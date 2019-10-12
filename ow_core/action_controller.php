@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -43,7 +44,7 @@ abstract class OW_ActionController extends OW_Renderable
      */
     public function __construct()
     {
-        
+
     }
 
     /**

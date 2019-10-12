@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -661,12 +662,12 @@ final class OW_Database
     /**
      * Escapes SQL string
      *
-     * @param string $string
+     * @param mixed $string
      * @return string
      */
-    public function escapeString(string $string )
+    public function escapeString( $string )
     {
-        $quotedString = $this->connection->quote($string); // real_escape_string( $string );
+        $quotedString = $this->connection->quote((string)$string); // real_escape_string( $string );
         return mb_substr($quotedString, 1, -1); //dirty hack to delete quotes
     }
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -528,7 +529,7 @@ class OW_HtmlDocument extends OW_Document
      * @param null   $priority
      * @return OW_HtmlDocument
      */
-    public function addOnloadScript( $script, $priority = null )
+    public function addOnloadScript(string $script, $priority = null )
     {
         $scriptHash = crc32($script);
 
@@ -554,7 +555,7 @@ class OW_HtmlDocument extends OW_Document
      * @param null   $priority
      * @return OW_HtmlDocument
      */
-    public function addScriptDeclarationBeforeIncludes( $script, $type = 'text/javascript', $priority = null )
+    public function addScriptDeclarationBeforeIncludes(string $script, $type = 'text/javascript', $priority = null )
     {
         $type = mb_strtolower(trim($type));
 

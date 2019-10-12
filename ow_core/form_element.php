@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -48,8 +49,8 @@ abstract class FormElement
 
     /**
      * Added filters
-     * 
-     * @var type 
+     *
+     * @var type
      */
     protected $filters = [];
 
@@ -225,7 +226,7 @@ abstract class FormElement
      * @param string $attrValue
      * @return FormElement
      */
-    public function addAttribute( $attrName, $attrValue = null )
+    public function addAttribute( string $attrName, string $attrValue = null )
     {
         $attrName = trim($attrName);
 
@@ -1265,6 +1266,7 @@ class CheckboxGroup extends FormElement
      * Constructor.
      *
      * @param string $name
+     * @throws Exception
      */
     public function __construct( $name )
     {
@@ -1424,7 +1426,7 @@ class CheckboxGroup extends FormElement
 
             $this->setId(UTIL_HtmlTag::generateAutoId('input_' . uniqid(UTIL_String::getRandomString(random_int(8, 13), UTIL_String::RND_STR_ALPHA_NUMERIC))));
 
-            $this->addAttribute('value', $key);
+            $this->addAttribute('value', (string)$key);
 
             $renderedString .= '<li style="width:' . $columnWidth . '%">' . UTIL_HtmlTag::generateTag('input', $this->attributes) . '&nbsp;<label for="' . $this->getId() . '">' . $value . '</label></li>';
 
@@ -2312,7 +2314,7 @@ class AgeRange extends FormElement implements DateRangeInterface
         $js = "var formElement = new OwFormElement('" . $this->getId() . "', '" . $this->getName() . "');";
 
         $js .= $this->generateValidatorAndFilterJsCode('formElement');
-        
+
         $js .= "
 			formElement.getValue = function(){
 				var value = {};
@@ -2414,7 +2416,7 @@ class Range extends FormElement
     /**
      * Sets form element value.
      *
-     * @param array $value
+     * @param array|string $value
      * @return void
      */
     public function setValue( $value )
@@ -2806,7 +2808,7 @@ class MobileBillingGatewaySelectionField extends BillingGatewaySelectionField
                 <label class="'. implode(' ', $style_classes) .'">' . $field . '</label>
         </div>';
     }
-    
+
     protected function getActiveGatewaysList()
     {
         return BOL_BillingService::getInstance()->getActiveGatewaysList(true);

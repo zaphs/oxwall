@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -59,7 +60,7 @@ abstract class OW_BaseDao
      * @param int   $id
      * @param int   $cacheLifeTime
      * @param array $tags
-     * @return OW_Entity
+     * @return OW_Entity|object|null
      */
     public function findById( $id, $cacheLifeTime = 0, $tags = [])
     {

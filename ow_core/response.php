@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -23,28 +23,28 @@
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_Response getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_Response
 {
     /**
      * HTTP Header constants
      */
-    const HD_CACHE_CONTROL = 'Cache-Control';
-    const HD_CNT_DISPOSITION = 'Content-Disposition';
-    const HD_CNT_LENGTH = 'Content-Length';
-    const HD_CONNECTION = 'Connection';
-    const HD_PRAGMA = 'Pragma';
-    const HD_CNT_TYPE = 'Content-Type';
-    const HD_EXPIRES = 'Expires';
-    const HD_LAST_MODIFIED = 'Last-Modified';
-    const HD_LOCATION = 'Location';
+    public const HD_CACHE_CONTROL   = 'Cache-Control';
+    public const HD_CNT_DISPOSITION = 'Content-Disposition';
+    public const HD_CNT_LENGTH      = 'Content-Length';
+    public const HD_CONNECTION      = 'Connection';
+    public const HD_PRAGMA          = 'Pragma';
+    public const HD_CNT_TYPE        = 'Content-Type';
+    public const HD_EXPIRES         = 'Expires';
+    public const HD_LAST_MODIFIED   = 'Last-Modified';
+    public const HD_LOCATION        = 'Location';
 
     use OW_Singleton;
-    
+
     /**
      * Headers to send with response
      *
@@ -69,7 +69,7 @@ class OW_Response
     /**
      * @return OW_Document
      */
-    public function getDocument()
+    public function getDocument(): OW_Document
     {
         return $this->document;
     }
@@ -77,7 +77,7 @@ class OW_Response
     /**
      * @param OW_Document $document
      */
-    public function setDocument( OW_Document $document )
+    public function setDocument(OW_Document $document): void
     {
         $this->document = $document;
     }
@@ -88,7 +88,7 @@ class OW_Response
      * @param string $name
      * @param string $value
      */
-    public function setHeader( $name, $value )
+    public function setHeader(string $name, string $value): void
     {
         $this->headers[trim($name)] = trim($value);
     }
@@ -96,7 +96,7 @@ class OW_Response
     /**
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headers;
     }
@@ -104,7 +104,7 @@ class OW_Response
     /**
      * @param array $headers
      */
-    public function setHeaders( array $headers )
+    public function setHeaders(array $headers): void
     {
         $this->headers = $headers;
     }
@@ -112,7 +112,7 @@ class OW_Response
     /**
      * Clears all headers.
      */
-    public function clearHeaders()
+    public function clearHeaders(): void
     {
         $this->headers = [];
     }
@@ -120,22 +120,15 @@ class OW_Response
     /**
      * Sends all added headers.
      */
-    public function sendHeaders()
+    public function sendHeaders(): void
     {
-        if ( !headers_sent() )
-        {
-            foreach ( $this->headers as $headerName => $headerValue )
-            {
-                if ( substr(mb_strtolower($headerName), 0, 4) === 'http' )
-                {
+        if (!headers_sent()) {
+            foreach ($this->headers as $headerName => $headerValue) {
+                if (mb_strtolower(substr($headerName, 0, 4)) === 'http') {
                     header($headerName . ' ' . $headerValue);
-                }
-                else if ( mb_strtolower($headerName) === 'status' )
-                {
-                    header(ucfirst(mb_strtolower($headerName)) . ': ' . $headerValue, null, (int) $headerValue);
-                }
-                else
-                {
+                } elseif (mb_strtolower($headerName) === 'status') {
+                    header(ucfirst(mb_strtolower($headerName)) . ': ' . $headerValue, null, (int)$headerValue);
+                } else {
                     header($headerName . ':' . $headerValue);
                 }
             }
@@ -145,7 +138,7 @@ class OW_Response
     /**
      * @return string
      */
-    public function getMarkup()
+    public function getMarkup(): string
     {
         return $this->markup;
     }
@@ -153,7 +146,7 @@ class OW_Response
     /**
      * @param string $markup
      */
-    public function setMarkup( $markup )
+    public function setMarkup(string $markup): void
     {
         $this->markup = $markup;
     }
@@ -162,17 +155,16 @@ class OW_Response
      * Sends generated response
      *
      */
-    public function respond()
+    public function respond(): void
     {
         $event = new OW_Event(OW_EventManager::ON_BEFORE_DOCUMENT_RENDER);
         OW::getEventManager()->trigger($event);
-        if ( $this->document !== null )
-        {
+        if ($this->document !== null) {
             $renderedMarkup = $this->document->render();
 
             $event = new BASE_CLASS_EventCollector('base.append_markup');
             OW::getEventManager()->trigger($event);
-            $data = $event->getData();
+            $data         = $event->getData();
             $this->markup = str_replace(OW_Document::APPEND_PLACEHOLDER, PHP_EOL . implode(PHP_EOL, $data), $renderedMarkup);
         }
 
@@ -181,18 +173,15 @@ class OW_Response
 
         $this->sendHeaders();
 
-        if ( OW::getRequest()->isAjax() )
-        {
+        if (OW::getRequest()->isAjax()) {
             exit();
         }
 
-        if ( OW_PROFILER_ENABLE || OW_DEV_MODE )
-        {
+        if (OW_PROFILER_ENABLE || OW_DEV_MODE) {
             UTIL_Profiler::getInstance()->mark('final');
         }
 
-        if ( OW_DEBUG_MODE )
-        {
+        if (OW_DEBUG_MODE) {
             echo ob_get_clean();
         }
 

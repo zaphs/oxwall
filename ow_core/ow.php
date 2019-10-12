@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -29,14 +30,15 @@
  */
 final class OW
 {
-    const CONTEXT_MOBILE = OW_Application::CONTEXT_MOBILE;
-    const CONTEXT_DESKTOP = OW_Application::CONTEXT_DESKTOP;
-    const CONTEXT_API = OW_Application::CONTEXT_API;
-    const CONTEXT_CLI = OW_Application::CONTEXT_CLI;
+    //TODO requires refactoring
+    public const CONTEXT_MOBILE = OW_Application::CONTEXT_MOBILE;
+    public const CONTEXT_DESKTOP = OW_Application::CONTEXT_DESKTOP;
+    public const CONTEXT_API = OW_Application::CONTEXT_API;
+    public const CONTEXT_CLI = OW_Application::CONTEXT_CLI;
 
     private static $context;
 
-    private static function detectContext()
+    private static function detectContext(): void
     {
         if ( self::$context !== null )
         {

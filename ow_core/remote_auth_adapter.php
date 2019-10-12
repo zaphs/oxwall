@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 class OW_RemoteAuthAdapter extends OW_AuthAdapter 
 {

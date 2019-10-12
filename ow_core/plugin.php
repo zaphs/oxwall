@@ -58,7 +58,7 @@ class OW_Plugin
     /**
      * Constructor.
      *
-     * @param array $params
+     * @param BOL_Plugin $plugin
      */
     public function __construct( BOL_Plugin $plugin )
     {
@@ -115,12 +115,12 @@ class OW_Plugin
 
     public function getInnerUserFilesDir()
     {
-        return $this->getRootDir() . "userfiles" . DS;
+        return $this->getRootDir() . 'userfiles' . DS;
     }
 
     public function getUserFilesUrl()
     {
-        return OW_URL_PLUGIN_USERFILES . $this->getDirName() . "/";
+        return OW_URL_PLUGIN_USERFILES . $this->getDirName() . '/';
     }
 
     public function getPluginFilesDir()
@@ -130,7 +130,7 @@ class OW_Plugin
 
     public function getInnerPluginFilesDir()
     {
-        return $this->getRootDir() . "pluginfiles" . DS;
+        return $this->getRootDir() . 'pluginfiles' . DS;
     }
 
     public function getRootDir()
@@ -140,77 +140,77 @@ class OW_Plugin
 
     public function getCliDir()
     {
-        return $this->getRootDir() . "cli" . DS;
+        return $this->getRootDir() . 'cli' . DS;
     }
 
     public function getMobileDir()
     {
-        return $this->getRootDir() . "mobile" . DS;
+        return $this->getRootDir() . 'mobile' . DS;
     }
 
     public function getCmpDir()
     {
-        return $this->getRootDir() . "components" . DS;
+        return $this->getRootDir() . 'components' . DS;
     }
 
     public function getMobileCmpDir()
     {
-        return $this->getMobileDir() . "components" . DS;
+        return $this->getMobileDir() . 'components' . DS;
     }
 
     public function getViewDir()
     {
-        return $this->getRootDir() . "views" . DS;
+        return $this->getRootDir() . 'views' . DS;
     }
 
     public function getMobileViewDir()
     {
-        return $this->getMobileDir() . "views" . DS;
+        return $this->getMobileDir() . 'views' . DS;
     }
 
     public function getCmpViewDir()
     {
-        return $this->getViewDir() . "components" . DS;
+        return $this->getViewDir() . 'components' . DS;
     }
 
     public function getMobileCmpViewDir()
     {
-        return $this->getMobileViewDir() . "components" . DS;
+        return $this->getMobileViewDir() . 'components' . DS;
     }
 
     public function getCtrlViewDir()
     {
-        return $this->getViewDir() . "controllers" . DS;
+        return $this->getViewDir() . 'controllers' . DS;
     }
 
     public function getMobileCtrlViewDir()
     {
-        return $this->getMobileViewDir() . "controllers" . DS;
+        return $this->getMobileViewDir() . 'controllers' . DS;
     }
 
     public function getCtrlDir()
     {
-        return $this->getRootDir() . "controllers" . DS;
+        return $this->getRootDir() . 'controllers' . DS;
     }
 
     public function getMobileCtrlDir()
     {
-        return $this->getMobileDir() . "controllers" . DS;
+        return $this->getMobileDir() . 'controllers' . DS;
     }
 
     public function getDecoratorDir()
     {
-        return $this->getRootDir() . "decorators" . DS;
+        return $this->getRootDir() . 'decorators' . DS;
     }
 
     public function getMobileDecoratorDir()
     {
-        return $this->getMobileDir() . "decorators" . DS;
+        return $this->getMobileDir() . 'decorators' . DS;
     }
 
     public function getStaticDir()
     {
-        return $this->getRootDir() . "static" . DS;
+        return $this->getRootDir() . 'static' . DS;
     }
 
     public function getPublicStaticDir()
@@ -220,27 +220,27 @@ class OW_Plugin
 
     public function getBolDir()
     {
-        return $this->getRootDir() . "bol" . DS;
+        return $this->getRootDir() . 'bol' . DS;
     }
 
     public function getMobileBolDir()
     {
-        return $this->getMobileDir() . "bol" . DS;
+        return $this->getMobileDir() . 'bol' . DS;
     }
 
     public function getClassesDir()
     {
-        return $this->getRootDir() . "classes" . DS;
+        return $this->getRootDir() . 'classes' . DS;
     }
 
     public function getMobileClassesDir()
     {
-        return $this->getMobileDir() . "classes" . DS;
+        return $this->getMobileDir() . 'classes' . DS;
     }
 
     public function getStaticJsDir()
     {
-        return $this->getStaticDir() . "js" . DS;
+        return $this->getStaticDir() . 'js' . DS;
     }
 
     public function getModuleName()
@@ -250,36 +250,36 @@ class OW_Plugin
 
     public function getStaticUrl()
     {
-        return OW_URL_STATIC_PLUGINS . $this->getModuleName() . "/";
+        return OW_URL_STATIC_PLUGINS . $this->getModuleName() . '/';
     }
 
     public function getStaticJsUrl()
     {
-        return $this->getStaticUrl() . "js/";
+        return $this->getStaticUrl() . 'js/';
     }
 
     public function getStaticCssUrl()
     {
-        return $this->getStaticUrl() . "css/";
+        return $this->getStaticUrl() . 'css/';
     }
 
     public function getApiDir()
     {
-        return $this->getRootDir() . "api" . DS;
+        return $this->getRootDir() . 'api' . DS;
     }
 
     public function getApiBolDir()
     {
-        return $this->getApiDir() . "bol" . DS;
+        return $this->getApiDir() . 'bol' . DS;
     }
 
     public function getApiCtrlDir()
     {
-        return $this->getApiDir() . "controllers" . DS;
+        return $this->getApiDir() . 'controllers' . DS;
     }
 
     public function getApiClassesDir()
     {
-        return $this->getApiDir() . "classes" . DS;
+        return $this->getApiDir() . 'classes' . DS;
     }
 }

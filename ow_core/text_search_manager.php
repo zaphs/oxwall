@@ -56,13 +56,13 @@ class OW_TextSearchManager
 
     /**
      * Default storage instance     
-     * @var BASE_CLASS_InterfaceSearchStorage
+     * @var BASE_CLASS_AbstractSearchStorage
      */
     private $defaultStorageInstance;
 
     /**
      * Active storage instance     
-     * @var BASE_CLASS_InterfaceSearchStorage
+     * @var BASE_CLASS_AbstractSearchStorage
      */
     private $activeStorageInstance;
 

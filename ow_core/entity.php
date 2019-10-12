@@ -51,6 +51,7 @@ class OW_Entity
 
     /**
      * @param int $id
+     * @return OW_Entity
      */
     public function setId( $id )
     {

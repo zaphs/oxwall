@@ -74,6 +74,7 @@ class OW_ViewRenderer
      *
      * @param string $template
      * @return string
+     * @throws SmartyException
      */
     public function renderTemplate( $template )
     {
@@ -121,8 +122,9 @@ class OW_ViewRenderer
     /**
      * Adds custom function for template.
      *
-     * @param string $name
+     * @param string   $name
      * @param callback $callback
+     * @throws SmartyException
      */
     public function registerFunction( $name, $callback )
     {
@@ -145,8 +147,9 @@ class OW_ViewRenderer
     /**
      * Adds custom block function for template.
      *
-     * @param string $name
+     * @param string   $name
      * @param callback $callback
+     * @throws SmartyException
      */
     public function registerBlock( $name, $callback )
     {
@@ -168,9 +171,10 @@ class OW_ViewRenderer
 
     /**
      * Adds custom template modifier.
-     * 
+     *
      * @param string $name
-     * @param string $callback 
+     * @param string $callback
+     * @throws SmartyException
      */
     public function registerModifier( $name, $callback )
     {
@@ -181,7 +185,7 @@ class OW_ViewRenderer
     }
 
     /**
-     * Remopves template modifier.
+     * Removes template modifier.
      * 
      * @param string $name 
      */

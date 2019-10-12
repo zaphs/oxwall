@@ -57,6 +57,9 @@ class OW_Event
 
     /**
      * Constructor.
+     * @param       $name
+     * @param array $params
+     * @param null  $dataValue
      */
     public function __construct( $name, array $params = [], $dataValue = null )
     {

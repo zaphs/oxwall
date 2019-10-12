@@ -1071,11 +1071,21 @@ class BOL_UserDao extends OW_BaseDao
 
         return $this->dbo->queryForColumnList($sqlString, ['start' => $start, 'count' => $count]);
     }
+
+    /**
+     * @var BOL_User[] $cachedItems
+     */
     protected $cachedItems = [];
 
+    /**
+     * @param int   $id
+     * @param int   $cacheLifeTime
+     * @param array $tags
+     * @return BOL_User
+     */
     public function findById( $id, $cacheLifeTime = 0, $tags = [])
     {
-        $id = intval($id);
+        $id = (int)$id;
         
         if ( empty($this->cachedItems[$id]) )
         {

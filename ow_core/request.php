@@ -190,19 +190,19 @@ class OW_Request
 
         $currentParams = array_merge($currentParams, $paramsToUpdate);
 
-        $scheme = empty($requestUrlArray["scheme"]) ? "" : $requestUrlArray["scheme"] . ":";
-        $host = empty($requestUrlArray["host"]) ? "" : "//" . $requestUrlArray["host"];
-        $port = empty($requestUrlArray["port"]) ? "" : ":" . (int) $requestUrlArray["port"];
-        $path = empty($requestUrlArray["path"]) ? "" : $requestUrlArray["path"];
-        $queryString = empty($currentParams) ? "" : "?" . http_build_query($currentParams);
-        $anchor = ($anchor === null) ? "" : "#" . trim($anchor);
+        $scheme = empty($requestUrlArray['scheme']) ? '' : $requestUrlArray['scheme'] . ':';
+        $host = empty($requestUrlArray['host']) ? '' : '//' . $requestUrlArray['host'];
+        $port = empty($requestUrlArray['port']) ? '' : ':' . (int)$requestUrlArray['port'];
+        $path = empty($requestUrlArray['path']) ? '' : $requestUrlArray['path'];
+        $queryString = empty($currentParams) ? '' : '?' . http_build_query($currentParams);
+        $anchor = ($anchor === null) ? '' : '#' . trim($anchor);
 
         return $scheme . $host . $port . $path . $queryString . $anchor;
     }
 
     /**
-     * @param array $value
-     * @return array
+     * @param array|string $value
+     * @return array|string
      */
     private function stripSlashesRecursive( $value )
     {
@@ -214,21 +214,21 @@ class OW_Request
     {
         $isHttps = null;
 
-        if ( array_key_exists("HTTPS", $_SERVER) )
+        if ( array_key_exists('HTTPS', $_SERVER) )
         {
-            $isHttps = (strtolower($_SERVER["HTTPS"]) == "on");
+            $isHttps = (strtolower($_SERVER['HTTPS']) == 'on');
         }
-        else if ( array_key_exists("REQUEST_SCHEME", $_SERVER) )
+        else if ( array_key_exists('REQUEST_SCHEME', $_SERVER) )
         {
-            $isHttps = (strtolower($_SERVER["REQUEST_SCHEME"]) == "https");
+            $isHttps = (strtolower($_SERVER['REQUEST_SCHEME']) == 'https');
         }
-        else if ( array_key_exists("HTTP_X_FORWARDED_PROTO", $_SERVER) )
+        else if ( array_key_exists('HTTP_X_FORWARDED_PROTO', $_SERVER) )
         {
-            $isHttps = (strtolower($_SERVER["HTTP_X_FORWARDED_PROTO"]) == "https");
+            $isHttps = (strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https');
         }
-        else if ( array_key_exists("SERVER_PORT", $_SERVER) )
+        else if ( array_key_exists('SERVER_PORT', $_SERVER) )
         {
-            $isHttps = (strtolower($_SERVER["SERVER_PORT"]) == "443");
+            $isHttps = (strtolower($_SERVER['SERVER_PORT']) == '443');
         }
 
         return $isHttps;

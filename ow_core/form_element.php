@@ -231,7 +231,7 @@ abstract class FormElement
 
         if ( $attrName == 'class' && isset($this->attributes['class']) )
         {
-            $this->attributes['class'] = $this->attributes['class'] . ' ' . $attrValue;
+            $this->attributes['class'] .= ' ' . $attrValue;
             return $this;
         }
 
@@ -382,7 +382,7 @@ abstract class FormElement
      */
     public function setValue( $value )
     {
-        /* @var $filter OW_IFilter  */
+        /* @var OW_IFilter $filter */
         foreach ( $this->filters as $filter )
         {
             $value = $filter->filter($value);
@@ -410,7 +410,7 @@ abstract class FormElement
      */
     public function isValid()
     {
-        /* @var $value Validator  */
+        /* @var Validator $value */
         foreach ( $this->validators as $value )
         {
             if ( $value->isValid($this->getValue()) )
@@ -470,9 +470,9 @@ abstract class FormElement
      */
     public function getElementJs()
     {
-        $jsString = "var formElement = new OwFormElement(" . json_encode($this->getId()) . ", " . json_encode($this->getName()) . ");";
+        $jsString = 'var formElement = new OwFormElement(' . json_encode($this->getId()) . ', ' . json_encode($this->getName()) . ');';
 
-        return $jsString . $this->generateValidatorAndFilterJsCode("formElement");
+        return $jsString . $this->generateValidatorAndFilterJsCode('formElement');
     }
 
     /**
@@ -481,18 +481,18 @@ abstract class FormElement
      */
     protected function generateValidatorAndFilterJsCode( $varName )
     {
-        $jsString = "";
+        $jsString = '';
 
-        /** @var $value OW_Validator  */
+        /** @var OW_Validator $value */
         foreach ( $this->validators as $value )
         {
-            $jsString .= "{$varName}.addValidator(" . $value->getJsValidator() . ");";
+            $jsString .= "{$varName}.addValidator(" . $value->getJsValidator() . ');';
         }
 
-        /** @var $filter OW_IFilter  */
+        /** @var OW_IFilter $filter */
         foreach ( $this->filters as $filter )
         {
-            $jsString .= "{$varName}.addFilter(" . $filter->getJsFilter() . ");";
+            $jsString .= "{$varName}.addFilter(" . $filter->getJsFilter() . ');';
         }
 
         return $jsString;
@@ -510,6 +510,8 @@ abstract class FormElement
         {
             $this->addAttributes($params);
         }
+
+        return '';
     }
 }
 
@@ -538,6 +540,7 @@ abstract class InvitationFormElement extends FormElement
 
     /**
      * Constructor.
+     * @param $name
      */
     public function __construct( $name )
     {
@@ -567,8 +570,9 @@ abstract class InvitationFormElement extends FormElement
 
     /**
      * @param boolean $hasInvitation
+     * @return InvitationFormElement
      */
-    public function setHasInvitation( $hasInvitation )
+    public function setHasInvitation( $hasInvitation ): InvitationFormElement
     {
         $this->hasInvitation = (bool) $hasInvitation;
         return $this;
@@ -627,7 +631,7 @@ class TextField extends InvitationFormElement
 
         if ( $this->getHasInvitation() )
         {
-            $this->addAttribute("placeholder", $this->getInvitation());
+            $this->addAttribute('placeholder', $this->getInvitation());
         }
 
         return UTIL_HtmlTag::generateTag('input', $this->attributes);
@@ -635,9 +639,9 @@ class TextField extends InvitationFormElement
 
     public function getElementJs()
     {
-        $jsString = "var formElement = new OwTextField(" . json_encode($this->getId()) . ", " . json_encode($this->getName()) . ");";
+        $jsString = 'var formElement = new OwTextField(' . json_encode($this->getId()) . ', ' . json_encode($this->getName()) . ');';
 
-        return $jsString.$this->generateValidatorAndFilterJsCode("formElement");
+        return $jsString.$this->generateValidatorAndFilterJsCode('formElement');
     }
 }
 
@@ -666,7 +670,7 @@ class DateField extends FormElement
     {
         parent::__construct($name);
 
-        $this->maxYear = ( (int) date("Y") - 18);
+        $this->maxYear = ((int) date('Y') - 18);
 
         $this->minYear = self::MIN_YEAR;
 
@@ -752,14 +756,15 @@ class DateField extends FormElement
     {
         parent::renderInput($params);
 
-        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin("base")->getStaticJsUrl() . 'date_field.js');
+        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'date_field.js');
 
-        OW::getDocument()->addOnloadScript(" if( window.date_field == undefined ) { window.date_field = {}; } window.date_field['" . $this->getId() . "'] = new DateField( '" . ( $this->getName() ) . "' ); ");
+        OW::getDocument()->addOnloadScript(" if( window.date_field == undefined ) { window.date_field = {}; } window.date_field['" . $this->getId() . "'] = new DateField( '" .
+                                           $this->getName() . "' ); ");
 
         $language = OW::getLanguage();
 
         $yearOptionsString = UTIL_HtmlTag::generateTag('option', ['value' => ''], true, $language->text('base', 'year'));
-        $mounthOptionsString = UTIL_HtmlTag::generateTag('option', ['value' => ''], true, $language->text('base', 'month'));
+        $monthOptionsString = UTIL_HtmlTag::generateTag('option', ['value' => ''], true, $language->text('base', 'month'));
         $dayOptionsString = UTIL_HtmlTag::generateTag('option', ['value' => ''], true, $language->text('base', 'day'));
 
         for ( $i = $this->maxYear; $i >= $this->minYear; $i-- )
@@ -781,7 +786,7 @@ class DateField extends FormElement
 
             $attrs['value'] = $i;
 
-            $mounthOptionsString .= UTIL_HtmlTag::generateTag('option', $attrs, true, $language->text('base', 'date_time_month_short_' . $i));
+            $monthOptionsString .= UTIL_HtmlTag::generateTag('option', $attrs, true, $language->text('base', 'date_time_month_short_' . $i));
         }
 
         $lastDay = 31;
@@ -837,14 +842,14 @@ class DateField extends FormElement
 
         $config = OW::getConfig()->getValue('base', 'date_field_format');
 
-        $result = "";
+        $result = '';
 
         if ( $config === 'dmy' )
         {
             $result = '<div class="' . $this->getAttribute('name') . '">
                             ' . UTIL_HtmlTag::generateTag('input', $attributes) . '
                             <div class="ow_inline owm_inline">' . UTIL_HtmlTag::generateTag('select', $dayAttributes, true, $dayOptionsString) . '</div>
-                            <div class="ow_inline owm_inline">' . UTIL_HtmlTag::generateTag('select', $monthAttributes, true, $mounthOptionsString) . '</div>
+                            <div class="ow_inline owm_inline">' . UTIL_HtmlTag::generateTag('select', $monthAttributes, true, $monthOptionsString) . '</div>
                             <div class="ow_inline owm_inline">' . UTIL_HtmlTag::generateTag('select', $yearAttributes, true, $yearOptionsString) . '</div>
                         </div>';
         }
@@ -852,7 +857,7 @@ class DateField extends FormElement
         {
             $result = '<div class="' . $this->getAttribute('name') . '">
                             ' . UTIL_HtmlTag::generateTag('input', $attributes) . '
-                            <div class="ow_inline owm_inline">' . UTIL_HtmlTag::generateTag('select', $monthAttributes, true, $mounthOptionsString) . '</div>
+                            <div class="ow_inline owm_inline">' . UTIL_HtmlTag::generateTag('select', $monthAttributes, true, $monthOptionsString) . '</div>
                             <div class="ow_inline owm_inline">' . UTIL_HtmlTag::generateTag('select', $dayAttributes, true, $dayOptionsString) . '</div>
                             <div class="ow_inline owm_inline">' . UTIL_HtmlTag::generateTag('select', $yearAttributes, true, $yearOptionsString) . '</div>
                         </div>';
@@ -884,9 +889,9 @@ class Textarea extends InvitationFormElement
 
     public function getElementJs()
     {
-        $jsString = "var formElement = new OwTextArea(" . json_encode($this->getId()) . ", " . json_encode($this->getName()) . ");";
+        $jsString = 'var formElement = new OwTextArea(' . json_encode($this->getId()) . ', ' . json_encode($this->getName()) . ');';
 
-        return $jsString.$this->generateValidatorAndFilterJsCode("formElement");
+        return $jsString.$this->generateValidatorAndFilterJsCode('formElement');
     }
 
     /**
@@ -941,8 +946,9 @@ class HiddenField extends FormElement
     }
 
     /**
+     * @param null $params
+     * @return string
      * @see FormElement::renderInput()
-     *
      */
     public function renderInput( $params = null )
     {
@@ -972,6 +978,7 @@ class Submit extends FormElement
      * Constructor.
      *
      * @param string $name
+     * @param string $decorator
      */
     public function __construct( $name, $decorator = 'button' )
     {
@@ -984,10 +991,11 @@ class Submit extends FormElement
     }
 
     /**
-     * @see FormElement::renderInput()
-     *
      * @param array $params
      * @return string
+     * @throws SmartyException
+     * @see FormElement::renderInput()
+     *
      */
     public function renderInput( $params = null )
     {
@@ -1202,9 +1210,9 @@ class RadioField extends FormElement
      */
     public function getElementJs()
     {
-        $js = "var formElement = new OwRadioField(" . json_encode($this->getId()) . ", " . json_encode($this->getName()) . ");";
+        $js = 'var formElement = new OwRadioField(' . json_encode($this->getId()) . ', ' . json_encode($this->getName()) . ');';
 
-        return $js.$this->generateValidatorAndFilterJsCode("formElement");
+        return $js.$this->generateValidatorAndFilterJsCode('formElement');
     }
 
     /**
@@ -1396,9 +1404,9 @@ class CheckboxGroup extends FormElement
      */
     public function getElementJs()
     {
-        $js = "var formElement = new OwCheckboxGroup(" . json_encode($this->getId()) . ", " . json_encode($this->getName()) . ");";
+        $js = 'var formElement = new OwCheckboxGroup(' . json_encode($this->getId()) . ', ' . json_encode($this->getName()) . ');';
 
-        return $js.$this->generateValidatorAndFilterJsCode("formElement");
+        return $js.$this->generateValidatorAndFilterJsCode('formElement');
     }
 
     /**
@@ -1499,8 +1507,8 @@ class Selectbox extends InvitationFormElement
     /**
      * Adds input option.
      *
+     * @param        $key
      * @param string $value
-     * @param string $label
      * @return Selectbox
      */
     public function addOption( $key, $value )
@@ -1609,9 +1617,9 @@ class CheckboxField extends FormElement
      */
     public function getElementJs()
     {
-        $jsString = "var formElement = new OwCheckboxField(" . json_encode($this->getId()) . ", " . json_encode($this->getName()) . ");";
+        $jsString = 'var formElement = new OwCheckboxField(' . json_encode($this->getId()) . ', ' . json_encode($this->getName()) . ');';
 
-        return $jsString.$this->generateValidatorAndFilterJsCode("formElement");
+        return $jsString.$this->generateValidatorAndFilterJsCode('formElement');
     }
 
     /**
@@ -1753,10 +1761,10 @@ class Multiselect extends FormElement
         $jsString = "var formElement1 = new OwFormElement('" . $this->getId() . "', '" . $this->getName() . "');
                 MultiselectField.prototype = formElement1;
                 var formElement = new MultiselectField('" . $this->getId() . "', '" . $this->getName() . "');
-                formElement.setValue(" . json_encode($this->value) . ");
-        ";
+                formElement.setValue(" . json_encode($this->value) . ');
+        ';
 
-        return $jsString.$this->generateValidatorAndFilterJsCode("formElement");
+        return $jsString.$this->generateValidatorAndFilterJsCode('formElement');
     }
 }
 
@@ -1882,7 +1890,8 @@ class MultiFileField extends FormElement
      * Constructor.
      *
      * @param string $name
-     * @param int $inputs
+     * @param int    $inputs
+     * @param null   $labels
      */
     public function __construct( $name, $inputs = 5, $labels = null )
     {
@@ -1903,7 +1912,7 @@ class MultiFileField extends FormElement
     {
         $js = "var formElement = new OwFormElement('" . $this->getId() . "', '" . $this->getName() . "');";
 
-        $js .= $this->generateValidatorAndFilterJsCode("formElement");
+        $js .= $this->generateValidatorAndFilterJsCode('formElement');
 
         $js .= "
 			formElement.getValue = function(){
@@ -1982,8 +1991,9 @@ class TagsField extends FormElement
 
         foreach ( $arr as $key => $value )
         {
-            if ( strlen(trim($value)) > 0 )
+            if (trim($value) !== '') {
                 continue;
+            }
             unset($arr[$key]);
         }
 
@@ -2048,7 +2058,7 @@ class TagsField extends FormElement
     {
         $js = "var formElement = new OwFormElement('" . $this->getId() . "', '" . $this->getName() . "');";
 
-        $js .= $this->generateValidatorAndFilterJsCode("formElement");
+        $js .= $this->generateValidatorAndFilterJsCode('formElement');
 
         $js .= "
 			formElement.getValue = function(){
@@ -2104,7 +2114,7 @@ class CaptchaField extends FormElement
         parent::__construct($name);
 
         $this->addAttribute('type', 'text');
-        $this->jsObjectName = self::CAPTCHA_PREFIX . preg_replace('/[^\d^\w]/', '_', $this->getId());
+        $this->jsObjectName = self::CAPTCHA_PREFIX . preg_replace('/[^\w]/', '_', $this->getId());
         $this->setRequired();
         $this->addAttribute('style', 'width:100px;');
         $this->addValidator(new CaptchaValidator());
@@ -2140,8 +2150,8 @@ class CaptchaField extends FormElement
         $captchaClass = $this->getName() . '_' . $this->getId();
         $uniqueId = md5(time());
 
-        $jsDir = OW::getPluginManager()->getPlugin("base")->getStaticJsUrl();
-        OW::getDocument()->addScript($jsDir . "captcha.js");
+        $jsDir = OW::getPluginManager()->getPlugin('base')->getStaticJsUrl();
+        OW::getDocument()->addScript($jsDir . 'captcha.js');
 
         $string = ' window.' . $this->jsObjectName . ' = new OW_Captcha( ' . json_encode([
                 'captchaUrl'   => $captchaUrl,
@@ -2180,7 +2190,7 @@ class AgeRange extends FormElement implements DateRangeInterface
 
         $this->minAge = 18;
 
-        $this->maxAge = (int) date("Y") - self::MIN_YEAR;
+        $this->maxAge = (int) date('Y') - self::MIN_YEAR;
         $this->value = [];
     }
 
@@ -2188,8 +2198,7 @@ class AgeRange extends FormElement implements DateRangeInterface
      * Sets form element value.
      *
      * @param array $value
-
-     * @return FormElement
+     * @return void
      */
     public function setValue( $value )
     {
@@ -2233,37 +2242,41 @@ class AgeRange extends FormElement implements DateRangeInterface
 
     public function setMaxYear( $year )
     {
-        $this->minAge = (int) date("Y") - (int) $year;
+        $this->minAge = (int) date('Y') - (int) $year;
 
         return $this;
     }
 
     public function setMinYear( $year )
     {
-        $this->maxAge = (int) date("Y") - (int) $year;
+        $this->maxAge = (int) date('Y') - (int) $year;
 
         return $this;
     }
 
     public function getMaxYear()
     {
-        return (int) date("Y") - (int) $this->minAge;
+        return (int) date('Y') - (int) $this->minAge;
     }
 
     public function getMinYear()
     {
-        return (int) date("Y") - (int) $this->maxAge;
+        return (int) date('Y') - (int) $this->maxAge;
     }
 
     public function renderInput( $params = null )
     {
         parent::renderInput($params);
 
-        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin("base")->getStaticJsUrl() . 'age_range_field.js');
-        OW::getDocument()->addOnloadScript(" window." . $this->getName() . " = new AgeRangeField( " . json_encode($this->getName()) . ", " . json_encode($this->minAge) . ", " . ( $this->maxAge ) . " ); ");
+        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'age_range_field.js');
+        OW::getDocument()->addOnloadScript(' window.' . $this->getName() .
+                                           ' = new AgeRangeField( ' . json_encode($this->getName()) .
+                                           ', ' . json_encode($this->minAge) .
+                                           ', ' . $this->maxAge .
+                                           ' ); ');
 
-        $fromAgeOptionsString = ""; //UTIL_HtmlTag::generateTag('option', array('value' => ''), true);
-        $toAgeOptionsString = ""; //UTIL_HtmlTag::generateTag('option', array('value' => ''), true);
+        $fromAgeOptionsString = ''; //UTIL_HtmlTag::generateTag('option', array('value' => ''), true);
+        $toAgeOptionsString = ''; //UTIL_HtmlTag::generateTag('option', array('value' => ''), true);
 
         $defaultAgeFrom = isset($this->value['from']) ? (int) $this->value['from'] : $this->minAge;
         $defaultAgeTo = isset($this->value['to']) ? (int) $this->value['to'] : $this->maxAge;
@@ -2318,7 +2331,7 @@ class AgeRange extends FormElement implements DateRangeInterface
     {
         $js = "var formElement = new OwFormElement('" . $this->getId() . "', '" . $this->getName() . "');";
 
-        $js .= $this->generateValidatorAndFilterJsCode("formElement");
+        $js .= $this->generateValidatorAndFilterJsCode('formElement');
         
         $js .= "
 			formElement.getValue = function(){
@@ -2341,8 +2354,7 @@ class MatchAgeRange extends AgeRange
      * Sets form element value.
      *
      * @param array $value
-
-     * @return FormElement
+     * @return void
      */
     public function setValue( $value )
     {
@@ -2389,9 +2401,9 @@ class MatchAgeRange extends AgeRange
 
     public function getElementJs()
     {
-        $js = "var formElement = new OwRange(" . json_encode($this->getId()) . ", " . json_encode($this->getName()) . ");";
+        $js = 'var formElement = new OwRange(' . json_encode($this->getId()) . ', ' . json_encode($this->getName()) . ');';
 
-        return $js.$this->generateValidatorAndFilterJsCode("formElement");
+        return $js.$this->generateValidatorAndFilterJsCode('formElement');
     }
 }
 
@@ -2423,8 +2435,7 @@ class Range extends FormElement
      * Sets form element value.
      *
      * @param array $value
-
-     * @return FormElement
+     * @return void
      */
     public function setValue( $value )
     {
@@ -2497,11 +2508,11 @@ class Range extends FormElement
     {
         parent::renderInput($params);
 
-        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin("base")->getStaticJsUrl() . 'range_field.js');
-        OW::getDocument()->addOnloadScript(" window." . $this->getName() . " = new RangeField( '" . ( $this->getName() ) . "', " . ( $this->minValue ) . ", " . ( $this->maxValue ) . " ); ");
+        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'range_field.js');
+        OW::getDocument()->addOnloadScript(' window.' . $this->getName() . " = new RangeField( '" . $this->getName() . "', " . $this->minValue . ', ' . $this->maxValue . ' ); ');
 
-        $fromValueOptionsString = ""; //UTIL_HtmlTag::generateTag('option', array('value' => ''), true);
-        $toValueOptionsString = ""; //UTIL_HtmlTag::generateTag('option', array('value' => ''), true);
+        $fromValueOptionsString = ''; //UTIL_HtmlTag::generateTag('option', array('value' => ''), true);
+        $toValueOptionsString = ''; //UTIL_HtmlTag::generateTag('option', array('value' => ''), true);
 
         $defaultValueFrom = isset($this->value['from']) ? (int) $this->value['from'] : $this->minValue;
         $defaultValueTo = isset($this->value['to']) ? (int) $this->value['to'] : $this->maxValue;
@@ -2549,9 +2560,9 @@ class Range extends FormElement
 
     public function getElementJs()
     {
-        $js = "var formElement = new OwRange(" . json_encode($this->getId()) . ", " . json_encode($this->getName()) . ");";
+        $js = 'var formElement = new OwRange(' . json_encode($this->getId()) . ', ' . json_encode($this->getName()) . ');';
 
-        return $js.$this->generateValidatorAndFilterJsCode("formElement");
+        return $js.$this->generateValidatorAndFilterJsCode('formElement');
     }
 }
 
@@ -2573,10 +2584,10 @@ class DateRange extends FormElement implements DateRangeInterface
         $this->minDate = new DateField($name . '[from]');
         $this->maxDate = new DateField($name . '[to]');
 
-        $this->minDate->setMaxYear(date("Y"));
+        $this->minDate->setMaxYear(date('Y'));
         //$this->minDate->setValue($this->minDate->getMinYear().'/1/1');
 
-        $this->maxDate->setMaxYear(date("Y"));
+        $this->maxDate->setMaxYear(date('Y'));
         //$this->maxDate->setValue(date("Y").'/12/31');
         /* @var $this->minDate = DateField */
     }
@@ -2642,9 +2653,9 @@ class DateRange extends FormElement implements DateRangeInterface
         $language = OW::getLanguage();
 
         $result = '<div id="' . $this->getAttribute('id') . '" class="' . $this->getAttribute('name') . '">
-                       ' . $language->text('base', 'form_element_from') . '  <div class="ow_inline">' . ( $this->minDate->renderInput() ) . '</div>
+                       ' . $language->text('base', 'form_element_from') . '  <div class="ow_inline">' . $this->minDate->renderInput() . '</div>
                        ' . $language->text('base', 'form_element_to') . '
-                       <div class="ow_inline">' . ( $this->maxDate->renderInput() ) . '</div>
+                       <div class="ow_inline">' . $this->maxDate->renderInput() . '</div>
                     </div>';
 
         return $result;
@@ -2789,7 +2800,7 @@ class BillingGatewaySelectionField extends FormElement
 
         foreach ( $gateways as $gateway )
         {
-            /* @var $adapter OW_BillingAdapter */
+            /* @var OW_BillingAdapter $adapter */
             if ( $adapter = OW::getClassInstance($gateway->adapterClassName) )
             {
                 $paymentOptions[$gateway->gatewayKey]['dto'] = $gateway;
@@ -2810,9 +2821,9 @@ class MobileBillingGatewaySelectionField extends BillingGatewaySelectionField
         $name = str_replace('billing', '', $option['dto']->gatewayKey);
 
         $style_classes = [
-            "owm_border",
-            "owm_" . $name,
-            ($this->getAttribute('checked')) ? "active" : ""
+            'owm_border',
+            'owm_' . $name,
+            $this->getAttribute('checked') ? 'active' : ''
         ];
 
         return'<div class="owm_payment_provider_item owm_std_margin_bottom">
@@ -2831,12 +2842,12 @@ class MobileBillingGatewaySelectionField extends BillingGatewaySelectionField
 
         foreach ( $gateways as $gateway )
         {
-            /* @var $adapter OW_BillingAdapter */
+            /* @var OW_BillingAdapter $adapter */
             if ( $adapter = OW::getClassInstance($gateway->adapterClassName) )
             {
                 $paymentOptions[$gateway->gatewayKey]['dto'] = $gateway;
-                $paymentOptions[$gateway->gatewayKey]['orderUrl'] = $adapter->getOrderFormUrl(true);
-                $paymentOptions[$gateway->gatewayKey]['logoUrl'] = $adapter->getLogoUrl(true);
+                $paymentOptions[$gateway->gatewayKey]['orderUrl'] = $adapter->getOrderFormUrl();
+                $paymentOptions[$gateway->gatewayKey]['logoUrl'] = $adapter->getLogoUrl();
             }
         }
 
@@ -2864,17 +2875,15 @@ class YearRange extends FormElement implements DateRangeInterface
         $this->minYear = self::MIN_YEAR;
         $this->maxYear = self::MAX_YEAR;
         $this->value['from'] = 1930;
-        $this->value['to'] = (int) date("Y") - 18;
+        $this->value['to'] = (int) date('Y') - 18;
     }
 
     /**
      * Sets form element value.
      *
      * @param array $value
-
-     * @return FormElement
      */
-    public function setValue( $value )
+    public function setValue( $value ): void
     {
         if ( empty($value) || empty($value['from']) || empty($value['to']) )
         {
@@ -2892,9 +2901,9 @@ class YearRange extends FormElement implements DateRangeInterface
 
     public function getElementJs()
     {
-        $jsString = " var formElement = new AgeRangeFormElement(" . json_encode($this->getId()) . ", " . json_encode($this->getName()) . "); ";
+        $jsString = ' var formElement = new AgeRangeFormElement(' . json_encode($this->getId()) . ', ' . json_encode($this->getName()) . '); ';
 
-        return $jsString.$this->generateValidatorAndFilterJsCode("formElement");
+        return $jsString.$this->generateValidatorAndFilterJsCode('formElement');
     }
 
     public function getMinAge()
@@ -2931,11 +2940,15 @@ class YearRange extends FormElement implements DateRangeInterface
     {
         parent::renderInput($params);
 
-        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin("base")->getStaticJsUrl() . 'age_range_field.js');
-        OW::getDocument()->addOnloadScript(" window." . $this->getName() . " = new AgeRangeField( " . json_encode($this->getName()) . ", " . json_encode($this->minYear) . ", " . json_encode($this->maxYear) . " ); ");
+        OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'age_range_field.js');
+        OW::getDocument()->addOnloadScript(' window.' . $this->getName() .
+                                           ' = new AgeRangeField( ' . json_encode($this->getName()) .
+                                           ', ' . json_encode($this->minYear) .
+                                           ', ' . json_encode($this->maxYear) .
+                                           ' ); ');
 
-        $fromAgeOptionsString = ""; //UTIL_HtmlTag::generateTag('option', array('value' => ''), true);
-        $toAgeOptionsString = ""; //UTIL_HtmlTag::generateTag('option', array('value' => ''), true);
+        $fromAgeOptionsString = ''; //UTIL_HtmlTag::generateTag('option', array('value' => ''), true);
+        $toAgeOptionsString = ''; //UTIL_HtmlTag::generateTag('option', array('value' => ''), true);
 
         $defaultYearFrom = isset($this->value['from']) ? (int) $this->value['from'] : $this->minYear;
         $defaultYearTo = isset($this->value['to']) ? (int) $this->value['to'] : $this->maxYear;
@@ -3179,7 +3192,9 @@ class WysiwygTextarea extends InvitationFormElement
     /**
      * Constructor.
      *
-     * @param string $name
+     * @param string     $name
+     * @param array|null $buttons
+     * @param bool       $init
      */
     public function __construct( $name, array $buttons = null, $init = true )
     {
@@ -3262,13 +3277,13 @@ class WysiwygTextarea extends InvitationFormElement
 
         $invitation = $this->getHasInvitation() ? $this->getInvitation() : false;
 
-        $jsString = "var formElement = new OwWysiwyg(" . json_encode($this->getId()) . ", " . json_encode($this->getName()) . ", " . json_encode($invitation) . ");            
-        ";
+        $jsString = 'var formElement = new OwWysiwyg(' . json_encode($this->getId()) . ', ' . json_encode($this->getName()) . ', ' . json_encode($invitation) . ');            
+        ';
 
-        /** @var $value Validator  */
+        /** @var OW_Validator $value  */
         foreach ( $this->validators as $value )
         {
-            $jsString .= "formElement.addValidator(" . $value->getJsValidator() . ");";
+            $jsString .= 'formElement.addValidator(' . $value->getJsValidator() . ');';
         }
 
         return $jsString;
@@ -3280,10 +3295,11 @@ class WysiwygTextarea extends InvitationFormElement
     }
 
     /**
-     * @see FormElement::renderInput()
-     *
      * @param array $params
      * @return string
+     * @throws SmartyException
+     * @see FormElement::renderInput()
+     *
      */
     public function renderInput( $params = null )
     {
@@ -3335,12 +3351,12 @@ class WysiwygTextarea extends InvitationFormElement
                     ]
                 ],
                 'buttonCode' => OW::getThemeManager()->processDecorator('button', ['label' => '#label#', 'class' => 'ow_ic_add mn_submit']),
-                'rtl' => ( ( $languageDto !== null && (bool) $languageDto->getRtl() ) ? true : false )
+                'rtl' => ($languageDto !== null && (bool) $languageDto->getRtl() ) ? true : false
             ];
 
 
 
-            $script = "window.htmlAreaData = " . json_encode($array);
+            $script = 'window.htmlAreaData = ' . json_encode($array);
             OW::getDocument()->addScriptDeclarationBeforeIncludes($script);
             OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'htmlarea.js');
             OW::getDocument()->addStyleSheet(OW::getPluginManager()->getPlugin('base')->getStaticCssUrl() . 'htmlarea.css');
@@ -3351,14 +3367,14 @@ class WysiwygTextarea extends InvitationFormElement
 
         if ( !empty($this->customBodyClass) )
         {
-            $params["customClass"] = $this->customBodyClass;
+            $params['customClass'] = $this->customBodyClass;
         }
 
         OW::getDocument()->addOnloadScript("
             $('#{$this->getId()}').get(0).htmlarea = function(){ $(this).htmlarea( " . json_encode($params) . " );};
             $('#{$this->getId()}').get(0).htmlareaFocus = function(){this.jhtmlareaObject.iframe[0].contentWindow.focus();};
-            $('#{$this->getId()}').get(0).htmlareaRefresh = function(){if(this.jhtmlareaObject){this.jhtmlareaObject.dispose();$(this).htmlarea( " . json_encode($params) . " );}};
-        ");
+            $('#{$this->getId()}').get(0).htmlareaRefresh = function(){if(this.jhtmlareaObject){this.jhtmlareaObject.dispose();$(this).htmlarea( " . json_encode($params) . ' );}};
+        ');
 
         if ( $this->value === null && $this->getHasInvitation() )
         {
@@ -3368,7 +3384,7 @@ class WysiwygTextarea extends InvitationFormElement
 
         if ( $this->init )
         {
-            OW::getDocument()->addOnloadScript("$('#{$this->getId()}').htmlarea( " . json_encode($params) . " );");
+            OW::getDocument()->addOnloadScript("$('#{$this->getId()}').htmlarea( " . json_encode($params) . ' );');
         }
 
         $this->removeAttribute('value');
@@ -3396,6 +3412,10 @@ class WysiwygTextarea extends InvitationFormElement
         return BOL_TextFormatService::getInstance()->processWsForOutput($this->value, ['buttons' => $this->buttons]);
     }
 
+    /**
+     * @param mixed $value
+     * @return FormElement|mixed
+     */
     public function setValue( $value )
     {
         if ( $this->textarea !== null )
@@ -3404,6 +3424,8 @@ class WysiwygTextarea extends InvitationFormElement
         }
 
         $this->value = $value;
+
+        return $this->value;
     }
 
     private function processButtons( $buttons )
@@ -3541,10 +3563,10 @@ class TagsInputField extends FormElement
     public function getElementJs()
     {
         $js = "
-$('#" . $this->getId() . "').tagsInput({" . ( $this->jsRegexp ? "'regexp':" . $this->jsRegexp . "," : '' ) . "'pseudoDelimiter':" . json_encode($this->delimiterChars) . ", 'height':'auto', 'width':'auto', 'interactive':true, 'defaultText':'" . $this->invLabel . "', 'removeWithBackspace':true, 'minChars':" . $this->minChars . ", 'maxChars':" . $this->maxChars . ", 'placeholderColor':'#666666'});
+$('#" . $this->getId() . "').tagsInput({" . ( $this->jsRegexp ? "'regexp':" . $this->jsRegexp . ',' : '' ) . "'pseudoDelimiter':" . json_encode($this->delimiterChars) . ", 'height':'auto', 'width':'auto', 'interactive':true, 'defaultText':'" . $this->invLabel . "', 'removeWithBackspace':true, 'minChars':" . $this->minChars . ", 'maxChars':" . $this->maxChars . ", 'placeholderColor':'#666666'});
 var formElement = new OwFormElement('" . $this->getId() . "', '" . $this->getName() . "');";
 
-        $js .= $this->generateValidatorAndFilterJsCode("formElement");
+        $js .= $this->generateValidatorAndFilterJsCode('formElement');
 
         $js .= "
             formElement.getValue = function(){
@@ -3568,7 +3590,7 @@ var formElement = new OwFormElement('" . $this->getId() . "', '" . $this->getNam
 
         if ( $this->value )
         {
-            $js .= "$('#" . $this->getId() . "').importTags('" . str_replace("'", "", implode(',', $this->value)) . "');";
+            $js .= "$('#" . $this->getId() . "').importTags('" . str_replace("'", '', implode(',', $this->value)) . "');";
         }
 
         return $js;
@@ -3624,11 +3646,11 @@ class CsrfHiddenField extends HiddenField
      */
     public function getElementJs()
     {
-        $jsString = "
-            var formElement = new OwFormElement(" . json_encode($this->getId()) . ", " . json_encode($this->getName()) . ");
+        $jsString = '
+            var formElement = new OwFormElement(' . json_encode($this->getId()) . ', ' . json_encode($this->getName()) . ');
             formElement.resetValue = function(){};
-        ";
+        ';
 
-        return $jsString . $this->generateValidatorAndFilterJsCode("formElement");
+        return $jsString . $this->generateValidatorAndFilterJsCode('formElement');
     }
 }

@@ -31,7 +31,7 @@
  */
 interface OW_ICacheBackend
 {
-    public function save( $data, $key, array $tags = [], $expTime );
+    public function save( $data, $key, array $tags = [], $expTime = null );
     public function load( $key );
     public function test( $key );
     public function remove( $key );

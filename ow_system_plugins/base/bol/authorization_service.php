@@ -553,7 +553,7 @@ class BOL_AuthorizationService
         return $defaults;
     }
 
-    public function isActionAuthorizedForUser( $userId, $groupName, $actionName = null )
+    public function isActionAuthorizedForUser( $userId, $groupName, $actionName = null, $extra = null )
     {
         $userId = (int) $userId;
 

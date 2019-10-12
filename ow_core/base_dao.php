@@ -31,11 +31,17 @@
  */
 abstract class OW_BaseDao
 {
-    const DEFAULT_CACHE_LIFETIME = false;
+    public const DEFAULT_CACHE_LIFETIME = false;
 
-    public abstract function getTableName();
+    /**
+     * @return string
+     */
+    abstract public function getTableName();
 
-    public abstract function getDtoClassName();
+    /**
+     * @return string
+     */
+    abstract public function getDtoClassName();
     /**
      *
      * @var OW_Database
@@ -50,7 +56,9 @@ abstract class OW_BaseDao
     /**
      * Finds and returns mapped entity item
      *
-     * @param int $id
+     * @param int   $id
+     * @param int   $cacheLifeTime
+     * @param array $tags
      * @return OW_Entity
      */
     public function findById( $id, $cacheLifeTime = 0, $tags = [])
@@ -64,6 +72,8 @@ abstract class OW_BaseDao
      * Finds and returns mapped entity list
      *
      * @param array $idList
+     * @param int   $cacheLifeTime
+     * @param array $tags
      * @return array
      */
     public function findByIdList( array $idList, $cacheLifeTime = 0, $tags = [])
@@ -117,6 +127,8 @@ abstract class OW_BaseDao
     /**
      * Returns all mapped entries of table
      *
+     * @param int   $cacheLifeTime
+     * @param array $tags
      * @return array
      */
     public function findAll( $cacheLifeTime = 0, $tags = [])
@@ -161,13 +173,13 @@ abstract class OW_BaseDao
      * Deletes list of entities by id list. Returns affected rows
      *
      * @param array $idList
-     * @return int
+     * @return int|null
      */
     public function deleteByIdList( array $idList )
     {
         if ( $idList === null || count($idList) === 0 )
         {
-            return;
+            return null;
         }
         $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE `id` IN(' . $this->dbo->mergeInClause($idList) . ')';
 
@@ -212,7 +224,6 @@ abstract class OW_BaseDao
         }
         else
         {
-            $entity->id = NULL;
             $entity->id = $this->dbo->insertObject($this->getTableName(), $entity);
         }
 

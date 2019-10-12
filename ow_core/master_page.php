@@ -115,7 +115,7 @@ class OW_MasterPage extends OW_Renderable
      */
     public function getForm( $name )
     {
-        throw new LogicException('Master page cant cantain forms!');
+        throw new LogicException("Master page can't contain forms!");
     }
 
     /**
@@ -132,7 +132,7 @@ class OW_MasterPage extends OW_Renderable
         $this->addMenu(BOL_NavigationService::MENU_TYPE_MAIN, $mainMenu);
         
         $this->addComponent('main_menu', new BASE_CMP_MainMenu([
-            "responsive" => false
+            'responsive' => false
         ]));
 
         // add bottom menu

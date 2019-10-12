@@ -100,9 +100,9 @@ class OW_AjaxDocument extends OW_HtmlDocument
 
         ksort($this->styleSheets['items']);
 
-        foreach ( $this->styleSheets['items'] as $priority => $scipts )
+        foreach ( $this->styleSheets['items'] as $priority => $scripts )
         {
-            foreach ( $scipts as $media => $urls )
+            foreach ( $scripts as $media => $urls )
             {
                 foreach ( $urls as $url )
                 {

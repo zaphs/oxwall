@@ -51,6 +51,7 @@ class RedirectException extends Exception
      * Constructor.
      *
      * @param string $url
+     * @param null   $code
      */
     public function __construct( $url, $code = null )
     {
@@ -99,6 +100,7 @@ class InterceptException extends Exception
     public function __construct( $attrs )
     {
         $this->handlerAttrs = $attrs;
+        parent::__construct(json_encode($attrs));
     }
 
     public function getHandlerAttrs()
@@ -112,6 +114,7 @@ class AuthorizationException extends InterceptException
 
     /**
      * Constructor.
+     * @param null $message
      */
     public function __construct( $message = null )
     {
@@ -132,8 +135,9 @@ class Redirect404Exception extends InterceptException
 
     /**
      * Constructor.
+     * @param string $message
      */
-    public function __construct()
+    public function __construct(?string $message = '')
     {
         $route = OW::getRouter()->getRoute('base_page_404');
         $params = $route === null ? ['controller' => 'BASE_CTRL_BaseDocument', 'action' => 'page404'] : $route->getDispatchAttrs();
@@ -164,6 +168,7 @@ class Redirect403Exception extends InterceptException
 
     /**
      * Constructor.
+     * @param null $message
      */
     public function __construct( $message = null )
     {
@@ -182,6 +187,8 @@ class RedirectConfirmPageException extends RedirectException
 
     /**
      * Constructor.
+     * @param $message
+     * @throws Exception
      */
     public function __construct( $message )
     {
@@ -198,6 +205,8 @@ class RedirectAlertPageException extends RedirectException
 
     /**
      * Constructor.
+     * @param $message
+     * @throws Exception
      */
     public function __construct( $message )
     {
@@ -227,7 +236,7 @@ class ApiResponseErrorException extends Exception
     
     public function __construct($data = [], $code = 0)
     {
-        parent::__construct("", $code);
+        parent::__construct('', $code);
         
         $this->data = $data;
     }
@@ -235,16 +244,16 @@ class ApiResponseErrorException extends Exception
 
 class ApiAccessException extends ApiResponseErrorException
 {
-    const TYPE_NOT_AUTHENTICATED = "not_authenticated";
-    const TYPE_SUSPENDED = "suspended";
-    const TYPE_NOT_APPROVED = "not_approved";
-    const TYPE_NOT_VERIFIED = "not_verified";
+    const TYPE_NOT_AUTHENTICATED = 'not_authenticated';
+    const TYPE_SUSPENDED = 'suspended';
+    const TYPE_NOT_APPROVED = 'not_approved';
+    const TYPE_NOT_VERIFIED = 'not_verified';
 
     public function __construct( $type, $userData = [])
     {
         parent::__construct([
-            "type" => $type,
-            "data" => $userData
+            'type' => $type,
+            'data' => $userData
         ]);
     }
 }

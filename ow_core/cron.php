@@ -64,5 +64,5 @@ abstract class OW_Cron
         return 1;
     }
 
-    public abstract function run();
+    abstract public function run();
 }

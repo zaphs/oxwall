@@ -52,23 +52,25 @@ class OW_ApiDocument extends OW_Document
     /**
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         if( $this->type == OW_Document::JSON )
         {
             return $this->renderJson();
         }
+
+        return '';
     }
 
     private function renderJson()
     {
-        OW::getResponse()->setHeader(OW_Response::HD_CNT_TYPE, "application/json");
+        OW::getResponse()->setHeader(OW_Response::HD_CNT_TYPE, 'application/json');
 
         $body = $this->getBody();
         
         $apiResponse = [
-            "type" => "success",
-            "data" => empty($body) ? new stdClass() : $body
+            'type' => 'success',
+            'data' => empty($body) ? new stdClass() : $body
         ];
         
         return json_encode($apiResponse);

@@ -23,7 +23,7 @@
  */
 
 /**
- * The class is responsible for default stratagy of url generation.
+ * The class is responsible for default strategy of url generation.
  * All URIs (except URIs working with custom routes) are generated and decomposed by default route.
  * DefaultRoute class can be extended and modified to change whole url generation strategy.
  * 
@@ -45,17 +45,17 @@ class OW_ApiDefaultRoute extends OW_DefaultRoute
      */
     public function generateUri( $controller, $action = null, array $params = [])
     {
-        throw new LogicException("Cant generate URI in API context");
+        throw new LogicException('Cant generate URI in API context');
     }
 
     /**
      * Returns dispatch params (controller, action, vars) for provided URI.
-     * 
-     * @throws Redirect404Exception
+     *
      * @param string $uri
      * @return array
+     * @throws Redirect404Exception
      */
-    public function getDispatchAttrs( $uri )
+    public function getDispatchAttrs( $uri ): array
     {
         throw new Redirect404Exception();
     }

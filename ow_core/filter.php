@@ -70,7 +70,7 @@ class TrimFilter implements OW_IFilter
      */
     public function getJsFilter()
     {
-        return "{filter : function( data ){return data.trim()}}";
+        return '{filter : function( data ){return data.trim()}}';
     }
 }
 
@@ -92,6 +92,6 @@ class StripTagsFilter implements OW_IFilter
 
     public function getJsFilter()
     {
-        return "{filter : function( data ){return $(data).text()}}";
+        return '{filter : function( data ){return $(data).text()}}';
     }
 }

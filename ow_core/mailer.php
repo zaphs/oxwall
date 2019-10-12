@@ -48,10 +48,9 @@ class OW_Mailer
     {
         $this->maliService = BOL_MailService::getInstance();
     }
-    
+
     /**
-     * 
-     * @param $state
+     *
      * @return BASE_CLASS_Mail
      */
     public function createMail()

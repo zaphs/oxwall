@@ -44,8 +44,9 @@ class OW_ApiRequestHandler extends OW_RequestHandler
     }
 
     /**
-     * @param ReflectionMethod $action
+     * @param ReflectionMethod    $action
      * @param OW_ActionController $controller
+     * @throws SmartyException
      */
     protected function processControllerAction( $action, $controller )
     {

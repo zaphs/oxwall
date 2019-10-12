@@ -68,6 +68,7 @@ class OW_Dispatcher
     private $catchAllRequestsExcludes = [];
 
     /**
+     * @param $key
      * @return array
      */
     public function getCatchAllRequestsAttributes( $key )
@@ -78,7 +79,8 @@ class OW_Dispatcher
     /**
      * <controller> <action> <params> <route> <redirect> <js>
      *
-     * @param array $attributes 
+     * @param       $key
+     * @param array $attributes
      */
     public function setCatchAllRequestsAttributes( $key, array $attributes )
     {
@@ -89,6 +91,7 @@ class OW_Dispatcher
 
     /**
      *
+     * @param        $key
      * @param string $controller
      * @param string $action
      */
@@ -146,6 +149,7 @@ class OW_Dispatcher
 
     /**
      * @param array $attributes
+     * @throws Redirect404Exception
      */
     public function setDispatchAttributes( array $attributes )
     {
@@ -156,13 +160,14 @@ class OW_Dispatcher
 
         $this->dispatchAttributes = [
             self::ATTRS_KEY_CTRL => trim($attributes[OW_Route::DISPATCH_ATTRS_CTRL]),
-            self::ATTRS_KEY_ACTION => ( empty($attributes[OW_Route::DISPATCH_ATTRS_ACTION]) ? null : trim($attributes[OW_Route::DISPATCH_ATTRS_ACTION]) ),
-            self::ATTRS_KEY_VARLIST => ( empty($attributes[OW_Route::DISPATCH_ATTRS_VARLIST]) ? [] : $attributes[OW_Route::DISPATCH_ATTRS_VARLIST])
+            self::ATTRS_KEY_ACTION => empty($attributes[OW_Route::DISPATCH_ATTRS_ACTION]) ? null : trim($attributes[OW_Route::DISPATCH_ATTRS_ACTION]),
+            self::ATTRS_KEY_VARLIST => empty($attributes[OW_Route::DISPATCH_ATTRS_VARLIST]) ? [] : $attributes[OW_Route::DISPATCH_ATTRS_VARLIST]
         ];
     }
 
     /**
-     * @param array $dispatchAttributes
+     * @throws Redirect404Exception
+     * @throws Exception
      */
     public function dispatch()
     {
@@ -187,7 +192,7 @@ class OW_Dispatcher
             $this->dispatchAttributes = $catchAllRequests;
         }
 
-        /* @var $controller OW_ActionController */
+        /* @var  OW_ActionController $controller */
 
         try
         {
@@ -227,7 +232,7 @@ class OW_Dispatcher
             throw new Redirect404Exception();
         }
 
-        $action->invokeArgs($controller, [self::ATTRS_KEY_VARLIST => ( empty($this->dispatchAttributes[self::ATTRS_KEY_VARLIST]) ? [] : $this->dispatchAttributes[self::ATTRS_KEY_VARLIST] )]);
+        $action->invokeArgs($controller, [self::ATTRS_KEY_VARLIST => empty($this->dispatchAttributes[self::ATTRS_KEY_VARLIST]) ? [] : $this->dispatchAttributes[self::ATTRS_KEY_VARLIST]]);
 
         // set default template for controller action if template wasn't set
         if ( $controller->getTemplate() === null )
@@ -241,8 +246,6 @@ class OW_Dispatcher
     /**
      * Returns template path for provided controller and action.
      *
-     * @param string $controller
-     * @param string $action
      * @return string<path>
      */
     private function getControllerActionDefaultTemplate()
@@ -259,6 +262,7 @@ class OW_Dispatcher
      * Returns processed catch all requests attributes.
      *
      * @return string
+     * @throws Exception
      */
     private function processCatchAllRequestsAttrs()
     {

@@ -34,8 +34,8 @@ class OW_DeveloperTools
     const CACHE_ENTITY_THEME = 4;
     const CACHE_ENTITY_LANGUAGE = 8;
     const CACHE_ENTITY_PLUGIN_STRUCTURE = 32;
-    const EVENT_UPDATE_CACHE_ENTITIES = "base.update_cache_entities";
-    const CONFIG_NAME = "dev_mode";
+    const EVENT_UPDATE_CACHE_ENTITIES = 'base.update_cache_entities';
+    const CONFIG_NAME = 'dev_mode';
 
     use OW_Singleton;
     
@@ -64,18 +64,21 @@ class OW_DeveloperTools
         $this->languageService = BOL_LanguageService::getInstance();
     }
 
+    /**
+     * @throws Exception
+     */
     public function init()
     {
-        $configDev = (int) OW::getConfig()->getValue("base", self::CONFIG_NAME);
+        $configDev = (int) OW::getConfig()->getValue('base', self::CONFIG_NAME);
 
         if ( $configDev > 0 )
         {
             $this->refreshEntitiesCache($configDev);
-            OW::getConfig()->saveConfig("base", self::CONFIG_NAME, 0);
+            OW::getConfig()->saveConfig('base', self::CONFIG_NAME, 0);
             OW::getApplication()->redirect();
         }
 
-        if ( defined("OW_DEV_MODE") && OW_DEV_MODE )
+        if (defined('OW_DEV_MODE') && OW_DEV_MODE )
         {
             $this->refreshEntitiesCache(OW_DEV_MODE);
         }
@@ -88,7 +91,7 @@ class OW_DeveloperTools
 
         OW_View::setCollectDevInfo(true);
         OW::getEventManager()->setDevMode(true);
-        OW::getEventManager()->bind("base.append_markup", [$this, "onAppendMarkup"]);
+        OW::getEventManager()->bind('base.append_markup', [$this, 'onAppendMarkup']);
     }
     /* ---------------------------------------- Developer handlers -------------------------------------------------- */
 
@@ -121,7 +124,7 @@ class OW_DeveloperTools
             $this->updateStructureforAllPlugins();
         }
 
-        OW::getEventManager()->trigger(new OW_Event(self::EVENT_UPDATE_CACHE_ENTITIES, ["options" => $options]));
+        OW::getEventManager()->trigger(new OW_Event(self::EVENT_UPDATE_CACHE_ENTITIES, ['options' => $options]));
     }
 
     /**
@@ -140,9 +143,9 @@ class OW_DeveloperTools
         $this->themeService->updateThemeList();
         $this->themeService->processAllThemes();
 
-        if ( OW::getConfig()->configExists("base", "cachedEntitiesPostfix") )
+        if ( OW::getConfig()->configExists('base', 'cachedEntitiesPostfix') )
         {
-            OW::getConfig()->saveConfig("base", "cachedEntitiesPostfix", UTIL_String::getRandomString());
+            OW::getConfig()->saveConfig('base', 'cachedEntitiesPostfix', UTIL_String::getRandomString());
         }
     }
 
@@ -161,7 +164,7 @@ class OW_DeveloperTools
     {
         $plugins = $this->pluginService->findAllPlugins();
 
-        /* @var $pluginDto BOL_Plugin */
+        /* @var BOL_Plugin $pluginDto */
         foreach ( $plugins as $pluginDto )
         {
             $this->pluginService->addPluginDirs($pluginDto);
@@ -172,61 +175,62 @@ class OW_DeveloperTools
 
     /**
      * The method collects all the developer info during the page handling.
-     * 
+     *
      * @param BASE_CLASS_EventCollector $event
+     * @throws SmartyException
      */
     public function onAppendMarkup( BASE_CLASS_EventCollector $event )
     {
         $viewRenderer = OW_ViewRenderer::getInstance();
-        $viewRenderer->assignVar("oxwall", BOL_StorageService::getInstance()->getPlatformXmlInfo());
+        $viewRenderer->assignVar('oxwall', BOL_StorageService::getInstance()->getPlatformXmlInfo());
 
         $view = new OW_View();
-        $view->setTemplate(OW::getPluginManager()->getPlugin("base")->getCmpViewDir() . "dev_tools_tpl.html");
+        $view->setTemplate(OW::getPluginManager()->getPlugin('base')->getCmpViewDir() . 'dev_tools_tpl.html');
 
         // get current request attributes
         $requestHandlerData = OW::getRequestHandler()->getDispatchAttributes();
 
         try
         {
-            $ctrlPath = OW::getAutoloader()->getClassPath($requestHandlerData["controller"]);
+            $ctrlPath = OW::getAutoloader()->getClassPath($requestHandlerData['controller']);
         }
         catch ( Exception $e )
         {
-            $ctrlPath = "not_found";
+            $ctrlPath = 'not_found';
         }
 
-        $requestHandlerData["ctrlPath"] = $ctrlPath;
-        $requestHandlerData["paramsExp"] = var_export(( empty($requestHandlerData["params"]) ? [] : $requestHandlerData["params"]),
+        $requestHandlerData['ctrlPath']  = $ctrlPath;
+        $requestHandlerData['paramsExp'] = var_export(( empty($requestHandlerData['params']) ? [] : $requestHandlerData['params']),
             true);
 
-        $view->assign("requestHandler", $requestHandlerData);
+        $view->assign('requestHandler', $requestHandlerData);
 
         // get current request memory usage
-        $memoryUsage = "No info";
+        $memoryUsage = 'No info';
 
-        if ( function_exists("memory_get_peak_usage") )
+        if ( function_exists('memory_get_peak_usage') )
         {
             $memoryUsage = UTIL_File::convertBytesToHumanReadable(memory_get_peak_usage(true));
         }
 
-        $view->assign("memoryUsage", $memoryUsage);
+        $view->assign('memoryUsage', $memoryUsage);
 
         // get default profiler data
-        $view->assign("profiler", UTIL_Profiler::getInstance()->getResult());
+        $view->assign('profiler', UTIL_Profiler::getInstance()->getResult());
 
         // rendered view data
-        $view->assign("renderedItems", $this->getViewInfo(OW_View::getDevInfo()));
+        $view->assign('renderedItems', $this->getViewInfo(OW_View::getDevInfo()));
 
         // sql queries data
-        $filter = !empty($_GET["pr_query_log_filter"]) ? trim($_GET["pr_query_log_filter"]) : null;
-        $view->assign("database",
+        $filter = !empty($_GET['pr_query_log_filter']) ? trim($_GET['pr_query_log_filter']) : null;
+        $view->assign('database',
             $this->getSqlInfo(OW::getDbo()->getQueryLog(), OW::getDbo()->getTotalQueryExecTime(), $filter));
 
         // events data
-        $view->assign("events", $this->getEventInfo(OW::getEventManager()->getLog()));
+        $view->assign('events', $this->getEventInfo(OW::getEventManager()->getLog()));
 
-        $view->assign("clrBtnUrl", OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlFor("BASE_CTRL_Base", "turnDevModeOn"),
-            ["back-uri" => urlencode(OW::getRouter()->getUri())]));
+        $view->assign('clrBtnUrl', OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlFor('BASE_CTRL_Base', 'turnDevModeOn'),
+            ['back-uri' => urlencode(OW::getRouter()->getUri())]));
 
         $event->add($view->render());
     }
@@ -237,50 +241,50 @@ class OW_DeveloperTools
         {
             if ( $queryFilter )
             {
-                if ( !mb_strstr($query["query"], $queryFilter) )
+                if ( !mb_strstr($query['query'], $queryFilter) )
                 {
                     unset($sqlData[$key]);
                     continue;
                 }
             }
 
-            if ( isset($query["params"]) && is_array($query["params"]) )
+            if (isset($query['params']) && is_array($query['params']) )
             {
-                $sqlData[$key]["params"] = var_export($query["params"], true);
+                $sqlData[$key]['params'] = var_export($query['params'], true);
             }
         }
 
-        return ["qet" => $totalTime, "ql" => $sqlData, "qc" => count($sqlData)];
+        return ['qet' => $totalTime, 'ql' => $sqlData, 'qc' => count($sqlData)];
     }
 
     protected function getEventInfo( array $eventsData )
     {
-        $eventsDataArray = ["bind" => [], "calls" => []];
+        $eventsDataArray = ['bind' => [], 'calls' => []];
 
-        foreach ( $eventsData["bind"] as $eventName => $listeners )
+        foreach ($eventsData['bind'] as $eventName => $listeners )
         {
-            $eventsDataArray["bind"][] = [
-                "name" => $eventName,
-                "listeners" => $this->getEventListeners($listeners)
+            $eventsDataArray['bind'][] = [
+                'name'      => $eventName,
+                'listeners' => $this->getEventListeners($listeners)
             ];
         }
 
-        foreach ( $eventsData["call"] as $eventItem )
+        foreach ($eventsData['call'] as $eventItem )
         {
-            $paramsData = var_export($eventItem["event"]->getParams(), true);
+            $paramsData = var_export($eventItem['event']->getParams(), true);
 
-            $eventsDataArray["call"][] = [
-                "type" => $eventItem["type"],
-                "name" => $eventItem["event"]->getName(),
-                "listeners" => $this->getEventListeners($eventItem["listeners"]),
-                "params" => $paramsData,
-                "start" => sprintf("%.3f", $eventItem["start"]),
-                "exec" => sprintf("%.3f", $eventItem["exec"])
+            $eventsDataArray['call'][] = [
+                'type'      => $eventItem['type'],
+                'name'      => $eventItem['event']->getName(),
+                'listeners' => $this->getEventListeners($eventItem['listeners']),
+                'params'    => $paramsData,
+                'start'     => sprintf('%.3f', $eventItem['start']),
+                'exec'      => sprintf('%.3f', $eventItem['exec'])
             ];
         }
 
-        $eventsDataArray["bindsCount"] = count($eventsDataArray["bind"]);
-        $eventsDataArray["callsCount"] = count($eventsDataArray["call"]);
+        $eventsDataArray['bindsCount'] = count($eventsDataArray['bind']);
+        $eventsDataArray['callsCount'] = count($eventsDataArray['call']);
 
         return $eventsDataArray;
     }
@@ -310,7 +314,7 @@ class OW_DeveloperTools
                 }
                 else
                 {
-                    $listener = "ClosureObject";
+                    $listener = 'ClosureObject';
                 }
 
                 $listenersList[] = $listener;
@@ -322,7 +326,7 @@ class OW_DeveloperTools
 
     protected function getViewInfo( array $viewData )
     {
-        $viewDataArray = ["mp" => [], "cmp" => [], "ctrl" => []];
+        $viewDataArray = ['mp' => [], 'cmp' => [], 'ctrl' => []];
 
         foreach ( $viewData as $class => $item )
         {
@@ -332,29 +336,29 @@ class OW_DeveloperTools
             }
             catch ( Exception $e )
             {
-                $src = "not_found";
+                $src = 'not_found';
             }
 
-            $addItem = ["class" => $class, "src" => $src, "tpl" => $item];
+            $addItem = ['class' => $class, 'src' => $src, 'tpl' => $item];
 
             if ( is_subclass_of($class, OW_MasterPage::class) )
             {
-                $viewDataArray["mp"] = $addItem;
+                $viewDataArray['mp'] = $addItem;
             }
             else if ( is_subclass_of($class, OW_ActionController::class) )
             {
-                $viewDataArray["ctrl"] = $addItem;
+                $viewDataArray['ctrl'] = $addItem;
             }
             else if ( is_subclass_of($class, OW_Component::class) )
             {
-                $viewDataArray["cmp"][] = $addItem;
+                $viewDataArray['cmp'][] = $addItem;
             }
             else
             {
-                $viewDataArray["view"][] = $addItem;
+                $viewDataArray['view'][] = $addItem;
             }
         }
 
-        return ["items" => $viewDataArray, "count" => (count($viewData) - 2 )];
+        return ['items' => $viewDataArray, 'count' => count($viewData) - 2];
     }
 }

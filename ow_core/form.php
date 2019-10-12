@@ -42,8 +42,8 @@ class Form
     const AJAX_DATA_TYPE_XML = 'xml';
     const AJAX_DATA_TYPE_HTML = 'html';
     /* -------------------------------------------------------------------------------------------------------------- */
-    const ELEMENT_CSRF_TOKEN = "csrf_token";
-    const ELEMENT_FORM_NAME = "form_name";
+    const ELEMENT_CSRF_TOKEN = 'csrf_token';
+    const ELEMENT_FORM_NAME = 'form_name';
 
     /**
      * Form element attributes (id, name, etc).
@@ -262,7 +262,7 @@ class Form
     /**
      * Sets form ajax flag.
      *
-     * @param boolean $isAjax
+     * @param bool $ajax
      * @return Form
      */
     public function setAjax( $ajax = true )
@@ -438,10 +438,10 @@ class Form
         {
             $valid = false;
             //TODO refactor - remove message adding from Form class
-            OW::getFeedback()->error(OW::getLanguage()->text("base", "invalid_csrf_token_error_message"));
+            OW::getFeedback()->error(OW::getLanguage()->text('base', 'invalid_csrf_token_error_message'));
         }
 
-        /* @var $element FormElement */
+        /* @var FormElement $element */
         foreach ( $this->elements as $element )
         {
             $element->setValue(( isset($data[$element->getName()]) ? $data[$element->getName()] : null));
@@ -464,7 +464,7 @@ class Form
     {
         $values = [];
 
-        /* @var $element FormElement */
+        /* @var FormElement $element */
         foreach ( $this->elements as $element )
         {
             $values[$element->getName()] = $element->getValue();
@@ -480,7 +480,7 @@ class Form
      */
     public function setValues( array $values )
     {
-        /* @var $element FormElement */
+        /* @var FormElement $element */
         foreach ( $this->elements as $element )
         {
             if ( isset($values[$element->getName()]) )
@@ -499,7 +499,7 @@ class Form
     {
         $errors = [];
 
-        /* @var $value FormElement */
+        /* @var FormElement $value */
         foreach ( $this->elements as $key => $value )
         {
             $errors[$key] = $value->getErrors();
@@ -515,7 +515,7 @@ class Form
      */
     public function reset()
     {
-        /* @var $element FormElement */
+        /* @var FormElement $element */
         foreach ( $this->elements as $element )
         {
             //TODO remove temp hardcode to avoid token reset
@@ -532,18 +532,18 @@ class Form
      * Returns rendered HTML code of form object.
      *
      * @param string $formContent
-     * @param string $decorator
+     * @param array  $params
      * @return string
      */
     public function render( $formContent, array $params = [])
     {
         $formElementJS = '';
 
-        /* @var $element FormElement */
+        /* @var FormElement $element */
         foreach ( $this->elements as $element )
         {
             $formElementJS .= $element->getElementJs() . PHP_EOL;
-            $formElementJS .= "form.addElement(formElement);" . PHP_EOL;
+            $formElementJS .= 'form.addElement(formElement);' . PHP_EOL;
         }
 
         $formInitParams = [
@@ -555,8 +555,8 @@ class Form
             'validateErrorMessage' => $this->emptyElementsErrorMessage,
         ];
 
-        $jsString = " var form = new OwForm(" . json_encode($formInitParams) . ");window.owForms[form.name] = form;
-			" . PHP_EOL . $formElementJS . "
+        $jsString = ' var form = new OwForm(' . json_encode($formInitParams) . ');window.owForms[form.name] = form;
+			' . PHP_EOL . $formElementJS . "
 
 			if ( form.form ) 
 			{
@@ -584,7 +584,7 @@ class Form
 
             foreach ( $binds as $function )
             {
-                $jsString .= "form.bind('" . trim($bindType) . "', " . $function . ");";
+                $jsString .= "form.bind('" . trim($bindType) . "', " . $function . ');';
             }
         }
 
@@ -592,7 +592,7 @@ class Form
 
         $hiddenFieldString = '';
 
-        /* @var $value OW_FormElement */
+        /* @var OW_FormElement $value */
         foreach ( $this->elements as $value )
         {
             if ( $value instanceof HiddenField )

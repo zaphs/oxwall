@@ -59,7 +59,7 @@ class OW_Config
 
         $this->cachedConfigs = [];
         
-        /* @var $config BOL_Config */
+        /* @var BOL_Config $config */
         foreach ( $configs as $config )
         {
             if ( !isset($this->cachedConfigs[$config->getKey()]) )
@@ -80,7 +80,7 @@ class OW_Config
      */
     public function getValue( $key, $name )
     {
-        return ( isset($this->cachedConfigs[$key][$name]) ) ? $this->cachedConfigs[$key][$name] : null;
+        return isset($this->cachedConfigs[$key][$name]) ? $this->cachedConfigs[$key][$name] : null;
     }
 
     /**
@@ -91,19 +91,20 @@ class OW_Config
      */
     public function getValues( $key )
     {
-        return ( isset($this->cachedConfigs[$key]) ) ? $this->cachedConfigs[$key] : [];
+        return isset($this->cachedConfigs[$key]) ? $this->cachedConfigs[$key] : [];
     }
 
     /**
      * Adds plugin config.
-     * 
+     *
      * @param string $key
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
+     * @param null   $description
      */
-    public function addConfig( $key, $name, $value, $descripton = null )
+    public function addConfig( $key, $name, $value, $description = null )
     {
-        $this->configService->addConfig($key, $name, $value, $descripton);
+        $this->configService->addConfig($key, $name, $value, $description);
         $this->generateCache();
     }
 

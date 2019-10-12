@@ -66,6 +66,9 @@ class OW_AuthResult
 
     /**
      * Constructor.
+     * @param       $code
+     * @param null  $userId
+     * @param array $messages
      */
     public function __construct( $code, $userId = null, array $messages = [])
     {

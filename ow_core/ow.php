@@ -120,12 +120,9 @@ final class OW
                 $context = self::CONTEXT_API;
             }
         }
-        else
+        elseif ( trim($uri) == 'api' )
         {
-            if ( trim($uri) == 'api' )
-            {
-                $context = self::CONTEXT_API;
-            }
+            $context = self::CONTEXT_API;
         }
 
         self::$context = $context;
@@ -360,8 +357,8 @@ final class OW
     }
 
     /**
+     * @return OW_RequestHandler
      * @deprecated
-     * @return OW_Dispatcher
      */
     public static function getDispatcher()
     {
@@ -448,14 +445,26 @@ final class OW
         return OW_CacheManager::getInstance();
     }
 
+    /**
+     * @param      $className
+     * @param null $arguments
+     * @return mixed|object
+     * @throws ReflectionException
+     */
     public static function getClassInstance( $className, $arguments = null )
     {
         $args = func_get_args();
-        $constuctorArgs = array_splice($args, 1);
+        $constructorArgs = array_splice($args, 1);
 
-        return self::getClassInstanceArray($className, $constuctorArgs);
+        return self::getClassInstanceArray($className, $constructorArgs);
     }
 
+    /**
+     * @param       $className
+     * @param array $arguments
+     * @return mixed|object
+     * @throws ReflectionException
+     */
     public static function getClassInstanceArray( $className, array $arguments = [])
     {
         $params = [
@@ -464,31 +473,31 @@ final class OW
         ];
 
         $eventManager = OW::getEventManager();
-        $eventManager->trigger(new OW_Event("core.performance_test", ["key" => "component_construct.start", "params" => $params]));
+        $eventManager->trigger(new OW_Event('core.performance_test', ['key' => 'component_construct.start', 'params' => $params]));
 
-        $event = new OW_Event("class.get_instance." . $className, $params);
+        $event = new OW_Event('class.get_instance.' . $className, $params);
         $eventManager->trigger($event);
         $instance = $event->getData();
 
         if ( $instance !== null )
         {
-            $eventManager->trigger(new OW_Event("core.performance_test", ["key" => "component_construct.end", "params" => $params]));
+            $eventManager->trigger(new OW_Event('core.performance_test', ['key' => 'component_construct.end', 'params' => $params]));
             return $instance;
         }
 
-        $event = new OW_Event("class.get_instance", $params);
+        $event = new OW_Event('class.get_instance', $params);
 
         $eventManager->trigger($event);
         $instance = $event->getData();
 
         if ( $instance !== null )
         {
-            $eventManager->trigger(new OW_Event("core.performance_test", ["key" => "component_construct.end", "params" => $params]));
+            $eventManager->trigger(new OW_Event('core.performance_test', ['key' => 'component_construct.end', 'params' => $params]));
             return $instance;
         }
 
         $rClass = new ReflectionClass($className);
-        $eventManager->trigger(new OW_Event("core.performance_test", ["key" => "component_construct.end", "params" => $params]));
+        $eventManager->trigger(new OW_Event('core.performance_test', ['key' => 'component_construct.end', 'params' => $params]));
         return $rClass->newInstanceArgs($arguments);
     }
 

@@ -35,7 +35,6 @@ abstract class OW_MobileComponent extends OW_Component
     /**
      * Constructor.
      *
-     * @param string $template
      */
     public function __construct()
     {

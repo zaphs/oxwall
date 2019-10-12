@@ -47,14 +47,14 @@ class OW_ApiApplication extends OW_Application
         require_once OW_DIR_SYSTEM_PLUGIN . 'base' . DS . 'classes' . DS . 'json_err_output.php';
         OW_ErrorManager::getInstance()->setErrorOutput(new BASE_CLASS_JsonErrOutput());
 
-        $authToken = empty($_SERVER["HTTP_API_AUTH_TOKEN"]) ? null : $_SERVER["HTTP_API_AUTH_TOKEN"];
+        $authToken = empty($_SERVER['HTTP_API_AUTH_TOKEN']) ? null : $_SERVER['HTTP_API_AUTH_TOKEN'];
         OW_Auth::getInstance()->setAuthenticator(new OW_TokenAuthenticator($authToken));
 
         $tag = '';
 
-        if ( !empty($_SERVER["HTTP_API_LANGUAGE"]) )
+        if ( !empty($_SERVER['HTTP_API_LANGUAGE']) )
         {
-            $tag = $_SERVER["HTTP_API_LANGUAGE"];
+            $tag = $_SERVER['HTTP_API_LANGUAGE'];
         }
         else
         {
@@ -73,19 +73,19 @@ class OW_ApiApplication extends OW_Application
         {
             $languageDto = BOL_LanguageService::getInstance()->findByTag($tag);
 
-            if ( empty($languageDto) )
+            if ($languageDto === null)
             {
                 $tag = str_replace('_', '-', $tag);
                 $languageDto = BOL_LanguageService::getInstance()->findByTag($tag);
             }
 
-            if ( empty($languageDto) )
+            if ($languageDto === null)
             {
                 $tag = mb_substr($tag, 0, 2);
                 $languageDto = BOL_LanguageService::getInstance()->findByTag($tag);
             }
 
-            if ( !empty($languageDto) && $languageDto->status == "active" )
+            if ($languageDto !== null && $languageDto->status == 'active')
             {
                 BOL_LanguageService::getInstance()->setCurrentLanguage($languageDto);
             }
@@ -131,11 +131,11 @@ class OW_ApiApplication extends OW_Application
         $event = new OW_Event(OW_EventManager::ON_PLUGINS_INIT);
         OW::getEventManager()->trigger($event);
 
-        $beckend = OW::getEventManager()->call('base.cache_backend_init');
+        $backend = OW::getEventManager()->call('base.cache_backend_init');
 
-        if ( $beckend !== null )
+        if ( $backend !== null )
         {
-            OW::getCacheManager()->setCacheBackend($beckend);
+            OW::getCacheManager()->setCacheBackend($backend);
             OW::getCacheManager()->setLifetime(3600);
             OW::getDbo()->setUseCashe(true);
         }
@@ -187,27 +187,27 @@ class OW_ApiApplication extends OW_Application
         }
         catch ( Exception $e )
         {
-            $errorType = "exception";
+            $errorType = 'exception';
             
             $responseData = [
-                "exception" => get_class($e),
-                "message" => $e->getMessage(),
-                "code" => $e->getCode()
+                'exception' => get_class($e),
+                'message'   => $e->getMessage(),
+                'code'      => $e->getCode()
             ];
             
             if ( $e instanceof ApiResponseErrorException )
             {
-                $responseData["userData"] = $e->data;
-                $errorType = "userError";
+                $responseData['userData'] = $e->data;
+                $errorType                = 'userError';
             }
-            else if ( defined("OW_DEBUG_MODE") && OW_DEBUG_MODE )
+            else if (defined('OW_DEBUG_MODE') && OW_DEBUG_MODE )
             {
-                $responseData["trace"] = $e->getTraceAsString();
+                $responseData['trace'] = $e->getTraceAsString();
             }
             
             $apiResponse = [
-                "type" => $errorType,
-                "data" => $responseData
+                'type' => $errorType,
+                'data' => $responseData
             ];
             
             //OW::getResponse()->setHeader(OW_Response::HD_CNT_TYPE, "application/json");
@@ -227,9 +227,9 @@ class OW_ApiApplication extends OW_Application
     {
 //        $document = OW::getDocument();
 //
-//        $meassages = OW::getFeedback()->getFeedback();
+//        $messages = OW::getFeedback()->getFeedback();
 //
-//        foreach ( $meassages as $messageType => $messageList )
+//        foreach ( $messages as $messageType => $messageList )
 //        {
 //            foreach ( $messageList as $message )
 //            {
@@ -326,6 +326,7 @@ class OW_ApiApplication extends OW_Application
      * Makes header redirect to provided URL or URI.
      *
      * @param string $redirectTo
+     * @param bool   $switchContextTo
      */
     public function redirect( $redirectTo = null, $switchContextTo = false )
     {
@@ -364,52 +365,11 @@ class OW_ApiApplication extends OW_Application
 //            }
 //        }
     }
-    /* private auxilary methods */
+    /* private auxiliary methods */
 
     protected function newDocument()
     {
-        $document = new OW_ApiDocument();
-
-        return $document;
-
-//        $language = BOL_LanguageService::getInstance()->getCurrent();
-//        $document = new OW_HtmlDocument();
-//        $document->setCharset('UTF-8');
-//        $document->setMime('text/html');
-//        $document->setLanguage($language->getTag());
-//
-//        if ( $language->getRtl() )
-//        {
-//            $document->setDirection('rtl');
-//        }
-//        else
-//        {
-//            $document->setDirection('ltr');
-//        }
-//
-//        if ( (bool) OW::getConfig()->getValue('base', 'favicon') )
-//        {
-//            $document->setFavicon(OW::getPluginManager()->getPlugin('base')->getUserFilesUrl() . 'favicon.ico');
-//        }
-//
-//        $document->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'jquery.min.js', 'text/javascript', (-100));
-//        $document->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'jquery-migrate.min.js', 'text/javascript', (-100));
-//
-//        //$document->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'json2.js', 'text/javascript', (-99));
-//        $document->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'ow.js?' . OW::getConfig()->getValue('base', 'cachedEntitiesPostfix'), 'text/javascript', (-50));
-//
-//        $onloadJs = "OW.bindAutoClicks();OW.bindTips($('body'));";
-//
-//        if ( OW::getUser()->isAuthenticated() )
-//        {
-//            $activityUrl = OW::getRouter()->urlFor('BASE_CTRL_User', 'updateActivity');
-//            $onloadJs .= "OW.getPing().addCommand('user_activity_update').start(600000);";
-//        }
-//
-//        $document->addOnloadScript($onloadJs);
-//        OW::getEventManager()->bind(OW_EventManager::ON_AFTER_REQUEST_HANDLE, array($this, 'onBeforeDocumentRender'));
-
-        return $document;
+        return new OW_ApiDocument();
     }
 
     protected function addCatchAllRequestsException( $eventName, $key )

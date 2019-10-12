@@ -103,9 +103,8 @@ class OW_Auth
      * Logins user by provided user id.
      *
      * @param integer $userId
-     * @return string
      */
-    public function login( $userId )
+    public function login( $userId ): void
     {
         $userId = (int) $userId;
 

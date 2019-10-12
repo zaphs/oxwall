@@ -83,7 +83,7 @@ class OW_PluginManager
         $plugins = $this->pluginService->findActivePlugins();
 
         usort($plugins,
-            function( BOL_Plugin $a, BOL_Plugin $b )
+            static function( BOL_Plugin $a, BOL_Plugin $b )
         {
             if ( $a->getId() == $b->getId() )
             {
@@ -93,7 +93,7 @@ class OW_PluginManager
             return ($a->getId() > $b->getId()) ? 1 : -1;
         });
 
-        /* @var $value BOL_Plugin */
+        /* @var BOL_Plugin $plugin */
         foreach ( $plugins as $plugin )
         {
             if ( !array_key_exists($plugin->getKey(), $this->cachedObjects) )
@@ -107,6 +107,7 @@ class OW_PluginManager
 
     /**
      * Includes init script for provided plugin
+     * @param OW_Plugin $pluginObject
      */
     public function initPlugin( OW_Plugin $pluginObject )
     {
@@ -127,13 +128,13 @@ class OW_PluginManager
             $initDirPath = $pluginObject->getApiDir();
         }
 
-        OW::getEventManager()->trigger(new OW_Event("core.performance_test",
-            ["key" => "plugin_init.start", "pluginKey" => $pluginObject->getKey()]));
+        OW::getEventManager()->trigger(new OW_Event('core.performance_test',
+            ['key' => 'plugin_init.start', 'pluginKey' => $pluginObject->getKey()]));
 
         $this->pluginService->includeScript($initDirPath . BOL_PluginService::SCRIPT_INIT);
 
-        OW::getEventManager()->trigger(new OW_Event("core.performance_test",
-            ["key" => "plugin_init.end", "pluginKey" => $pluginObject->getKey()]));
+        OW::getEventManager()->trigger(new OW_Event('core.performance_test',
+            ['key' => 'plugin_init.end', 'pluginKey' => $pluginObject->getKey()]));
     }
 
     /**
@@ -148,22 +149,22 @@ class OW_PluginManager
         $autoloader = OW::getAutoloader();
 
         $predefinedPointers = [
-            "CMP" => $plugin->getCmpDir(),
-            "CTRL" => $plugin->getCtrlDir(),
-            "BOL" => $plugin->getBolDir(),
-            "CLASS" => $plugin->getClassesDir(),
-            "MCMP" => $plugin->getMobileCmpDir(),
-            "MCTRL" => $plugin->getMobileCtrlDir(),
-            "MBOL" => $plugin->getMobileBolDir(),
-            "MCLASS" => $plugin->getMobileClassesDir(),
-            "ACTRL" => $plugin->getApiCtrlDir(),
-            "ABOL" => $plugin->getApiBolDir(),
-            "ACLASS" => $plugin->getApiClassesDir()
+            'CMP'    => $plugin->getCmpDir(),
+            'CTRL'   => $plugin->getCtrlDir(),
+            'BOL'    => $plugin->getBolDir(),
+            'CLASS'  => $plugin->getClassesDir(),
+            'MCMP'   => $plugin->getMobileCmpDir(),
+            'MCTRL'  => $plugin->getMobileCtrlDir(),
+            'MBOL'   => $plugin->getMobileBolDir(),
+            'MCLASS' => $plugin->getMobileClassesDir(),
+            'ACTRL'  => $plugin->getApiCtrlDir(),
+            'ABOL'   => $plugin->getApiBolDir(),
+            'ACLASS' => $plugin->getApiClassesDir()
         ];
 
         foreach ( $predefinedPointers as $pointer => $dirPath )
         {
-            $autoloader->addPackagePointer($upperedKey . "_" . $pointer, $dirPath);
+            $autoloader->addPackagePointer($upperedKey . '_' . $pointer, $dirPath);
         }
     }
 
@@ -188,7 +189,7 @@ class OW_PluginManager
     {
         $plugins = $this->pluginService->findActivePlugins();
 
-        /* @var $plugin BOL_Plugin */
+        /* @var BOL_Plugin $plugin */
         foreach ( $plugins as $plugin )
         {
             if ( $plugin->getModule() == $moduleName )
@@ -213,7 +214,7 @@ class OW_PluginManager
 
         if ( $plugin == null )
         {
-            throw new InvalidArgumentException("There is no active plugin with key `{$key}`");
+            throw new InvalidArgumentException("There is no active plugin with key `{$pluginKey}`");
         }
 
         return $plugin->getModule();

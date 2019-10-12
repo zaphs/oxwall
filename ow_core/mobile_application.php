@@ -123,13 +123,13 @@ class OW_MobileApplication extends OW_Application
     {
         $document = OW::getDocument();
 
-        $meassages = OW::getFeedback()->getFeedback();
+        $messages = OW::getFeedback()->getFeedback();
 
-        foreach ( $meassages as $messageType => $messageList )
+        foreach ( $messages as $messageType => $messageList )
         {
             foreach ( $messageList as $message )
             {
-                $document->addOnloadScript("OWM.message(" . json_encode($message) . ", '" . $messageType . "');");
+                $document->addOnloadScript('OWM.message(' . json_encode($message) . ", '" . $messageType . "');");
             }
         }
 
@@ -147,7 +147,7 @@ class OW_MobileApplication extends OW_Application
         $document->addStyleSheet(OW::getPluginManager()->getPlugin('base')->getStaticCssUrl() . 'mobile.css' . '?' . OW::getConfig()->getValue('base',
                 'cachedEntitiesPostfix'), 'all', -100);
         $document->addStyleSheet(OW::getThemeManager()->getCssFileUrl(true) . '?' . OW::getConfig()->getValue('base',
-                'cachedEntitiesPostfix'), 'all', (-90));
+                'cachedEntitiesPostfix'), 'all', -90);
 
         if ( OW::getThemeManager()->getCurrentTheme()->getDto()->getCustomCssFileName() !== null )
         {
@@ -204,9 +204,9 @@ class OW_MobileApplication extends OW_Application
         }
 
         $document->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'jquery.min.js',
-            'text/javascript', (-100));
+            'text/javascript', -100);
         $document->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'mobile.js?' . OW::getConfig()->getValue('base',
-                'cachedEntitiesPostfix'), 'text/javascript', (-50));
+                'cachedEntitiesPostfix'), 'text/javascript', -50);
         OW::getEventManager()->bind(OW_EventManager::ON_AFTER_REQUEST_HANDLE, [$this, 'onBeforeDocumentRender']);
 
         return $document;

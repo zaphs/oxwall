@@ -34,7 +34,7 @@ abstract class OW_ApiActionController
     /**
      * List of assigned vars.
      *
-     * @var array
+     * @var array $assignedVars
      */
     protected $assignedVars = [];
 
@@ -81,11 +81,11 @@ abstract class OW_ApiActionController
     /**
      * Returns rendered markup.
      *
-     * @return string
+     * @return array
      */
-    public function render()
+    public function render(): array
     {
-        if ( defined("OW_PROFILER_ENABLE") && OW_PROFILER_ENABLE ) {
+        if (defined('OW_PROFILER_ENABLE') && OW_PROFILER_ENABLE ) {
             $this->assign('queryLog', OW::getDbo()->getQueryLog());
             $this->assign('queryCount', OW::getDbo()->getQueryCount());
             $this->assign('queryExecutionTime', OW::getDbo()->getTotalQueryExecTime());

@@ -60,9 +60,9 @@ class UTIL_String
     /**
      * Replaces lowercase case chars + delimiter in string uppercase chars
      *
-     * @param unknown_type $string
-     * @param unknown_type $delimiter
-     * @return unknown
+     * @param string $string
+     * @param string $delimiter
+     * @return string
      */
     public static function delimiterToCaps( $string, $delimiter = '_' )
     {

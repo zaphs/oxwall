@@ -142,7 +142,7 @@ class OW_Authorization
     {
         if ( $extra !== null && !is_array($extra) )
         {
-            trigger_error("`ownerId` parameter has been deprecated, pass `extra` parameter instead");
+            trigger_error('`ownerId` parameter has been deprecated, pass `extra` parameter instead');
         }
 
         return $this->service->isActionAuthorizedForUser($userId, $groupName, $actionName, $extra);

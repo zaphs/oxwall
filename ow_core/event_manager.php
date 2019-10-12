@@ -47,7 +47,7 @@ class OW_EventManager
     const ON_AFTER_PLUGIN_ACTIVATE = 'core.plugin_activate';
     const ON_BEFORE_PLUGIN_DEACTIVATE = 'core.plugin_deactivate';
     const ON_AFTER_PLUGIN_DEACTIVATE = 'core.after_plugin_deactivate';
-    const ON_AFTER_PLUGIN_UPDATE = "core.plugin_update";
+    const ON_AFTER_PLUGIN_UPDATE = 'core.plugin_update';
 
     const ON_CLI_RUN = 'cli.run';
 
@@ -77,14 +77,14 @@ class OW_EventManager
      * @var array
      */
     private $eventsToSkip = [
-        "core.get_text",
-        "core.get_storage",
-        "class.get_instance",
-        "base.before_decorator",
-        "core.sql.get_query_result",
-        "core.sql.set_query_result",
-        "core.sql.exec_query",
-        "core.performance_test"
+        'core.get_text',
+        'core.get_storage',
+        'class.get_instance',
+        'base.before_decorator',
+        'core.sql.get_query_result',
+        'core.sql.set_query_result',
+        'core.sql.exec_query',
+        'core.performance_test'
     ];
 
     /**
@@ -291,19 +291,19 @@ class OW_EventManager
 
             return $result;
         }
-        else
-        {
-            // log events with no listeners
-            $startTime = UTIL_Profiler::getInstance()->getTotalTime();
 
-            if ( $this->devMode && !in_array($event->getName(), $this->eventsToSkip) && count($this->eventsLog) < $this->maxItemsInLog )
-            {
-                $this->eventsLog[] = [
-                    'type' => 'call', 'start' => $startTime, 'event' => $event, 'listeners' => [],
-                    'exec' => 0
-                ];
-            }
+        // log events with no listeners
+        $startTime = UTIL_Profiler::getInstance()->getTotalTime();
+
+        if ($this->devMode && !in_array($event->getName(), $this->eventsToSkip) && count($this->eventsLog) < $this->maxItemsInLog )
+        {
+            $this->eventsLog[] = [
+                'type' => 'call', 'start' => $startTime, 'event' => $event, 'listeners' => [],
+                'exec' => 0
+            ];
         }
+
+        return null;
     }
 
     /**

@@ -74,7 +74,7 @@ class OW_Navigation
      * @param string $routeName
      * @param string $prefix
      * @param string $key
-     * @param string $visibleFor
+     * @param int    $visibleFor
      */
     public function addMenuItem( $menuType, $routeName, $prefix, $key, $visibleFor = self::VISIBLE_FOR_ALL )
     {
@@ -92,7 +92,7 @@ class OW_Navigation
         $menuItem->setRoutePath($routeName);
         $menuItem->setPrefix($prefix);
         $menuItem->setKey($key);
-        $menuItem->setOrder(($order + 1));
+        $menuItem->setOrder($order + 1);
         $menuItem->setVisibleFor($visibleFor);
 
         $this->navService->saveMenuItem($menuItem);
@@ -157,7 +157,7 @@ class OW_Navigation
 
         if ( $menu === null )
         {
-            trigger_error("Can't find menu in master page -  `" . $menuType . "`!", E_USER_WARNING);
+            trigger_error("Can't find menu in master page -  `" . $menuType . '`!', E_USER_WARNING);
             return;
         }
 

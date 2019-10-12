@@ -23,7 +23,7 @@
  */
 
 /**
- * OW_Router is responsible for routing process, i.e. finding which controller and action should recieve request.
+ * OW_Router is responsible for routing process, i.e. finding which controller and action should receive request.
  * 
  * @author Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
@@ -55,7 +55,7 @@ class OW_Router
     /**
      * Default route. Used for default url generation strategy.
      * 
-     * @var DefaultRoute
+     * @var OW_DefaultRoute
      */
     private $defaultRoute;
     /**
@@ -71,7 +71,7 @@ class OW_Router
     private $usedRoute;
 
     /**
-     * @return DefaultRoute
+     * @return OW_DefaultRoute
      */
     public function getDefaultRoute()
     {
@@ -79,7 +79,7 @@ class OW_Router
     }
 
     /**
-     * @param DefaultRoute $defaultRoute
+     * @param OW_DefaultRoute $defaultRoute
      * @return OW_Router
      */
     public function setDefaultRoute( OW_DefaultRoute $defaultRoute )
@@ -137,8 +137,7 @@ class OW_Router
      * All routes should by added before routing process starts.
      * If route with provided name exists exception will be thrown.
      *
-     * @throws LogicException
-     * @param OW_RouteAbstract $route
+     * @param OW_Route $route
      * @return OW_Router
      */
     public function addRoute( OW_Route $route )
@@ -148,18 +147,15 @@ class OW_Router
         if ( isset($this->staticRoutes[$routeName]) || isset($this->routes[$routeName]) )
         {
             //throw new LogicException( "Can't add route! Route `" . $routeName . "` already exists!");
-            trigger_error("Can't add route! Route `" . $routeName . "` already added!", E_USER_WARNING);
+            trigger_error("Can't add route! Route `" . $routeName . '` already added!', E_USER_WARNING);
+        }
+        elseif ( $route->isStatic() )
+        {
+            $this->staticRoutes[$routeName] = $route;
         }
         else
         {
-            if ( $route->isStatic() )
-            {
-                $this->staticRoutes[$routeName] = $route;
-            }
-            else
-            {
-                $this->routes[$routeName] = $route;
-            }
+            $this->routes[$routeName] = $route;
         }
 
         return $this;
@@ -233,7 +229,7 @@ class OW_Router
             return $this->routes[$routeName]->generateUri($params);
         }
 
-        trigger_error("Can't generate URI! Route `" . $routeName . "` not found!", E_USER_WARNING);
+        trigger_error("Can't generate URI! Route `" . $routeName . '` not found!', E_USER_WARNING);
 
         return 'INVALID_URI';
     }
@@ -321,11 +317,11 @@ class OW_Router
     {
         return $this->routes;
     }
-    
+
     /**
      * Returns used route.
-     * 
-     * @return type 
+     *
+     * @return OW_Route
      */
     public function getUsedRoute()
     {

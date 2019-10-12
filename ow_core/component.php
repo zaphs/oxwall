@@ -41,7 +41,7 @@ abstract class OW_Component extends OW_Renderable
     {
         parent::__construct();
 
-        // TODO remove everthing from constructor
+        // TODO remove everything from constructor
         try
         {
             $plugin = OW::getPluginManager()->getPlugin(OW::getAutoloader()->getPluginKey(get_class($this)));

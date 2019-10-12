@@ -159,6 +159,7 @@ class OW_View
      * Returns rendered markup
      *
      * @return string
+     * @throws SmartyException
      */
     public function render()
     {
@@ -166,7 +167,7 @@ class OW_View
 
         if ( !$this->visible )
         {
-            return "";
+            return '';
         }
 
         $className = get_class($this);

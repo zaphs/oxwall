@@ -71,6 +71,7 @@ class OW_RequestHandler
     protected $catchAllRequestsExcludes = [];
 
     /**
+     * @param $key
      * @return array
      */
     public function getCatchAllRequestsAttributes( $key )
@@ -81,7 +82,8 @@ class OW_RequestHandler
     /**
      * <controller> <action> <params> <route> <redirect> <js>
      *
-     * @param array $attributes 
+     * @param       $key
+     * @param array $attributes
      */
     public function setCatchAllRequestsAttributes( $key, array $attributes )
     {
@@ -92,8 +94,10 @@ class OW_RequestHandler
 
     /**
      *
+     * @param        $key
      * @param string $controller
      * @param string $action
+     * @param null   $params
      */
     public function addCatchAllRequestsExclude( $key, $controller, $action = null, $params = null )
     {
@@ -172,19 +176,20 @@ class OW_RequestHandler
 
         $this->handlerAttributes = [
             self::ATTRS_KEY_CTRL => trim($attributes[OW_Route::DISPATCH_ATTRS_CTRL]),
-            self::ATTRS_KEY_ACTION => ( empty($attributes[OW_Route::DISPATCH_ATTRS_ACTION]) ? null : trim($attributes[OW_Route::DISPATCH_ATTRS_ACTION]) ),
-            self::ATTRS_KEY_VARLIST => ( empty($attributes[OW_Route::DISPATCH_ATTRS_VARLIST]) ? [] : $attributes[OW_Route::DISPATCH_ATTRS_VARLIST])
+            self::ATTRS_KEY_ACTION => empty($attributes[OW_Route::DISPATCH_ATTRS_ACTION]) ? null : trim($attributes[OW_Route::DISPATCH_ATTRS_ACTION]),
+            self::ATTRS_KEY_VARLIST => empty($attributes[OW_Route::DISPATCH_ATTRS_VARLIST]) ? [] : $attributes[OW_Route::DISPATCH_ATTRS_VARLIST]
         ];
     }
 
     /**
      * @throws Redirect404Exception
+     * @throws SmartyException
      */
     public function dispatch()
     {
         if ( empty($this->handlerAttributes[self::ATTRS_KEY_CTRL]) )
         {
-            throw new InvalidArgumentException("Cant dispatch request! Empty or invalid controller class provided!");
+            throw new InvalidArgumentException('Cant dispatch request! Empty or invalid controller class provided!');
         }
         // set uri params in request object
         if ( !empty($this->handlerAttributes[self::ATTRS_KEY_VARLIST]) )
@@ -199,7 +204,7 @@ class OW_RequestHandler
             $this->handlerAttributes = $catchAllRequests;
         }
 
-        /* @var $controller OW_ActionController */
+        /* @var OW_ActionController $controller */
         try
         {
             $controller = OW::getClassInstance($this->handlerAttributes[self::ATTRS_KEY_CTRL]);
@@ -219,7 +224,7 @@ class OW_RequestHandler
         // check if controller exists and is instance of base action controller class
         if ( !$this->checkControllerInstance($controller) )
         {
-            throw new LogicException("Cant dispatch request!Please provide valid controller class!");
+            throw new LogicException('Cant dispatch request!Please provide valid controller class!');
         }
 
         // call optional init method
@@ -238,8 +243,9 @@ class OW_RequestHandler
     }
 
     /**
-     * @param ReflectionMethod $action
+     * @param ReflectionMethod    $action
      * @param OW_ActionController $controller
+     * @throws SmartyException
      */
     protected function processControllerAction( $action, $controller )
     {
@@ -247,11 +253,11 @@ class OW_RequestHandler
             self::ATTRS_KEY_VARLIST =>
             empty($this->handlerAttributes[self::ATTRS_KEY_VARLIST]) ? [] : $this->handlerAttributes[self::ATTRS_KEY_VARLIST]
         ];
-        OW::getEventManager()->trigger(new OW_Event("core.performance_test",
-            ["key" => "controller_call.start", "handlerAttrs" => $this->handlerAttributes]));
+        OW::getEventManager()->trigger(new OW_Event('core.performance_test',
+            ['key' => 'controller_call.start', 'handlerAttrs' => $this->handlerAttributes]));
         $action->invokeArgs($controller, $args);
-        OW::getEventManager()->trigger(new OW_Event("core.performance_test",
-            ["key" => "controller_call.end", "handlerAttrs" => $this->handlerAttributes]));
+        OW::getEventManager()->trigger(new OW_Event('core.performance_test',
+            ['key' => 'controller_call.end', 'handlerAttrs' => $this->handlerAttributes]));
         // set default template for controller action if template wasn"t set
         if ( $controller->getTemplate() === null )
         {
@@ -280,6 +286,7 @@ class OW_RequestHandler
      * Returns processed catch all requests attributes.
      *
      * @return string
+     * @throws Exception
      */
     protected function processCatchAllRequestsAttrs()
     {

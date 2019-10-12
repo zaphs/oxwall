@@ -161,7 +161,7 @@ class OW_HtmlDocument extends OW_Document
     /**
      * @var string
      */
-    private $bodyClass = "";
+    private $bodyClass = '';
 
     /**
      * @var array
@@ -189,7 +189,7 @@ class OW_HtmlDocument extends OW_Document
      */
     public function addBodyClass( $class )
     {
-        $this->bodyClass .= " " . trim($class);
+        $this->bodyClass .= ' ' . trim($class);
     }
 
     /**
@@ -255,7 +255,6 @@ class OW_HtmlDocument extends OW_Document
     /**
      * Constructor.
      *
-     * @param array $params
      */
     public function __construct()
     {
@@ -275,7 +274,7 @@ class OW_HtmlDocument extends OW_Document
     /**
      * Sets document heading icon class.
      *
-     * @param string $headingIcon
+     * @param $headingIconClass
      */
     public function setHeadingIconClass( $headingIconClass )
     {
@@ -289,7 +288,7 @@ class OW_HtmlDocument extends OW_Document
      */
     public function setHeading( $heading )
     {
-        $this->throwEvent("core.set_document_heading", ["str" => $heading]);
+        $this->throwEvent('core.set_document_heading', ['str' => $heading]);
         $this->heading = $heading;
     }
 
@@ -356,7 +355,7 @@ class OW_HtmlDocument extends OW_Document
      * Sets master page in html document.
      *
      * @param OW_MasterPage $masterPage
-     * @return OW_HtmlDocument
+     * @return void
      */
     public function setMasterPage( OW_MasterPage $masterPage )
     {
@@ -377,6 +376,8 @@ class OW_HtmlDocument extends OW_Document
      * Adds stylesheet file to document.
      *
      * @param string $url
+     * @param string $media
+     * @param null   $priority
      * @return OW_HtmlDocument
      */
     public function addStyleSheet( $url, $media = 'all', $priority = null )
@@ -403,6 +404,8 @@ class OW_HtmlDocument extends OW_Document
      * Adds head style declarations to document.
      *
      * @param string $style
+     * @param string $media
+     * @param null   $priority
      * @return OW_HtmlDocument
      */
     public function addStyleDeclaration( $style, $media = 'all', $priority = null )
@@ -430,9 +433,10 @@ class OW_HtmlDocument extends OW_Document
      *
      * @param string $url
      * @param string $type
+     * @param null   $priority
      * @return OW_HtmlDocument
      */
-    public function addScript( $url, $type = "text/javascript", $priority = null )
+    public function addScript( $url, $type = 'text/javascript', $priority = null )
     {
         $url = trim($url);
 
@@ -488,9 +492,10 @@ class OW_HtmlDocument extends OW_Document
      *
      * @param string $script
      * @param string $type
+     * @param null   $priority
      * @return OW_HtmlDocument
      */
-    public function addScriptDeclaration( $script, $type = "text/javascript", $priority = null )
+    public function addScriptDeclaration( $script, $type = 'text/javascript', $priority = null )
     {
         $type = trim(mb_strtolower($type));
 
@@ -520,6 +525,8 @@ class OW_HtmlDocument extends OW_Document
      * Adds onload javascript.
      *
      * @param string $script
+     * @param null   $priority
+     * @return OW_HtmlDocument
      */
     public function addOnloadScript( $script, $priority = null )
     {
@@ -544,9 +551,10 @@ class OW_HtmlDocument extends OW_Document
      *
      * @param string $script
      * @param string $type
+     * @param null   $priority
      * @return OW_HtmlDocument
      */
-    public function addScriptDeclarationBeforeIncludes( $script, $type = "text/javascript", $priority = null )
+    public function addScriptDeclarationBeforeIncludes( $script, $type = 'text/javascript', $priority = null )
     {
         $type = trim(mb_strtolower($type));
 
@@ -568,8 +576,6 @@ class OW_HtmlDocument extends OW_Document
      * Sets document favicon.
      *
      * @param string $url
-     * @param string $type
-     * @param string $relation
      * @return OW_HtmlDocument
      */
     public function setFavicon( $url )
@@ -630,7 +636,7 @@ class OW_HtmlDocument extends OW_Document
     }
 
     /**
-     * Adds cutom meta info.
+     * Adds custom meta info.
      *
      * @param string $infoString
      */
@@ -641,6 +647,7 @@ class OW_HtmlDocument extends OW_Document
 
     /**
      * @return string
+     * @throws SmartyException
      */
     public function render()
     {
@@ -656,9 +663,9 @@ class OW_HtmlDocument extends OW_Document
         $this->getMasterPage()->assign('heading', $this->getHeading());
         $this->getMasterPage()->assign('heading_icon_class', $this->getHeadingIconClass());
 
-        $this->throwEvent("core.before_master_page_render");
+        $this->throwEvent('core.before_master_page_render');
         $masterPageOutput = $this->getMasterPage()->render();
-        $this->throwEvent("core.after_master_page_render");
+        $this->throwEvent('core.after_master_page_render');
 
         $headData = '';
         $jsData = '';
@@ -666,12 +673,12 @@ class OW_HtmlDocument extends OW_Document
         // META INFO
         if ( $this->getDescription() )
         {
-            $headData .= UTIL_HtmlTag::generateTag('meta', ["name" => "description", "content" => $this->getDescription()]) . PHP_EOL;
+            $headData .= UTIL_HtmlTag::generateTag('meta', ['name' => 'description', 'content' => $this->getDescription()]) . PHP_EOL;
         }
 
         if ( $this->getKeywords() )
         {
-            $headData .= UTIL_HtmlTag::generateTag('meta', ["name" => "keywords", "content" => $this->getKeywords()]) . PHP_EOL;
+            $headData .= UTIL_HtmlTag::generateTag('meta', ['name' => 'keywords', 'content' => $this->getKeywords()]) . PHP_EOL;
         }
 
         foreach ( $this->meta as $key => $value )
@@ -689,9 +696,9 @@ class OW_HtmlDocument extends OW_Document
         // CSS FILE INCLUDES
         ksort($this->styleSheets['items']);
 
-        foreach ( $this->styleSheets['items'] as $priority => $scipts )
+        foreach ( $this->styleSheets['items'] as $priority => $scripts )
         {
-            foreach ( $scipts as $media => $urls )
+            foreach ( $scripts as $media => $urls )
             {
                 foreach ( $urls as $url )
                 {

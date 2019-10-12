@@ -101,7 +101,7 @@ abstract class OW_Renderable extends OW_View
     /**
      * Returns added form by key.
      *
-     * @param string $key
+     * @param $name
      * @return OW_Form
      */
     public function getForm( $name )
@@ -129,7 +129,7 @@ abstract class OW_Renderable extends OW_View
 
         if ( !empty($this->forms) )
         {
-            $viewRenderer->assignVar("_owForms_", $this->forms);
+            $viewRenderer->assignVar('_owForms_', $this->forms);
         }
     }
 }

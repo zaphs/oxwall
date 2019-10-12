@@ -82,7 +82,7 @@ interface OW_Storage
      *
      * @return boolean
      */
-    public function fileSetContent ( $destPath, $conent );
+    public function fileSetContent ( $destPath, $content );
 
      /**
      * Remove storage dir
@@ -157,12 +157,11 @@ interface OW_Storage
      * @return boolean
      */
     public function mkdir ( $path );
-    
-     /**
+
+    /**
      * Tells whether the filename is writable
      *
-     * @param string $path
-     *
+     * @param $filename
      * @return boolean
      */
     public function isWritable ( $filename );
@@ -181,11 +180,11 @@ interface OW_Storage
      * Rename file
      *
      * @param string $destPath
-     * @param string $premissions
+     * @param string $permissions
      *
      * @return boolean
      */
-    public function chmod ( $destPath, $premissions );
+    public function chmod ( $destPath, $permissions );
 }
 
 

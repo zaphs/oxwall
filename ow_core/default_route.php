@@ -23,7 +23,7 @@
  */
 
 /**
- * The class is responsible for default stratagy of url generation.
+ * The class is responsible for default strategy of url generation.
  * All URIs (except URIs working with custom routes) are generated and decomposed by default route.
  * DefaultRoute class can be extended and modified to change whole url generation strategy.
  * 

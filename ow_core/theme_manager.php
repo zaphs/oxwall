@@ -41,7 +41,7 @@ class OW_ThemeManager
     private $themeService;
 
     /**
-     * @var type
+     * @var OW_Theme[] $themeObjects
      */
     private $themeObjects = [];
 
@@ -134,7 +134,7 @@ class OW_ThemeManager
      * throws InvalidArgumentException
      *
      * @param string $decoratorName
-     * @param string $decoratorDir
+     * @param        $pluginKey
      */
     public function addDecorator( $decoratorName, $pluginKey )
     {
@@ -142,7 +142,7 @@ class OW_ThemeManager
 
         if ( array_key_exists($decoratorName, $this->decorators) )
         {
-            throw new LogicException("Can't add decorator! Decorator `" . $decoratorName . "` already exists!");
+            throw new LogicException("Can't add decorator! Decorator `" . $decoratorName . '` already exists!');
         }
 
         $this->decorators[trim($decoratorName)] = OW::getPluginManager()->getPlugin($pluginKey)->getDecoratorDir() . $decoratorName . '.html';
@@ -188,7 +188,7 @@ class OW_ThemeManager
     }
 
     /**
-     * Returns all decoarators list.
+     * Returns all decorators list.
      *
      * @return array
      */
@@ -200,7 +200,7 @@ class OW_ThemeManager
     /**
      * Returns master page template path.
      *
-     * @param string $templateName
+     * @param $masterPage
      * @return string
      */
     public function getMasterPageTemplate( $masterPage )
@@ -257,8 +257,9 @@ class OW_ThemeManager
      * Renders decorator and returns result markup.
      *
      * @param string $name
-     * @param array $params
+     * @param array  $params
      * @return string
+     * @throws SmartyException
      */
     public function processDecorator( $name, array $params )
     {
@@ -290,8 +291,10 @@ class OW_ThemeManager
      * Renders block decorator and returns result markup.
      *
      * @param string $name
-     * @param array $params
+     * @param array  $params
+     * @param string $content
      * @return string
+     * @throws SmartyException
      */
     public function processBlockDecorator( $name, array $params, $content = '' )
     {
@@ -349,7 +352,7 @@ class OW_ThemeManager
     /**
      * Returns theme css file url.
      *
-     * @param string $cssFileName
+     * @param bool $mobile
      * @return string
      */
     public function getCssFileUrl( $mobile = false )

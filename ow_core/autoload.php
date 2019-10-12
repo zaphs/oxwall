@@ -93,6 +93,7 @@ class OW_Autoload
     /**
      * Main static method registered as autoloader.
      * Don't call it manually.
+     * @param $className
      */
     public static function autoload( $className )
     {
@@ -113,8 +114,7 @@ class OW_Autoload
     /**
      * Returns class definition file path for provided classname.
      *
-     * @throws InvalidArgumentException
-     * @param string $class
+     * @param $className
      * @return string
      */
     public function getClassPath( $className )
@@ -127,7 +127,7 @@ class OW_Autoload
             // throw exception if package pointer is not registered
             if ( !isset($this->packagePointers[$packagePointer]) )
             {
-                throw new InvalidArgumentException("Package pointer `" . $packagePointer . "` is not registered!");
+                throw new InvalidArgumentException('Package pointer `' . $packagePointer . '` is not registered!');
             }
 
             $this->classPathArray[$className] = $this->packagePointers[$packagePointer] . $this->classToFilename($className);
@@ -149,7 +149,7 @@ class OW_Autoload
 
         if ( isset($this->classPathArray[$className]) )
         {
-            throw new LogicException("Can't register `" . $className . "` in autoloader. Duplicated class name!");
+            throw new LogicException("Can't register `" . $className . '` in autoloader. Duplicated class name!');
         }
 
         $this->classPathArray[$className] = $filePath;
@@ -186,7 +186,7 @@ class OW_Autoload
         // need to remove package pointer
         if ( strstr($className, '_') )
         {
-            $className = substr($className, (strrpos($className, '_') + 1));
+            $className = substr($className, strrpos($className, '_') + 1);
         }
 
         return substr(UTIL_String::capsToDelimiter($className), 1) . ($extension ? '.php' : '');
@@ -218,7 +218,7 @@ class OW_Autoload
         // throw exception if class doesn't have package pointer
         if ( !strstr($className, '_') )
         {
-            throw new InvalidArgumentException("Can't find package pointer in class `" . $className . "` !");
+            throw new InvalidArgumentException("Can't find package pointer in class `" . $className . '` !');
         }
 
         return substr($className, 0, strrpos($className, '_'));
@@ -236,7 +236,7 @@ class OW_Autoload
         // throw exception if class doesn't contain underscore symbols
         if ( !strstr($className, '_') )
         {
-            throw new InvalidArgumentException("Can't find plugin key in class `" . $className . "` !");
+            throw new InvalidArgumentException("Can't find plugin key in class `" . $className . '` !');
         }
 
         return substr($className, 0, strpos($className, '_'));
@@ -257,7 +257,7 @@ class OW_Autoload
         // throw exception if package pointer already registered
         if ( isset($this->packagePointers[$packagePointer]) )
         {
-            throw new InvalidArgumentException("Can't add package pointer `" . $packagePointer . "`! Duplicated package pointer!");
+            throw new InvalidArgumentException("Can't add package pointer `" . $packagePointer . '`! Duplicated package pointer!');
         }
 
         // add directory separator if needed

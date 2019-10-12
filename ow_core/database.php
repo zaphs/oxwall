@@ -32,7 +32,7 @@
 final class OW_Database
 {
     //const DEFAULT_CACHE_LIFETIME = false;
-    const NO_CACHE_ENTRY = "ow_db_no_cache_entry";
+    const NO_CACHE_ENTRY = 'ow_db_no_cache_entry';
 
     /**
      * @var array
@@ -102,9 +102,14 @@ final class OW_Database
     private $queryCount;
 
     /**
-     * @var boolean
+     * @var bool
      */
-    private $useCashe;
+    private $useCache;
+
+    /**
+     * @var string
+     */
+    private $queryString;
 
     /**
      * Getter for $log property
@@ -155,15 +160,15 @@ final class OW_Database
      */
     public function getUseCashe()
     {
-        return $this->useCashe;
+        return $this->useCache;
     }
 
     /**
-     * @param bool $useCashe
+     * @param bool $useCache
      */
-    public function setUseCashe( $useCashe )
+    public function setUseCashe( $useCache )
     {
-        $this->useCashe = (bool) $useCashe;
+        $this->useCache = (bool) $useCache;
     }
 
     /**
@@ -200,7 +205,7 @@ final class OW_Database
 
             if ( !$this->isMysqlValidVersion() )
             {
-                throw new InvalidArgumentException("Cant connect to database. Connection needs MySQL version 5.0 + !");
+                throw new InvalidArgumentException('Cant connect to database. Connection needs MySQL version 5.0 + !');
             }
 
             $this->prepareMysql();
@@ -221,7 +226,7 @@ final class OW_Database
             }
 
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->useCashe = false;
+            $this->useCache = false;
         }
         catch ( PDOException $e )
         {
@@ -293,10 +298,12 @@ final class OW_Database
     /**
      * Enter description here...
      *
-     * @param string $sql
-     * @param unknown_type $className
-     * @param array $params
-     * @return mixed
+     * @param string       $sql
+     * @param string       $className
+     * @param array        $params
+     * @param int          $cacheLifeTime
+     * @param array        $tags
+     * @return object|null
      */
     public function queryForObject( $sql, $className, array $params = null, $cacheLifeTime = 0, $tags = [])
     {
@@ -359,6 +366,7 @@ final class OW_Database
      * Set time zone
      *
      * @return void
+     * @throws Exception
      */
     public function setTimezone()
     {
@@ -401,7 +409,9 @@ final class OW_Database
      * Enter description here...
      *
      * @param string $sql
-     * @param array $params
+     * @param array  $params
+     * @param int    $cacheLifeTime
+     * @param array  $tags
      * @return array
      */
     public function queryForList( $sql, array $params = null, $cacheLifeTime = 0, $tags = [])
@@ -485,8 +495,8 @@ final class OW_Database
      * Enter description here...
      *
      * @param unknown_type $sql
-     * @param array $params
-     * @return unknown
+     * @param array        $params
+     * @return int
      */
     public function update( $sql, array $params = null )
     {
@@ -499,6 +509,7 @@ final class OW_Database
      *
      * @param string $tableName
      * @param object $obj
+     * @param bool   $delayed
      * @return int
      */
     public function insertObject( $tableName, $obj, $delayed = false )
@@ -509,7 +520,7 @@ final class OW_Database
             $paramNames = array_keys($params);
             $columns = UTIL_String::arrayToDelimitedString($paramNames, ',', '`', '`');
             $values = UTIL_String::arrayToDelimitedString($paramNames, ',', ':');
-            $sql = "INSERT" . ($delayed ? " DELAYED" : "") . " INTO `{$tableName}` ({$columns}) VALUES ({$values})";
+            $sql = 'INSERT' . ($delayed ? ' DELAYED' : '') . " INTO `{$tableName}` ({$columns}) VALUES ({$values})";
 
             return $this->insert($sql, $params);
         }
@@ -520,11 +531,11 @@ final class OW_Database
     }
 
     /**
-     * @param string $tableName
+     * @param string    $tableName
      * @param OW_Entity $obj
-     * @param string $primaryKeyName
-     * @return type
-     * @throws InvalidArgumentException
+     * @param string    $primaryKeyName
+     * @param bool      $lowPriority
+     * @return bool|unknown
      */
     public function updateObject( $tableName, $obj, $primaryKeyName = 'id', $lowPriority = false )
     {
@@ -561,7 +572,7 @@ final class OW_Database
             }
 
             $updateStmt = UTIL_String::arrayToDelimitedString($updateArray);
-            $sql = "UPDATE" . ($lowPriority ? " LOW_PRIORITY" : "") . " `{$tableName}` SET {$updateStmt} WHERE {$primaryKeyName}=:{$primaryKeyName}";
+            $sql = 'UPDATE' . ($lowPriority ? ' LOW_PRIORITY' : '') . " `{$tableName}` SET {$updateStmt} WHERE {$primaryKeyName}=:{$primaryKeyName}";
             return $this->update($sql, $params);
         }
         else
@@ -676,6 +687,7 @@ final class OW_Database
     /**
      * Returns last insert id
      *
+     * @param null $seqname
      * @return integer
      */
     public function getInsertId( $seqname = null )
@@ -697,6 +709,8 @@ final class OW_Database
     /**
      * Returns current PDOStatement
      *
+     * @param            $sql
+     * @param array|null $params
      * @return PDOStatement
      */
     private function execute( $sql, array $params = null )
@@ -706,7 +720,7 @@ final class OW_Database
             $this->profiler->reset();
         }
 
-        /* @var $stmt PDOStatement */
+        /* @var PDOStatement $stmt */
         $stmt = $this->connection->prepare($sql);
         if ( $params !== null )
         {
@@ -721,7 +735,7 @@ final class OW_Database
                 $stmt->bindValue(is_int($key) ? $key + 1 : $key, $value, $paramType);
             }
         }
-        OW::getEventManager()->trigger(new OW_Event("core.sql.exec_query", ["sql" => $sql, "params" => $params]));
+        OW::getEventManager()->trigger(new OW_Event('core.sql.exec_query', ['sql' => $sql, 'params' => $params]));
         $stmt->execute(); //TODO setup profiler
         $this->affectedRows = $stmt->rowCount();
 
@@ -771,7 +785,7 @@ final class OW_Database
 
     private function cacheEnabled( $expTime )
     {
-        return !OW_DEV_MODE && $this->useCashe && ( $expTime === false || $expTime > 0 );
+        return !OW_DEV_MODE && $this->useCache && ($expTime === false || $expTime > 0 );
     }
 
     /**
@@ -795,11 +809,11 @@ final class OW_Database
             }
         }
 
-        $data = OW::getEventManager()->call("core.sql.get_query_result", ["sql" => $sql, "params" => $params]);
+        $data = OW::getEventManager()->call('core.sql.get_query_result', ['sql' => $sql, 'params' => $params]);
 
-        if ( is_array($data) && isset($data["result"]) && $data["result"] === true )
+        if ( is_array($data) && isset($data['result']) && $data['result'] === true )
         {
-            return $data["value"];
+            return $data['value'];
         }
 
         return self::NO_CACHE_ENTRY;
@@ -813,7 +827,7 @@ final class OW_Database
             $this->getCacheManager()->save(serialize($result), $cacheKey, $tags, $cacheLifeTime);
         }
 
-        OW::getEventManager()->trigger(new OW_Event("core.sql.set_query_result",
-            ["sql" => $sql, "params" => $params, "result" => $result]));
+        OW::getEventManager()->trigger(new OW_Event('core.sql.set_query_result',
+            ['sql' => $sql, 'params' => $params, 'result' => $result]));
     }
 }

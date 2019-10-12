@@ -42,6 +42,7 @@ final class OW_ErrorManager
     /**
      * Returns an instance of class (singleton pattern implementation).
      *
+     * @param bool $debugMode
      * @return OW_ErrorManager
      */
     public static function getInstance( $debugMode = true )
@@ -75,6 +76,7 @@ final class OW_ErrorManager
 
     /**
      * Constructor.
+     * @param $debugMode
      */
     private function __construct( $debugMode )
     {
@@ -173,14 +175,14 @@ final class OW_ErrorManager
         ];
 
         //temp fix
-        $e_depricated = defined('E_DEPRECATED') ? E_DEPRECATED : 0;
+        $e_deprecated = defined('E_DEPRECATED') ? E_DEPRECATED : 0;
 
         switch ( $errno )
         {
             case E_NOTICE:
             case E_USER_NOTICE:
             case E_STRICT:
-            case $e_depricated:
+            case $e_deprecated:
 
                 $data['type'] = 'Notice';
 
@@ -273,14 +275,13 @@ final class OW_ErrorManager
         $this->handleLog($data);
         OW::getEventManager()->trigger(new OW_Event('core.emergency_exit', $data));
 
-        header("HTTP/1.1 500 Internal Server Error");
+        header('HTTP/1.1 500 Internal Server Error');
         header('Location: ' . OW_URL_HOME . 'e500.php');
     }
 
     private function handleIgnore( $data )
     {
         $this->handleLog($data);
-        return;
     }
 
     private function handleLog( $data )
@@ -290,7 +291,7 @@ final class OW_ErrorManager
             return;
         }
 
-        $trace = !empty($data['trace']) ? ' Trace: [' . str_replace(PHP_EOL, ' | ', $data['trace']) . ']' : "";
+        $trace = !empty($data['trace']) ? ' Trace: [' . str_replace(PHP_EOL, ' | ', $data['trace']) . ']' : '';
         $message = 'Message: ' . $data['message'] . ' File: ' . $data['file'] . ' Line:' . $data['line'] . $trace;
         $this->logger->addEntry($message, $data['type']);
     }
@@ -304,12 +305,12 @@ final class OW_ErrorManager
 
         foreach ( $trace as $node )
         {
-            $stack .=  "#$i " . (isset($node['file']) ? $node['file'] : '') . (isset($node['line']) ? "(" . $node['line'] . "): " : '');
+            $stack .=  "#$i " . (isset($node['file']) ? $node['file'] : '') . (isset($node['line']) ? '(' . $node['line'] . '): ' : '');
             if ( isset($node['class']) )
             {
-                $stack .= $node['class'] . "->";
+                $stack .= $node['class'] . '->';
             }
-            $stack .= $node['function'] . "()" . PHP_EOL;
+            $stack .= $node['function'] . '()' . PHP_EOL;
             $i++;
         }
 

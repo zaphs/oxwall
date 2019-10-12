@@ -183,9 +183,9 @@ class BOL_PreferenceService
     }
 
     /**
-     * @param array $preferenceList
+     * @param string $preferenceKey
      * @param int $userId
-     * @return array[userId][preferenceName]
+     * @return string
      */
     public function getPreferenceValue( $preferenceKey, $userId )
     {

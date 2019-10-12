@@ -102,7 +102,7 @@ class OW_DeveloperTools
      */
     public function refreshEntitiesCache( $options = 1 )
     {
-        $options = (intval($options) == 1 ? PHP_INT_MAX : intval($options));
+        $options = ((int)$options == 1 ? PHP_INT_MAX : (int)$options);
 
         if ( $options & self::CACHE_ENTITY_TEMPLATE )
         {

@@ -138,7 +138,7 @@ class OW_ThemeManager
      */
     public function addDecorator( $decoratorName, $pluginKey )
     {
-        $decoratorName = trim(mb_strtolower($decoratorName));
+        $decoratorName = mb_strtolower(trim($decoratorName));
 
         if ( array_key_exists($decoratorName, $this->decorators) )
         {
@@ -167,7 +167,7 @@ class OW_ThemeManager
      */
     public function getDecorator( $decoratorName )
     {
-        $decoratorName = trim(mb_strtolower($decoratorName));
+        $decoratorName = mb_strtolower(trim($decoratorName));
 
         if ( !array_key_exists($decoratorName, $this->decorators) )
         {
@@ -205,7 +205,7 @@ class OW_ThemeManager
      */
     public function getMasterPageTemplate( $masterPage )
     {
-        $masterPage = trim(mb_strtolower($masterPage));
+        $masterPage = mb_strtolower(trim($masterPage));
 
         if ( $this->themeObjects[self::CURRENT_THEME]->hasMasterPage($masterPage) )
         {

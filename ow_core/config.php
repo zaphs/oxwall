@@ -80,7 +80,7 @@ class OW_Config
      */
     public function getValue( $key, $name )
     {
-        return isset($this->cachedConfigs[$key][$name]) ? $this->cachedConfigs[$key][$name] : null;
+        return $this->cachedConfigs[$key][$name] ?? null;
     }
 
     /**
@@ -91,7 +91,7 @@ class OW_Config
      */
     public function getValues( $key )
     {
-        return isset($this->cachedConfigs[$key]) ? $this->cachedConfigs[$key] : [];
+        return $this->cachedConfigs[$key] ?? [];
     }
 
     /**

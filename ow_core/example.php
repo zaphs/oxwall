@@ -103,7 +103,7 @@ class OW_Example
     {
         if ( is_bool($value) )
         {
-            $value = intval($value);
+            $value = (int)$value;
         }
 
         $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . '` = ' . (is_string($value) ? "'" . $this->dbo->escapeString($value) . "'" : $value);
@@ -114,7 +114,7 @@ class OW_Example
      * Adds field like clause to query.
      *
      * @param string $field
-     * @param string $value
+     * @param string|int|bool $value
      * @return OW_Example
      */
     public function andFieldLike( $field, $value )
@@ -159,7 +159,7 @@ class OW_Example
     {
         if ( is_bool($value) )
         {
-            $value = intval($value);
+            $value = (int)$value;
         }
         
         $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . '` != ' . (is_string($value) ? "'" . $this->dbo->escapeString($value) . "'" : $value);

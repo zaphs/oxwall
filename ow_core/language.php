@@ -37,7 +37,7 @@ class OW_Language
     /**
      * @var OW_EventManager
      */
-    private $eventManager;
+//    private $eventManager;
 
     /**
      * Constructor.
@@ -45,7 +45,7 @@ class OW_Language
      */
     private function __construct()
     {
-        $this->eventManager = OW::getEventManager();
+//        $this->eventManager = OW::getEventManager();
     }    
 
     public function text( $prefix, $key, array $vars = null, $defaultValue = null )
@@ -62,12 +62,12 @@ class OW_Language
         }
         catch ( Exception $e )
         {
-            return $defaultValue === null ? $prefix . '+' . $key : $defaultValue;
+            return $defaultValue ?? $prefix . '+' . $key;
         }
 
         if ( $text === null )
         {
-            return $defaultValue === null ? $prefix . '+' . $key : $defaultValue;
+            return $defaultValue ?? $prefix . '+' . $key;
         }
 
         return $text;
@@ -89,12 +89,7 @@ class OW_Language
             return false;
         }
 
-        if ( $text === null )
-        {
-            return false;
-        }
-
-        return true;
+        return !($text === null);
     }
 
     public function addKeyForJs( $prefix, $key )

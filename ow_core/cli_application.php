@@ -35,7 +35,10 @@ class OW_CliApplication extends OW_Application
 {
     use OW_Singleton;
 
-    protected $cliArgsHandler = null;
+    /**
+     * @var CliArgsHandler|null $cliArgsHandler
+     */
+    protected $cliArgsHandler;
 
     private function __construct()
     {

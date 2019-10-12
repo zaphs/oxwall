@@ -200,12 +200,7 @@ class OW_Router
             return $this->staticRoutes[$routeName];
         }
 
-        if ( isset($this->routes[$routeName]) )
-        {
-            return $this->routes[$routeName];
-        }
-
-        return null;
+        return $this->routes[$routeName] ?? null;
     }
 
     /**

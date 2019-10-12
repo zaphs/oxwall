@@ -41,8 +41,9 @@ class OW_ApiApplication extends OW_Application
 
     /**
      * Application init actions.
+     * @throws Exception
      */
-    public function init()
+    public function init(): void
     {
         require_once OW_DIR_SYSTEM_PLUGIN . 'base' . DS . 'classes' . DS . 'json_err_output.php';
         OW_ErrorManager::getInstance()->setErrorOutput(new BASE_CLASS_JsonErrOutput());
@@ -150,8 +151,9 @@ class OW_ApiApplication extends OW_Application
 
     /**
      * Finds controller and action for current request.
+     * @throws Redirect404Exception
      */
-    public function route()
+    public function route(): void
     {
         try
         {
@@ -168,9 +170,9 @@ class OW_ApiApplication extends OW_Application
     }
 
     /**
-     * ---------
+     * @throws Redirect404Exception
      */
-    public function handleRequest()
+    public function handleRequest(): void
     {
         try
         {
@@ -312,14 +314,6 @@ class OW_ApiApplication extends OW_Application
 //                $document->getMasterPage()->setTemplate($masterPagePath);
 //            }
 //        }
-    }
-
-    /**
-     * Triggers response object to send rendered page.
-     */
-    public function returnResponse()
-    {
-        OW::getResponse()->respond();
     }
 
     /**

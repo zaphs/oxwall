@@ -206,7 +206,7 @@ class OW_EventManager
                 {
                     foreach ( $data as $listener )
                     {
-                        if ( call_user_func($listener, $event) === false || $event->isStopped() )
+                        if ($listener($event) === false || $event->isStopped() )
                         {
                             break 2;
                         }
@@ -227,7 +227,7 @@ class OW_EventManager
                 {
                     foreach ( $data as $listener )
                     {
-                        if ( call_user_func($listener, $event) === false || $event->isStopped() )
+                        if ($listener($event) === false || $event->isStopped() )
                         {
                             break 2;
                         }

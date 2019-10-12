@@ -80,7 +80,7 @@ class OW_Navigation
     {
         if ( empty($menuType) || empty($routeName) || empty($prefix) || empty($key) )
         {
-            throw new InvalidArgumentException();
+            throw new InvalidArgumentException('Invalid arguments');
         }
 
         $menuType = trim($menuType);

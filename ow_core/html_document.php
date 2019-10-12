@@ -365,7 +365,7 @@ class OW_HtmlDocument extends OW_Document
     /**
      * Returns document master page.
      *
-     * @return OW_MobileMasterPage
+     * @return OW_MasterPage
      */
     public function getMasterPage()
     {
@@ -410,7 +410,7 @@ class OW_HtmlDocument extends OW_Document
      */
     public function addStyleDeclaration( $style, $media = 'all', $priority = null )
     {
-        $media = trim(mb_strtolower($media));
+        $media = mb_strtolower(trim($media));
 
         $styleHash = crc32($style);
 
@@ -497,7 +497,7 @@ class OW_HtmlDocument extends OW_Document
      */
     public function addScriptDeclaration( $script, $type = 'text/javascript', $priority = null )
     {
-        $type = trim(mb_strtolower($type));
+        $type = mb_strtolower(trim($type));
 
         $scriptHash = crc32($script);
 
@@ -556,7 +556,7 @@ class OW_HtmlDocument extends OW_Document
      */
     public function addScriptDeclarationBeforeIncludes( $script, $type = 'text/javascript', $priority = null )
     {
-        $type = trim(mb_strtolower($type));
+        $type = mb_strtolower(trim($type));
 
         $scriptHash = crc32($script);
 

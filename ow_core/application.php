@@ -86,8 +86,9 @@ class OW_Application
 
     /**
      * Application init actions.
+     * @throws Exception
      */
-    public function init()
+    public function init(): void
     {
         // router init - need to set current page uri and base url
         $router = OW::getRouter();
@@ -117,9 +118,9 @@ class OW_Application
         $uri = OW::getRequest()->getRequestUri();
 
         // before setting in router need to remove get params
-        if ( strstr($uri, '?') )
+        if (false !== ($p = strpos($uri, '?')))
         {
-            $uri = substr($uri, 0, strpos($uri, '?'));
+            $uri = substr($uri, 0, $p);
         }
         $router->setUri($uri);
 
@@ -155,7 +156,7 @@ class OW_Application
 
         // setting current theme
         $activeThemeName = OW::getEventManager()->call('base.get_active_theme_name');
-        $activeThemeName = $activeThemeName ? $activeThemeName : OW::getConfig()->getValue('base', 'selectedTheme');
+        $activeThemeName = $activeThemeName ?: OW::getConfig()->getValue('base', 'selectedTheme');
 
         if ( $activeThemeName !== BOL_ThemeService::DEFAULT_THEME && OW::getThemeManager()->getThemeService()->themeExists($activeThemeName) )
         {
@@ -262,8 +263,9 @@ class OW_Application
 
     /**
      * Finds controller and action for current request.
+     * @throws Exception
      */
-    public function route()
+    public function route(): void
     {
         try
         {
@@ -490,7 +492,7 @@ class OW_Application
         }
 
         // if URI is provided need to add site home URL
-        if ( !strstr($redirectTo, 'http://') && !strstr($redirectTo, 'https://') )
+        if (false === strpos($redirectTo, 'http://') && false === strpos($redirectTo, 'https://'))
         {
             $redirectTo = OW::getRouter()->getBaseUrl() . UTIL_String::removeFirstAndLastSlashes($redirectTo);
         }
@@ -534,7 +536,8 @@ class OW_Application
     {
         if ( !OW::getDocument()->getMasterPage() instanceof ADMIN_CLASS_MasterPage )
         {
-            if ( OW::getRequest()->getRequestUri() === '/' || OW::getRequest()->getRequestUri() === '' )
+            $request_uri = OW::getRequest()->getRequestUri();
+            if ( $request_uri === '/' || $request_uri === '' )
             {
                 OW::getNavigation()->activateMenuItem(OW_Navigation::MAIN, $this->indexMenuItem->getPrefix(),
                     $this->indexMenuItem->getKey());
@@ -718,7 +721,7 @@ class OW_Application
         {
             $id = BOL_UserService::getInstance()->findUserIdByCookie(trim($_COOKIE['ow_login']));
 
-            if ( !empty($id) )
+            if ( $id )
             {
                 OW_User::getInstance()->login($id);
                 $loginCookie = BOL_UserService::getInstance()->findLoginCookieByUserId($id);
@@ -775,11 +778,11 @@ class OW_Application
 
         if ( !empty($_GET['language_id']) )
         {
-            $languageId = intval($_GET['language_id']);
+            $languageId = (int)$_GET['language_id'];
         }
         else if ( !empty($_COOKIE[BOL_LanguageService::LANG_ID_VAR_NAME]) )
         {
-            $languageId = intval($_COOKIE[BOL_LanguageService::LANG_ID_VAR_NAME]);
+            $languageId = (int)$_COOKIE[BOL_LanguageService::LANG_ID_VAR_NAME];
         }
 
         if( $languageId > 0 )
@@ -802,6 +805,6 @@ class OW_Application
 
         $languageService->getCurrent();
 
-        setcookie(BOL_LanguageService::LANG_ID_VAR_NAME, strval($languageService->getCurrent()->getId()), time() + 60 * 60 * 24 * 30, '/');
+        setcookie(BOL_LanguageService::LANG_ID_VAR_NAME, (string)$languageService->getCurrent()->getId(), time() + 60 * 60 * 24 * 30, '/');
     }
 }

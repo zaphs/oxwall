@@ -190,7 +190,7 @@ abstract class OW_BaseDao
 
     public function deleteByExample( OW_Example $example )
     {
-        if ( $example === null || mb_strlen($example->__toString()) === 0 )
+        if ( $example === null || (string)$example === '')
         {
             throw new InvalidArgumentException('example must not be null or empty');
         }

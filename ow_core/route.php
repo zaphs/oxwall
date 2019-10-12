@@ -71,9 +71,9 @@ class OW_Route
     /**
      * Default route params.
      * 
-     * @var array
+     * @var array $routeParamOptions
      */
-    private $routeParamOptions = [];
+    private $routeParamOptions;
 
     /**
      * @return string
@@ -236,7 +236,7 @@ class OW_Route
                     return 'INVALID_URI';
                 }
 
-                $generatedUri .= urlencode(( isset($params[$varName]) ? $params[$varName] : $this->routeParamOptions[$varName][self::PARAM_OPTION_DEFAULT_VALUE])) . '/';
+                $generatedUri .= urlencode($params[$varName] ?? $this->routeParamOptions[$varName][self::PARAM_OPTION_DEFAULT_VALUE]) . '/';
             }
         }
 
@@ -274,7 +274,7 @@ class OW_Route
 
         $uriArray = explode('/', $uri);
 
-        if ( sizeof($uriArray) !== sizeof($this->routePathArray) )
+        if (count($uriArray) !== count($this->routePathArray) )
         {
             return false;
         }

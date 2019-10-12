@@ -70,7 +70,7 @@ class OW_DefaultRoute
         $ctrlParts = explode('_', $controller);
         $moduleNamePrefix = str_replace('ctrl', '', strtolower($ctrlParts[1]));
 
-        if ( strlen($moduleNamePrefix) > 0 )
+        if ($moduleNamePrefix != '')
         {
             $moduleNamePrefix .= '-';
         }
@@ -110,14 +110,14 @@ class OW_DefaultRoute
 
         $uriArray = explode('/', $uriString);
 
-        if ( sizeof($uriArray) < 2 )
+        if (count($uriArray) < 2 )
         {
             throw new Redirect404Exception('Invalid uri was provided for routing!');
         }
 
         $controllerNamePrefixAdd = '';
 
-        if ( strstr($uriArray[0], '-') )
+        if (false !== strpos($uriArray[0], '-'))
         {
             $uriPartArray = explode('-', $uriArray[0]);
             $uriArray[0] = $uriPartArray[1];
@@ -128,7 +128,7 @@ class OW_DefaultRoute
 
         $classPrefix = null;
 
-        $arraySize = sizeof($uriArray);
+        $arraySize = count($uriArray);
 
         for ( $i = 0; $i < $arraySize; $i++ )
         {

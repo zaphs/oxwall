@@ -62,7 +62,7 @@ class OW_TextSearchManager
 
     /**
      * Active storage instance     
-     * @var BASE_CLASS_AbstractSearchStorage
+     * @var BASE_CLASS_AbstractSearchStorage|null $activeStorageInstance
      */
     private $activeStorageInstance;
 
@@ -72,7 +72,6 @@ class OW_TextSearchManager
     private function __construct()
     {
         $this->defaultStorageInstance = new BASE_CLASS_MysqlSearchStorage;
-        $this->activeStorageInstance = null;
     }
 
     /**

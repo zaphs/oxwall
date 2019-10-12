@@ -221,7 +221,7 @@ class BOL_NavigationService
     /**
      * Returns max sort order for menu type.
      * 
-     * @param strign $menuType
+     * @param string $menuType
      * @return integer
      */
     public function findMaxSortOrderForMenuType( $menuType )

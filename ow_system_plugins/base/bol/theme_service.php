@@ -125,7 +125,7 @@ class BOL_ThemeService
     /**
      * Sets the name of selected theme
      * 
-     * @param type $name
+     * @param string $name
      */
     public function setSelectedThemeName( $name )
     {
@@ -1237,7 +1237,7 @@ class BOL_ThemeService
     /**
      * Checks if theme exists.
      *
-     * @param type $themeId
+     * @param int $id
      * @return BOL_Theme
      */
     private function getThemeById( $id )

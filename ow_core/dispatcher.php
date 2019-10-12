@@ -73,7 +73,7 @@ class OW_Dispatcher
      */
     public function getCatchAllRequestsAttributes( $key )
     {
-        return!empty($this->catchAllRequestsAttributes[$key]) ? $this->catchAllRequestsAttributes[$key] : null;
+        return !empty($this->catchAllRequestsAttributes[$key]) ? $this->catchAllRequestsAttributes[$key] : null;
     }
 
     /**
@@ -261,7 +261,7 @@ class OW_Dispatcher
     /**
      * Returns processed catch all requests attributes.
      *
-     * @return string
+     * @return array|string|null
      * @throws Exception
      */
     private function processCatchAllRequestsAttrs()
@@ -289,7 +289,7 @@ class OW_Dispatcher
             {
                 $route = isset($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_ROUTE]) ? trim($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_ROUTE]) : null;
 
-                $params = isset($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_PARAMS]) ? $this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_PARAMS] : [];
+                $params = $this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_PARAMS] ?? [];
 
                 $redirectUrl = ($route !== null) ?
                     OW::getRouter()->urlForRoute($route, $params) :
@@ -305,15 +305,13 @@ class OW_Dispatcher
                     {
                         if ( $this->dispatchAttributes[self::CATCH_ALL_REQUEST_KEY_CTRL] === 'BASE_CTRL_User' && $this->dispatchAttributes[self::CATCH_ALL_REQUEST_KEY_ACTION] === 'standardSignIn' )
                         {
-                            $backUri = isset($_GET['back_uri']) ? $_GET['back_uri'] : OW::getRequest()->getRequestUri();
+                            $backUri = $_GET['back_uri'] ?? OW::getRequest()->getRequestUri();
                             OW::getDocument()->addOnloadScript("window.location = '" . OW::getRequest()->buildUrlQueryString($redirectUrl, ['back_uri' => $backUri]) . "'");
                             return null;
                         }
-                        else
-                        {
-                            $ru = OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlForRoute('static_sign_in'), ['back_uri' => OW::getRequest()->getRequestUri()]);
-                            OW::getApplication()->redirect($ru);
-                        }
+
+                        $ru = OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlForRoute('static_sign_in'), ['back_uri' => OW::getRequest()->getRequestUri()]);
+                        OW::getApplication()->redirect($ru);
                     }
 
                     OW::getDocument()->addOnloadScript("window.location = '" . $redirectUrl . "'");

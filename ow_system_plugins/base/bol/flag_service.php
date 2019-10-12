@@ -178,8 +178,8 @@ class BOL_FlagService
     
     /**
      * 
-     * @param type $type
-     * @param type $entityId
+     * @param string $type
+     * @param int $entityId
      */
     public function deleteByTypeAndEntityId( $type, $entityId )
     {

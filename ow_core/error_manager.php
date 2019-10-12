@@ -305,7 +305,7 @@ final class OW_ErrorManager
 
         foreach ( $trace as $node )
         {
-            $stack .=  "#$i " . (isset($node['file']) ? $node['file'] : '') . (isset($node['line']) ? '(' . $node['line'] . '): ' : '');
+            $stack .=  "#$i " . ($node['file'] ?? '') . (isset($node['line']) ? '(' . $node['line'] . '): ' : '');
             if ( isset($node['class']) )
             {
                 $stack .= $node['class'] . '->';

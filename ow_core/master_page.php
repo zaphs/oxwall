@@ -75,12 +75,7 @@ class OW_MasterPage extends OW_Renderable
      */
     public function getMenu( $name )
     {
-        if ( isset($this->menus[$name]) )
-        {
-            return $this->menus[$name];
-        }
-
-        return null;
+        return $this->menus[$name] ?? null;
     }
 
     /**

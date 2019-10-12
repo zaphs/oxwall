@@ -72,7 +72,7 @@ abstract class OW_Renderable extends OW_View
      */
     public function getComponent( $key )
     {
-        return ( isset($this->components[$key]) ? $this->components[$key] : null );
+        return ($this->components[$key] ?? null);
     }
 
     /**
@@ -106,7 +106,7 @@ abstract class OW_Renderable extends OW_View
      */
     public function getForm( $name )
     {
-        return ( isset($this->forms[$name]) ? $this->forms[$name] : null );
+        return ($this->forms[$name] ?? null);
     }
 
     protected function onRender()

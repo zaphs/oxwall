@@ -105,11 +105,15 @@ class OW_Session
         return session_id();
     }
 
+    /**
+     * @param $key
+     * @param $value
+     */
     public function set( $key, $value )
     {
         if ( in_array($key, self::$protectedKeys) )
         {
-            throw new Exception('Attempt to set protected key');
+            throw new RuntimeException('Attempt to set protected key');
         }
 
         $_SESSION[$key] = $value;

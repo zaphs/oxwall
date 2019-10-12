@@ -90,7 +90,7 @@ class OW_Request
      */
     public function getRemoteAddress()
     {
-        return isset($_SERVER['HTTP_X_REAL_IP']) ? $_SERVER['HTTP_X_REAL_IP'] : $_SERVER['REMOTE_ADDR'];
+        return $_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['REMOTE_ADDR'];
     }
 
     /**
@@ -100,7 +100,7 @@ class OW_Request
      */
     public function getRequestType()
     {
-        return mb_strtoupper(isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET');
+        return mb_strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
     }
 //    public function getContentType()
 //    {

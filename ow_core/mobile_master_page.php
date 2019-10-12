@@ -91,6 +91,9 @@ class OW_MobileMasterPage extends OW_MasterPage
         $this->buttonData['right'] = array_merge($this->buttonData['right'], $data);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function onBeforeRender()
     {
         if ( $this->getTemplate() === null )

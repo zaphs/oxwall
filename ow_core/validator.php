@@ -121,7 +121,7 @@ class RequiredValidator extends OW_Validator
     {
         if ( is_array($value) )
         {
-            if ( sizeof($value) === 0 )
+            if (count($value) === 0 )
             {
                 return false;
             }
@@ -301,7 +301,7 @@ class StringValidator extends OW_Validator
     public function isValid( $value )
     {
         // doesn't check empty values
-        if ( (is_array($value) && sizeof($value) === 0) || $value === null || mb_strlen(trim($value)) === 0 )
+        if ((is_array($value) && count($value) === 0) || $value === null || mb_strlen(trim($value)) === 0 )
         {
             return true;
         }
@@ -317,10 +317,8 @@ class StringValidator extends OW_Validator
             }
             return true;
         }
-        else
-        {
-            return $this->checkValue($value);
-        }
+
+        return $this->checkValue($value);
     }
 
     public function checkValue( $value )
@@ -468,7 +466,7 @@ class RegExpValidator extends OW_Validator
     public function isValid( $value )
     {
         // doesn't check empty values
-        if ( (is_array($value) && sizeof($value) === 0) || $value === null || mb_strlen(trim($value)) === 0 )
+        if ((is_array($value) && count($value) === 0) || $value === null || trim($value) === '')
         {
             return true;
         }
@@ -484,10 +482,8 @@ class RegExpValidator extends OW_Validator
             }
             return true;
         }
-        else
-        {
-            return $this->checkValue($value);
-        }
+
+        return $this->checkValue($value);
     }
 
     public function checkValue( $value )
@@ -748,12 +744,12 @@ class IntValidator extends OW_Validator
     {
         $this->pattern = UTIL_Validator::INT_PATTERN;
 
-        if ( !is_null($min) )
+        if ($min !== null)
         {
             $this->min = (int) $min;
         }
 
-        if ( !is_null($max) )
+        if ($max !== null)
         {
             $this->max = (int) $max;
         }
@@ -781,7 +777,7 @@ class IntValidator extends OW_Validator
     public function isValid( $value )
     {
         // doesn't check empty values
-        if ( (is_array($value) && sizeof($value) === 0) || $value === null || mb_strlen(trim($value)) === 0 )
+        if ((is_array($value) && count($value) === 0) || $value === null || mb_strlen(trim($value)) === 0 )
         {
             return true;
         }
@@ -797,10 +793,8 @@ class IntValidator extends OW_Validator
             }
             return true;
         }
-        else
-        {
-            return $this->checkValue($value);
-        }
+
+        return $this->checkValue($value);
     }
 
     public function checkValue( $value )
@@ -939,12 +933,12 @@ class FloatValidator extends OW_Validator
     {
         $this->pattern = UTIL_Validator::FLOAT_PATTERN;
 
-        if ( !is_null($min) )
+        if ($min !== null)
         {
             $this->min = (float) $min;
         }
 
-        if ( !is_null($max) )
+        if ($max !== null)
         {
             $this->max = (float) $max;
         }
@@ -972,7 +966,7 @@ class FloatValidator extends OW_Validator
     public function isValid( $value )
     {
         // doesn't check empty values
-        if ( (is_array($value) && sizeof($value) === 0) || $value === null || mb_strlen(trim($value)) === 0 )
+        if ((is_array($value) && count($value) === 0) || $value === null || mb_strlen(trim($value)) === 0 )
         {
             return true;
         }
@@ -988,10 +982,8 @@ class FloatValidator extends OW_Validator
             }
             return true;
         }
-        else
-        {
-            return $this->checkValue($value);
-        }
+
+        return $this->checkValue($value);
     }
 
     public function checkValue( $value )
@@ -1179,7 +1171,7 @@ class DateValidator extends OW_Validator
     public function isValid( $value )
     {
         // doesn't check empty values
-        if ( (is_array($value) && sizeof($value) === 0) || $value === null || mb_strlen(trim($value)) === 0 )
+        if ((is_array($value) && count($value) === 0) || $value === null || mb_strlen(trim($value)) === 0 )
         {
             return true;
         }
@@ -1195,10 +1187,8 @@ class DateValidator extends OW_Validator
             }
             return true;
         }
-        else
-        {
-            return $this->checkValue($value);
-        }
+
+        return $this->checkValue($value);
     }
 
     public function checkValue( $value )
@@ -1252,7 +1242,10 @@ class DateValidator extends OW_Validator
  */
 class CaptchaValidator extends OW_Validator
 {
-    protected $jsObjectName = null;
+    /**
+     * @var string|null $jsObjectName
+     */
+    protected $jsObjectName;
 
     public function __construct()
     {
@@ -1269,7 +1262,7 @@ class CaptchaValidator extends OW_Validator
     public function isValid( $value )
     {
         // doesn't check empty values
-        if ( (is_array($value) && sizeof($value) === 0) || $value === null || mb_strlen(trim($value)) === 0 )
+        if ((is_array($value) && count($value) === 0) || $value === null || mb_strlen(trim($value)) === 0 )
         {
             return true;
         }
@@ -1285,10 +1278,8 @@ class CaptchaValidator extends OW_Validator
             }
             return true;
         }
-        else
-        {
-            return $this->checkValue($value);
-        }
+
+        return $this->checkValue($value);
     }
 
     public function setJsObjectName( $name )
@@ -1314,24 +1305,22 @@ class CaptchaValidator extends OW_Validator
                     getErrorMessage : function(){ return ' . json_encode($this->getError()) . ' }
             }';
         }
-        else
-        {
-            return '{
-                 
-                    validate : function( value )
+
+        return '{
+             
+                validate : function( value )
+                {
+                    if( !window.' . $this->jsObjectName . '.validateCaptcha() )
                     {
-                        if( !window.' . $this->jsObjectName . '.validateCaptcha() )
-                        {
-                            throw ' . json_encode($this->getError()) . ';
-                        }
-                    },
-                    
-                    getErrorMessage : function()
-                    {
-                        return ' . json_encode($this->getError()) . ';
+                        throw ' . json_encode($this->getError()) . ';
                     }
-            }';
-        }
+                },
+                
+                getErrorMessage : function()
+                {
+                    return ' . json_encode($this->getError()) . ';
+                }
+        }';
     }
 }
 
@@ -1423,7 +1412,7 @@ class RangeValidator extends OW_Validator
         
         $valArray = explode('-', $value);
 
-        if ( empty($valArray) || !isset($valArray[0]) || !isset($valArray[1]) )
+        if (!isset($valArray[0], $valArray[1]) || empty($valArray))
         {
             return false;
         }

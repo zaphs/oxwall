@@ -266,7 +266,7 @@ class OW_Autoload
             $dir = trim($dir) . DS;
         }
 
-        $this->packagePointers[trim(strtoupper($packagePointer))] = $dir;
+        $this->packagePointers[strtoupper(trim($packagePointer))] = $dir;
     }
 }
 

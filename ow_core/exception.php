@@ -55,7 +55,7 @@ class RedirectException extends Exception
      */
     public function __construct( $url, $code = null )
     {
-        parent::__construct('', 0);
+        parent::__construct();
         $this->url = $url;
         $this->redirectCode = ( empty($code) ? 301 : (int) $code );
     }

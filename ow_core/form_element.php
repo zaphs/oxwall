@@ -99,18 +99,18 @@ abstract class FormElement
      * Constructor.
      *
      * @param string $name
-     * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function __construct( $name )
     {
-        if ( $name === null || !$name || strlen(trim($name)) === 0 )
+        if ( $name === null || !$name || trim($name) === '')
         {
             throw new InvalidArgumentException('Invalid form element name!');
         }
 
         $this->setName($name);
 
-        $this->setId(UTIL_HtmlTag::generateAutoId('input_' . uniqid(UTIL_String::getRandomString(rand(8, 13), UTIL_String::RND_STR_ALPHA_NUMERIC))));
+        $this->setId(UTIL_HtmlTag::generateAutoId('input_' . uniqid(UTIL_String::getRandomString(random_int(8, 13), UTIL_String::RND_STR_ALPHA_NUMERIC))));
     }
 
     /**
@@ -120,7 +120,7 @@ abstract class FormElement
      */
     public function getId()
     {
-        return isset($this->attributes['id']) ? $this->attributes['id'] : null;
+        return $this->attributes['id'] ?? null;
     }
 
     /**
@@ -130,7 +130,7 @@ abstract class FormElement
      */
     public function setId( $id )
     {
-        if ( $id === null || strlen(trim($id)) === 0 )
+        if ( $id === null || trim($id) === '')
         {
             throw new InvalidArgumentException('Invalid form element id!');
         }
@@ -192,7 +192,7 @@ abstract class FormElement
      */
     public function getName()
     {
-        return isset($this->attributes['name']) ? $this->attributes['name'] : null;
+        return $this->attributes['name'] ?? null;
     }
 
     /**
@@ -201,7 +201,7 @@ abstract class FormElement
      */
     public function setName( $name )
     {
-        if ( $name === null || strlen(trim($name)) === 0 )
+        if ( $name === null || trim($name) === '')
         {
             throw new InvalidArgumentException('Form element invalid name!');
         }
@@ -255,12 +255,7 @@ abstract class FormElement
     {
         $attrName = trim($attrName);
 
-        if ( isset($this->attributes[$attrName]) )
-        {
-            return $this->attributes[$attrName];
-        }
-
-        return null;
+        return $this->attributes[$attrName] ?? null;
     }
 
     /**
@@ -559,9 +554,9 @@ abstract class InvitationFormElement extends FormElement
 
     /**
      * @param string $invitation
-     * @return Selectbox
+     * @return InvitationFormElement
      */
-    public function setInvitation( $invitation )
+    public function setInvitation( $invitation ): InvitationFormElement
     {
         $this->invitation = trim($invitation);
 
@@ -791,7 +786,7 @@ class DateField extends FormElement
 
         $lastDay = 31;
 
-        if ( isset($this->defaultDate['month']) && isset($this->defaultDate['year']) )
+        if (isset($this->defaultDate['month'], $this->defaultDate['year']))
         {
             $time = mktime(0, 0, 0, $this->defaultDate['month'], 1, $this->defaultDate['year']);
             $lastDay = date('d', strtotime('+1 month last day', $time));
@@ -876,16 +871,6 @@ class DateField extends FormElement
  */
 class Textarea extends InvitationFormElement
 {
-
-    /**
-     * Constructor.
-     *
-     * @param string $name
-     */
-    public function __construct( $name )
-    {
-        parent::__construct($name);
-    }
 
     public function getElementJs()
     {
@@ -1216,10 +1201,11 @@ class RadioField extends FormElement
     }
 
     /**
-     * @see FormElement::renderInput()
-     *
      * @param array $params
      * @return string
+     * @throws Exception
+     * @see FormElement::renderInput()
+     *
      */
     public function renderInput( $params = null )
     {
@@ -1241,7 +1227,7 @@ class RadioField extends FormElement
                 $this->addAttribute(FormElement::ATTR_CHECKED, 'checked');
             }
 
-            $this->setId(UTIL_HtmlTag::generateAutoId('input_' . uniqid(UTIL_String::getRandomString(rand(8, 13), UTIL_String::RND_STR_ALPHA_NUMERIC))));
+            $this->setId(UTIL_HtmlTag::generateAutoId('input_' . uniqid(UTIL_String::getRandomString(random_int(8, 13), UTIL_String::RND_STR_ALPHA_NUMERIC))));
 
             $this->addAttribute('value', $key);
 
@@ -1379,7 +1365,7 @@ class CheckboxGroup extends FormElement
      */
     public function setName( $name )
     {
-        if ( $name === null || strlen(trim($name)) == 0 )
+        if ( $name === null || trim($name) === '')
         {
             throw new InvalidArgumentException('CheckboxGroup invalid name!');
         }
@@ -1410,10 +1396,11 @@ class CheckboxGroup extends FormElement
     }
 
     /**
-     * @see FormElement::renderInput()
-     *
      * @param array $params
      * @return string
+     * @throws Exception
+     * @see FormElement::renderInput()
+     *
      */
     public function renderInput( $params = null )
     {
@@ -1435,7 +1422,7 @@ class CheckboxGroup extends FormElement
                 $this->addAttribute(FormElement::ATTR_CHECKED, 'checked');
             }
 
-            $this->setId(UTIL_HtmlTag::generateAutoId('input_' . uniqid(UTIL_String::getRandomString(rand(8, 13), UTIL_String::RND_STR_ALPHA_NUMERIC))));
+            $this->setId(UTIL_HtmlTag::generateAutoId('input_' . uniqid(UTIL_String::getRandomString(random_int(8, 13), UTIL_String::RND_STR_ALPHA_NUMERIC))));
 
             $this->addAttribute('value', $key);
 
@@ -1690,9 +1677,9 @@ class Multiselect extends FormElement
      */
     public function setOptions( $options )
     {
-        if ( is_null($options) || !is_array($options) )
+        if ($options === null || !is_array($options) )
         {
-            throw new InvalidArgumentException();
+            throw new InvalidArgumentException('Options is empty or not array');
         }
 
         $this->options = $options;
@@ -1804,11 +1791,6 @@ class SuggestField extends FormElement
     private $initialLabel;
     private $minChars = 2;
 
-    public function __construct( $name )
-    {
-        parent::__construct($name);
-    }
-
     public function setResponderUrl( $responderUrl )
     {
         $this->responderUrl = json_encode($responderUrl);
@@ -1905,7 +1887,7 @@ class MultiFileField extends FormElement
 
     public function getValue()
     {
-        return isset($_FILES[$this->getName()]) ? $_FILES[$this->getName()] : null;
+        return $_FILES[$this->getName()] ?? null;
     }
 
     public function getElementJs()
@@ -1950,10 +1932,11 @@ class MultiFileField extends FormElement
     }
 
     /**
-     * @see FormElement::renderInput()
-     *
      * @param array $params
      * @return string
+     * @throws Exception
+     * @see FormElement::renderInput()
+     *
      */
     public function renderInput( $params = null )
     {
@@ -1964,7 +1947,7 @@ class MultiFileField extends FormElement
         for ( $i = 0; $i < $this->inputs; $i++ )
         {
             $label = isset($this->labels[$i]) ? $this->labels[$i] . ' ' : '';
-            $this->setId(UTIL_HtmlTag::generateAutoId('input_' . uniqid(UTIL_String::getRandomString(rand(8, 13), UTIL_String::RND_STR_ALPHA_NUMERIC))));
+            $this->setId(UTIL_HtmlTag::generateAutoId('input_' . uniqid(UTIL_String::getRandomString(random_int(8, 13), UTIL_String::RND_STR_ALPHA_NUMERIC))));
 
             $markup .= $label . '<input type="file" id="' . $this->getId() . '" name="' . $this->getName() . '[]" /><br />';
         }
@@ -2015,8 +1998,6 @@ class TagsField extends FormElement
             $this->addAttribute('value', $this->value);
         }
 
-        $markup = '';
-
         $tagTpl = '<div class="tags-field-tag-cont" style="margin: 2px 2px 0pt 0pt; padding: 2px 5px; background: rgb(204, 204, 204) none repeat scroll 0% 0%; float: left;"><span class="tags-field-tag">${tag}</span> <a class="ow_lbutton ow_red tags-field-del-tag">x</a></div>';
 
         $tagsMarkup = '';
@@ -2038,13 +2019,9 @@ class TagsField extends FormElement
 
         OW::getDocument()->addOnloadScript($js);
 
-        $markup .= str_replace('${tags}', $tagsMarkup, $tpl);
-
-        $markup = str_replace('${id}', $id, $markup);
-
         $this->addAttribute('type', 'hidden');
 
-        $markup = str_replace('${hidden}', UTIL_HtmlTag::generateTag('input', $this->attributes), $markup);
+        $markup = str_replace(['${tags}', '${id}', '${hidden}'], [$tagsMarkup, $id, UTIL_HtmlTag::generateTag('input', $this->attributes)], $tpl);
 
         return $markup;
     }
@@ -2102,7 +2079,10 @@ class CaptchaField extends FormElement
 {
     const CAPTCHA_PREFIX = 'ow_captcha_';
 
-    public $jsObjectName = null;
+    /**
+     * @var string|null $jsObjectName
+     */
+    public $jsObjectName;
 
     /**
      * Constructor.
@@ -2353,7 +2333,7 @@ class MatchAgeRange extends AgeRange
     /**
      * Sets form element value.
      *
-     * @param array $value
+     * @param array|string $value
      * @return void
      */
     public function setValue( $value )
@@ -2601,7 +2581,7 @@ class DateRange extends FormElement implements DateRangeInterface
      */
     public function setValue( $value )
     {
-        if ( isset($value['from']) && isset($value['to']) )
+        if (isset($value['from'], $value['to']))
         {
             $this->minDate->setValue($value['from']);
             $this->maxDate->setValue($value['to']);
@@ -2666,16 +2646,6 @@ class BillingGatewaySelectionField extends FormElement
 {
 
     /**
-     * Constructor.
-     *
-     * @param string $name
-     */
-    public function __construct( $name )
-    {
-        parent::__construct($name);
-    }
-
-    /**
      * @see FormElement::getElementJs()
      */
     public function getElementJs()
@@ -2686,10 +2656,11 @@ class BillingGatewaySelectionField extends FormElement
     }
 
     /**
-     * @see FormElement::renderInput()
-     *
      * @param array $params
      * @return string
+     * @throws ReflectionException
+     * @see FormElement::renderInput()
+     *
      */
     public function renderInput( $params = null )
     {
@@ -2794,7 +2765,12 @@ class BillingGatewaySelectionField extends FormElement
         return BOL_BillingService::getInstance()->getActiveGatewaysList();
     }
 
-    protected function getAdapterData( $gateways )
+    /**
+     * @param array $gateways
+     * @return array
+     * @throws ReflectionException
+     */
+    protected function getAdapterData( $gateways ): array
     {
         $paymentOptions = [];
 
@@ -2836,23 +2812,6 @@ class MobileBillingGatewaySelectionField extends BillingGatewaySelectionField
         return BOL_BillingService::getInstance()->getActiveGatewaysList(true);
     }
 
-    protected function getAdapterData( $gateways )
-    {
-        $paymentOptions = [];
-
-        foreach ( $gateways as $gateway )
-        {
-            /* @var OW_BillingAdapter $adapter */
-            if ( $adapter = OW::getClassInstance($gateway->adapterClassName) )
-            {
-                $paymentOptions[$gateway->gatewayKey]['dto'] = $gateway;
-                $paymentOptions[$gateway->gatewayKey]['orderUrl'] = $adapter->getOrderFormUrl();
-                $paymentOptions[$gateway->gatewayKey]['logoUrl'] = $adapter->getLogoUrl();
-            }
-        }
-
-        return $paymentOptions;
-    }
 }
 
 class YearRange extends FormElement implements DateRangeInterface
@@ -3351,7 +3310,7 @@ class WysiwygTextarea extends InvitationFormElement
                     ]
                 ],
                 'buttonCode' => OW::getThemeManager()->processDecorator('button', ['label' => '#label#', 'class' => 'ow_ic_add mn_submit']),
-                'rtl' => ($languageDto !== null && (bool) $languageDto->getRtl() ) ? true : false
+                'rtl' => $languageDto !== null && (bool)$languageDto->getRtl()
             ];
 
 
@@ -3550,9 +3509,7 @@ class TagsInputField extends FormElement
 
         $this->addAttribute('value', $this->value ? implode(',', $this->value) : '');
 
-        $markup = UTIL_HtmlTag::generateTag('input', $this->attributes);
-
-        return $markup;
+        return UTIL_HtmlTag::generateTag('input', $this->attributes);
     }
 
     /**
@@ -3594,11 +3551,6 @@ var formElement = new OwFormElement('" . $this->getId() . "', '" . $this->getNam
         }
 
         return $js;
-    }
-
-    public function getValue()
-    {
-        return $this->value;
     }
 
     public function setValue( $value )

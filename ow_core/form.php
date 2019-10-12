@@ -125,7 +125,7 @@ class Form
      */
     public function getId()
     {
-        return isset($this->attributes['id']) ? $this->attributes['id'] : null;
+        return $this->attributes['id'] ?? null;
     }
 
     /**
@@ -133,7 +133,7 @@ class Form
      */
     public function getName()
     {
-        return isset($this->attributes['name']) ? $this->attributes['name'] : null;
+        return $this->attributes['name'] ?? null;
     }
 
     /**
@@ -204,7 +204,7 @@ class Form
      */
     public function getAction()
     {
-        return isset($this->attributes['action']) ? $this->attributes['action'] : null;
+        return $this->attributes['action'] ?? null;
     }
 
     /**
@@ -230,7 +230,7 @@ class Form
      */
     public function getMethod()
     {
-        return isset($this->attributes['method']) ? $this->attributes['method'] : null;
+        return $this->attributes['method'] ?? null;
     }
 
     /**
@@ -256,7 +256,7 @@ class Form
      */
     public function getEnctype()
     {
-        return isset($this->attributes['enctype']) ? $this->attributes['enctype'] : null;
+        return $this->attributes['enctype'] ?? null;
     }
 
     /**
@@ -444,7 +444,7 @@ class Form
         /* @var FormElement $element */
         foreach ( $this->elements as $element )
         {
-            $element->setValue(( isset($data[$element->getName()]) ? $data[$element->getName()] : null));
+            $element->setValue($data[$element->getName()] ?? null);
 
             if ( !$element->isValid() )
             {

@@ -63,7 +63,7 @@ class BASE_CTRL_UserList extends OW_ActionController
 
         $this->assign('listType', $listType);
 
-        $this->setMetaForListType(array("user_list" => $language->text("base", "user_list_type_".$listType)));
+        $this->setMetaForListType(["user_list" => $language->text("base", "user_list_type_" . $listType)]);
     }
 
     /**
@@ -102,7 +102,7 @@ class BASE_CTRL_UserList extends OW_ActionController
 
         $blockedList = $listCount
             ? $service->findBlockedUserList($userId, $first, $count)
-            : array();
+            : [];
 
         $listCmp = new BASE_CMP_BlockedUserList(BOL_UserService::
                 getInstance()->findUserListByIdList($blockedList), $listCount, $perPage);
@@ -141,39 +141,39 @@ class BASE_CTRL_UserList extends OW_ActionController
     {
         $language = OW::getLanguage();
 
-        $menuArray = array(
-            array(
+        $menuArray = [
+            [
                 'label' => $language->text('base', 'user_list_menu_item_latest'),
-                'url' => OW::getRouter()->urlForRoute('base_user_lists', array('list' => 'latest')),
+                'url' => OW::getRouter()->urlForRoute('base_user_lists', ['list' => 'latest']),
                 'iconClass' => 'ow_ic_clock',
                 'key' => 'latest',
                 'order' => 1
-            ),
-            array(
+            ],
+            [
                 'label' => $language->text('base', 'user_list_menu_item_online'),
-                'url' => OW::getRouter()->urlForRoute('base_user_lists', array('list' => 'online')),
+                'url' => OW::getRouter()->urlForRoute('base_user_lists', ['list' => 'online']),
                 'iconClass' => 'ow_ic_push_pin',
                 'key' => 'online',
                 'order' => 3
-            ),
-            array(
+            ],
+            [
                 'label' => $language->text('base', 'user_search_menu_item_label'),
                 'url' => OW::getRouter()->urlForRoute('users-search'),
                 'iconClass' => 'ow_ic_lens',
                 'key' => 'search',
                 'order' => 4
-            )
-        );
+            ]
+        ];
 
         if ( BOL_UserService::getInstance()->countFeatured() > 0 )
         {
-            $menuArray[] =  array(
+            $menuArray[] =  [
                 'label' => $language->text('base', 'user_list_menu_item_featured'),
-                'url' => OW::getRouter()->urlForRoute('base_user_lists', array('list' => 'featured')),
+                'url' => OW::getRouter()->urlForRoute('base_user_lists', ['list' => 'featured']),
                 'iconClass' => 'ow_ic_push_pin',
                 'key' => 'featured',
                 'order' => 2
-            );
+            ];
         }
 
         $event = new BASE_CLASS_EventCollector('base.add_user_list');
@@ -207,14 +207,14 @@ class BASE_CTRL_UserList extends OW_ActionController
     }
 
     protected function setMetaForListType( array $vars ){
-        $params = array(
+        $params = [
             "sectionKey" => "base.users",
             "entityKey" => "userLists",
             "title" => "base+meta_title_user_list",
             "description" => "base+meta_desc_user_list",
             "keywords" => "base+meta_keywords_user_list",
             "vars" => $vars
-        );
+        ];
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }
@@ -238,9 +238,9 @@ class BASE_Members extends BASE_CMP_Users
 
     public function getFields( $userIdList )
     {
-        $fields = array();
+        $fields = [];
 
-        $qs = array();
+        $qs = [];
 
         $qBdate = BOL_QuestionService::getInstance()->findQuestionByName('birthdate');
 
@@ -261,7 +261,7 @@ class BASE_Members extends BASE_CMP_Users
         foreach ( $questionList as $uid => $question )
         {
 
-            $fields[$uid] = array();
+            $fields[$uid] = [];
 
             $age = '';
 
@@ -294,10 +294,10 @@ class BASE_Members extends BASE_CMP_Users
 
             if ( !empty($sexValue) && !empty($age) )
             {
-                $fields[$uid][] = array(
+                $fields[$uid][] = [
                     'label' => '',
                     'value' => $sexValue . ' ' . $age
-                );
+                ];
             }
 
             if ( !empty($question['birthdate']) )
@@ -325,10 +325,10 @@ class BASE_Members extends BASE_CMP_Users
                         $birthdate = UTIL_DateTime::formatBirthdate($dinfo['year'], $dinfo['month'], $dinfo['day']);
                     }
 
-                    $fields[$uid][] = array(
+                    $fields[$uid][] = [
                         'label' => OW::getLanguage()->text('birthdays', 'birthday'),
                         'value' => $birthdate
-                    );
+                    ];
                 }
             }
         }

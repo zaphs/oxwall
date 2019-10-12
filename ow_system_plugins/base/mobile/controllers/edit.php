@@ -94,7 +94,7 @@ class BASE_MCTRL_Edit extends BASE_CTRL_Edit
             // get available account types from DB
             $accountTypes = BOL_QuestionService::getInstance()->findAllAccountTypes();
 
-            $accounts = array();
+            $accounts = [];
 
             if (count($accountTypes) > 1) {
                 /* @var $value BOL_QuestionAccount */
@@ -193,8 +193,8 @@ class BASE_MCTRL_Edit extends BASE_CTRL_Edit
         $questions = $this->questionService->findEditQuestionsForAccountType($accountType);
 
         $section = null;
-        $questionArray = array();
-        $questionNameList = array();
+        $questionArray = [];
+        $questionNameList = [];
 
         foreach ($questions as $sort => $question) {
             if ($section !== $question['sectionName']) {
@@ -207,11 +207,11 @@ class BASE_MCTRL_Edit extends BASE_CTRL_Edit
 
         $this->assign('questionArray', $questionArray);
 
-        $questionData = $this->questionService->getQuestionData(array($editUserId), $questionNameList);
+        $questionData = $this->questionService->getQuestionData([$editUserId], $questionNameList);
 
         $questionValues = $this->questionService->findQuestionsValuesByQuestionNameList($questionNameList);
         // add question to form
-        $editForm->addQuestions($questions, $questionValues, !empty($questionData[$editUserId]) ? $questionData[$editUserId] : array());
+        $editForm->addQuestions($questions, $questionValues, !empty($questionData[$editUserId]) ? $questionData[$editUserId] : []);
 
         // process form
         if (OW::getRequest()->isPost()) {
@@ -233,9 +233,10 @@ class BASE_MCTRL_Edit extends BASE_CTRL_Edit
 
         //include js
         $onLoadJs = " window.edit = new OW_BaseFieldValidators( " .
-            json_encode(array(
+            json_encode([
                 'formName' => $editForm->getName(),
-                'responderUrl' => OW::getRouter()->urlFor("BASE_MCTRL_Edit", "ajaxResponder"))) . ",
+                'responderUrl' => OW::getRouter()->urlFor("BASE_MCTRL_Edit", "ajaxResponder")
+            ]) . ",
                                                         " . UTIL_Validator::EMAIL_PATTERN . ", " . UTIL_Validator::USER_NAME_PATTERN . ", " . $editUserId . " ); ";
 
         $this->assign('validImageExtensions', json_encode(UTIL_File::$imageExtensions));
@@ -323,13 +324,13 @@ class BASE_MCTRL_Edit extends BASE_CTRL_Edit
                     if ( !$adminMode )
                     {
                         $isNeedToModerate = $this->questionService->isNeedToModerate($changesList);
-                        $event = new OW_Event(OW_EventManager::ON_USER_EDIT, array('userId' => $userId, 'method' => 'native', 'moderate' => $isNeedToModerate));
+                        $event = new OW_Event(OW_EventManager::ON_USER_EDIT, ['userId' => $userId, 'method' => 'native', 'moderate' => $isNeedToModerate]);
                         OW::getEventManager()->trigger($event);
 
                         // saving changed fields
                         if ( BOL_UserService::getInstance()->isApproved($userId) )
                         {
-                            $changesList = array();
+                            $changesList = [];
                         }
 
                         BOL_PreferenceService::getInstance()->savePreferenceValue(self::PREFERENCE_LIST_OF_CHANGES, json_encode($changesList), $userId);
@@ -340,10 +341,10 @@ class BASE_MCTRL_Edit extends BASE_CTRL_Edit
                     }
                     else
                     {
-                        $event = new OW_Event(OW_EventManager::ON_USER_EDIT_BY_ADMIN, array('userId' => $userId));
+                        $event = new OW_Event(OW_EventManager::ON_USER_EDIT_BY_ADMIN, ['userId' => $userId]);
                         OW::getEventManager()->trigger($event);
 
-                        BOL_PreferenceService::getInstance()->savePreferenceValue(self::PREFERENCE_LIST_OF_CHANGES, json_encode(array()), $userId);
+                        BOL_PreferenceService::getInstance()->savePreferenceValue(self::PREFERENCE_LIST_OF_CHANGES, json_encode([]), $userId);
 
                         if ( !BOL_UserService::getInstance()->isApproved($userId) )
                         {
@@ -351,7 +352,7 @@ class BASE_MCTRL_Edit extends BASE_CTRL_Edit
                         }
 
                         OW::getFeedback()->info($language->text('base', 'edit_successfull_edit'));
-                        $this->redirect(OW::getRouter()->urlForRoute('base_user_profile', array('username' => BOL_UserService::getInstance()->getUserName($userId))));
+                        $this->redirect(OW::getRouter()->urlForRoute('base_user_profile', ['username' => BOL_UserService::getInstance()->getUserName($userId)]));
                     }
                 }
                 else
@@ -383,16 +384,16 @@ class BASE_MCTRL_Edit extends BASE_CTRL_Edit
             return false;
         }
 
-        $event = new OW_Event('base.before_avatar_change', array(
+        $event = new OW_Event('base.before_avatar_change', [
             'userId' => $userId,
             'avatarId' => null,
             'upload' => true,
             'crop' => false,
             'isModerable' => false
-        ));
+        ]);
         OW::getEventManager()->trigger($event);
 
-        $avatarSet = $avatarService->setUserAvatar($userId, $path, array('isModerable' => false, 'trackAction' => false ));
+        $avatarSet = $avatarService->setUserAvatar($userId, $path, ['isModerable' => false, 'trackAction' => false]);
 
         if ( $avatarSet )
         {
@@ -400,12 +401,12 @@ class BASE_MCTRL_Edit extends BASE_CTRL_Edit
 
             if ( $avatar )
             {
-                $event = new OW_Event('base.after_avatar_change', array(
+                $event = new OW_Event('base.after_avatar_change', [
                     'userId' => $userId,
                     'avatarId' => $avatar->id,
                     'upload' => true,
                     'crop' => false
-                ));
+                ]);
                 OW::getEventManager()->trigger($event);
             }
         }

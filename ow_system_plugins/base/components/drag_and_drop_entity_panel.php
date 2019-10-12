@@ -33,10 +33,10 @@
 class BASE_CMP_DragAndDropEntityPanel extends BASE_CMP_DragAndDropFrontendPanel
 {
     private $entityScheme;
-    private $entitySettingList = array();
-    private $entityPositionList = array();
-    private $entityComponentList = array();
-    private $entityClonedNameList = array();
+    private $entitySettingList = [];
+    private $entityPositionList = [];
+    private $entityComponentList = [];
+    private $entityClonedNameList = [];
     private $entityId;
 
     public function __construct( $placeName, $entityId, array $componentList, $customizeMode, $componentTemplate, $responderController = 'BASE_CTRL_AjaxComponentEntityPanel' )
@@ -86,7 +86,7 @@ class BASE_CMP_DragAndDropEntityPanel extends BASE_CMP_DragAndDropFrontendPanel
     {
         $entityComponentList = $this->entityComponentList;
 
-        $tmpList = array();
+        $tmpList = [];
 
         foreach ( $defaultPositions as $item )
         {
@@ -111,7 +111,7 @@ class BASE_CMP_DragAndDropEntityPanel extends BASE_CMP_DragAndDropFrontendPanel
 
     protected function makeComponentList( $defaultComponentList )
     {
-        $entityList = array();
+        $entityList = [];
         foreach ( $this->entityComponentList as $item )
         {
             if ( !isset($defaultComponentList[$item['uniqName']]) )

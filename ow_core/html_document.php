@@ -51,63 +51,63 @@ class OW_HtmlDocument extends OW_Document
      *
      * @var array
      */
-    protected $styleSheets = array('added' => array(), 'items' => array());
+    protected $styleSheets = ['added' => [], 'items' => []];
 
     /**
      * Appended style declarations.
      *
      * @var array
      */
-    protected $styleDeclarations = array('hash' => array(), 'items' => array());
+    protected $styleDeclarations = ['hash' => [], 'items' => []];
 
     /**
      * Included javascript files.
      *
      * @var array
      */
-    protected $javaScripts = array('added' => array(), 'items' => array());
+    protected $javaScripts = ['added' => [], 'items' => []];
 
     /**
      * Appended javascript code.
      *
      * @var array
      */
-    protected $javaScriptDeclarations = array('hash' => array(), 'items' => array());
+    protected $javaScriptDeclarations = ['hash' => [], 'items' => []];
 
     /**
      * Javascript code added before script file includes.
      *
      * @var array
      */
-    protected $preIncludeJavaScriptDeclarations = array();
+    protected $preIncludeJavaScriptDeclarations = [];
 
     /**
      * Appended onload javascript.
      *
      * @var array
      */
-    protected $onloadJavaScript = array('hash' => array(), 'items' => array());
+    protected $onloadJavaScript = ['hash' => [], 'items' => []];
 
     /**
      * Added head area links.
      *
      * @var array
      */
-    private $links = array();
+    private $links = [];
 
     /**
      * Added meta tags.
      *
      * @var array
      */
-    private $meta = array();
+    private $meta = [];
 
     /**
      * Custom head info.
      *
      * @var array
      */
-    private $customHeadInfo = array();
+    private $customHeadInfo = [];
 
     /**
      * Document master page.
@@ -166,7 +166,7 @@ class OW_HtmlDocument extends OW_Document
     /**
      * @var array
      */
-    private $availableMetaAttrs = array('http-equiv', 'name', 'property', 'itemprop');
+    private $availableMetaAttrs = ['http-equiv', 'name', 'property', 'itemprop'];
 
     /**
      * @return string
@@ -289,7 +289,7 @@ class OW_HtmlDocument extends OW_Document
      */
     public function setHeading( $heading )
     {
-        $this->throwEvent("core.set_document_heading", array("str" => $heading));
+        $this->throwEvent("core.set_document_heading", ["str" => $heading]);
         $this->heading = $heading;
     }
 
@@ -574,7 +574,7 @@ class OW_HtmlDocument extends OW_Document
      */
     public function setFavicon( $url )
     {
-        $attributes = array('rel' => 'shortcut icon', 'type' => 'image/x-icon', 'href' => trim($url));
+        $attributes = ['rel' => 'shortcut icon', 'type' => 'image/x-icon', 'href' => trim($url)];
 
         $this->links[] = $attributes;
 
@@ -666,12 +666,12 @@ class OW_HtmlDocument extends OW_Document
         // META INFO
         if ( $this->getDescription() )
         {
-            $headData .= UTIL_HtmlTag::generateTag('meta', array("name" => "description", "content" => $this->getDescription())) . PHP_EOL;
+            $headData .= UTIL_HtmlTag::generateTag('meta', ["name" => "description", "content" => $this->getDescription()]) . PHP_EOL;
         }
 
         if ( $this->getKeywords() )
         {
-            $headData .= UTIL_HtmlTag::generateTag('meta', array("name" => "keywords", "content" => $this->getKeywords())) . PHP_EOL;
+            $headData .= UTIL_HtmlTag::generateTag('meta', ["name" => "keywords", "content" => $this->getKeywords()]) . PHP_EOL;
         }
 
         foreach ( $this->meta as $key => $value )
@@ -680,7 +680,7 @@ class OW_HtmlDocument extends OW_Document
             {
                 foreach ( $value as $name => $content )
                 {
-                    $attrs = array($key => $name, 'content' => $content);
+                    $attrs = [$key => $name, 'content' => $content];
                     $headData .= UTIL_HtmlTag::generateTag('meta', $attrs) . PHP_EOL;
                 }
             }
@@ -695,7 +695,7 @@ class OW_HtmlDocument extends OW_Document
             {
                 foreach ( $urls as $url )
                 {
-                    $attrs = array('rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url, 'media' => $media);
+                    $attrs = ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url, 'media' => $media];
                     $headData .= UTIL_HtmlTag::generateTag('link', $attrs) . PHP_EOL;
                 }
             }
@@ -710,7 +710,7 @@ class OW_HtmlDocument extends OW_Document
             {
                 foreach ( $declarations as $declaration )
                 {
-                    $attrs = array('type' => $type);
+                    $attrs = ['type' => $type];
                     $jsData .= UTIL_HtmlTag::generateTag('script', $attrs, true, PHP_EOL . $declaration . PHP_EOL) . PHP_EOL;
                 }
             }
@@ -725,7 +725,7 @@ class OW_HtmlDocument extends OW_Document
             {
                 foreach ( $urls as $url )
                 {
-                    $attrs = array('type' => $type, 'src' => $url);
+                    $attrs = ['type' => $type, 'src' => $url];
 
                     //TODO remake temp fix - get JQUERY lib to the head area
                     if ( $priority == -100 )
@@ -747,7 +747,7 @@ class OW_HtmlDocument extends OW_Document
         {
             foreach ( $mediaTypes as $media => $declarations )
             {
-                $attrs = array('media' => $media);
+                $attrs = ['media' => $media];
                 $headData .= UTIL_HtmlTag::generateTag('style', $attrs, true, implode(' ', $declarations));
             }
         }
@@ -761,7 +761,7 @@ class OW_HtmlDocument extends OW_Document
             {
                 foreach ( $declarations as $declaration )
                 {
-                    $attrs = array('type' => $type);
+                    $attrs = ['type' => $type];
                     $jsData .= UTIL_HtmlTag::generateTag('script', $attrs, true,
                             PHP_EOL . '(function() {' . $declaration . '})();' . PHP_EOL) . PHP_EOL;
                 }
@@ -791,14 +791,14 @@ class OW_HtmlDocument extends OW_Document
 
         $customHeadData = implode('', $this->customHeadInfo);
 
-        $assignArray = array(
+        $assignArray = [
             'title' => $this->getTitle(),
             'headData' => $headData . $headJsInclude . $customHeadData,
             'language' => $this->language,
             'direction' => $this->direction,
             'pageBody' => $this->prependCode . $masterPageOutput . $this->appendCode . $jsData . OW_Document::APPEND_PLACEHOLDER,
             'bodyClass' => $this->bodyClass
-        );
+        ];
 
         $renderer = OW_ViewRenderer::getInstance();
         $renderer->clearAssignedVars();
@@ -806,7 +806,7 @@ class OW_HtmlDocument extends OW_Document
         return $renderer->renderTemplate($this->getTemplate());
     }
 
-    protected function throwEvent( $name, $params = array() )
+    protected function throwEvent( $name, $params = [])
     {
         OW::getEventManager()->trigger(new OW_Event($name, $params));
     }

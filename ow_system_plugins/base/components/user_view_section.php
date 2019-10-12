@@ -2,7 +2,7 @@
 
 class BASE_CMP_UserViewSection extends OW_Component
 {
-    public function __construct( $section, $sectionQuestions, $data, $labels, $template = 'table', $hideSection = false, $additionalParams = array() )
+    public function __construct( $section, $sectionQuestions, $data, $labels, $template = 'table', $hideSection = false, $additionalParams = [])
     {
         parent::__construct();
 

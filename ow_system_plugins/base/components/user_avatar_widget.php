@@ -148,18 +148,18 @@ class BASE_CMP_UserAvatarWidget extends BASE_CLASS_Widget
         
         $avatar = $avatarService->getAvatarUrl($userId, 2, null, false, !($moderation || $owner));
         $this->assign('avatar', $avatar ? $avatar : $avatarService->getDefaultAvatarUrl(2));
-        $roles = BOL_AuthorizationService::getInstance()->getRoleListOfUsers(array($userId));
+        $roles = BOL_AuthorizationService::getInstance()->getRoleListOfUsers([$userId]);
         $this->assign('role', !empty($roles[$userId]) ? $roles[$userId] : null);
 
         $userService = BOL_UserService::getInstance();
 
         $showPresence = true;
         // Check privacy permissions 
-        $eventParams = array(
+        $eventParams = [
             'action' => 'base_view_my_presence_on_site',
             'ownerId' => $userId,
             'viewerId' => OW::getUser()->getId()
-        );
+        ];
         try
         {
             OW::getEventManager()->getInstance()->call('privacy_check_permission', $eventParams);
@@ -187,11 +187,11 @@ class BASE_CMP_UserAvatarWidget extends BASE_CLASS_Widget
 
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_TITLE => OW::getLanguage()->text('base', 'avatar_widget'),
             self::SETTING_SHOW_TITLE => false,
             self::SETTING_ICON => self::ICON_PICTURE,
             self::SETTING_FREEZE => true
-        );
+        ];
     }
 }

@@ -63,24 +63,24 @@ class BASE_CMP_IndexWallWidget extends BASE_CLASS_Widget
 
     public static function getSettingList()
     {
-        $settingList = array();
-        $settingList['comments_count'] = array(
+        $settingList = [];
+        $settingList['comments_count'] = [
             'presentation' => self::PRESENTATION_SELECT,
             'label' => OW::getLanguage()->text('base', 'cmp_widget_wall_comments_count'),
-            'optionList' => array('3' => 3, '5' => 5, '10' => 10, '20' => 20, '50' => 50),
+            'optionList' => ['3' => 3, '5' => 5, '10' => 10, '20' => 20, '50' => 50],
             'value' => 10
-        );
+        ];
 
         return $settingList;
     }
 
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_SHOW_TITLE => false,
             self::SETTING_TITLE => OW::getLanguage()->text('base', 'comments_widget_label'),
             self::SETTING_WRAP_IN_BOX => false
-        );
+        ];
     }
 
     public static function getAccess()

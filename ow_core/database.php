@@ -193,8 +193,10 @@ final class OW_Database
             $dsn .= "dbname={$params['dbname']}";
 
             $this->connection = new PDO($dsn, $params['username'], $params['password'],
-                array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES UTF8MB4;',
-                PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true));
+                [
+                    PDO::MYSQL_ATTR_INIT_COMMAND       => 'SET NAMES UTF8MB4;',
+                    PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+                ]);
 
             if ( !$this->isMysqlValidVersion() )
             {
@@ -210,7 +212,7 @@ final class OW_Database
                 $this->queryCount = 0;
                 $this->queryExecTime = 0;
                 $this->totalQueryExecTime = 0;
-                $this->queryLog = array();
+                $this->queryLog = [];
             }
 
             if ( !empty($params['debugMode']) )
@@ -239,7 +241,7 @@ final class OW_Database
     {
         if ( !isset(self::$classInstances) )
         {
-            self::$classInstances = array();
+            self::$classInstances = [];
         }
 
         ksort($params);
@@ -266,7 +268,7 @@ final class OW_Database
      * @param array $tags
      * @return mixed
      */
-    public function queryForColumn( $sql, array $params = null, $cacheLifeTime = 0, $tags = array() )
+    public function queryForColumn( $sql, array $params = null, $cacheLifeTime = 0, $tags = [])
     {
         $dataFromCache = $this->getFromCache($sql, $params, $cacheLifeTime);
 
@@ -296,7 +298,7 @@ final class OW_Database
      * @param array $params
      * @return mixed
      */
-    public function queryForObject( $sql, $className, array $params = null, $cacheLifeTime = 0, $tags = array() )
+    public function queryForObject( $sql, $className, array $params = null, $cacheLifeTime = 0, $tags = [])
     {
         $dataFromCache = $this->getFromCache($sql, $params, $cacheLifeTime);
 
@@ -332,7 +334,7 @@ final class OW_Database
      * @param array $tags
      * @return array
      */
-    public function queryForObjectList( $sql, $className, array $params = null, $cacheLifeTime = 0, $tags = array() )
+    public function queryForObjectList( $sql, $className, array $params = null, $cacheLifeTime = 0, $tags = [])
     {
         $dataFromCache = $this->getFromCache($sql, $params, $cacheLifeTime);
 
@@ -361,9 +363,9 @@ final class OW_Database
     public function setTimezone()
     {
         $date = new DateTime;
-        $this->query('SET TIME_ZONE = ?', array(
+        $this->query('SET TIME_ZONE = ?', [
             $date->format('P')
-        ));
+        ]);
     }
 
     /**
@@ -373,7 +375,7 @@ final class OW_Database
      * @param array $tags
      * @return array
      */
-    public function queryForRow( $sql, array $params = null, $cacheLifeTime = 0, $tags = array() )
+    public function queryForRow( $sql, array $params = null, $cacheLifeTime = 0, $tags = [])
     {
         $dataFromCache = $this->getFromCache($sql, $params, $cacheLifeTime);
 
@@ -388,7 +390,7 @@ final class OW_Database
 
         if ( $result === false )
         {
-            $result = array();
+            $result = [];
         }
 
         $this->saveToCache($result, $sql, $params, $cacheLifeTime, $tags);
@@ -402,7 +404,7 @@ final class OW_Database
      * @param array $params
      * @return array
      */
-    public function queryForList( $sql, array $params = null, $cacheLifeTime = 0, $tags = array() )
+    public function queryForList( $sql, array $params = null, $cacheLifeTime = 0, $tags = [])
     {
         $dataFromCache = $this->getFromCache($sql, $params, $cacheLifeTime);
 
@@ -424,7 +426,7 @@ final class OW_Database
      * @param array $tags
      * @return type
      */
-    public function queryForColumnList( $sql, array $params = null, $cacheLifeTime = 0, $tags = array() )
+    public function queryForColumnList( $sql, array $params = null, $cacheLifeTime = 0, $tags = [])
     {
         $dataFromCache = $this->getFromCache($sql, $params, $cacheLifeTime);
 
@@ -542,7 +544,7 @@ final class OW_Database
                 return true;
             }
 
-            $updateArray = array();
+            $updateArray = [];
             foreach ( $params as $key => $value )
             {
                 if ( $key !== $primaryKeyName )
@@ -592,7 +594,7 @@ final class OW_Database
             if ( count($objects) > 0 )
             {
                 $columns = '';
-                $paramNames = array();
+                $paramNames = [];
 
                 if ( is_object($objects[0]) )
                 {
@@ -609,7 +611,7 @@ final class OW_Database
                 $totalInsertsCount = 0;
                 $objectsCount = count($objects);
                 $batchSize = (int) $batchSize;
-                $inserts = array();
+                $inserts = [];
 
                 foreach ( $objects as $obj )
                 {
@@ -635,7 +637,7 @@ final class OW_Database
                     if ( $i === $batchSize || $totalInsertsCount === $objectsCount )
                     {
                         $sql = "REPLACE INTO `{$tableName}` ({$columns}) VALUES" . implode(',', $inserts);
-                        $inserts = array();
+                        $inserts = [];
                         $i = 0;
                         $this->execute($sql)->closeCursor();
                         //$this->connection->query($sql)->closeCursor();
@@ -719,7 +721,7 @@ final class OW_Database
                 $stmt->bindValue(is_int($key) ? $key + 1 : $key, $value, $paramType);
             }
         }
-        OW::getEventManager()->trigger(new OW_Event("core.sql.exec_query", array("sql" => $sql, "params" => $params)));
+        OW::getEventManager()->trigger(new OW_Event("core.sql.exec_query", ["sql" => $sql, "params" => $params]));
         $stmt->execute(); //TODO setup profiler
         $this->affectedRows = $stmt->rowCount();
 
@@ -729,7 +731,7 @@ final class OW_Database
             $this->totalQueryExecTime += $this->queryExecTime;
 
             $this->queryCount++;
-            $this->queryLog[] = array('query' => $sql, 'execTime' => $this->queryExecTime, 'params' => $params);
+            $this->queryLog[] = ['query' => $sql, 'execTime' => $this->queryExecTime, 'params' => $params];
         }
 
         return $stmt;
@@ -784,7 +786,7 @@ final class OW_Database
     {
         if ( $this->cacheEnabled($cacheLifeTime) )
         {
-            $cacheKey = $this->getCacheKeyForQuery($sql, $params ? $params : array());
+            $cacheKey = $this->getCacheKeyForQuery($sql, $params ? $params : []);
             $cacheData = $this->getCacheManager()->load($cacheKey);
 
             if ( $cacheData !== null )
@@ -793,7 +795,7 @@ final class OW_Database
             }
         }
 
-        $data = OW::getEventManager()->call("core.sql.get_query_result", array("sql" => $sql, "params" => $params));
+        $data = OW::getEventManager()->call("core.sql.get_query_result", ["sql" => $sql, "params" => $params]);
 
         if ( is_array($data) && isset($data["result"]) && $data["result"] === true )
         {
@@ -807,11 +809,11 @@ final class OW_Database
     {
         if ( $this->cacheEnabled($cacheLifeTime) )
         {
-            $cacheKey = $this->getCacheKeyForQuery($sql, $params ? $params : array());
+            $cacheKey = $this->getCacheKeyForQuery($sql, $params ? $params : []);
             $this->getCacheManager()->save(serialize($result), $cacheKey, $tags, $cacheLifeTime);
         }
 
         OW::getEventManager()->trigger(new OW_Event("core.sql.set_query_result",
-            array("sql" => $sql, "params" => $params, "result" => $result)));
+            ["sql" => $sql, "params" => $params, "result" => $result]));
     }
 }

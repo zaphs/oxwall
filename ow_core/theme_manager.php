@@ -43,7 +43,7 @@ class OW_ThemeManager
     /**
      * @var type
      */
-    private $themeObjects = array();
+    private $themeObjects = [];
 
     /**
      * Registered decorators.
@@ -57,7 +57,7 @@ class OW_ThemeManager
      */
     private function __construct()
     {
-        $this->decorators = array();
+        $this->decorators = [];
         $this->themeService = BOL_ThemeService::getInstance();
     }    
 

@@ -36,7 +36,7 @@ class BASE_MCTRL_Oembed extends OW_MobileActionController
      */
     public function getAjaxEmbedCode()
     {
-        $result = array();
+        $result = [];
         $url = !empty($_GET['url']) ? urldecode($_GET['url']) : null;
 
         if ( $url )

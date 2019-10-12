@@ -38,7 +38,7 @@ final class BOL_TagService
     /**
      * @var array
      */
-    private $configs = array();
+    private $configs = [];
     /**
      * @var BOL_TagDao
      */
@@ -144,7 +144,7 @@ final class BOL_TagService
 
         $entityTags = $this->findEntityTags($entityId, $entityType);
 
-        $tagsToAdd = array_udiff($tags, $entityTags, array($this, 'tagDiff'));
+        $tagsToAdd = array_udiff($tags, $entityTags, [$this, 'tagDiff']);
 
         /* @var $tag BOL_Tag */
         foreach ( $tagsToAdd as $tag )
@@ -154,7 +154,7 @@ final class BOL_TagService
             $this->entityTagDao->save($entityTagItem);
         }
 
-        $tagsToDelete = array_udiff($entityTags, $tags, array($this, 'tagDiff'));
+        $tagsToDelete = array_udiff($entityTags, $tags, [$this, 'tagDiff']);
 
         foreach ( $tagsToDelete as $tag )
         {
@@ -173,7 +173,7 @@ final class BOL_TagService
     {
         $entityTags = $this->entityTagDao->findEntityTagItems($entityId, $entityType);
 
-        $tagIds = array();
+        $tagIds = [];
 
         /* @var $entityTag BOL_EntityTag */
         foreach ( $entityTags as $entityTag )
@@ -188,7 +188,7 @@ final class BOL_TagService
     {
         $tagInfo = $this->tagDao->findTagListByEntityIdList($entityType, $idList);
 
-        $resultArray = array();
+        $resultArray = [];
 
         foreach ( $tagInfo as $info )
         {
@@ -199,7 +199,7 @@ final class BOL_TagService
         {
             if ( !isset($resultArray[$id]) )
             {
-                $resultArray[$id] = array();
+                $resultArray[$id] = [];
             }
         }
 
@@ -270,9 +270,9 @@ final class BOL_TagService
 
         $tagList = array_unique($tagList);
 
-        $tagsInDb = empty($tagList) ? array() : $this->tagDao->findTagsByLabel($tagList);
+        $tagsInDb = empty($tagList) ? [] : $this->tagDao->findTagsByLabel($tagList);
 
-        $tagsInDbLabels = array();
+        $tagsInDbLabels = [];
 
         /* @var $value BOL_Tag */
         foreach ( $tagsInDb as $value )

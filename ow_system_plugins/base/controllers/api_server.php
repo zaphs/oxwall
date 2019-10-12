@@ -69,7 +69,7 @@ class BASE_CTRL_ApiServer extends OW_ActionController
         $controller->init();
         
         $data = empty($_GET['data']) ? null : @json_decode(urldecode($_GET['data']), true);
-        $data = empty($data) ? array() : $data;
+        $data = empty($data) ? [] : $data;
         
         try 
         {        
@@ -85,22 +85,22 @@ class BASE_CTRL_ApiServer extends OW_ActionController
     
     private function error($message, $code, $errorType = 'requestError')
     {
-        echo json_encode(array(
+        echo json_encode([
                 'responseType' => 'error',
                 'error' => $code,
                 'errorMessage' => $message,
                 'errorType' => $errorType
-            ));
+        ]);
         
         exit;
     }
     
     public function success( $data )
     {
-        echo json_encode(array(
+        echo json_encode([
                 'responseType' => 'success',
                 'data' => $data
-            ));
+        ]);
         
         exit;
     }

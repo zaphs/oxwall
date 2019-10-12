@@ -94,7 +94,7 @@ class OW_CacheManager
         return false;
     }
 
-    public function save( $data, $key, $tags = array(), $specificLifetime = false )
+    public function save( $data, $key, $tags = [], $specificLifetime = false )
     {
         if ( $this->cacheAvailable() )
         {
@@ -114,7 +114,7 @@ class OW_CacheManager
         return false;
     }
 
-    public function clean( $tags = array(), $mode = self::CLEAN_MATCH_ANY_TAG )
+    public function clean( $tags = [], $mode = self::CLEAN_MATCH_ANY_TAG )
     {
         if ( $this->cacheAvailable() )
         {

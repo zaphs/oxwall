@@ -46,7 +46,7 @@ class BOL_LanguageService
     /**
      * @var array
      */
-    protected $language = array();
+    protected $language = [];
 
     /**
      * @var BOL_LanguageDao
@@ -71,7 +71,7 @@ class BOL_LanguageService
     /**
      * @var array
      */
-    private $exceptionPrefixes = array( "mobile", "nav", "ow_custom" ); // section which importing without checking plugin key
+    private $exceptionPrefixes = ["mobile", "nav", "ow_custom"]; // section which importing without checking plugin key
 
     /**
      * Class instance
@@ -132,7 +132,7 @@ class BOL_LanguageService
 
         $values = $this->keyDao->findAllWithValues($languageId);
 
-        $result = array();
+        $result = [];
 
         foreach ( $values as $v )
         {
@@ -264,7 +264,7 @@ class BOL_LanguageService
      */
     public function getTextTemplate( $languageId, $prefix, $key )
     {
-        OW::getEventManager()->trigger( new OW_Event('servicelangtools.lang_used_log', array( 'prefix' => $prefix, 'key' => $key)) );
+        OW::getEventManager()->trigger( new OW_Event('servicelangtools.lang_used_log', ['prefix' => $prefix, 'key' => $key]) );
 
         return ( isset($this->language[$languageId][$prefix . '+' . $key]) ) ? $this->language[$languageId][$prefix . '+' . $key] : null;
     }
@@ -276,7 +276,7 @@ class BOL_LanguageService
      * @param array $vars
      * @return string
      */
-    public function getText( $languageId, $prefix, $key, $vars = array() )
+    public function getText( $languageId, $prefix, $key, $vars = [])
     {
         $text = $this->getTextTemplate($languageId, $prefix, $key);
 
@@ -297,7 +297,7 @@ class BOL_LanguageService
             }
         }
 
-        $event = new OW_Event("core.get_text", array("prefix" => $prefix, "key" => $key, "vars" => $vars));
+        $event = new OW_Event("core.get_text", ["prefix" => $prefix, "key" => $key, "vars" => $vars]);
         OW::getEventManager()->trigger($event);
 
         if ( $event->getData() !== null )
@@ -771,11 +771,11 @@ class BOL_LanguageService
 
         $this->save($languageClone);
 
-        $prefixes = ( null == ($prefixes = $this->getPrefixList()) ) ? array() : $prefixes;
+        $prefixes = ( null == ($prefixes = $this->getPrefixList()) ) ? [] : $prefixes;
 
         foreach ( $prefixes as $prefix ) /* @var $prefix BOL_LanguagePrefix */
         {
-            $keys = (null === $keys = $this->findAllPrefixKeys($prefix->getId())) ? array() : $keys;
+            $keys = (null === $keys = $this->findAllPrefixKeys($prefix->getId())) ? [] : $keys;
 
             foreach ( $keys as $key )/* @var $key BOL_LanguageKey */
             {
@@ -986,12 +986,13 @@ class BOL_LanguageService
 
         $this->valueDao->save($valueDto);
 
-        $event = new OW_Event('base.on_after_add_or_update_value_lang', array(
+        $event = new OW_Event('base.on_after_add_or_update_value_lang', [
                 'languageId' => $languageId,
                 'prefix' => $prefix,
                 'key' => $key,
                 'value' => $value,
-                'generateCache' => $generateCache)
+                'generateCache' => $generateCache
+            ]
         );
         OW::getEventManager()->trigger($event);
 
@@ -1020,8 +1021,8 @@ class BOL_LanguageService
 
         $arr = glob("{$path}*");
 
-        $prefixesToImport = array();
-        $langsToImport = array();
+        $prefixesToImport = [];
+        $langsToImport = [];
 
         foreach ( $arr as $index => $dir )
         {
@@ -1034,7 +1035,7 @@ class BOL_LanguageService
 
             $langXmlE = simplexml_load_file($dir . DS . 'language.xml');
 
-            $l = array('label' => strval($langXmlE->attributes()->label), 'tag' => strval($langXmlE->attributes()->tag), 'path' => $dir . DS);
+            $l = ['label' => strval($langXmlE->attributes()->label), 'tag' => strval($langXmlE->attributes()->tag), 'path' => $dir . DS];
 
             if ( !in_array($l, $langsToImport) )
             {
@@ -1053,10 +1054,10 @@ class BOL_LanguageService
                 $tmp = $xmlElement->xpath('/prefix');
                 $prefixElement = $tmp[0];
 
-                $prefixItem = array(
+                $prefixItem = [
                     'label' => strval($prefixElement->attributes()->label),
                     'prefix' => strval($prefixElement->attributes()->name)
-                );
+                ];
 
                 if ( !in_array($prefixItem, $prefixesToImport) )
                 {
@@ -1231,7 +1232,7 @@ class BOL_LanguageService
         }
 
         $filename = $this->getLanguageCacheDir() . $this->getCacheFilename($this->getCurrent()->getId());
-        $language = array();
+        $language = [];
 
         // include cache file
         include $filename;

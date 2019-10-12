@@ -71,12 +71,12 @@ class ADMIN_CLASS_MobileNavigationItemSettingsForm extends Form
                     ? 0
                     : $settings[BOL_MobileNavigationService::SETTING_VISIBLE_FOR];
                     
-            $options = array(
+            $options = [
                 '1' => OW::getLanguage()->text('admin', 'pages_edit_visible_for_guests'),
                 '2' => OW::getLanguage()->text('admin', 'pages_edit_visible_for_members')
-            );
+            ];
 
-            $values = array();
+            $values = [];
 
             foreach ( $options as $value => $option )
             {
@@ -99,10 +99,10 @@ class ADMIN_CLASS_MobileNavigationItemSettingsForm extends Form
                     . '$("#mp-content").show(); $("#mp-url").hide(); url.validators = []; '
                     . '} else { '
                     . '$("#mp-content").hide(); $("#mp-url").show(); url.validators = validators; } '
-                    . '});', array(
+                    . '});', [
                 "id" => $this->getId(),
                 "name" => $this->getName()
-            ));
+            ]);
             
             OW::getDocument()->addOnloadScript($js);
         }
@@ -119,13 +119,13 @@ class ADMIN_CLASS_MobileNavigationItemSettingsForm extends Form
         
         BOL_MobileNavigationService::getInstance()->editItem($this->menuItem, $values);
         
-        $items = array();
-        $items[$values["key"]] = array(
+        $items = [];
+        $items[$values["key"]] = [
             "title" => $values[BOL_MobileNavigationService::SETTING_LABEL]
-        );
+        ];
         
-        return array(
+        return [
             "items" => $items
-        );
+        ];
     }
 }

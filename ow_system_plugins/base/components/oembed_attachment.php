@@ -65,10 +65,10 @@ class BASE_CMP_OembedAttachment extends OW_Component
                 . '$(".two_column", "#" + {$uniqId}).addClass("ow_video_playing"); '
                 . '$(".attachment_left", "#" + {$uniqId}).html({$embed});'
                 . 'OW.trigger("base.comment_video_play", {});'
-                . 'return false; });', array(
+                . 'return false; });', [
             "uniqId" => $this->uniqId,
             "embed" => $code
-        ));
+        ]);
         
         OW::getDocument()->addOnloadScript($js);
     }

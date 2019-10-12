@@ -101,8 +101,8 @@ class BOL_SitemapDao extends OW_BaseDao
 			LIMIT
 			    ?";
 
-        return $this->dbo->queryForList($query, array(
+        return $this->dbo->queryForList($query, [
             $count
-        ));
+        ]);
     }
 }

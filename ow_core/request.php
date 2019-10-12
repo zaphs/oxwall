@@ -175,13 +175,13 @@ class OW_Request
      * @param string $anchor
      * @return string
      */
-    public function buildUrlQueryString( $url = null, array $paramsToUpdate = array(), $anchor = null )
+    public function buildUrlQueryString( $url = null, array $paramsToUpdate = [], $anchor = null )
     {
         $url = ( $url === null ) ? OW_URL_HOME . $this->getRequestUri() : trim($url);
 
         $requestUrlArray = parse_url($url);
 
-        $currentParams = array();
+        $currentParams = [];
 
         if ( isset($requestUrlArray['query']) )
         {
@@ -206,7 +206,7 @@ class OW_Request
      */
     private function stripSlashesRecursive( $value )
     {
-        $value = is_array($value) ? array_map(array($this, 'stripSlashesRecursive'), $value) : stripslashes($value);
+        $value = is_array($value) ? array_map([$this, 'stripSlashesRecursive'], $value) : stripslashes($value);
         return $value;
     }
 

@@ -104,4 +104,3 @@ class BOL_LanguageValue extends OW_Entity
         return $this;
     }
 }
-?>

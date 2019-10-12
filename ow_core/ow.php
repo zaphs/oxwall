@@ -211,12 +211,12 @@ final class OW
     {
         if ( self::$dboInstance === null )
         {
-            $params = array(
+            $params = [
                 'host' => OW_DB_HOST,
                 'username' => OW_DB_USER,
                 'password' => OW_DB_PASSWORD,
                 'dbname' => OW_DB_NAME
-            );
+            ];
             if ( defined('OW_DB_PORT') && (OW_DB_PORT !== null) )
             {
                 $params['port'] = OW_DB_PORT;
@@ -456,15 +456,15 @@ final class OW
         return self::getClassInstanceArray($className, $constuctorArgs);
     }
 
-    public static function getClassInstanceArray( $className, array $arguments = array() )
+    public static function getClassInstanceArray( $className, array $arguments = [])
     {
-        $params = array(
+        $params = [
             'className' => $className,
             'arguments' => $arguments
-        );
+        ];
 
         $eventManager = OW::getEventManager();
-        $eventManager->trigger(new OW_Event("core.performance_test", array("key" => "component_construct.start", "params" => $params)));
+        $eventManager->trigger(new OW_Event("core.performance_test", ["key" => "component_construct.start", "params" => $params]));
 
         $event = new OW_Event("class.get_instance." . $className, $params);
         $eventManager->trigger($event);
@@ -472,7 +472,7 @@ final class OW
 
         if ( $instance !== null )
         {
-            $eventManager->trigger(new OW_Event("core.performance_test", array("key" => "component_construct.end", "params" => $params)));
+            $eventManager->trigger(new OW_Event("core.performance_test", ["key" => "component_construct.end", "params" => $params]));
             return $instance;
         }
 
@@ -483,12 +483,12 @@ final class OW
 
         if ( $instance !== null )
         {
-            $eventManager->trigger(new OW_Event("core.performance_test", array("key" => "component_construct.end", "params" => $params)));
+            $eventManager->trigger(new OW_Event("core.performance_test", ["key" => "component_construct.end", "params" => $params]));
             return $instance;
         }
 
         $rClass = new ReflectionClass($className);
-        $eventManager->trigger(new OW_Event("core.performance_test", array("key" => "component_construct.end", "params" => $params)));
+        $eventManager->trigger(new OW_Event("core.performance_test", ["key" => "component_construct.end", "params" => $params]));
         return $rClass->newInstanceArgs($arguments);
     }
 

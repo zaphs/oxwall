@@ -42,7 +42,7 @@ class OW_PluginManager
     /**
      * @var array
      */
-    private $cachedObjects = array();
+    private $cachedObjects = [];
 
     /**
      * Constructor.
@@ -128,12 +128,12 @@ class OW_PluginManager
         }
 
         OW::getEventManager()->trigger(new OW_Event("core.performance_test",
-            array("key" => "plugin_init.start", "pluginKey" => $pluginObject->getKey())));
+            ["key" => "plugin_init.start", "pluginKey" => $pluginObject->getKey()]));
 
         $this->pluginService->includeScript($initDirPath . BOL_PluginService::SCRIPT_INIT);
 
         OW::getEventManager()->trigger(new OW_Event("core.performance_test",
-            array("key" => "plugin_init.end", "pluginKey" => $pluginObject->getKey())));
+            ["key" => "plugin_init.end", "pluginKey" => $pluginObject->getKey()]));
     }
 
     /**
@@ -147,7 +147,7 @@ class OW_PluginManager
         $upperedKey = mb_strtoupper($plugin->getKey());
         $autoloader = OW::getAutoloader();
 
-        $predefinedPointers = array(
+        $predefinedPointers = [
             "CMP" => $plugin->getCmpDir(),
             "CTRL" => $plugin->getCtrlDir(),
             "BOL" => $plugin->getBolDir(),
@@ -159,7 +159,7 @@ class OW_PluginManager
             "ACTRL" => $plugin->getApiCtrlDir(),
             "ABOL" => $plugin->getApiBolDir(),
             "ACLASS" => $plugin->getApiClassesDir()
-        );
+        ];
 
         foreach ( $predefinedPointers as $pointer => $dirPath )
         {

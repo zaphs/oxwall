@@ -38,7 +38,7 @@ class BASE_MCTRL_WidgetPanel extends OW_MobileActionController
         $state = $widgetService->findCache($place);
         if ( empty($state) )
         {
-            $state = array();
+            $state = [];
             $state['defaultComponents'] = $widgetService->findPlaceComponentList($place);
             $state['defaultPositions'] = $widgetService->findAllPositionList($place);
             $state['defaultSettings'] = $widgetService->findAllSettingList();
@@ -72,10 +72,10 @@ class BASE_MCTRL_WidgetPanel extends OW_MobileActionController
         $place = BOL_MobileWidgetService::PLACE_MOBILE_DASHBOARD;
         $componentPanel = $this->initDragAndDrop($place, OW::getUser()->getId());
         
-        $componentPanel->setAdditionalSettingList(array(
+        $componentPanel->setAdditionalSettingList([
             'entityId' => OW::getUser()->getId(),
             'entity' => 'user'
-        ));
+        ]);
     }
 
     public function profile( $paramList )
@@ -96,11 +96,11 @@ class BASE_MCTRL_WidgetPanel extends OW_MobileActionController
             return;
         }
 
-        $eventParams = array(
+        $eventParams = [
             'action' => 'base_view_profile',
             'ownerId' => $userDto->id,
             'viewerId' => OW::getUser()->getId()
-        );
+        ];
 
         $event = new OW_Event('privacy_check_permission', $eventParams);
 
@@ -112,11 +112,11 @@ class BASE_MCTRL_WidgetPanel extends OW_MobileActionController
         }
         catch ( RedirectException $ex )
         {
-            throw new RedirectException(OW::getRouter()->urlForRoute('base_user_privacy_no_permission', array('username' => $displayName)));
+            throw new RedirectException(OW::getRouter()->urlForRoute('base_user_privacy_no_permission', ['username' => $displayName]));
         }
 
-        $this->setPageTitle(OW::getLanguage()->text('base', 'profile_view_title', array('username' => $displayName)));
-        $this->setPageHeading(OW::getLanguage()->text('base', 'profile_view_heading', array('username' => $displayName)));
+        $this->setPageTitle(OW::getLanguage()->text('base', 'profile_view_title', ['username' => $displayName]));
+        $this->setPageHeading(OW::getLanguage()->text('base', 'profile_view_heading', ['username' => $displayName]));
         $this->setPageHeadingIconClass('ow_ic_user');
         
         $profileHeader = OW::getClassInstance("BASE_MCMP_ProfileHeader", $userDto->id);
@@ -124,9 +124,9 @@ class BASE_MCTRL_WidgetPanel extends OW_MobileActionController
         
         //Profile Info
         $displayNameQuestion = OW::getConfig()->getValue('base', 'display_name_question');
-        $profileInfo = OW::getClassInstance("BASE_MCMP_ProfileInfo", $userDto->id, false, array(
+        $profileInfo = OW::getClassInstance("BASE_MCMP_ProfileInfo", $userDto->id, false, [
             $displayNameQuestion, "birthdate"
-        ));
+        ]);
         $this->addComponent("info", $profileInfo);
         $this->addComponent('contentMenu', OW::getClassInstance("BASE_MCMP_ProfileContentMenu", $userDto->id));
         $this->addComponent('about', OW::getClassInstance("BASE_MCMP_ProfileAbout", $userDto->id, 80));
@@ -134,10 +134,10 @@ class BASE_MCTRL_WidgetPanel extends OW_MobileActionController
         $place = BOL_MobileWidgetService::PLACE_MOBILE_PROFILE;
         $componentPanel = $this->initDragAndDrop($place, $userDto->id);
         
-        $componentPanel->setAdditionalSettingList(array(
+        $componentPanel->setAdditionalSettingList([
             'entityId' => $userDto->id,
             'entity' => 'user'
-        ));
+        ]);
     }
     
     public function index()
@@ -145,19 +145,19 @@ class BASE_MCTRL_WidgetPanel extends OW_MobileActionController
         $place = BOL_MobileWidgetService::PLACE_MOBILE_INDEX;
         $componentPanel = $this->initDragAndDrop($place);
         
-        $componentPanel->setAdditionalSettingList(array(
+        $componentPanel->setAdditionalSettingList([
             'entityId' => null,
             'entity' => 'site'
-        ));
+        ]);
 
         // set meta info
-        $params = array(
+        $params = [
             "sectionKey" => "base.base_pages",
             "entityKey" => "index",
             "title" => "base+meta_title_index",
             "description" => "base+meta_desc_index",
             "keywords" => "base+meta_keywords_index"
-        );
+        ];
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }

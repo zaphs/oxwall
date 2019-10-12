@@ -59,9 +59,9 @@ class BASE_CMP_BlockedUserList extends BASE_CMP_Users
 
     public function getFields( $userIdList )
     {
-        $fields = array();
+        $fields = [];
 
-        $qs = array();
+        $qs = [];
 
         $qBdate = BOL_QuestionService::getInstance()->findQuestionByName('birthdate');
 
@@ -78,7 +78,7 @@ class BASE_CMP_BlockedUserList extends BASE_CMP_Users
         foreach ( $questionList as $uid => $question )
         {
 
-            $fields[$uid] = array();
+            $fields[$uid] = [];
 
             $age = '';
 
@@ -111,10 +111,10 @@ class BASE_CMP_BlockedUserList extends BASE_CMP_Users
 
             if ( !empty($sexValue) && !empty($age) )
             {
-                $fields[$uid][] = array(
+                $fields[$uid][] = [
                     'label' => '',
                     'value' => $sexValue . ' ' . $age
-                );
+                ];
             }
         }
 

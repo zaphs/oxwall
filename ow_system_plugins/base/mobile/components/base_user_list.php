@@ -20,16 +20,17 @@ class BASE_MCMP_BaseUserList extends BASE_MCMP_UserList
     
     public function getFields( $userIdList )
     {        
-        $fields = array();        
+        $fields = [];
         
         foreach ( $userIdList as $id )
         {
-            $fields[$id] = array();
+            $fields[$id] = [];
         }
         
-        $params = array(
+        $params = [
             'list' => $this->listKey,
-            'userIdList' => $userIdList  );
+            'userIdList' => $userIdList
+        ];
 
         $event = new OW_Event( self::EVENT_GET_FIELDS, $params, $fields);
         OW::getEventManager()->trigger($event);

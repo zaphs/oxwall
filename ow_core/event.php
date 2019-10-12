@@ -58,7 +58,7 @@ class OW_Event
     /**
      * Constructor.
      */
-    public function __construct( $name, array $params = array(), $dataValue = null )
+    public function __construct( $name, array $params = [], $dataValue = null )
     {
         $this->name = trim($name);
         $this->params = $params;

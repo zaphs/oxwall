@@ -30,7 +30,7 @@ class ADMIN_CMP_EditQuestion extends OW_Component
             $this->assign('no_sections', true);
         }
 
-        $fields = array();
+        $fields = [];
         foreach ( $addForm->getElements() as $element )
         {
             if ( !($element instanceof HiddenField) )
@@ -48,10 +48,10 @@ class ADMIN_CMP_EditQuestion extends OW_Component
         $descriptionLang = BOL_QuestionService::getInstance()->getQuestionLangKeyName(BOL_QuestionService::LANG_KEY_TYPE_QUESTION_DESCRIPTION, $question->name);
         $valueLang = BOL_QuestionService::getInstance()->getQuestionLangKeyName(BOL_QuestionService::LANG_KEY_TYPE_QUESTION_VALUE, $question->name, '');
 
-        $script = ' window.addQuest = new QuestionFormModel( ' . json_encode( array(
+        $script = ' window.addQuest = new QuestionFormModel( ' . json_encode( [
             'formName' => 'qst_edit_form',
             'presentations2FormElements' => $presentations2FormElements
-        ) ) . ' );
+            ]) . ' );
 
         OW.bind( "question.value.delete", function( params ) {
                 var questionId = params.node.parents(\'form[name=qst_edit_form]:eq(0)\').find(\'input[name=questionId]\').val();

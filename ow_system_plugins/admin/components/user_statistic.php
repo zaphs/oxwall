@@ -65,15 +65,15 @@ class ADMIN_CMP_UserStatistic extends OW_Component
      */
     public function onBeforeRender()
     {
-        $entityTypes = array(
+        $entityTypes = [
             'user_join',
             'user_login'
-        );
+        ];
 
-        $entityLabels = array(
+        $entityLabels = [
             'user_join' => OW::getLanguage()->text('admin', 'site_statistics_user_registrations'),
             'user_login' => OW::getLanguage()->text('admin', 'site_statistics_user_logins')
-        );
+        ];
 
         // register components
         $this->addComponent('statistics',

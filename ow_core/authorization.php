@@ -99,7 +99,7 @@ class OW_Authorization
         $roles = $this->service->getRoleList();
         foreach ( $roles as $role )
         {
-            $this->service->grantActionListToRole($role, array($action));
+            $this->service->grantActionListToRole($role, [$action]);
         }
     }
 

@@ -51,7 +51,7 @@ class ADMIN_CTRL_Finance extends ADMIN_CTRL_Abstract
         $onPage = 20;
         $list = $service->getFinanceList($page, $onPage);
 
-        $userIdList = array();
+        $userIdList = [];
         foreach ( $list as $sale )
         {
             if ( isset($sale['userId']) && !in_array($sale['userId'], $userIdList))

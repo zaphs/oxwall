@@ -81,8 +81,8 @@ final class OW_ErrorManager
         $this->debugMode = (bool) $debugMode;
 
         // set custom error and exception interceptors
-        set_error_handler(array($this, 'errorHandler'));
-        set_exception_handler(array($this, 'exceptionHandler'));
+        set_error_handler([$this, 'errorHandler']);
+        set_exception_handler([$this, 'exceptionHandler']);
 
         // set error reporting level
         error_reporting(-1);
@@ -166,11 +166,11 @@ final class OW_ErrorManager
             return true;
         }
 
-        $data = array(
+        $data = [
             'message' => $errString,
             'file' => $errFile,
             'line' => $errLine
-        );
+        ];
 
         //temp fix
         $e_depricated = defined('E_DEPRECATED') ? E_DEPRECATED : 0;
@@ -234,14 +234,14 @@ final class OW_ErrorManager
      */
     public function exceptionHandler( $e )
     {
-        $data = array(
+        $data = [
             'message' => $e->getMessage(),
             'file' => $e->getFile(),
             'line' => $e->getLine(),
             'trace' => $e->getTraceAsString(),
             'type' => 'Exception',
             'class' => get_class($e)
-        );
+        ];
 
         if ( $this->debugMode )
         {

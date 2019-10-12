@@ -40,4 +40,4 @@ function smarty_function_question_lang( $params, $smarty )
 {
     return BOL_QuestionService::getInstance()->getQuestionLang(trim($params['name']));
 }
-?>
+

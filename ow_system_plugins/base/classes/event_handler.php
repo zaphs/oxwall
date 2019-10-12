@@ -33,111 +33,111 @@ class BASE_CLASS_EventHandler
     public function genericInit()
     {
         $eventManager = OW::getEventManager();
-        $eventManager->bind(BOL_BillingService::EVENT_ON_AFTER_DELIVER_SALE, array($this, 'onAfterBillingDeliverSale'));
-        $eventManager->bind(OW_EventManager::ON_USER_LOGIN, array($this, 'onUserLoginSaveStatistics'));
-        $eventManager->bind(BOL_ContentService::EVENT_AFTER_ADD, array($this, 'onAfterAdd'));
-        $eventManager->bind('base.add_global_lang_keys', array($this, 'onAddGlobalLangs'));
-        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, 'onDeleteUserContent'));
-        $eventManager->bind(OW_EventManager::ON_USER_LOGIN, array($this, 'onUserLogin'));
-        $eventManager->bind(OW_EventManager::ON_USER_LOGOUT, array($this, 'onUserLogout'));
-        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, array($this, 'onJoinMandatoryUserApprove'));
-        $eventManager->bind(OW_EventManager::ON_USER_EDIT, array($this, 'onUserEditFeed'));
-        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, array($this, 'onJoinFeed'));
-        $eventManager->bind('feed.after_comment_add', array($this, 'onUserJoinCommentFeed'));
-        $eventManager->bind('feed.after_like_added', array($this, 'onLikeUserJoin'));
-        $eventManager->bind('feed.after_like_added', array($this, 'onUserAvatarLikeFeed'));
-        $eventManager->bind('feed.after_comment_add', array($this, 'onUserAvatarCommentFeed'));
-        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, array($this, 'onUserRegisterWelcomeLetter'));
-        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, 'onUserUnregisterDeleteDisaproved'));
-        $eventManager->bind('notifications.collect_actions', array($this, 'onNotifyActions'));
-        $eventManager->bind('base_add_comment', array($this, 'onAddComment'));
-        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, 'onUserUnregisterRemovePreference'));
-        $eventManager->bind('base.update_entity_items_status', array($this, 'onUpdateEntityItemsStatus'));
-        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, 'onDeleteMediaPanelFiles'));
-        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, 'clearUserListQueryCache'));
-        $eventManager->bind(OW_EventManager::ON_USER_SUSPEND, array($this, 'clearUserListQueryCache'));
-        $eventManager->bind(OW_EventManager::ON_USER_SUSPEND, array($this, 'sendSuspendNotification'));
-        $eventManager->bind(OW_EventManager::ON_USER_UNSUSPEND, array($this, 'clearUserListQueryCache'));
-        $eventManager->bind(OW_EventManager::ON_USER_APPROVE, array($this, 'clearUserListQueryCache'));
-        $eventManager->bind(OW_EventManager::ON_USER_DISAPPROVE, array($this, 'clearUserListQueryCache'));
-        $eventManager->bind(OW_EventManager::ON_USER_MARK_FEATURED, array($this, 'clearUserListQueryCache'));
-        $eventManager->bind(OW_EventManager::ON_USER_UNMARK_FEATURED, array($this, 'clearUserListQueryCache'));
-        $eventManager->bind('base.questions_field_get_label', array($this, 'getQuestionLabel'));
-        $eventManager->bind('base.before_decorator', array($this, 'onBeforeDecoratorRender'));
-        $eventManager->bind('plugin.privacy.get_action_list', array($this, 'onPrivacyAddAction'));
-        $eventManager->bind('base.members_only_exceptions', array($this, 'onAddMembersOnlyException'));
-        $eventManager->bind('base.password_protected_exceptions', array($this, 'onAddPasswordProtectedExceptions'));
-        $eventManager->bind('base.maintenance_mode_exceptions', array($this, 'onAddMaintenanceModeExceptions'));
-        $eventManager->bind(OW_EventManager::ON_USER_LOGIN, array($this, 'onUserLoginSetAdminCookie'));
-        $eventManager->bind('core.emergency_exit', array($this, 'onEmergencyExit'));
+        $eventManager->bind(BOL_BillingService::EVENT_ON_AFTER_DELIVER_SALE, [$this, 'onAfterBillingDeliverSale']);
+        $eventManager->bind(OW_EventManager::ON_USER_LOGIN, [$this, 'onUserLoginSaveStatistics']);
+        $eventManager->bind(BOL_ContentService::EVENT_AFTER_ADD, [$this, 'onAfterAdd']);
+        $eventManager->bind('base.add_global_lang_keys', [$this, 'onAddGlobalLangs']);
+        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, 'onDeleteUserContent']);
+        $eventManager->bind(OW_EventManager::ON_USER_LOGIN, [$this, 'onUserLogin']);
+        $eventManager->bind(OW_EventManager::ON_USER_LOGOUT, [$this, 'onUserLogout']);
+        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, [$this, 'onJoinMandatoryUserApprove']);
+        $eventManager->bind(OW_EventManager::ON_USER_EDIT, [$this, 'onUserEditFeed']);
+        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, [$this, 'onJoinFeed']);
+        $eventManager->bind('feed.after_comment_add', [$this, 'onUserJoinCommentFeed']);
+        $eventManager->bind('feed.after_like_added', [$this, 'onLikeUserJoin']);
+        $eventManager->bind('feed.after_like_added', [$this, 'onUserAvatarLikeFeed']);
+        $eventManager->bind('feed.after_comment_add', [$this, 'onUserAvatarCommentFeed']);
+        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, [$this, 'onUserRegisterWelcomeLetter']);
+        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, 'onUserUnregisterDeleteDisaproved']);
+        $eventManager->bind('notifications.collect_actions', [$this, 'onNotifyActions']);
+        $eventManager->bind('base_add_comment', [$this, 'onAddComment']);
+        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, 'onUserUnregisterRemovePreference']);
+        $eventManager->bind('base.update_entity_items_status', [$this, 'onUpdateEntityItemsStatus']);
+        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, 'onDeleteMediaPanelFiles']);
+        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, 'clearUserListQueryCache']);
+        $eventManager->bind(OW_EventManager::ON_USER_SUSPEND, [$this, 'clearUserListQueryCache']);
+        $eventManager->bind(OW_EventManager::ON_USER_SUSPEND, [$this, 'sendSuspendNotification']);
+        $eventManager->bind(OW_EventManager::ON_USER_UNSUSPEND, [$this, 'clearUserListQueryCache']);
+        $eventManager->bind(OW_EventManager::ON_USER_APPROVE, [$this, 'clearUserListQueryCache']);
+        $eventManager->bind(OW_EventManager::ON_USER_DISAPPROVE, [$this, 'clearUserListQueryCache']);
+        $eventManager->bind(OW_EventManager::ON_USER_MARK_FEATURED, [$this, 'clearUserListQueryCache']);
+        $eventManager->bind(OW_EventManager::ON_USER_UNMARK_FEATURED, [$this, 'clearUserListQueryCache']);
+        $eventManager->bind('base.questions_field_get_label', [$this, 'getQuestionLabel']);
+        $eventManager->bind('base.before_decorator', [$this, 'onBeforeDecoratorRender']);
+        $eventManager->bind('plugin.privacy.get_action_list', [$this, 'onPrivacyAddAction']);
+        $eventManager->bind('base.members_only_exceptions', [$this, 'onAddMembersOnlyException']);
+        $eventManager->bind('base.password_protected_exceptions', [$this, 'onAddPasswordProtectedExceptions']);
+        $eventManager->bind('base.maintenance_mode_exceptions', [$this, 'onAddMaintenanceModeExceptions']);
+        $eventManager->bind(OW_EventManager::ON_USER_LOGIN, [$this, 'onUserLoginSetAdminCookie']);
+        $eventManager->bind('core.emergency_exit', [$this, 'onEmergencyExit']);
 
-        $eventManager->bind('admin.add_auth_labels', array($this, 'onAddAuthLabels'));
+        $eventManager->bind('admin.add_auth_labels', [$this, 'onAddAuthLabels']);
 
-        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, 'onUserUnregisterClearMailQueue'));
+        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, 'onUserUnregisterClearMailQueue']);
 
-        $eventManager->bind('socialsharing.get_entity_info', array($this, 'sosialSharingGetUserInfo'));
+        $eventManager->bind('socialsharing.get_entity_info', [$this, 'sosialSharingGetUserInfo']);
 
-        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, array($this, 'setAccountTypeUserRoleOnUserRegister'));
-        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, array($this, 'deleteInviteCode'));
-        $eventManager->bind('base.before_save_user', array($this, 'setUserRoleOnChangeAccountType'));
+        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, [$this, 'setAccountTypeUserRoleOnUserRegister']);
+        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, [$this, 'deleteInviteCode']);
+        $eventManager->bind('base.before_save_user', [$this, 'setUserRoleOnChangeAccountType']);
 
-        $eventManager->bind('base.questions_field_add_fake_questions', array($this, 'addFakeQuestions'));
+        $eventManager->bind('base.questions_field_add_fake_questions', [$this, 'addFakeQuestions']);
 
-        $eventManager->bind(OW_EventManager::ON_JOIN_FORM_RENDER, array($this, 'onInviteMembersProcessJoinForm'));
+        $eventManager->bind(OW_EventManager::ON_JOIN_FORM_RENDER, [$this, 'onInviteMembersProcessJoinForm']);
 
-        $eventManager->bind(BASE_CMP_ModerationToolsWidget::EVENT_COLLECT_CONTENTS, array($this, 'onCollectModerationWidgetContent'));
-        $eventManager->bind("base.moderation_tools.collect_menu", array($this, 'onCollectModerationToolsMenu'));
+        $eventManager->bind(BASE_CMP_ModerationToolsWidget::EVENT_COLLECT_CONTENTS, [$this, 'onCollectModerationWidgetContent']);
+        $eventManager->bind("base.moderation_tools.collect_menu", [$this, 'onCollectModerationToolsMenu']);
 
-        $eventManager->bind(BOL_ContentService::EVENT_BEFORE_DELETE, array($this, 'deleteEntityFlags'));
+        $eventManager->bind(BOL_ContentService::EVENT_BEFORE_DELETE, [$this, 'deleteEntityFlags']);
 
         BASE_CLASS_ContentProvider::getInstance()->init();
-        $eventManager->bind('base.after_avatar_update', array($this, 'onAfterAvatarUpdate'));
+        $eventManager->bind('base.after_avatar_update', [$this, 'onAfterAvatarUpdate']);
 
-        $eventManager->bind("base.user_list.get_displayed_fields", array($this, 'onGetUserListFields'));
-        $eventManager->bind("base.user_list.get_questions", array($this, 'onGetUserListQuestions'));
-        $eventManager->bind("base.user_list.get_field_data", array($this, 'onGetUserListFieldValue'));
-        $eventManager->bind("base.sitemap.get_urls", array($this, 'onSitemapGetUrls'));
-        $eventManager->bind("base.provide_page_meta_info", array($this, 'onProvideMetaInfoForPage'));
+        $eventManager->bind("base.user_list.get_displayed_fields", [$this, 'onGetUserListFields']);
+        $eventManager->bind("base.user_list.get_questions", [$this, 'onGetUserListQuestions']);
+        $eventManager->bind("base.user_list.get_field_data", [$this, 'onGetUserListFieldValue']);
+        $eventManager->bind("base.sitemap.get_urls", [$this, 'onSitemapGetUrls']);
+        $eventManager->bind("base.provide_page_meta_info", [$this, 'onProvideMetaInfoForPage']);
     }
 
     public function init()
     {
         $this->genericInit();
         $eventManager = OW::getEventManager();
-        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, array($this, 'onActionToolbarAddDeleteActionTool'));
-        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, array($this, 'onActionToolbarAddFlagActionTool'));
+        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, [$this, 'onActionToolbarAddDeleteActionTool']);
+        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, [$this, 'onActionToolbarAddFlagActionTool']);
 
-        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, array($this, 'onActionToolbarAddSuspendActionTool'));
-        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, array($this, 'onActionToolbarAddAuthActionTool'));
-        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, array($this, 'onActionToolbarAddUserApproveActionTool'));
-        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, array($this, 'onActionToolbarAddUserFeatureActionTool'));
-        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, array($this, 'onActionToolbarAddUserBlockActionTool'));
-        $eventManager->bind('base.dashboard_menu_items', array($this, 'onDashboardMenuItem'));
-        $eventManager->bind('base.preference_menu_items', array($this, 'onPreferenceMenuItem'));
-        $eventManager->bind('base.on_avatar_toolbar_collect', array($this, 'onAvatarToolbarCollect'));
-        $eventManager->bind(OW_EventManager::ON_FINALIZE, array($this, 'addJsDeclarations'));
-        $eventManager->bind('admin.add_admin_notification', array($this, 'addAdminNotification'));
-        $eventManager->bind('ads.enabled_plugins', array($this, 'onAddAdsEnabled'));
-        $eventManager->bind(OW_EventManager::ON_BEFORE_PLUGIN_UNINSTALL, array($this, 'onPluginUninstallDeleteComments'));
+        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, [$this, 'onActionToolbarAddSuspendActionTool']);
+        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, [$this, 'onActionToolbarAddAuthActionTool']);
+        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, [$this, 'onActionToolbarAddUserApproveActionTool']);
+        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, [$this, 'onActionToolbarAddUserFeatureActionTool']);
+        $eventManager->bind(BASE_CMP_ProfileActionToolbar::EVENT_NAME, [$this, 'onActionToolbarAddUserBlockActionTool']);
+        $eventManager->bind('base.dashboard_menu_items', [$this, 'onDashboardMenuItem']);
+        $eventManager->bind('base.preference_menu_items', [$this, 'onPreferenceMenuItem']);
+        $eventManager->bind('base.on_avatar_toolbar_collect', [$this, 'onAvatarToolbarCollect']);
+        $eventManager->bind(OW_EventManager::ON_FINALIZE, [$this, 'addJsDeclarations']);
+        $eventManager->bind('admin.add_admin_notification', [$this, 'addAdminNotification']);
+        $eventManager->bind('ads.enabled_plugins', [$this, 'onAddAdsEnabled']);
+        $eventManager->bind(OW_EventManager::ON_BEFORE_PLUGIN_UNINSTALL, [$this, 'onPluginUninstallDeleteComments']);
 
-        $eventManager->bind(BOL_PreferenceService::PREFERENCE_ADD_FORM_ELEMENT_EVENT, array($this, 'onPreferenceAddFormElement'));
-        $eventManager->bind(BOL_PreferenceService::PREFERENCE_SECTION_LABEL_EVENT, array($this, 'onAddPreferenceSectionLabels'));
-        $eventManager->bind('feed.collect_configurable_activity', array($this, 'onFeedCollectConfigurableActivity'));
+        $eventManager->bind(BOL_PreferenceService::PREFERENCE_ADD_FORM_ELEMENT_EVENT, [$this, 'onPreferenceAddFormElement']);
+        $eventManager->bind(BOL_PreferenceService::PREFERENCE_SECTION_LABEL_EVENT, [$this, 'onAddPreferenceSectionLabels']);
+        $eventManager->bind('feed.collect_configurable_activity', [$this, 'onFeedCollectConfigurableActivity']);
         //$eventManager->bind('base.attachment_delete_image', array($this, 'onDeleteAttachmentImage'));
-        $eventManager->bind('base.attachment_save_image', array($this, 'onSaveAttachmentImage'));
-        $eventManager->bind(OW_EventManager::ON_BEFORE_PLUGIN_UNINSTALL, array($this, 'onPluginsUninstallDeleteGateway'));
-        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, 'onDeleteUserAttachments'));
-        $eventManager->bind(OW_EventManager::ON_FINALIZE, array($this, 'onFinalizeAddScrollJs'));
-        $eventManager->bind('join.get_captcha_field', array($this, 'getCaptcha'));
-        $eventManager->bind(OW_EventManager::ON_FINALIZE, array($this, 'onFinalizeCheckIfSiteFullyInstalled'));
-        $eventManager->bind(OW_EventManager::ON_AFTER_ROUTE, array($this, 'onPluginsInitCheckUserStatus'));
-        $eventManager->bind(BASE_CMP_QuickLinksWidget::EVENT_NAME, array($this, 'onCollectQuickLinks'));
-        $eventManager->bind("base.collect_seo_meta_data", array($this, 'onCollectMetaData'));
-        $eventManager->bind('class.get_instance', array($this, 'onGetClassInstance'));
+        $eventManager->bind('base.attachment_save_image', [$this, 'onSaveAttachmentImage']);
+        $eventManager->bind(OW_EventManager::ON_BEFORE_PLUGIN_UNINSTALL, [$this, 'onPluginsUninstallDeleteGateway']);
+        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, 'onDeleteUserAttachments']);
+        $eventManager->bind(OW_EventManager::ON_FINALIZE, [$this, 'onFinalizeAddScrollJs']);
+        $eventManager->bind('join.get_captcha_field', [$this, 'getCaptcha']);
+        $eventManager->bind(OW_EventManager::ON_FINALIZE, [$this, 'onFinalizeCheckIfSiteFullyInstalled']);
+        $eventManager->bind(OW_EventManager::ON_AFTER_ROUTE, [$this, 'onPluginsInitCheckUserStatus']);
+        $eventManager->bind(BASE_CMP_QuickLinksWidget::EVENT_NAME, [$this, 'onCollectQuickLinks']);
+        $eventManager->bind("base.collect_seo_meta_data", [$this, 'onCollectMetaData']);
+        $eventManager->bind('class.get_instance', [$this, 'onGetClassInstance']);
 
         if ( defined('OW_ADS_XP_TOP') )
         {
-            $eventManager->bind('base.add_page_content', array($this, 'addPageBanner'));
+            $eventManager->bind('base.add_page_content', [$this, 'addPageBanner']);
         }
     }
 
@@ -151,12 +151,12 @@ class BASE_CLASS_EventHandler
 
             if ( $blockedCount )
             {
-                $event->add(array(
+                $event->add([
                     BASE_CMP_QuickLinksWidget::DATA_KEY_LABEL => OW::getLanguage()->text('base', 'my_blocked_users'),
                     BASE_CMP_QuickLinksWidget::DATA_KEY_URL => OW::getRouter()->urlForRoute('users-blocked'),
                     BASE_CMP_QuickLinksWidget::DATA_KEY_COUNT => $blockedCount,
                     BASE_CMP_QuickLinksWidget::DATA_KEY_COUNT_URL => OW::getRouter()->urlForRoute('users-blocked')
-                ));
+                ]);
             }
         }
     }
@@ -193,13 +193,13 @@ class BASE_CLASS_EventHandler
             // base pages
             case 'base_pages' :
                 // list of basic pages
-                $urls = array(
+                $urls = [
                     OW_URL_HOME,
                     OW::getRouter()->urlForRoute('base.mobile_version'),
                     OW::getRouter()->urlForRoute('base_join'),
                     OW::getRouter()->urlForRoute('static_sign_in'),
                     OW::getRouter()->urlForRoute('base_forgot_password')
-                );
+                ];
 
                 // get all public static docs
                 $staticDocs = BOL_NavigationService::getInstance()->findAllStaticDocuments();
@@ -210,7 +210,7 @@ class BASE_CLASS_EventHandler
 
                     // is the page public
                     if ( $menuItem && in_array($menuItem->visibleFor,
-                            array(BOL_NavigationService::VISIBLE_FOR_ALL, BOL_NavigationService::VISIBLE_FOR_GUEST)) )
+                            [BOL_NavigationService::VISIBLE_FOR_ALL, BOL_NavigationService::VISIBLE_FOR_GUEST]) )
                     {
                         $urls[] = OW_URL_HOME . $doc->uri;
                     }
@@ -223,21 +223,21 @@ class BASE_CLASS_EventHandler
             case 'user_list' :
                 if ( BOL_AuthorizationService::getInstance()->isActionAuthorizedForGuest('base', 'view_profile') )
                 {
-                    $event->setData(array(
+                    $event->setData([
                         OW::getRouter()->urlForRoute('users'),
-                        OW::getRouter()->urlForRoute('base_user_lists', array(
+                        OW::getRouter()->urlForRoute('base_user_lists', [
                             'list' => 'latest'
-                        )),
-                        OW::getRouter()->urlForRoute('base_user_lists', array(
+                        ]),
+                        OW::getRouter()->urlForRoute('base_user_lists', [
                             'list' => 'featured'
-                        )),
-                        OW::getRouter()->urlForRoute('base_user_lists', array(
+                        ]),
+                        OW::getRouter()->urlForRoute('base_user_lists', [
                             'list' => 'online'
-                        )),
-                        OW::getRouter()->urlForRoute('base_user_lists', array(
+                        ]),
+                        OW::getRouter()->urlForRoute('base_user_lists', [
                             'list' => 'search'
-                        ))
-                    ));
+                        ])
+                    ]);
                 }
                 break;
         }
@@ -263,7 +263,7 @@ class BASE_CLASS_EventHandler
         {
             $rClass = new ReflectionClass('BASE_CLASS_AvatarField');
 
-            $arguments = array();
+            $arguments = [];
 
             if ( !empty($params['arguments']) )
             {
@@ -292,11 +292,11 @@ class BASE_CLASS_EventHandler
 
         $flagsCmp = new BASE_CMP_ModerationPanelList($flagGroups);
 
-        $event->add(array(
+        $event->add([
             "name" => "flags",
             "label" => OW::getLanguage()->text("base", "flagged_content"),
             "content" => $flagsCmp->render()
-        ));
+        ]);
     }
 
     public function onCollectModerationToolsMenu( BASE_CLASS_EventCollector $event )
@@ -308,12 +308,12 @@ class BASE_CLASS_EventHandler
             return;
         }
 
-        $event->add(array(
+        $event->add([
             "url" => OW::getRouter()->urlForRoute("base.moderation_flags_index"),
             "label" => OW::getLanguage()->text("base", "flagged_content"),
             "iconClass" => "ow_ic_clock",
             "key" => "flags"
-        ));
+        ]);
     }
 
     public function deleteInviteCode( OW_Event $e )
@@ -401,7 +401,7 @@ class BASE_CLASS_EventHandler
 
             if ( OW::getConfig()->getValue('base', 'mandatory_user_approve') && OW::getUser()->isAuthenticated() && !BOL_UserService::getInstance()->isApproved() )
             {
-                OW::getRequestHandler()->setCatchAllRequestsAttributes('base.wait_for_approval', array('controller' => 'BASE_CTRL_WaitForApproval', 'action' => 'index'));
+                OW::getRequestHandler()->setCatchAllRequestsAttributes('base.wait_for_approval', ['controller' => 'BASE_CTRL_WaitForApproval', 'action' => 'index']);
                 OW::getRequestHandler()->addCatchAllRequestsExclude('base.wait_for_approval', 'BASE_CTRL_User', 'signOut');
             }
 
@@ -409,7 +409,7 @@ class BASE_CLASS_EventHandler
             {
                 if ( BOL_UserService::getInstance()->isSuspended($user->getId()) && !OW::getUser()->isAdmin() )
                 {
-                    OW::getRequestHandler()->setCatchAllRequestsAttributes('base.suspended_user', array('controller' => 'BASE_CTRL_SuspendedUser', 'action' => 'index'));
+                    OW::getRequestHandler()->setCatchAllRequestsAttributes('base.suspended_user', ['controller' => 'BASE_CTRL_SuspendedUser', 'action' => 'index']);
                     OW::getRequestHandler()->addCatchAllRequestsExclude('base.suspended_user', 'BASE_CTRL_User', 'signOut');
                     OW::getRequestHandler()->addCatchAllRequestsExclude('base.suspended_user', 'BASE_CTRL_Avatar');
                     OW::getRequestHandler()->addCatchAllRequestsExclude('base.suspended_user', 'BASE_CTRL_Edit');
@@ -421,7 +421,7 @@ class BASE_CLASS_EventHandler
 
                 if ( (int) $user->emailVerify === 0 && OW::getConfig()->getValue('base', 'confirm_email') )
                 {
-                    OW::getRequestHandler()->setCatchAllRequestsAttributes('base.email_verify', array(OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_CTRL_EmailVerify', OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'index'));
+                    OW::getRequestHandler()->setCatchAllRequestsAttributes('base.email_verify', [OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_CTRL_EmailVerify', OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'index']);
 
                     OW::getRequestHandler()->addCatchAllRequestsExclude('base.email_verify', 'BASE_CTRL_User', 'signOut');
                     OW::getRequestHandler()->addCatchAllRequestsExclude('base.email_verify', 'BASE_CTRL_EmailVerify');
@@ -446,7 +446,7 @@ class BASE_CLASS_EventHandler
                 {
                     if ( empty($accountType) )
                     {
-                        OW::getRequestHandler()->setCatchAllRequestsAttributes('base.complete_profile.account_type', array('controller' => 'BASE_CTRL_CompleteProfile', 'action' => 'fillAccountType'));
+                        OW::getRequestHandler()->setCatchAllRequestsAttributes('base.complete_profile.account_type', ['controller' => 'BASE_CTRL_CompleteProfile', 'action' => 'fillAccountType']);
                         OW::getRequestHandler()->addCatchAllRequestsExclude('base.complete_profile.account_type', 'BASE_CTRL_Console', 'listRsp');
                         OW::getRequestHandler()->addCatchAllRequestsExclude('base.complete_profile.account_type', 'BASE_CTRL_User', 'signOut');
                         OW::getRequestHandler()->addCatchAllRequestsExclude('base.complete_profile.account_type', 'INSTALL_CTRL_Install');
@@ -466,7 +466,7 @@ class BASE_CLASS_EventHandler
 
                             if ( !empty($questionList) )
                             {
-                                OW::getRequestHandler()->setCatchAllRequestsAttributes('base.complete_profile', array('controller' => 'BASE_CTRL_CompleteProfile', 'action' => 'fillRequiredQuestions'));
+                                OW::getRequestHandler()->setCatchAllRequestsAttributes('base.complete_profile', ['controller' => 'BASE_CTRL_CompleteProfile', 'action' => 'fillRequiredQuestions']);
                                 OW::getRequestHandler()->addCatchAllRequestsExclude('base.complete_profile', 'BASE_CTRL_Console', 'listRsp');
                                 OW::getRequestHandler()->addCatchAllRequestsExclude('base.complete_profile', 'BASE_CTRL_User', 'signOut');
                                 OW::getRequestHandler()->addCatchAllRequestsExclude('base.complete_profile', 'INSTALL_CTRL_Install');
@@ -544,7 +544,7 @@ class BASE_CLASS_EventHandler
         $params = $event->getParams();
         $userId = (int) $params['userId'];
 
-        OW::getCacheManager()->clean(array(BOL_UserDao::CACHE_TAG_ALL_USER_LIST));
+        OW::getCacheManager()->clean([BOL_UserDao::CACHE_TAG_ALL_USER_LIST]);
     }
 
     public function sendSuspendNotification( OW_Event $event )
@@ -564,8 +564,8 @@ class BASE_CLASS_EventHandler
         $email = $user->email;
         $displayName = $userService->getDisplayName($userId);
 
-        $txt = OW::getLanguage()->text('base', 'suspend_notification_text', array('realName' => $displayName, 'suspendReason' => $message));
-        $html = OW::getLanguage()->text('base', 'suspend_notification_html', array('realName' => $displayName, 'suspendReason' => $message));
+        $txt = OW::getLanguage()->text('base', 'suspend_notification_text', ['realName' => $displayName, 'suspendReason' => $message]);
+        $html = OW::getLanguage()->text('base', 'suspend_notification_html', ['realName' => $displayName, 'suspendReason' => $message]);
 
         $subject = OW::getLanguage()->text('base', 'suspend_notification_subject');
 
@@ -647,25 +647,25 @@ class BASE_CLASS_EventHandler
     public function onFeedCollectConfigurableActivity( BASE_CLASS_EventCollector $event )
     {
         $language = OW::getLanguage();
-        $event->add(array(
+        $event->add([
             'label' => $language->text('admin', 'feed_content_registration'),
             'activity' => 'create:user_join'
-        ));
+        ]);
 
-        $event->add(array(
+        $event->add([
             'label' => $language->text('admin', 'feed_content_edit'),
             'activity' => 'create:user_edit'
-        ));
+        ]);
 
-        $event->add(array(
+        $event->add([
             'label' => $language->text('admin', 'feed_content_avatar_change'),
             'activity' => 'create:avatar-change'
-        ));
+        ]);
 
-        $event->add(array(
+        $event->add([
             'label' => $language->text('admin', 'feed_content_user_comment'),
             'activity' => 'create:user-comment'
-        ));
+        ]);
     }
 
     public function onUpdateEntityItemsStatus( OW_Event $event )
@@ -700,23 +700,23 @@ class BASE_CLASS_EventHandler
     {
         $language = OW::getLanguage();
 
-        $action = array(
+        $action = [
             'key' => 'base_view_profile',
             'pluginKey' => 'base',
             'label' => $language->text('base', 'privacy_action_view_profile'),
             'description' => '',
             'defaultValue' => 'everybody'
-        );
+        ];
 
         $event->add($action);
 
-        $action = array(
+        $action = [
             'key' => 'base_view_my_presence_on_site',
             'pluginKey' => 'base',
             'label' => $language->text('base', 'privacy_action_view_my_presence_on_site'),
             'description' => '',
             'defaultValue' => 'everybody'
-        );
+        ];
 
         $event->add($action);
     }
@@ -725,12 +725,12 @@ class BASE_CLASS_EventHandler
     {
         $language = OW::getLanguage();
 
-        $sectionLabels = array(
-            'general' => array(
+        $sectionLabels = [
+            'general' => [
                 'label' => $language->text('base', 'preference_section_general'),
                 'iconClass' => 'ow_ic_script'
-            )
-        );
+            ]
+        ];
 
         $event->add($sectionLabels);
     }
@@ -742,7 +742,7 @@ class BASE_CLASS_EventHandler
         $params = $event->getParams();
         $values = $params['values'];
 
-        $fromElementList = array();
+        $fromElementList = [];
 
         $fromElement = new CheckboxField('mass_mailing_subscribe');
         $fromElement->setLabel($language->text('base', 'preference_mass_mailing_subscribe_label'));
@@ -770,17 +770,17 @@ class BASE_CLASS_EventHandler
     {
         $language = OW::getLanguage();
         $event->add(
-            array(
-                'base' => array(
+            [
+                'base' => [
                     'label' => $language->text('base', 'auth_group_label'),
-                    'actions' => array(
+                    'actions' => [
                         'add_comment' => $language->text('base', 'auth_action_add_comment'),
                         'delete_comment_by_content_owner' => $language->text('base', 'delete_comment_by_content_owner'),
                         'search_users' => $language->text('base', 'search_users'),
                         'view_profile' => $language->text('base', 'auth_view_profile')
-                    )
-                )
-            )
+                    ]
+                ]
+            ]
         );
     }
 
@@ -806,9 +806,9 @@ class BASE_CLASS_EventHandler
             return;
         }
 
-        $coll->add(OW::getLanguage()->text('admin', 'cron_configuration_required_notice', array(
+        $coll->add(OW::getLanguage()->text('admin', 'cron_configuration_required_notice', [
             'helpUrl' => 'http://docs.oxwall.org/install:cron'
-        )));
+        ]));
     }
 
     public function addJsDeclarations( OW_Event $e )
@@ -821,18 +821,20 @@ class BASE_CLASS_EventHandler
         OW::getLanguage()->addKeyForJs('base', 'avatar_change');
         OW::getLanguage()->addKeyForJs('base', 'avatar_crop');
 
-        $scriptGen = UTIL_JsGenerator::newInstance()->setVariable(array('OW', 'ajaxComponentLoaderRsp'), OW::getRouter()->urlFor('BASE_CTRL_AjaxLoader', 'component'));
-        $scriptGen->setVariable(array('OW', 'ajaxAttachmentLinkRsp'), OW::getRouter()->urlFor('BASE_CTRL_Attachment', 'addLink'));
+        $scriptGen = UTIL_JsGenerator::newInstance()->setVariable(['OW', 'ajaxComponentLoaderRsp'], OW::getRouter()->urlFor('BASE_CTRL_AjaxLoader', 'component'));
+        $scriptGen->setVariable(['OW', 'ajaxAttachmentLinkRsp'], OW::getRouter()->urlFor('BASE_CTRL_Attachment', 'addLink'));
 
         //Ping
-        $scriptGen->addScript('OW.getPing().setRspUrl({$url});', array(
+        $scriptGen->addScript('OW.getPing().setRspUrl({$url});', [
             'url' => OW::getRouter()->urlFor('BASE_CTRL_Ping', 'index')
-        ));
+        ]);
 
         //UsersApi
-        $scriptGen->newObject(array('OW', 'Users'), 'OW_UsersApi', array(array(
+        $scriptGen->newObject(['OW', 'Users'], 'OW_UsersApi', [
+            [
             "rsp" => OW::getRouter()->urlFor('BASE_CTRL_AjaxUsersApi', 'rsp')
-        )));
+            ]
+        ]);
 
         OW::getDocument()->addScriptDeclaration($scriptGen->generateJs());
 
@@ -843,29 +845,29 @@ class BASE_CLASS_EventHandler
         {
             OW::getDocument()->addOnloadScript(UTIL_JsGenerator::composeJsString(
                 '$.get({$cron});'
-                , array(
-                'cron' => OW::getRequest()->buildUrlQueryString(OW_URL_HOME . 'ow_cron/run.php', array(
+                , [
+                'cron' => OW::getRequest()->buildUrlQueryString(OW_URL_HOME . 'ow_cron/run.php', [
                     'ow-light-cron' => 1
-                ))
-            )));
+                ])
+            ]));
         }
     }
 
     public function onAvatarToolbarCollect( BASE_CLASS_EventCollector $e )
     {
-        $e->add(array(
+        $e->add([
             'title' => OW::getLanguage()->text('base', 'console_item_label_dashboard'),
             'iconClass' => 'ow_ic_house',
             'url' => OW::getRouter()->urlForRoute('base_member_dashboard'),
             'order' => 1
-        ));
+        ]);
 
-        $e->add(array(
+        $e->add([
             'title' => OW::getLanguage()->text('base', 'console_item_label_profile'),
             'iconClass' => 'ow_ic_user',
             'url' => OW::getRouter()->urlForRoute('base_member_profile'),
             'order' => 3
-        ));
+        ]);
     }
 
     public function onAddComment( OW_Event $event )
@@ -891,87 +893,87 @@ class BASE_CLASS_EventHandler
         }
 
         $comment = BOL_CommentService::getInstance()->findComment($commentId);
-        $url = OW::getRouter()->urlForRoute('base_user_profile', array('username' => BOL_UserService::getInstance()->getUserName($entityId)));
+        $url = OW::getRouter()->urlForRoute('base_user_profile', ['username' => BOL_UserService::getInstance()->getUserName($entityId)]);
 
-        $avatars = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($userId));
+        $avatars = BOL_AvatarService::getInstance()->getDataForUserAvatars([$userId]);
         $avatar = $avatars[$userId];
 
-        $event = new OW_Event('notifications.add', array(
+        $event = new OW_Event('notifications.add', [
             'pluginKey' => 'base',
             'entityType' => 'base_profile_wall',
             'entityId' => $commentId,
             'action' => 'base_add_user_comment',
             'userId' => $user->getId(),
-        ), array(
+        ], [
             'avatar' => $avatar,
-            'string' => array(
+            'string' => [
                 'key' => 'base+profile_comment_notification',
-                'vars' => array(
+                'vars' => [
                     'userName' => $userService->getDisplayName($userId),
                     'userUrl' => $userService->getUserUrl($userId),
                     'profileUrl' => $userService->getUserUrl($user->getId())
-                )
-            ),
+                ]
+            ],
             'content' => $comment->getMessage(),
             'url' => $userService->getUserUrl($user->getId())
-        ));
+        ]);
 
         OW::getEventManager()->trigger($event);
     }
 
     public function onNotifyActions( BASE_CLASS_EventCollector $e )
     {
-        $e->add(array(
+        $e->add([
             'section' => 'base',
             'sectionLabel' => OW::getLanguage()->text('base', 'notification_section_label'),
             'action' => 'base_add_user_comment',
             'description' => OW::getLanguage()->text('base', 'email_notifications_setting_user_comment'),
             'sectionIcon' => 'ow_ic_file',
             'selected' => true
-        ));
+        ]);
     }
 
     public function onAddMaintenanceModeExceptions( BASE_CLASS_EventCollector $event )
     {
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'standardSignIn'));
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'forgotPassword'));
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPassword'));
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordCodeExpired'));
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordRequest'));
-        $event->add(array('controller' => 'BASE_CTRL_ApiServer', 'action' => 'request'));
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'standardSignIn']);
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'forgotPassword']);
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPassword']);
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordCodeExpired']);
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordRequest']);
+        $event->add(['controller' => 'BASE_CTRL_ApiServer', 'action' => 'request']);
     }
 
     public function onAddPasswordProtectedExceptions( BASE_CLASS_EventCollector $event )
     {
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'standardSignIn'));
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'ajaxSignIn'));
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'forgotPassword'));
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordRequest'));
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPassword'));
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordCodeExpired'));
-        $event->add(array('controller' => 'BASE_CTRL_EmailVerify', 'action' => 'verify'));
-        $event->add(array('controller' => 'BASE_CTRL_ApiServer', 'action' => 'request'));
-        $event->add(array('controller' => 'BASE_CTRL_Unsubscribe', 'action' => 'index'));
-        $event->add(array('controller' => 'BASE_CTRL_BaseDocument', 'action' => 'redirectToMobile'));
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'standardSignIn']);
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'ajaxSignIn']);
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'forgotPassword']);
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordRequest']);
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPassword']);
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordCodeExpired']);
+        $event->add(['controller' => 'BASE_CTRL_EmailVerify', 'action' => 'verify']);
+        $event->add(['controller' => 'BASE_CTRL_ApiServer', 'action' => 'request']);
+        $event->add(['controller' => 'BASE_CTRL_Unsubscribe', 'action' => 'index']);
+        $event->add(['controller' => 'BASE_CTRL_BaseDocument', 'action' => 'redirectToMobile']);
     }
 
     public function onAddMembersOnlyException( BASE_CLASS_EventCollector $event )
     {
-        $event->add(array('controller' => 'BASE_CTRL_Join', 'action' => 'index'));
-        $event->add(array('controller' => 'BASE_CTRL_Join', 'action' => 'joinFormSubmit'));
-        $event->add(array('controller' => 'BASE_CTRL_Join', 'action' => 'ajaxResponder'));
-        $event->add(array('controller' => 'BASE_CTRL_Captcha', 'action' => 'index'));
-        $event->add(array('controller' => 'BASE_CTRL_Captcha', 'action' => 'ajaxResponder'));
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'forgotPassword'));
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordRequest'));
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPassword'));
-        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'ajaxSignIn'));
-        $event->add(array('controller' => 'BASE_CTRL_ApiServer', 'action' => 'request'));
-        $event->add(array('controller' => 'BASE_CTRL_Unsubscribe', 'action' => 'index'));
-        $event->add(array('controller' => 'BASE_CTRL_BaseDocument', 'action' => 'redirectToMobile'));
-        $event->add(array('controller' => 'BASE_CTRL_AjaxLoader', 'action' => 'init'));
-        $event->add(array('controller' => 'BASE_CTRL_AjaxLoader', 'action' => 'component'));
-        $event->add(array('controller' => 'BASE_CTRL_Avatar', 'action' => 'ajaxResponder'));
+        $event->add(['controller' => 'BASE_CTRL_Join', 'action' => 'index']);
+        $event->add(['controller' => 'BASE_CTRL_Join', 'action' => 'joinFormSubmit']);
+        $event->add(['controller' => 'BASE_CTRL_Join', 'action' => 'ajaxResponder']);
+        $event->add(['controller' => 'BASE_CTRL_Captcha', 'action' => 'index']);
+        $event->add(['controller' => 'BASE_CTRL_Captcha', 'action' => 'ajaxResponder']);
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'forgotPassword']);
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordRequest']);
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPassword']);
+        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'ajaxSignIn']);
+        $event->add(['controller' => 'BASE_CTRL_ApiServer', 'action' => 'request']);
+        $event->add(['controller' => 'BASE_CTRL_Unsubscribe', 'action' => 'index']);
+        $event->add(['controller' => 'BASE_CTRL_BaseDocument', 'action' => 'redirectToMobile']);
+        $event->add(['controller' => 'BASE_CTRL_AjaxLoader', 'action' => 'init']);
+        $event->add(['controller' => 'BASE_CTRL_AjaxLoader', 'action' => 'component']);
+        $event->add(['controller' => 'BASE_CTRL_Avatar', 'action' => 'ajaxResponder']);
     }
 
     public function onPreferenceMenuItem( BASE_CLASS_EventCollector $event )
@@ -995,7 +997,7 @@ class BASE_CLASS_EventHandler
         $router = OW_Router::getInstance();
         $language = OW::getLanguage();
 
-        $menuItems = array();
+        $menuItems = [];
 
         $menuItem = new BASE_MenuItem();
 
@@ -1095,7 +1097,7 @@ class BASE_CLASS_EventHandler
 
         $userId = (int) $params['userId'];
 
-        $resultArray = array();
+        $resultArray = [];
 
         $uniqId = uniqid("block-");
         $isBlocked = BOL_UserService::getInstance()->isBlocked($userId, OW::getUser()->getId());
@@ -1108,7 +1110,7 @@ class BASE_CLASS_EventHandler
 
         $toggleClass = !$isBlocked ? 'ow_mild_green' : 'ow_mild_red';
 
-        $resultArray[BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ATTRIBUTES] = array();
+        $resultArray[BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ATTRIBUTES] = [];
         $resultArray[BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ATTRIBUTES]["data-command"] = $isBlocked ? "unblock" : "block";
 
         $toggleCommand = !$isBlocked ? "unblock" : "block";
@@ -1128,12 +1130,12 @@ class BASE_CLASS_EventHandler
             OW.Users.unBlockUser(e.data.userId);
             toggle();
         }'
-            , array("e"), array(
+            , ["e"], [
                 "userId" => $userId,
                 "toggleText" => $toggleText,
                 "toggleCommand" => $toggleCommand,
                 "toggleClass" => $toggleClass
-            ));
+            ]);
 
         OW::getDocument()->addOnloadScript($js);
 
@@ -1157,11 +1159,11 @@ class BASE_CLASS_EventHandler
             return;
         }
 
-        $action = array(
+        $action = [
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_GROUP_KEY => 'base.moderation',
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_GROUP_LABEL => OW::getLanguage()->text('base', 'profile_toolbar_group_moderation'),
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ORDER => 3
-        );
+        ];
 
         $userId = (int) $params['userId'];
 
@@ -1172,7 +1174,7 @@ class BASE_CLASS_EventHandler
 
         $toggleText = !$isFeatured ? OW::getLanguage()->text('base', 'user_action_unmark_as_featured') : OW::getLanguage()->text('base', 'user_action_mark_as_featured');
 
-        $action[BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ATTRIBUTES] = array();
+        $action[BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ATTRIBUTES] = [];
         $action[BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ATTRIBUTES]["data-command"] = $isFeatured ? "unfeature" : "feature";
 
         $toggleCommand = !$isFeatured ? "unfeature" : "feature";
@@ -1184,11 +1186,11 @@ class BASE_CLASS_EventHandler
         $js->jQueryEvent("#" . $uniqId, "click", 'OW.Users[$(this).attr("data-command") == "feature" ? "featureUser" : "unFeatureUser"](e.data.userId);
          OW.Utils.toggleText(this, e.data.toggleText);
          OW.Utils.toggleAttr(this, "data-command", e.data.toggleCommand);'
-            , array("e"), array(
+            , ["e"], [
                 "userId" => $userId,
                 "toggleText" => $toggleText,
                 "toggleCommand" => $toggleCommand
-            ));
+            ]);
 
         OW::getDocument()->addOnloadScript($js);
 
@@ -1217,14 +1219,14 @@ class BASE_CLASS_EventHandler
             return;
         }
 
-        $action = array(
+        $action = [
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_GROUP_KEY => 'base.moderation',
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_GROUP_LABEL => OW::getLanguage()->text('base', 'profile_toolbar_group_moderation'),
-            BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_HREF => OW::getRouter()->urlFor('BASE_CTRL_User', 'approve', array('userId' => $userId)),
+            BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_HREF => OW::getRouter()->urlFor('BASE_CTRL_User', 'approve', ['userId' => $userId]),
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LABEL => OW::getLanguage()->text('base', 'profile_toolbar_user_approve_label'),
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_CLASS => 'ow_mild_green',
             BASE_CMP_ProfileActionToolbar::DATA_KEY_ITEM_KEY => "base.approve_user"
-        );
+        ];
 
         $event->add($action);
     }
@@ -1246,7 +1248,7 @@ class BASE_CLASS_EventHandler
         $userId = (int) $params['userId'];
         $uniqId = uniqid('change-role-');
 
-        $action = array(
+        $action = [
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_GROUP_KEY => 'base.moderation',
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_GROUP_LABEL => OW::getLanguage()->text('base', 'profile_toolbar_group_moderation'),
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ID => $uniqId,
@@ -1254,14 +1256,14 @@ class BASE_CLASS_EventHandler
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_CLASS => 'ow_mild_green',
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ORDER => 1,
             BASE_CMP_ProfileActionToolbar::DATA_KEY_ITEM_KEY => "base.change_role"
-        );
+        ];
 
         $event->add($action);
 
-        $js = UTIL_JsGenerator::newInstance()->jQueryEvent('#' . $uniqId, 'click', 'window.baseChangeUserRoleFB = OW.ajaxFloatBox("BASE_CMP_GiveUserRole", [e.data.userId], { width:556, title: e.data.title });', array('e'), array(
+        $js = UTIL_JsGenerator::newInstance()->jQueryEvent('#' . $uniqId, 'click', 'window.baseChangeUserRoleFB = OW.ajaxFloatBox("BASE_CMP_GiveUserRole", [e.data.userId], { width:556, title: e.data.title });', ['e'], [
             'userId' => $userId,
             'title' => OW::getLanguage()->text('base', 'authorization_user_roles')
-        ));
+        ]);
 
         OW::getDocument()->addOnloadScript($js);
     }
@@ -1288,11 +1290,11 @@ class BASE_CLASS_EventHandler
         $userService = BOL_UserService::getInstance();
         $userId = (int) $params['userId'];
 
-        $action = array(
+        $action = [
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_GROUP_KEY => 'base.moderation',
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_GROUP_LABEL => OW::getLanguage()->text('base', 'profile_toolbar_group_moderation'),
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ORDER => 4
-        );
+        ];
 
         $action[BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_HREF] = 'javascript://';
 
@@ -1305,7 +1307,7 @@ class BASE_CLASS_EventHandler
 
         $suspended = $userService->isSuspended($userId);
 
-        $action[BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ATTRIBUTES] = array();
+        $action[BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ATTRIBUTES] = [];
         $action[BASE_CMP_ProfileActionToolbar::DATA_KEY_LABEL] = $suspended ? OW::getLanguage()->text('base', 'user_unsuspend_btn_lbl') : OW::getLanguage()->text('base', 'user_suspend_btn_lbl');
 
         $toggleText = !$suspended ? OW::getLanguage()->text('base', 'user_unsuspend_btn_lbl') : OW::getLanguage()->text('base', 'user_suspend_btn_lbl');
@@ -1319,9 +1321,9 @@ class BASE_CLASS_EventHandler
         $toggleClass = !$suspended ? "ow_mild_green" : "ow_mild_red";
 
         $rsp = OW::getRouter()->urlFor('BASE_CTRL_SuspendedUser', 'ajaxRsp');
-        $rsp = OW::getRequest()->buildUrlQueryString($rsp, array(
+        $rsp = OW::getRequest()->buildUrlQueryString($rsp, [
             "userId" => $userId
-        ));
+        ]);
 
         OW::getLanguage()->addKeyForJs('base', 'suspend_floatbox_title');
 
@@ -1338,13 +1340,13 @@ class BASE_CLASS_EventHandler
             {
                 OW.trigger("base.on_suspend_command", ["unsuspend"])
             } '
-            , array("e"), array(
+            , ["e"], [
                 "userId" => $userId,
                 "toggleText" => $toggleText,
                 "toggleCommand" => $toggleCommand,
                 "toggleClass" => $toggleClass,
                 "displayName" => $displayName
-            ));
+            ]);
 
         $js->addScript( ' OW.bind("base.on_suspend_command", function( command, message ) {
                 var element = $("#"+{$uniqId});
@@ -1354,12 +1356,13 @@ class BASE_CLASS_EventHandler
                 OW.Utils.toggleAttr(element, "class", {$toggleClass});
                 OW.Utils.toggleAttr(element, "data-command", {$toggleCommand});
                 
-             }); ', array(
+             }); ', [
             "uniqId" => $uniqId,
             "userId" => $userId,
             "toggleText" => $toggleText,
             "toggleCommand" => $toggleCommand,
-            "toggleClass" => $toggleClass ) );
+            "toggleClass" => $toggleClass
+        ]);
 
         OW::getDocument()->addOnloadScript($js);
 
@@ -1387,20 +1390,20 @@ class BASE_CLASS_EventHandler
 
         $linkId = 'ud' . rand(10, 1000000);
         $script = UTIL_JsGenerator::newInstance()->jQueryEvent('#' . $linkId, 'click', 'OW.flagContent(e.data.entityType, e.data.entityId);'
-            , array('e'), array(
+            , ['e'], [
                 'entityType' => BASE_CLASS_ContentProvider::ENTITY_TYPE_PROFILE,
                 'entityId' => $userId
-            ));
+            ]);
 
         OW::getDocument()->addOnloadScript($script);
 
-        $resultArray = array(
+        $resultArray = [
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LABEL => OW::getLanguage()->text('base', 'flag'),
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_HREF => 'javascript://',
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ID => $linkId,
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ORDER => 7,
             BASE_CMP_ProfileActionToolbar::DATA_KEY_ITEM_KEY => "base.flag_user"
-        );
+        ];
 
         $event->add($resultArray);
     }
@@ -1430,11 +1433,11 @@ class BASE_CLASS_EventHandler
 
         $linkId = 'ud' . rand(10, 1000000);
         $script = UTIL_JsGenerator::newInstance()->jQueryEvent('#' . $linkId, 'click', 'OW.Users.deleteUser(e.data.userId, e.data.callbackUrl, false);'
-            , array('e'), array('userId' => $userId, 'callbackUrl' => $callbackUrl));
+            , ['e'], ['userId' => $userId, 'callbackUrl' => $callbackUrl]);
 
         OW::getDocument()->addOnloadScript($script);
 
-        $resultArray = array(
+        $resultArray = [
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LABEL => OW::getLanguage()->text('base', 'profile_toolbar_user_delete_label'),
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_CLASS => 'ow_mild_red',
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_HREF => 'javascript://',
@@ -1443,7 +1446,7 @@ class BASE_CLASS_EventHandler
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_GROUP_LABEL => OW::getLanguage()->text('base', 'profile_toolbar_group_moderation'),
             BASE_CMP_ProfileActionToolbar::DATA_KEY_LINK_ORDER => 5,
             BASE_CMP_ProfileActionToolbar::DATA_KEY_ITEM_KEY => "base.delete_user"
-        );
+        ];
 
         $event->add($resultArray);
     }
@@ -1485,7 +1488,7 @@ class BASE_CLASS_EventHandler
 
         if ( $userId == $params['userId'] )
         {
-            $string = array('key' => 'base+feed_activity_avatar_string_own');
+            $string = ['key' => 'base+feed_activity_avatar_string_own'];
         }
         else
         {
@@ -1493,22 +1496,22 @@ class BASE_CLASS_EventHandler
             $userUrl = BOL_UserService::getInstance()->getUserUrl($userId);
             $userEmbed = '<a href="' . $userUrl . '">' . $userName . '</a>';
 
-            $string = array(
+            $string = [
                 'key' => 'base+feed_activity_avatar_string',
-                'vars' => array('user' => $userEmbed)
-            );
+                'vars' => ['user' => $userEmbed]
+            ];
         }
 
-        OW::getEventManager()->trigger(new OW_Event('feed.activity', array(
+        OW::getEventManager()->trigger(new OW_Event('feed.activity', [
             'activityType' => 'comment',
             'activityId' => $params['userId'],
             'entityId' => $params['entityId'],
             'entityType' => $params['entityType'],
             'userId' => $params['userId'],
             'pluginKey' => 'base'
-        ), array(
+        ], [
             'string' => $string
-        )));
+        ]));
     }
 
     public function onUserAvatarLikeFeed( OW_Event $event )
@@ -1534,7 +1537,7 @@ class BASE_CLASS_EventHandler
 
         if ( $userId == $params['userId'] )
         {
-            $string = array('key' => 'base+feed_activity_avatar_string_like_own');
+            $string = ['key' => 'base+feed_activity_avatar_string_like_own'];
         }
         else
         {
@@ -1542,22 +1545,22 @@ class BASE_CLASS_EventHandler
             $userUrl = BOL_UserService::getInstance()->getUserUrl($userId);
             $userEmbed = '<a href="' . $userUrl . '">' . $userName . '</a>';
 
-            $string = array(
+            $string = [
                 'key' => 'base+feed_activity_avatar_string_like',
-                'vars' => array('user' => $userEmbed)
-            );
+                'vars' => ['user' => $userEmbed]
+            ];
         }
 
-        OW::getEventManager()->trigger(new OW_Event('feed.activity', array(
+        OW::getEventManager()->trigger(new OW_Event('feed.activity', [
             'activityType' => 'like',
             'activityId' => $params['userId'],
             'entityId' => $params['entityId'],
             'entityType' => $params['entityType'],
             'userId' => $params['userId'],
             'pluginKey' => 'base'
-        ), array(
+        ], [
             'string' => $string
-        )));
+        ]));
     }
 
     public function onLikeUserJoin( OW_Event $event )
@@ -1575,19 +1578,19 @@ class BASE_CLASS_EventHandler
         $userUrl = BOL_UserService::getInstance()->getUserUrl($userId);
         $userEmbed = '<a href="' . $userUrl . '">' . $userName . '</a>';
 
-        OW::getEventManager()->trigger(new OW_Event('feed.activity', array(
+        OW::getEventManager()->trigger(new OW_Event('feed.activity', [
             'activityType' => 'like',
             'activityId' => $params['userId'],
             'entityId' => $params['entityId'],
             'entityType' => $params['entityType'],
             'userId' => $params['userId'],
             'pluginKey' => 'base'
-        ), array(
-            'string' => array(
+        ], [
+            'string' => [
                 'key' => 'base+feed_activity_join_profile_string_like',
-                'vars' => array('user' => $userEmbed)
-            )
-        )));
+                'vars' => ['user' => $userEmbed]
+            ]
+        ]));
     }
 
     public function onUserJoinCommentFeed( OW_Event $event )
@@ -1605,19 +1608,19 @@ class BASE_CLASS_EventHandler
         $userUrl = BOL_UserService::getInstance()->getUserUrl($userId);
         $userEmbed = '<a href="' . $userUrl . '">' . $userName . '</a>';
 
-        OW::getEventManager()->trigger(new OW_Event('feed.activity', array(
+        OW::getEventManager()->trigger(new OW_Event('feed.activity', [
             'activityType' => 'comment',
             'activityId' => $params['commentId'],
             'entityId' => $params['entityId'],
             'entityType' => $params['entityType'],
             'userId' => $params['userId'],
             'pluginKey' => 'base'
-        ), array(
-            'string' => array(
+        ], [
+            'string' => [
                 'key' => 'base+feed_activity_join_profile_string',
-                'vars' => array('user' => $userEmbed)
-            )
-        )));
+                'vars' => ['user' => $userEmbed]
+            ]
+        ]));
     }
 
     public function onJoinFeed( OW_Event $event )
@@ -1631,18 +1634,18 @@ class BASE_CLASS_EventHandler
 
         $userId = (int) $params['userId'];
 
-        $event = new OW_Event('feed.action', array(
+        $event = new OW_Event('feed.action', [
             'pluginKey' => 'base',
             'entityType' => 'user_join',
             'entityId' => $userId,
             'userId' => $userId,
             'replace' => true
-        ), array(
-            'string' => array('key' => 'base+feed_user_join'),
-            'view' => array(
+        ], [
+            'string' => ['key' => 'base+feed_user_join'],
+            'view' => [
                 'iconClass' => 'ow_ic_user'
-            )
-        ));
+            ]
+        ]);
         OW::getEventManager()->trigger($event);
     }
 
@@ -1657,22 +1660,22 @@ class BASE_CLASS_EventHandler
 
         $userId = (int) $params['userId'];
 
-        $event = new OW_Event('feed.action', array(
+        $event = new OW_Event('feed.action', [
             'pluginKey' => 'base',
             'entityType' => 'user_edit',
             'entityId' => $userId,
             'userId' => $userId,
             'replace' => true
-        ), array(
-            'string' => array('key' => 'base+feed_user_edit_profile'),
-            'data' => array(
+        ], [
+            'string' => ['key' => 'base+feed_user_edit_profile'],
+            'data' => [
                 'userId' => $userId
-            ),
-            'features' => array(),
-            'view' => array(
+            ],
+            'features' => [],
+            'view' => [
                 'iconClass' => 'ow_ic_user'
-            )
-        ));
+            ]
+        ]);
         OW::getEventManager()->trigger($event);
     }
 
@@ -1682,7 +1685,7 @@ class BASE_CLASS_EventHandler
 
         if ( !OW::getConfig()->getValue('base', 'mandatory_user_approve') )
         {
-            $e = new OW_Event(OW_EventManager::ON_USER_APPROVE, array('userId' => (int) $params['userId']));
+            $e = new OW_Event(OW_EventManager::ON_USER_APPROVE, ['userId' => (int)$params['userId']]);
             OW::getEventManager()->trigger($e);
 
             return;
@@ -1693,10 +1696,10 @@ class BASE_CLASS_EventHandler
 
     public function onAddGlobalLangs( BASE_CLASS_EventCollector $event )
     {
-        $event->add(array('site_name' => OW::getConfig()->getValue('base', 'site_name')));
-        $event->add(array('site_url' => OW_URL_HOME));
-        $event->add(array('site_email' => OW::getConfig()->getValue('base', 'site_email')));
-        $event->add(array('default_currency' => BOL_BillingService::getInstance()->getActiveCurrency()));
+        $event->add(['site_name' => OW::getConfig()->getValue('base', 'site_name')]);
+        $event->add(['site_url' => OW_URL_HOME]);
+        $event->add(['site_email' => OW::getConfig()->getValue('base', 'site_email')]);
+        $event->add(['default_currency' => BOL_BillingService::getInstance()->getActiveCurrency()]);
     }
 
     public function onDeleteUserContent( OW_Event $event )
@@ -1759,11 +1762,11 @@ class BASE_CLASS_EventHandler
                 $displaySocialSharing = false;
             }
 
-            $eventParams = array(
+            $eventParams = [
                 'action' => 'base_view_profile',
                 'ownerId' => $user->id,
                 'viewerId' => 0
-            );
+            ];
 
             try
             {
@@ -1901,115 +1904,115 @@ class BASE_CLASS_EventHandler
         $language = OW::getLanguage();
 
         $e->add(
-            array(
+            [
                 "sectionLabel" => $language->text("base", "seo_meta_section_users"),
                 "sectionKey" => "base.users",
                 "entityKey" => "userLists",
                 "entityLabel" => $language->text("base", "seo_meta_user_list_label"),
                 "iconClass" => "ow_ic_newsfeed",
-                "langs" => array(
+                "langs" => [
                     "title" => "base+meta_title_user_list",
                     "description" => "base+meta_desc_user_list",
                     "keywords" => "base+meta_keywords_user_list"
-                ),
-                "vars" => array( "user_list", "site_name" )
-            )
+                ],
+                "vars" => ["user_list", "site_name"]
+            ]
         );
 
         $e->add(
-            array(
+            [
                 "sectionLabel" => $language->text("base", "seo_meta_section_base_pages"),
                 "sectionKey" => "base.base_pages",
                 "entityKey" => "index",
                 "entityLabel" => $language->text("base", "seo_meta_index_label"),
                 "iconClass" => "ow_ic_house",
-                "langs" => array(
+                "langs" => [
                     "title" => "base+meta_title_index",
                     "description" => "base+meta_desc_index",
                     "keywords" => "base+meta_keywords_index"
-                ),
-                "vars" => array( "site_name" )
-            )
+                ],
+                "vars" => ["site_name"]
+            ]
         );
 
         $e->add(
-            array(
+            [
                 "sectionLabel" => $language->text("base", "seo_meta_section_base_pages"),
                 "sectionKey" => "base.base_pages",
                 "entityKey" => "join",
                 "entityLabel" => $language->text("base", "seo_meta_join_label"),
                 "iconClass" => "ow_ic_add",
-                "langs" => array(
+                "langs" => [
                     "title" => "base+meta_title_join",
                     "description" => "base+meta_desc_join",
                     "keywords" => "base+meta_keywords_join"
-                ),
-                "vars" => array( "site_name" )
-            )
+                ],
+                "vars" => ["site_name"]
+            ]
         );
 
         $e->add(
-            array(
+            [
                 "sectionLabel" => $language->text("base", "seo_meta_section_base_pages"),
                 "sectionKey" => "base.base_pages",
                 "entityKey" => "sign_in",
                 "entityLabel" => $language->text("base", "seo_meta_sign_in_label"),
                 "iconClass" => "ow_ic_key",
-                "langs" => array(
+                "langs" => [
                     "title" => "base+meta_title_sign_in",
                     "description" => "base+meta_desc_sign_in",
                     "keywords" => "base+meta_keywords_sign_in"
-                ),
-                "vars" => array( "site_name" )
-            )
+                ],
+                "vars" => ["site_name"]
+            ]
         );
 
         $e->add(
-            array(
+            [
                 "sectionLabel" => $language->text("base", "seo_meta_section_base_pages"),
                 "sectionKey" => "base.base_pages",
                 "entityKey" => "forgotPass",
                 "entityLabel" => $language->text("base", "seo_meta_forgot_pass_label"),
                 "iconClass" => "ow_ic_lock",
-                "langs" => array(
+                "langs" => [
                     "title" => "base+meta_title_forgot_pass",
                     "description" => "base+meta_desc_forgot_pass",
                     "keywords" => "base+meta_keywords_forgot_pass"
-                ),
-                "vars" => array( "site_name" )
-            )
+                ],
+                "vars" => ["site_name"]
+            ]
         );
 
         $e->add(
-            array(
+            [
                 "sectionLabel" => $language->text("base", "seo_meta_section_users"),
                 "sectionKey" => "base.users",
                 "entityKey" => "userPage",
                 "entityLabel" => $language->text("base", "seo_meta_user_page_label"),
                 "iconClass" => "ow_ic_user",
-                "langs" => array(
+                "langs" => [
                     "title" => "base+meta_title_user_page",
                     "description" => "base+meta_desc_user_page",
                     "keywords" => "base+meta_keywords_user_page"
-                ),
-                "vars" => array( "site_name" )
-            )
+                ],
+                "vars" => ["site_name"]
+            ]
         );
 
         $e->add(
-            array(
+            [
                 "sectionLabel" => $language->text("base", "seo_meta_section_users"),
                 "sectionKey" => "base.users",
                 "entityKey" => "userSearch",
                 "entityLabel" => $language->text("base", "seo_meta_user_search_label"),
                 "iconClass" => "ow_ic_lens",
-                "langs" => array(
+                "langs" => [
                     "title" => "base+meta_title_user_search",
                     "description" => "base+meta_desc_user_search",
                     "keywords" => "base+meta_keywords_user_search"
-                ),
-                "vars" => array( "site_name" )
-            )
+                ],
+                "vars" => ["site_name"]
+            ]
         );
     }
 
@@ -2031,7 +2034,7 @@ class BASE_CLASS_EventHandler
             return;
         }
 
-        $vars = empty($params["vars"]) ? array() : $params["vars"];
+        $vars = empty($params["vars"]) ? [] : $params["vars"];
 
         $title = false;
         $desc = false;

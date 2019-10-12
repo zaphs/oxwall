@@ -116,7 +116,7 @@ class AuthorizationException extends InterceptException
     public function __construct( $message = null )
     {
         $route = OW::getRouter()->getRoute('base_page_auth_failed');
-        $params = $route === null ? array('controller' => 'BASE_CTRL_BaseDocument', 'action' => 'authorizationFailed') : $route->getDispatchAttrs();
+        $params = $route === null ? ['controller' => 'BASE_CTRL_BaseDocument', 'action' => 'authorizationFailed'] : $route->getDispatchAttrs();
         $params[OW_Route::DISPATCH_ATTRS_VARLIST]['message'] = $message;
         parent::__construct($params);
     }
@@ -136,7 +136,7 @@ class Redirect404Exception extends InterceptException
     public function __construct()
     {
         $route = OW::getRouter()->getRoute('base_page_404');
-        $params = $route === null ? array('controller' => 'BASE_CTRL_BaseDocument', 'action' => 'page404') : $route->getDispatchAttrs();
+        $params = $route === null ? ['controller' => 'BASE_CTRL_BaseDocument', 'action' => 'page404'] : $route->getDispatchAttrs();
         parent::__construct($params);
     }
 }
@@ -168,7 +168,7 @@ class Redirect403Exception extends InterceptException
     public function __construct( $message = null )
     {
         $route = OW::getRouter()->getRoute('base_page_403');
-        $params = $route === null ? array('controller' => 'BASE_CTRL_BaseDocument', 'action' => 'page403') : $route->getDispatchAttrs();
+        $params = $route === null ? ['controller' => 'BASE_CTRL_BaseDocument', 'action' => 'page403'] : $route->getDispatchAttrs();
         $params[OW_Route::DISPATCH_ATTRS_VARLIST]['message'] = $message;
         parent::__construct($params);
     }
@@ -185,7 +185,7 @@ class RedirectConfirmPageException extends RedirectException
      */
     public function __construct( $message )
     {
-        parent::__construct(OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlForRoute('base_page_confirm'), array('back_uri' => urlencode(OW::getRequest()->getRequestUri()))));
+        parent::__construct(OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlForRoute('base_page_confirm'), ['back_uri' => urlencode(OW::getRequest()->getRequestUri())]));
         OW::getSession()->set('baseConfirmPageMessage', $message);
     }
 }
@@ -217,15 +217,15 @@ class AuthenticateException extends RedirectException
      */
     public function __construct()
     {
-        parent::__construct(OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlForRoute('static_sign_in'), array('back-uri' => urlencode(OW::getRequest()->getRequestUri()))));
+        parent::__construct(OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlForRoute('static_sign_in'), ['back-uri' => urlencode(OW::getRequest()->getRequestUri())]));
     }
 }
 
 class ApiResponseErrorException extends Exception
 {
-    public $data = array();
+    public $data = [];
     
-    public function __construct($data = array(), $code = 0) 
+    public function __construct($data = [], $code = 0)
     {
         parent::__construct("", $code);
         
@@ -240,11 +240,11 @@ class ApiAccessException extends ApiResponseErrorException
     const TYPE_NOT_APPROVED = "not_approved";
     const TYPE_NOT_VERIFIED = "not_verified";
 
-    public function __construct( $type, $userData = array() )
+    public function __construct( $type, $userData = [])
     {
-        parent::__construct(array(
+        parent::__construct([
             "type" => $type,
             "data" => $userData
-        ));
+        ]);
     }
 }

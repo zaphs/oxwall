@@ -36,7 +36,7 @@ function smarty_function_user_avatar( $params, $smarty )
         return '_EMPTY_USER_ID_';
     }
 
-    $decoratorParams = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($params['userId']));
+    $decoratorParams = BOL_AvatarService::getInstance()->getDataForUserAvatars([$params['userId']]);
 
     if( empty( $decoratorParams ) )
     {

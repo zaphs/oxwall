@@ -65,15 +65,15 @@ class ADMIN_CMP_FinanceStatistic extends OW_Component
      */
     public function onBeforeRender()
     {
-        $entityTypes = array(
+        $entityTypes = [
             'billing_transaction',
             'billing_transaction_amount'
-        );
+        ];
 
-        $entityLabels = array(
+        $entityLabels = [
             'billing_transaction' => OW::getLanguage()->text('admin', 'site_statistics_finance_transactions'),
             'billing_transaction_amount' => OW::getLanguage()->text('admin', 'site_statistics_finance_transactions_amount')
-        );
+        ];
 
         // register components
         $this->addComponent('statistics',

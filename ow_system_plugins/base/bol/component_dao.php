@@ -114,7 +114,7 @@ class BOL_ComponentDao extends OW_BaseDao
     {
         if ( empty($pluginKey) )
         {
-            return array();
+            return [];
         }
         
         $example = new OW_Example();

@@ -70,11 +70,11 @@ class BASE_CMP_ProfileActionToolbar extends OW_Component
     {
         parent::onBeforeRender();
 
-        $event = new BASE_CLASS_EventCollector(self::EVENT_NAME, array('userId' => $this->userId));
+        $event = new BASE_CLASS_EventCollector(self::EVENT_NAME, ['userId' => $this->userId]);
 
         OW::getEventManager()->trigger($event);
 
-        $event = new OW_Event(self::EVENT_PROCESS_TOOLBAR, array('userId' => $this->userId), $event->getData());
+        $event = new OW_Event(self::EVENT_PROCESS_TOOLBAR, ['userId' => $this->userId], $event->getData());
 
         OW::getEventManager()->trigger($event);
 
@@ -93,14 +93,14 @@ class BASE_CMP_ProfileActionToolbar extends OW_Component
     public function initToolbar( $items )
     {
         $cmpsMarkup = '';
-        $tplActions = array();
-        $tplGroups = array();
+        $tplActions = [];
+        $tplGroups = [];
         
         $maxOrder = count($items);
         
         foreach ( $items as $item  )
         {
-            $action = array();
+            $action = [];
             
             $action["order"] = isset($item["order"]) ? $item["order"] : $maxOrder;
                     
@@ -110,7 +110,7 @@ class BASE_CMP_ProfileActionToolbar extends OW_Component
 
             $attrs = isset($item[self::DATA_KEY_LINK_ATTRIBUTES]) && is_array($item[self::DATA_KEY_LINK_ATTRIBUTES])
                 ? $item[self::DATA_KEY_LINK_ATTRIBUTES]
-                : array();
+                : [];
 
             $attrs['href'] = isset($item[self::DATA_KEY_LINK_HREF]) ? $item[self::DATA_KEY_LINK_HREF] : 'javascript://';
 
@@ -128,19 +128,19 @@ class BASE_CMP_ProfileActionToolbar extends OW_Component
             {
                 $cmpClass = trim($item[self::DATA_KEY_CMP_CLASS]);
 
-                $cmp = OW::getEventManager()->call('class.get_instance', array(
+                $cmp = OW::getEventManager()->call('class.get_instance', [
                     'className' => $cmpClass,
-                    'arguments' => array(
-                        array('userId' => $this->userId)
-                    )
-                ));
+                    'arguments' => [
+                        ['userId' => $this->userId]
+                    ]
+                ]);
 
-                $cmp = $cmp === null ? new $cmpClass(array('userId' => $this->userId)) : $cmp;
+                $cmp = $cmp === null ? new $cmpClass(['userId' => $this->userId]) : $cmp;
 
                 $cmpsMarkup .= $cmp->render();
             }
 
-            $_attrs = array();
+            $_attrs = [];
             foreach ( $attrs as $name => $value )
             {
                 $_attrs[] = $name . '="' . $value . '"';
@@ -155,11 +155,11 @@ class BASE_CMP_ProfileActionToolbar extends OW_Component
             {
                 if ( empty($tplGroups[$item[self::DATA_KEY_LINK_GROUP_KEY]]) )
                 {
-                    $tplGroups[$item[self::DATA_KEY_LINK_GROUP_KEY]] = array(
+                    $tplGroups[$item[self::DATA_KEY_LINK_GROUP_KEY]] = [
                         "key" => $item[self::DATA_KEY_LINK_GROUP_KEY],
                         "label" => $item[self::DATA_KEY_LINK_GROUP_LABEL],
-                        "toolbar" => array()
-                    );
+                        "toolbar" => []
+                    ];
                 }
                 $tplGroups[$item[self::DATA_KEY_LINK_GROUP_KEY]]["toolbar"][] = $action;
             }
@@ -167,11 +167,11 @@ class BASE_CMP_ProfileActionToolbar extends OW_Component
             {
                 $label = $action['label'];
                 $action['label'] = $item[self::DATA_KEY_EXTRA_LABEL];
-                $fake_group = array(
+                $fake_group = [
                     'key' => $action['key'],
                     'label' => $label,
-                    'toolbar' => array($action)
-                );
+                    'toolbar' => [$action]
+                ];
                 $action[self::DATA_KEY_EXTRA_LABEL] = $this->getGroupMenu($fake_group);
                 unset($action['html']);
                 $tplActions[] = $action;
@@ -182,17 +182,17 @@ class BASE_CMP_ProfileActionToolbar extends OW_Component
             }
         }
         
-        usort($tplActions, array($this, "sortCallback"));
+        usort($tplActions, [$this, "sortCallback"]);
         $visibleActions = array_slice($tplActions, 0, $this->shownButtonsCount);
         $moreActions = array_slice($tplActions, $this->shownButtonsCount);
 
         $this->assign('toolbar', $visibleActions);
         
-        $moreGroup = array(
+        $moreGroup = [
             "key" => "base.more",
             "label" => OW::getLanguage()->text("base", "more"),
             "toolbar" => $moreActions
-        );
+        ];
         
         array_unshift($tplGroups, $moreGroup);
         
@@ -222,10 +222,10 @@ class BASE_CMP_ProfileActionToolbar extends OW_Component
         }
 
         $contextActionMenu = new BASE_CMP_ContextAction();
-        $event = new OW_Event(self::EVENT_GROUP_MENU_CLASS, array("key" => $group["key"], "userId" => $this->userId), array(
+        $event = new OW_Event(self::EVENT_GROUP_MENU_CLASS, ["key" => $group["key"], "userId" => $this->userId], [
             "ow_profile_toolbar_group",
             "ow_context_action_value_block"
-        ));
+        ]);
 
         OW::getEventManager()->trigger($event);
         $contextActionMenu->setClass(implode(" ", $event->getData()));
@@ -236,11 +236,11 @@ class BASE_CMP_ProfileActionToolbar extends OW_Component
         
         $contextActionMenu->addAction($contextParentAction);
 
-        usort($group["toolbar"], array($this, "sortCallback"));
+        usort($group["toolbar"], [$this, "sortCallback"]);
         
         foreach ( $group["toolbar"] as $action )
         {
-            $attrs = empty($action["attrsArr"]) ? array() : $action["attrsArr"];
+            $attrs = empty($action["attrsArr"]) ? [] : $action["attrsArr"];
             
             $contextAction = new BASE_ContextAction();
             $contextAction->setParentKey($contextParentAction->getKey());

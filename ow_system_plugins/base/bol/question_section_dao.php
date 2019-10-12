@@ -101,7 +101,7 @@ class BOL_QuestionSectionDao extends OW_BaseDao
     {
         if ( $sectionNameList === null || !is_array($sectionNameList) || count($sectionNameList) === 0 )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();

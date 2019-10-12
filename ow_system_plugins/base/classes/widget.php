@@ -118,7 +118,7 @@ abstract class BASE_CLASS_Widget extends OW_Component
     const ICON_WRITE = "ow_ic_write";
 
 
-    private static $placeData = array();
+    private static $placeData = [];
 
     final public static function getPlaceData()
     {
@@ -134,7 +134,7 @@ abstract class BASE_CLASS_Widget extends OW_Component
 
     public static function getSettingList()
     {
-        return array();
+        return [];
     }
 
     public static function validateSettingList( $settingList )
@@ -154,7 +154,7 @@ abstract class BASE_CLASS_Widget extends OW_Component
 
     public static function getStandardSettingValueList()
     {
-        return array();
+        return [];
     }
 
     public static function getAccess()
@@ -162,7 +162,7 @@ abstract class BASE_CLASS_Widget extends OW_Component
         return self::ACCESS_ALL;
     }
 
-    private $runtimeSettings = array();
+    private $runtimeSettings = [];
 
     public function setSettingValue( $setting, $value )
     {

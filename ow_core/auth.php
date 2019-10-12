@@ -114,12 +114,12 @@ class OW_Auth
             throw new InvalidArgumentException('invalid userId');
         }
 
-        $event = new OW_Event(OW_EventManager::ON_BEFORE_USER_LOGIN, array('userId' => $userId));
+        $event = new OW_Event(OW_EventManager::ON_BEFORE_USER_LOGIN, ['userId' => $userId]);
         OW::getEventManager()->trigger($event);
 
         $this->authenticator->login($userId);
 
-        $event = new OW_Event(OW_EventManager::ON_USER_LOGIN, array('userId' => $userId));
+        $event = new OW_Event(OW_EventManager::ON_USER_LOGIN, ['userId' => $userId]);
         OW::getEventManager()->trigger($event);
     }
 
@@ -133,7 +133,7 @@ class OW_Auth
             return;
         }
 
-        $event = new OW_Event(OW_EventManager::ON_USER_LOGOUT, array('userId' => $this->getUserId()));
+        $event = new OW_Event(OW_EventManager::ON_USER_LOGOUT, ['userId' => $this->getUserId()]);
         OW::getEventManager()->trigger($event);
 
         $this->authenticator->logout();

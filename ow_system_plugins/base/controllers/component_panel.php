@@ -70,7 +70,7 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
         $state = $this->componentAdminService->findCache($place);
         if ( empty($state) )
         {
-            $state = array();
+            $state = [];
             $state['defaultComponents'] = $this->componentAdminService->findPlaceComponentList($place);
             $state['defaultPositions'] = $this->componentAdminService->findAllPositionList($place);
             $state['defaultSettings'] = $this->componentAdminService->findAllSettingList();
@@ -90,7 +90,7 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
 
             if ( empty($userCache) )
             {
-                $userCache = array();
+                $userCache = [];
                 $userCache['userComponents'] = $this->componentEntityService->findPlaceComponentList($place, $userId);
                 $userCache['userSettings'] = $this->componentEntityService->findAllSettingList($userId);
                 $userCache['userPositions'] = $this->componentEntityService->findAllPositionList($place, $userId);
@@ -104,9 +104,9 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
         }
         else
         {
-            $userComponents = array();
-            $userSettings = array();
-            $userPositions = array();
+            $userComponents = [];
+            $userSettings = [];
+            $userPositions = [];
         }
 
         if ( empty($defaultScheme) && !empty($schemeList) )
@@ -115,10 +115,10 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
         }
 
         $componentPanel = OW::getClassInstance('BASE_CMP_DragAndDropEntityPanel', $place, $userId, $defaultComponents, $customizeMode, $componentTemplate, $responderController);
-        $componentPanel->setAdditionalSettingList(array(
+        $componentPanel->setAdditionalSettingList([
             'entityId' => $userId,
             'entity' => 'user'
-        ));
+        ]);
 
         if ( !empty($customizeRouts) )
         {
@@ -172,10 +172,10 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
 
         $template = $customize ? 'drag_and_drop_entity_panel_customize' : 'drag_and_drop_entity_panel';
 
-        $customizeUrls = array(
-            'customize' => OW::getRouter()->urlForRoute('base_member_dashboard_customize', array('mode' => 'customize')),
+        $customizeUrls = [
+            'customize' => OW::getRouter()->urlForRoute('base_member_dashboard_customize', ['mode' => 'customize']),
             'normal' => OW::getRouter()->urlForRoute('base_member_dashboard')
-        );
+        ];
 
         $userId = OW::getUser()->getId();
 
@@ -199,24 +199,24 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
         }
 
         $displayName = BOL_UserService::getInstance()->getDisplayName(OW::getUser()->getId());
-        $this->setPageTitle(OW::getLanguage()->text('base', 'my_profile_title', array('username' => $displayName)));
-        $this->setPageHeading(OW::getLanguage()->text('base', 'my_profile_heading', array('username' => $displayName)));
+        $this->setPageTitle(OW::getLanguage()->text('base', 'my_profile_title', ['username' => $displayName]));
+        $this->setPageHeading(OW::getLanguage()->text('base', 'my_profile_heading', ['username' => $displayName]));
 
-        $this->setPageTitle(OW::getLanguage()->text('base', 'profile_view_title', array('username' => $displayName)));
-        OW::getDocument()->setDescription(OW::getLanguage()->text('base', 'profile_view_description', array('username' => $displayName)));
+        $this->setPageTitle(OW::getLanguage()->text('base', 'profile_view_title', ['username' => $displayName]));
+        OW::getDocument()->setDescription(OW::getLanguage()->text('base', 'profile_view_description', ['username' => $displayName]));
 
-        $event = new OW_Event('base.on_get_user_status', array('userId' => OW::getUser()->getId()));
+        $event = new OW_Event('base.on_get_user_status', ['userId' => OW::getUser()->getId()]);
         OW::getEventManager()->trigger($event);
         $status = $event->getData();
 
         if ( $status !== null )
         {
-            $heading = OW::getLanguage()->text('base', 'user_page_heading_status', array('status' => $status, 'username' => $displayName));
+            $heading = OW::getLanguage()->text('base', 'user_page_heading_status', ['status' => $status, 'username' => $displayName]);
             $this->setPageHeading($heading);
         }
         else
         {
-            $this->setPageHeading(OW::getLanguage()->text('base', 'profile_view_heading', array('username' => $displayName)));
+            $this->setPageHeading(OW::getLanguage()->text('base', 'profile_view_heading', ['username' => $displayName]));
         }
 
         $this->setPageHeadingIconClass('ow_ic_user');
@@ -232,10 +232,10 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
 
         $template = $customize ? 'drag_and_drop_entity_panel_customize' : 'drag_and_drop_entity_panel';
 
-        $customizeUrls = array(
-            'customize' => OW::getRouter()->urlForRoute('base_member_profile_customize', array('mode' => 'customize')),
+        $customizeUrls = [
+            'customize' => OW::getRouter()->urlForRoute('base_member_profile_customize', ['mode' => 'customize']),
             'normal' => OW::getRouter()->urlForRoute('base_member_profile')
-        );
+        ];
 
         $userId = OW::getUser()->getId();
 
@@ -269,11 +269,11 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
             throw new AuthorizationException($status['msg']);
         }
 
-        $eventParams = array(
+        $eventParams = [
             'action' => 'base_view_profile',
             'ownerId' => $userDto->id,
             'viewerId' => OW::getUser()->getId()
-        );
+        ];
 
         $event = new OW_Event('privacy_check_permission', $eventParams);
 
@@ -283,17 +283,17 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
         }
         catch ( RedirectException $ex )
         {
-            $exception = new RedirectException(OW::getRouter()->urlForRoute('base_user_privacy_no_permission', array('username' => $userDto->username)));
+            $exception = new RedirectException(OW::getRouter()->urlForRoute('base_user_privacy_no_permission', ['username' => $userDto->username]));
 
             throw $exception;
         }
 
         $displayName = BOL_UserService::getInstance()->getDisplayName($userDto->id);
 
-        $this->setPageTitle(OW::getLanguage()->text('base', 'profile_view_title', array('username' => $displayName)));
-        OW::getDocument()->setDescription(OW::getLanguage()->text('base', 'profile_view_description', array('username' => $displayName)));
+        $this->setPageTitle(OW::getLanguage()->text('base', 'profile_view_title', ['username' => $displayName]));
+        OW::getDocument()->setDescription(OW::getLanguage()->text('base', 'profile_view_description', ['username' => $displayName]));
 
-        $event = new OW_Event('base.on_get_user_status', array('userId' => $userDto->id));
+        $event = new OW_Event('base.on_get_user_status', ['userId' => $userDto->id]);
         OW::getEventManager()->trigger($event);
         $status = $event->getData();
 
@@ -306,12 +306,12 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
         
         if ( $status !== null )
         {
-            $heading = OW::getLanguage()->text('base', 'user_page_heading_status', array('status' => $status, 'username' => $displayName));
+            $heading = OW::getLanguage()->text('base', 'user_page_heading_status', ['status' => $status, 'username' => $displayName]);
             $this->setPageHeading($heading . $headingSuffix);
         }
         else
         {
-            $this->setPageHeading(OW::getLanguage()->text('base', 'profile_view_heading', array('username' => $displayName)) . $headingSuffix);
+            $this->setPageHeading(OW::getLanguage()->text('base', 'profile_view_heading', ['username' => $displayName]) . $headingSuffix);
         }
 
         $this->setPageHeadingIconClass('ow_ic_user');
@@ -326,7 +326,7 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
 
         $template = 'drag_and_drop_entity_panel';
 
-        $this->action($place, $userDto->id, false, array(), $template);
+        $this->action($place, $userDto->id, false, [], $template);
 
         $controllersTemplate = OW::getPluginManager()->getPlugin('BASE')->getCtrlViewDir() . 'widget_panel_profile.html';
         $this->setTemplate($controllersTemplate);
@@ -336,7 +336,7 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
         $vars = BOL_SeoService::getInstance()->getUserMetaInfo($userDto);
 
         // set meta info
-        $params = array(
+        $params = [
             "sectionKey" => "base.users",
             "entityKey" => "userPage",
             "title" => "base+meta_title_user_page",
@@ -344,7 +344,7 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
             "keywords" => "base+meta_keywords_user_page",
             "vars" => $vars,
             "image" => BOL_AvatarService::getInstance()->getAvatarUrl($userDto->getId(), 2)
-        );
+        ];
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }
@@ -371,12 +371,12 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
 
         $userId = $user->id;
 
-        $this->setPageHeading(OW::getLanguage()->text('base', 'profile_view_heading', array('username' => BOL_UserService::getInstance()->getDisplayName($userId))));
+        $this->setPageHeading(OW::getLanguage()->text('base', 'profile_view_heading', ['username' => BOL_UserService::getInstance()->getDisplayName($userId)]));
         $this->setPageHeadingIconClass('ow_ic_user');
 
         $avatar = $avatarService->getAvatarUrl($userId, 2);
         $this->assign('avatar', $avatar ? $avatar : $avatarService->getDefaultAvatarUrl(2));
-        $roles = BOL_AuthorizationService::getInstance()->getRoleListOfUsers(array($userId));
+        $roles = BOL_AuthorizationService::getInstance()->getRoleListOfUsers([$userId]);
         $this->assign('role', !empty($roles[$userId]) ? $roles[$userId] : null);
 
         $userService = BOL_UserService::getInstance();
@@ -438,7 +438,7 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
 
         if ( empty($state) )
         {
-            $state = array();
+            $state = [];
             $state['defaultComponents'] = $this->componentAdminService->findPlaceComponentList($place);
             $state['defaultPositions'] = $this->componentAdminService->findAllPositionList($place);
             $state['defaultSettings'] = $this->componentAdminService->findAllSettingList();
@@ -460,10 +460,10 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
         $componentPanel = new BASE_CMP_DragAndDropIndex($place, $defaultComponents, $customize, $template);
         $componentPanel->allowCustomize($allowCustomize);
 
-        $customizeUrls = array(
-            'customize' => OW::getRouter()->urlForRoute('base_index_customize', array('mode' => 'customize')),
+        $customizeUrls = [
+            'customize' => OW::getRouter()->urlForRoute('base_index_customize', ['mode' => 'customize']),
             'normal' => OW::getRouter()->urlForRoute('base_index')
-        );
+        ];
 
         $componentPanel->customizeControlCunfigure($customizeUrls['customize'], $customizeUrls['normal']);
 
@@ -483,13 +483,13 @@ class BASE_CTRL_ComponentPanel extends OW_ActionController
         $this->addComponent('componentPanel', $componentPanel);
 
         // set meta info
-        $params = array(
+        $params = [
             "sectionKey" => "base.base_pages",
             "entityKey" => "index",
             "title" => "base+meta_title_index",
             "description" => "base+meta_desc_index",
             "keywords" => "base+meta_keywords_index"
-        );
+        ];
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }

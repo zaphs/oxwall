@@ -7,7 +7,7 @@ class UTIL_JsGenerator
      *
      * @var array
      */
-    private $operations = array ();
+    private $operations = [];
 
     /**
      * Constructor.
@@ -109,7 +109,7 @@ class UTIL_JsGenerator
      *
      * @return UTIL_JsGenerator
      */
-    public function callFunction( $fnc, array $args = array(), $resultTo = null )
+    public function callFunction( $fnc, array $args = [], $resultTo = null )
     {
         $jsonArgs = array_map('json_encode', $args);
         $jsFnc = $this->getJsVarName($fnc);
@@ -131,7 +131,7 @@ class UTIL_JsGenerator
      *
      * @return UTIL_JsGenerator
      */
-    public function newFunction ( $fncContent, array $fncArgs = array(), $resultTo = null )
+    public function newFunction ( $fncContent, array $fncArgs = [], $resultTo = null )
     {
 
         $argsDef = implode(',', $fncArgs);
@@ -163,7 +163,7 @@ class UTIL_JsGenerator
      *
      * @return UTIL_JsGenerator
      */
-    public function newObject ( $objectName, $constructorName, array $args = array() )
+    public function newObject ( $objectName, $constructorName, array $args = [])
     {
         $jsonArgs = array_map('json_encode', $args);
         $jsArgs = implode(',', $jsonArgs);
@@ -188,7 +188,7 @@ class UTIL_JsGenerator
      *
      * @return UTIL_JsGenerator
      */
-    public function addScript($code, $assignVars = array())
+    public function addScript($code, $assignVars = [])
     {
         $code = self::composeJsString($code, $assignVars);
 
@@ -202,10 +202,10 @@ class UTIL_JsGenerator
     	return $this;
     }
 
-    public static function composeJsString($code, $assignVars = array())
+    public static function composeJsString($code, $assignVars = [])
     {
         $jsonAssignVars = array_map('json_encode', $assignVars);
-        $vars = array();
+        $vars = [];
         foreach ($jsonAssignVars as $key => $value)
         {
             $vars['{$' . $key .'}'] = $value;
@@ -240,7 +240,7 @@ class UTIL_JsGenerator
      *
      * @return UTIL_JsGenerator
      */
-    public function jQueryCall( $method, $selector = null, array $args = array(), $resultTo = null )
+    public function jQueryCall( $method, $selector = null, array $args = [], $resultTo = null )
     {
         $jsonArgs = array_map('json_encode', $args);
         $operation = ( empty($selector) ? '$' : '$("' . $selector . '")' ) . '.' . $method;
@@ -260,7 +260,7 @@ class UTIL_JsGenerator
      * @param array $args
      * @return UTIL_JsGenerator
      */
-    public function jQueryEvent( $selector, $event, $callbackContent, array $args = array(), $data = array() )
+    public function jQueryEvent( $selector, $event, $callbackContent, array $args = [], $data = [])
     {
         $eventParams = implode(', ', $args);
         $jsonData = empty($data) ? '' : ' ' . json_encode($data) . ',';
@@ -286,7 +286,7 @@ EOT;
      */
     public function clear()
     {
-        $this->operations = array();
+        $this->operations = [];
 
         return $this;
     }

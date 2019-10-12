@@ -57,14 +57,14 @@ class OW_Config
     {
         $configs = $this->configService->findAllConfigs();
 
-        $this->cachedConfigs = array();
+        $this->cachedConfigs = [];
         
         /* @var $config BOL_Config */
         foreach ( $configs as $config )
         {
             if ( !isset($this->cachedConfigs[$config->getKey()]) )
             {
-                $this->cachedConfigs[$config->getKey()] = array();
+                $this->cachedConfigs[$config->getKey()] = [];
             }
 
             $this->cachedConfigs[$config->getKey()][$config->getName()] = $config->getValue();
@@ -91,7 +91,7 @@ class OW_Config
      */
     public function getValues( $key )
     {
-        return ( isset($this->cachedConfigs[$key]) ) ? $this->cachedConfigs[$key] : array();
+        return ( isset($this->cachedConfigs[$key]) ) ? $this->cachedConfigs[$key] : [];
     }
 
     /**

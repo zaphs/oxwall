@@ -101,7 +101,7 @@ class BOL_UserDao extends OW_BaseDao
      * @param array $options
      * @return array
      */
-    public function getQueryFilter( array $tables, array $fields, $options = array() )
+    public function getQueryFilter( array $tables, array $fields, $options = [])
     {
         if ( empty($tables[BASE_CLASS_QueryBuilderEvent::TABLE_USER]) 
                 || empty($fields[BASE_CLASS_QueryBuilderEvent::FIELD_USER_ID]) )
@@ -112,10 +112,10 @@ class BOL_UserDao extends OW_BaseDao
         $tableAlias = $tables[BASE_CLASS_QueryBuilderEvent::TABLE_USER];
         $keyField = $fields[BASE_CLASS_QueryBuilderEvent::FIELD_USER_ID];
         
-        $event = new BASE_CLASS_QueryBuilderEvent(self::EVENT_QUERY_FILTER, array_merge(array(
+        $event = new BASE_CLASS_QueryBuilderEvent(self::EVENT_QUERY_FILTER, array_merge([
             "tables" => $tables,
             "fields" => $fields
-        ), $options));
+        ], $options));
 
         $userTable = "base_user_table_alias";
         $event->addJoin("INNER JOIN `" . $this->getTableName() . "` $userTable ON $userTable.`id` = `$tableAlias`.`$keyField`");
@@ -138,11 +138,11 @@ class BOL_UserDao extends OW_BaseDao
 
         OW::getEventManager()->trigger($event);
 
-        return array(
+        return [
             "join" => $event->getJoin(),
             "where" => $event->getWhere(),
             "order" => $event->getOrder()
-        );
+        ];
     }
 
     /**
@@ -156,13 +156,13 @@ class BOL_UserDao extends OW_BaseDao
      * @param array $params
      * @return array
      */
-    public function getUserQueryFilter( $tableAlias, $keyField, $params = array() )
+    public function getUserQueryFilter( $tableAlias, $keyField, $params = [])
     {
-        return $this->getQueryFilter(array(
+        return $this->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_USER => $tableAlias
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_USER_ID => $keyField
-        ), $params);
+        ], $params);
     }
     
     /**
@@ -235,9 +235,9 @@ class BOL_UserDao extends OW_BaseDao
             return $this->findListByExample($ex);
         }
 
-        $queryParts = $this->getUserQueryFilter("u", "id", array(
+        $queryParts = $this->getUserQueryFilter("u", "id", [
             "method" => "BOL_UserDao::findList"
-        ));
+        ]);
 
         $query = "SELECT `u`.*
     		FROM `{$this->getTableName()}` as `u`
@@ -248,7 +248,7 @@ class BOL_UserDao extends OW_BaseDao
     		LIMIT ?,? ";
 
         $cacheLifeTime = 0;
-        $tag = array();
+        $tag = [];
 
         // cached latest list query
         //TODO: create cache for other pages, now cached only first page.
@@ -256,17 +256,17 @@ class BOL_UserDao extends OW_BaseDao
         {
             //TODO: Enable cache
             $cacheLifeTime = 0;
-            $tag = array(self::CACHE_TAG_LATEST_LIST, self::CACHE_TAG_ALL_USER_LIST);
+            $tag = [self::CACHE_TAG_LATEST_LIST, self::CACHE_TAG_ALL_USER_LIST];
         }
 
-        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), array($first, $count), $cacheLifeTime, $tag);
+        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), [$first, $count], $cacheLifeTime, $tag);
     }
 
     public function findRecentlyActiveList( $first, $count, $admin = false )
     {
-        $queryParts = $this->getUserQueryFilter("u", "id", array(
+        $queryParts = $this->getUserQueryFilter("u", "id", [
             "method" => "BOL_UserDao::findRecentlyActiveList"
-        ));
+        ]);
 
         $query = "SELECT `u`.* FROM `{$this->getTableName()}` AS `u`"
             . ( $admin === true 
@@ -276,14 +276,14 @@ class BOL_UserDao extends OW_BaseDao
             "ORDER BY `u`.`activityStamp` DESC" . ( !empty($queryParts["order"]) ? ", " . $queryParts["order"] : "" ) . "
             LIMIT ?,?";
 
-        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), array($first, $count));
+        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), [$first, $count]);
     }
 
     public function getRecentlyActiveOrderedIdList( $userIdList )
     {
         if ( empty($userIdList) )
         {
-            return array();
+            return [];
         }
 
         $query = "SELECT `u`.id
@@ -297,7 +297,7 @@ class BOL_UserDao extends OW_BaseDao
     public function count( $isAdmin = false )
     {
         $cacheLifeTime = 0;
-        $tag = array();
+        $tag = [];
 
         if ( $isAdmin == true )
         {
@@ -306,9 +306,9 @@ class BOL_UserDao extends OW_BaseDao
         }
         else
         {
-            $queryParts = $this->getUserQueryFilter("u", "id", array(
+            $queryParts = $this->getUserQueryFilter("u", "id", [
                 "method" => "BOL_UserDao::count"
-            ));
+            ]);
 
             $query = "SELECT COUNT(*) FROM `{$this->getTableName()}` as `u`
                 {$queryParts["join"]} WHERE {$queryParts["where"]}";
@@ -316,7 +316,7 @@ class BOL_UserDao extends OW_BaseDao
             // cached latest list query count
             //TODO: create cache for other pages, now cached only first page.
             $cacheLifeTime = self::CACHE_LIFE_TIME;
-            $tag = array(self::CACHE_TAG_LATEST_LIST, self::CACHE_TAG_ALL_USER_LIST);
+            $tag = [self::CACHE_TAG_LATEST_LIST, self::CACHE_TAG_ALL_USER_LIST];
         }
 
         return $this->dbo->queryForColumn($query, null, $cacheLifeTime, $tag);
@@ -324,9 +324,9 @@ class BOL_UserDao extends OW_BaseDao
 
     public function findFeaturedList( $first, $count )
     {
-        $queryParts = $this->getUserQueryFilter("u", "id", array(
+        $queryParts = $this->getUserQueryFilter("u", "id", [
             "method" => "BOL_UserDao::findFeaturedList"
-        ));
+        ]);
 
         $query = "SELECT `u`.* FROM `{$this->getTableName()}` AS `u`
             {$queryParts["join"]}
@@ -338,24 +338,24 @@ class BOL_UserDao extends OW_BaseDao
 
         // cached featured list query
         $cacheLifeTime = 0;
-        $tag = array();
+        $tag = [];
 
         //TODO: create cache for other pages, now cached only first page.
         if ( $first == 0 )
         {
             //TODO: Enable cache
             $cacheLifeTime = 0;
-            $tag = array(self::CACHE_TAG_FEATURED_LIST, self::CACHE_TAG_ALL_USER_LIST);
+            $tag = [self::CACHE_TAG_FEATURED_LIST, self::CACHE_TAG_ALL_USER_LIST];
         }
 
-        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), array($first, $count), $cacheLifeTime, $tag);
+        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), [$first, $count], $cacheLifeTime, $tag);
     }
 
     public function countFeatured()
     {
-        $queryParts = $this->getUserQueryFilter("u", "id", array(
+        $queryParts = $this->getUserQueryFilter("u", "id", [
             "method" => "BOL_UserDao::countFeatured"
-        ));
+        ]);
 
         $query = "SELECT COUNT(*) FROM `{$this->getTableName()}` AS `u`
             {$queryParts["join"]}
@@ -365,16 +365,16 @@ class BOL_UserDao extends OW_BaseDao
 
         // cached featured users count query
         $cacheLifeTime = self::CACHE_LIFE_TIME;
-        $tag = array(self::CACHE_TAG_FEATURED_LIST, self::CACHE_TAG_ALL_USER_LIST);
+        $tag = [self::CACHE_TAG_FEATURED_LIST, self::CACHE_TAG_ALL_USER_LIST];
 
         return $this->dbo->queryForColumn($query, null, $cacheLifeTime, $tag);
     }
 
     public function findOnlineList( $first, $count )
     {
-        $queryParts = $this->getUserQueryFilter("u", "id", array(
+        $queryParts = $this->getUserQueryFilter("u", "id", [
             "method" => "BOL_UserDao::findOnlineList"
-        ));
+        ]);
 
         $query = "SELECT `u`.* FROM `{$this->getTableName()}` AS `u`
             {$queryParts["join"]}
@@ -384,14 +384,14 @@ class BOL_UserDao extends OW_BaseDao
             ORDER BY " . ( !empty($queryParts["order"]) ? $queryParts["order"] . ", " : "" ) . " `o`.`activityStamp` DESC
             LIMIT ?, ?";
 
-        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), array($first, $count));
+        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), [$first, $count]);
     }
 
     public function countOnline()
     {
-        $queryParts = $this->getUserQueryFilter("u", "id", array(
+        $queryParts = $this->getUserQueryFilter("u", "id", [
             "method" => "BOL_UserDao::countOnline"
-        ));
+        ]);
 
         $query = "SELECT  COUNT(*) FROM `{$this->getTableName()}` AS `u`
             {$queryParts["join"]}
@@ -413,7 +413,7 @@ class BOL_UserDao extends OW_BaseDao
             LIMIT ?,?
         ";
 
-        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), array($first, $count));
+        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), [$first, $count]);
     }
 
     public function countSuspended()
@@ -438,7 +438,7 @@ class BOL_UserDao extends OW_BaseDao
             LIMIT ?, ?
         ";
 
-        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), array($first, $count));
+        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), [$first, $count]);
     }
 
     public function countUnverified()
@@ -462,7 +462,7 @@ class BOL_UserDao extends OW_BaseDao
             LIMIT ?,?
         ";
 
-        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), array($first, $count));
+        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), [$first, $count]);
     }
 
     public function countUnapproved()
@@ -480,17 +480,17 @@ class BOL_UserDao extends OW_BaseDao
     public function replaceAccountTypeForUsers( $oldType, $newType )
     {
         $sql = "UPDATE `{$this->getTableName()}` SET `accountType`=? WHERE `accountType`=?";
-        $this->dbo->update($sql, array($newType, $oldType));
+        $this->dbo->update($sql, [$newType, $oldType]);
     }
 
-    public function findMassMailingUsers( $start, $count, $ignoreUnsubscribe = false, $userRoles = array() )
+    public function findMassMailingUsers( $start, $count, $ignoreUnsubscribe = false, $userRoles = [])
     {
         $join = '';
         $where = '';
 
-        $queryParts = $this->getUserQueryFilter("u", "id", array(
+        $queryParts = $this->getUserQueryFilter("u", "id", [
             "method" => "BOL_UserDao::findMassMailingUsers"
-        ));
+        ]);
 
         if ( $ignoreUnsubscribe !== true )
         {
@@ -515,17 +515,17 @@ class BOL_UserDao extends OW_BaseDao
             WHERE {$queryParts["where"]} {$where}
             LIMIT :start, :count ";
 
-        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), array('start' => (int) $start, 'count' => (int) $count));
+        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), ['start' => (int) $start, 'count' => (int) $count]);
     }
 
-    public function findMassMailingUserCount( $ignoreUnsubscribe = false, $userRoles = array() )
+    public function findMassMailingUserCount( $ignoreUnsubscribe = false, $userRoles = [])
     {
         $join = '';
         $where = '';
 
-        $queryParts = $this->getUserQueryFilter("u", "id", array(
+        $queryParts = $this->getUserQueryFilter("u", "id", [
             "method" => "BOL_UserDao::findMassMailingUserCount"
-        ));
+        ]);
 
         if ( $ignoreUnsubscribe !== true )
         {
@@ -558,7 +558,7 @@ class BOL_UserDao extends OW_BaseDao
         $email = trim($email);
 
         $sql = " UPDATE `{$this->getTableName()}` SET email = ? WHERE id = ? LIMIT 1 ";
-        $this->dbo->update($sql, array($email, $userId));
+        $this->dbo->update($sql, [$email, $userId]);
     }
 
     public function updatePassword( $userId, $password )
@@ -566,7 +566,7 @@ class BOL_UserDao extends OW_BaseDao
         $userId = (int) $userId;
 
         $sql = " UPDATE `{$this->getTableName()}` SET password = ? WHERE id = ? LIMIT 1 ";
-        $this->dbo->update($sql, array($password, $userId));
+        $this->dbo->update($sql, [$password, $userId]);
     }
 
     public function findListByRoleId( $roleId, $first, $count )
@@ -579,7 +579,7 @@ class BOL_UserDao extends OW_BaseDao
     		 WHERE `ur`.`roleId` = ?
     		 LIMIT ?, ?";
 
-        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), array($roleId, $first, $count));
+        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), [$roleId, $first, $count]);
     }
 
     public function countByRoleId( $roleId )
@@ -591,7 +591,7 @@ class BOL_UserDao extends OW_BaseDao
     		 	ON( `u`.`id` = `ur`.`userId` )
     		 WHERE `ur`.`roleId` = ? ";
 
-        return $this->dbo->queryForColumn($query, array($roleId));
+        return $this->dbo->queryForColumn($query, [$roleId]);
     }
 
     public function findListByEmailList( $emailList )
@@ -610,7 +610,7 @@ class BOL_UserDao extends OW_BaseDao
     		LIMIT ?, ?
     		';
 
-        return $this->dbo->queryForObjectList($q, $this->getDtoClassName(), array((int) $first, (int) $count));
+        return $this->dbo->queryForObjectList($q, $this->getDtoClassName(), [(int) $first, (int) $count]);
     }
 
     public function countDisapproved()
@@ -632,13 +632,13 @@ class BOL_UserDao extends OW_BaseDao
         return $this->dbo->queryForColumnList($query);
     }
 
-    public function findUserListByQuestionValues( $questionValues, $first, $count, $isAdmin = false, $aditionalParams = array() )
+    public function findUserListByQuestionValues( $questionValues, $first, $count, $isAdmin = false, $aditionalParams = [])
     {
         $userIdList = $this->findUserIdListByQuestionValues($questionValues, $first, $count, $isAdmin, $aditionalParams);
 
         if ( count($userIdList) === 0 )
         {
-            return array();
+            return [];
         }
 
         $ex = new OW_Example();
@@ -647,7 +647,7 @@ class BOL_UserDao extends OW_BaseDao
         return $this->findListByExample($ex);
     }
 
-    public function countUsersByQuestionValues( $questionValues, $isAdmin = false, $aditionalParams = array() )
+    public function countUsersByQuestionValues( $questionValues, $isAdmin = false, $aditionalParams = [])
     {
         $questionNameList = array_keys($questionValues);
 
@@ -668,11 +668,11 @@ class BOL_UserDao extends OW_BaseDao
                 }
                 else
                 {
-                    $params = array(
+                    $params = [
                         'question' => $question,
                         'value' => $questionValues[$question->name],
                         'prefix' => $prefix . $counter
-                    );
+                    ];
 
                     $event = new BASE_CLASS_QueryBuilderEvent("base.question.search_sql", $params);
 
@@ -716,9 +716,9 @@ class BOL_UserDao extends OW_BaseDao
             $where .= " AND `user`.`accountType` = '" . $this->dbo->escapeString($questionValues['accountType']) . "' ";
         }
 
-        $queryParts = $this->getUserQueryFilter("user", "id", array(
+        $queryParts = $this->getUserQueryFilter("user", "id", [
             "method" => "BOL_UserDao::countUsersByQuestionValues"
-        ));
+        ]);
 
         $usersTableName = "`{$this->getTableName()}`";
         
@@ -755,7 +755,7 @@ class BOL_UserDao extends OW_BaseDao
      *
      * @return String
      */
-    public function findUserIdListByQuestionValuesQuery( $questionValues, $isAdmin = false, $aditionalParams = array() )
+    public function findUserIdListByQuestionValuesQuery( $questionValues, $isAdmin = false, $aditionalParams = [])
     {
         $questionNameList = array_keys($questionValues);
 
@@ -776,11 +776,11 @@ class BOL_UserDao extends OW_BaseDao
                 }
                 else
                 {
-                    $params = array(
+                    $params = [
                         'question' => $question,
                         'value' => $questionValues[$question->name],
                         'prefix' => $prefix . $counter
-                    );
+                    ];
 
                     $event = new BASE_CLASS_QueryBuilderEvent("base.question.search_sql", $params);
 
@@ -823,9 +823,9 @@ class BOL_UserDao extends OW_BaseDao
             $where .= " AND `user`.`accountType` = '" . $this->dbo->escapeString($questionValues['accountType']) . "' ";
         }
 
-        $queryParts = $this->getUserQueryFilter("user", "id", array(
+        $queryParts = $this->getUserQueryFilter("user", "id", [
             "method" => "BOL_UserDao::findUserIdListByQuestionValues"
-        ));
+        ]);
 
         $order = '`user`.`activityStamp` DESC';
 
@@ -873,10 +873,10 @@ class BOL_UserDao extends OW_BaseDao
      *
      * @return BOL_User
      */
-    public function findUserIdListByQuestionValues( $questionValues, $first, $count, $isAdmin = false, $aditionalParams = array() )
+    public function findUserIdListByQuestionValues( $questionValues, $first, $count, $isAdmin = false, $aditionalParams = [])
     {
         $query = $this->findUserIdListByQuestionValuesQuery($questionValues,$isAdmin, $aditionalParams);
-        return $this->dbo->queryForColumnList($query . " LIMIT :first, :count ", array_merge(array('first' => $first, 'count' => $count)));
+        return $this->dbo->queryForColumnList($query . " LIMIT :first, :count ", array_merge(['first' => $first, 'count' => $count]));
     }
 
     public function findSearchResultList( $listId, $first, $count )
@@ -885,12 +885,12 @@ class BOL_UserDao extends OW_BaseDao
 
         if ( empty($userIdList) )
         {
-            return array();
+            return [];
         }
 
-        $queryParts = $this->getUserQueryFilter("user", "id", array(
+        $queryParts = $this->getUserQueryFilter("user", "id", [
             "method" => "BOL_UserDao::findUserIdListByQuestionValues"
-        ));
+        ]);
 
         $sql = "SELECT `user`.* FROM `" . $this->getTableName() . "` `user`
             {$queryParts["join"]}
@@ -1033,10 +1033,10 @@ class BOL_UserDao extends OW_BaseDao
     {
         if ( empty($preferenceValues) || !is_array($preferenceValues) )
         {
-            return array();
+            return [];
         }
 
-        $sqlList = array();
+        $sqlList = [];
 
         foreach ( $preferenceValues as $key => $value )
         {
@@ -1069,11 +1069,11 @@ class BOL_UserDao extends OW_BaseDao
             $sqlString .= $sql;
         }
 
-        return $this->dbo->queryForColumnList($sqlString, array('start' => $start, 'count' => $count));
+        return $this->dbo->queryForColumnList($sqlString, ['start' => $start, 'count' => $count]);
     }
-    protected $cachedItems = array();
+    protected $cachedItems = [];
 
-    public function findById( $id, $cacheLifeTime = 0, $tags = array() )
+    public function findById( $id, $cacheLifeTime = 0, $tags = [])
     {
         $id = intval($id);
         
@@ -1092,12 +1092,12 @@ class BOL_UserDao extends OW_BaseDao
         return parent::findById($id);
     }
 
-    public function findByIdList( array $idList, $cacheLifeTime = 0, $tags = array() )
+    public function findByIdList( array $idList, $cacheLifeTime = 0, $tags = [])
     {
         $idList = array_map('intval', $idList);
 
-        $idsToRequire = array();
-        $result = array();
+        $idsToRequire = [];
+        $result = [];
 
         foreach ( $idList as $id )
         {
@@ -1111,7 +1111,7 @@ class BOL_UserDao extends OW_BaseDao
             }
         }
 
-        $items = array();
+        $items = [];
 
         if ( !empty($idsToRequire) )
         {
@@ -1127,12 +1127,12 @@ class BOL_UserDao extends OW_BaseDao
         return $result;
     }
 
-    public function findIdListByIdList( array $idList, $cacheLifeTime = 0, $tags = array() )
+    public function findIdListByIdList( array $idList, $cacheLifeTime = 0, $tags = [])
     {
         $idList = array_map('intval', $idList);
 
-        $idsToRequire = array();
-        $result = array();
+        $idsToRequire = [];
+        $result = [];
 
         foreach ( $idList as $id )
         {
@@ -1146,7 +1146,7 @@ class BOL_UserDao extends OW_BaseDao
             }
         }
 
-        $items = array();
+        $items = [];
 
         if ( !empty($idsToRequire) )
         {

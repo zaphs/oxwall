@@ -38,7 +38,7 @@ require_once UPDATE_DIR_ROOT . "classes" . DS . "update_executor.php";
 require_once OW_DIR_CORE . "ow.php";
 require_once OW_DIR_CORE . "plugin.php";
 
-spl_autoload_register(array("UPDATE_Autoload", "autoload"));
+spl_autoload_register(["UPDATE_Autoload", "autoload"]);
 
 UPDATE_ErrorManager::getInstance(true);
 
@@ -133,7 +133,7 @@ else
 if ( !empty($_GET[UPDATE_UpdateExecutor::URI_VAR_BACK_URI]) )
 {
     $url = build_url_query_string(OW_URL_HOME . urldecode(trim($_GET[UPDATE_UpdateExecutor::URI_VAR_BACK_URI])),
-        array_merge($_GET, array("mode" => $status)));
+        array_merge($_GET, ["mode" => $status]));
     Header("HTTP/1.1 301 Moved Permanently");
     Header("Location: {$url}");
     exit;
@@ -160,11 +160,11 @@ echo '
 
 /* functions */
 
-function build_url_query_string( $url, array $paramsToUpdate = array(), $anchor = null )
+function build_url_query_string( $url, array $paramsToUpdate = [], $anchor = null )
 {
     $requestUrlArray = parse_url($url);
 
-    $currentParams = array();
+    $currentParams = [];
 
     if ( isset($requestUrlArray['query']) )
     {

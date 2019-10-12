@@ -58,11 +58,11 @@ class OW_Feedback
         }
         else
         {
-            $this->feedback = array(
-                'error' => array(),
-                'info' => array(),
-                'warning' => array()
-            );
+            $this->feedback = [
+                'error' => [],
+                'info' => [],
+                'warning' => []
+            ];
         }
     }
 

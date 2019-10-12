@@ -61,11 +61,11 @@ class OW_Dispatcher
     /**
      * @var array
      */
-    private $catchAllRequestsAttributes = array();
+    private $catchAllRequestsAttributes = [];
     /**
      * @var array
      */
-    private $catchAllRequestsExcludes = array();
+    private $catchAllRequestsExcludes = [];
 
     /**
      * @return array
@@ -96,10 +96,10 @@ class OW_Dispatcher
     {
         if ( empty($this->catchAllRequestsExcludes[$key]) )
         {
-            $this->catchAllRequestsExcludes[$key] = array();
+            $this->catchAllRequestsExcludes[$key] = [];
         }
 
-        $this->catchAllRequestsExcludes[$key][] = array(self::CATCH_ALL_REQUEST_KEY_CTRL => $controller, self::CATCH_ALL_REQUEST_KEY_ACTION => $action);
+        $this->catchAllRequestsExcludes[$key][] = [self::CATCH_ALL_REQUEST_KEY_CTRL => $controller, self::CATCH_ALL_REQUEST_KEY_ACTION => $action];
     }
 
     /**
@@ -116,7 +116,7 @@ class OW_Dispatcher
      */
     public function setIndexPageAttributes( $controller, $action = 'index' )
     {
-        $this->indexPageAttributes = array(self::ATTRS_KEY_CTRL => $controller, self::ATTRS_KEY_ACTION => $action);
+        $this->indexPageAttributes = [self::ATTRS_KEY_CTRL => $controller, self::ATTRS_KEY_ACTION => $action];
     }
 
     /**
@@ -133,7 +133,7 @@ class OW_Dispatcher
      */
     public function setStaticPageAttributes( $controller, $action = 'index' )
     {
-        $this->staticPageAttributes = array(self::ATTRS_KEY_CTRL => $controller, self::ATTRS_KEY_ACTION => $action);
+        $this->staticPageAttributes = [self::ATTRS_KEY_CTRL => $controller, self::ATTRS_KEY_ACTION => $action];
     }
 
     /**
@@ -154,11 +154,11 @@ class OW_Dispatcher
             throw new Redirect404Exception();
         }
 
-        $this->dispatchAttributes = array(
+        $this->dispatchAttributes = [
             self::ATTRS_KEY_CTRL => trim($attributes[OW_Route::DISPATCH_ATTRS_CTRL]),
             self::ATTRS_KEY_ACTION => ( empty($attributes[OW_Route::DISPATCH_ATTRS_ACTION]) ? null : trim($attributes[OW_Route::DISPATCH_ATTRS_ACTION]) ),
-            self::ATTRS_KEY_VARLIST => ( empty($attributes[OW_Route::DISPATCH_ATTRS_VARLIST]) ? array() : $attributes[OW_Route::DISPATCH_ATTRS_VARLIST])
-        );
+            self::ATTRS_KEY_VARLIST => ( empty($attributes[OW_Route::DISPATCH_ATTRS_VARLIST]) ? [] : $attributes[OW_Route::DISPATCH_ATTRS_VARLIST])
+        ];
     }
 
     /**
@@ -227,7 +227,7 @@ class OW_Dispatcher
             throw new Redirect404Exception();
         }
 
-        $action->invokeArgs($controller, array(self::ATTRS_KEY_VARLIST => ( empty($this->dispatchAttributes[self::ATTRS_KEY_VARLIST]) ? array() : $this->dispatchAttributes[self::ATTRS_KEY_VARLIST] )));
+        $action->invokeArgs($controller, [self::ATTRS_KEY_VARLIST => ( empty($this->dispatchAttributes[self::ATTRS_KEY_VARLIST]) ? [] : $this->dispatchAttributes[self::ATTRS_KEY_VARLIST] )]);
 
         // set default template for controller action if template wasn't set
         if ( $controller->getTemplate() === null )
@@ -285,13 +285,13 @@ class OW_Dispatcher
             {
                 $route = isset($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_ROUTE]) ? trim($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_ROUTE]) : null;
 
-                $params = isset($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_PARAMS]) ? $this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_PARAMS] : array();
+                $params = isset($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_PARAMS]) ? $this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_PARAMS] : [];
 
                 $redirectUrl = ($route !== null) ?
                     OW::getRouter()->urlForRoute($route, $params) :
                     OW::getRouter()->urlFor($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_CTRL], $this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_ACTION], $params);
 
-                $redirectUrl = OW::getRequest()->buildUrlQueryString($redirectUrl, array('back_uri' => OW::getRequest()->getRequestUri()));
+                $redirectUrl = OW::getRequest()->buildUrlQueryString($redirectUrl, ['back_uri' => OW::getRequest()->getRequestUri()]);
 
                 if ( isset($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_JS]) && (bool) $this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_JS] )
                 {
@@ -302,12 +302,12 @@ class OW_Dispatcher
                         if ( $this->dispatchAttributes[self::CATCH_ALL_REQUEST_KEY_CTRL] === 'BASE_CTRL_User' && $this->dispatchAttributes[self::CATCH_ALL_REQUEST_KEY_ACTION] === 'standardSignIn' )
                         {
                             $backUri = isset($_GET['back_uri']) ? $_GET['back_uri'] : OW::getRequest()->getRequestUri();
-                            OW::getDocument()->addOnloadScript("window.location = '" . OW::getRequest()->buildUrlQueryString($redirectUrl, array('back_uri' => $backUri)) . "'");
+                            OW::getDocument()->addOnloadScript("window.location = '" . OW::getRequest()->buildUrlQueryString($redirectUrl, ['back_uri' => $backUri]) . "'");
                             return null;
                         }
                         else
                         {
-                            $ru = OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlForRoute('static_sign_in'), array('back_uri' => OW::getRequest()->getRequestUri()));
+                            $ru = OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlForRoute('static_sign_in'), ['back_uri' => OW::getRequest()->getRequestUri()]);
                             OW::getApplication()->redirect($ru);
                         }
                     }

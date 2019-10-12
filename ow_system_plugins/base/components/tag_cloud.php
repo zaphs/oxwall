@@ -159,10 +159,10 @@ class BASE_CMP_TagCloud extends OW_Component
             }
         }
 
-        $tags = array();
+        $tags = [];
 
         // prepare array to assign
-        $list = empty($this->tagList) ? array() : $this->tagList;
+        $list = empty($this->tagList) ? [] : $this->tagList;
 
         foreach ( $list as $key => $value )
         {
@@ -171,7 +171,7 @@ class BASE_CMP_TagCloud extends OW_Component
                 continue;
             }
 
-            $tags[$key]['url'] = ($this->routeName === null) ? OW::getRequest()->buildUrlQueryString($this->url, array('tag' => $value['label'])) : OW::getRouter()->urlForRoute($this->routeName, array('tag' => $value['label']));
+            $tags[$key]['url'] = ($this->routeName === null) ? OW::getRequest()->buildUrlQueryString($this->url, ['tag' => $value['label']]) : OW::getRouter()->urlForRoute($this->routeName, ['tag' => $value['label']]);
 
             $fontSize = ($maxCount === $minCount ? ($maxFontSize / 2) : floor(((int) $value['count'] - $minCount) / ($maxCount - $minCount) * ($maxFontSize - $minFontSize) + $minFontSize));
 

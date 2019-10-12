@@ -31,33 +31,33 @@
  */
 class BASE_CMP_TextFormatter extends OW_Component
 {
-    public static $tagList = array(
-        array(
+    public static $tagList = [
+        [
             'tag' => 'a',
             'pair' => true,
-            'attributes' => array('href')
-        ),
-        array(
+            'attributes' => ['href']
+        ],
+        [
             'tag' => 'img',
             'pair' => false,
-            'attributes' => array('src', 'class', 'style')
-        ),
-        array(
+            'attributes' => ['src', 'class', 'style']
+        ],
+        [
             'tag' => 'strong',
             'pair' => true,
-            'attributes' => array()
-        ),
-        array(
+            'attributes' => []
+        ],
+        [
             'tag' => 'u',
             'pair' => true,
-            'attributes' => array()
-        ),
-        array(
+            'attributes' => []
+        ],
+        [
             'tag' => 'i',
             'pair' => true,
-            'attributes' => array()
-        )
-    );
+            'attributes' => []
+        ]
+    ];
 
     function __construct( $plugin, $elId, $dl, $dr, $controls, $template = null )
     {
@@ -87,7 +87,7 @@ class BASE_CMP_TextFormatter extends OW_Component
 
         $js = '$(function(){';
 
-        $mlist = array('image');
+        $mlist = ['image'];
 
         $this->assign('mlist', $mlist);
 
@@ -262,7 +262,7 @@ class BASE_CMP_TextFormatter extends OW_Component
 
             $tagName = $tag['tag'];
             $pair = $tag['pair'];
-            $attributes = (!empty($tag['attributes']) && is_array($tag['attributes']) ) ? $tag['attributes'] : array();
+            $attributes = (!empty($tag['attributes']) && is_array($tag['attributes']) ) ? $tag['attributes'] : [];
 
             $pairRegexp = $pair ? '(.*?)?\[[\s]*\/[\s]*' . $tagName . '\s*\]' : '';
 

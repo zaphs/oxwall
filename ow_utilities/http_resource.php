@@ -12,12 +12,12 @@ class UTIL_HttpResource
      */
     public static function getContents( $url, $timeout = 20 )
     {
-        $context = stream_context_create( array(
-            'http'=>array(
+        $context = stream_context_create( [
+            'http'=> [
                 'timeout' => $timeout,
                 'header' => "User-Agent: Oxwall Content Fetcher\r\n"
-            )
-        ));
+            ]
+        ]);
 
         return file_get_contents($url, false, $context);
     }

@@ -33,7 +33,7 @@ class BASE_CTRL_ApiResponder extends OW_ActionController
 {
     private function validateParams( $params, $requiredList )
     {
-        $fails = array();
+        $fails = [];
 
         foreach ( $requiredList as $required )
         {
@@ -53,11 +53,11 @@ class BASE_CTRL_ApiResponder extends OW_ActionController
     {
         throw new Exception('This method is deprecated');
 
-        $this->validateParams($params, array('eventName'));
+        $this->validateParams($params, ['eventName']);
 
         $eventName = trim($params['eventName']);
-        $eventParams = empty($params['params']) ? array() : $params['params'];
-        $eventData = empty($params['data']) ? array() : $params['data'];
+        $eventParams = empty($params['params']) ? [] : $params['params'];
+        $eventData = empty($params['data']) ? [] : $params['data'];
 
         $event = new OW_Event($eventName, $eventParams, $eventData);
 

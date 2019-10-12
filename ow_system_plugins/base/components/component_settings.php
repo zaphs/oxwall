@@ -36,15 +36,15 @@ class BASE_CMP_ComponentSettings extends OW_Component
      *
      * @var array
      */
-    private $defaultSettingList = array();
+    private $defaultSettingList = [];
     /**
      * Component default settings
      *
      * @var array
      */
-    private $componentSettingList = array();
-    private $standardSettingValueList = array();
-    private $hiddenFieldList = array();
+    private $componentSettingList = [];
+    private $standardSettingValueList = [];
+    private $hiddenFieldList = [];
     private $access;
 
     private $uniqName;
@@ -54,7 +54,7 @@ class BASE_CMP_ComponentSettings extends OW_Component
      *
      * @param array $menuItems
      */
-    public function __construct( $uniqName, array $componentSettings = array(), array $defaultSettings = array(), $access = null )
+    public function __construct( $uniqName, array $componentSettings = [], array $defaultSettings = [], $access = null )
     {
         parent::__construct();
 
@@ -126,7 +126,7 @@ class BASE_CMP_ComponentSettings extends OW_Component
 
         $authorizationService = BOL_AuthorizationService::getInstance();
 
-        $roleList = array();
+        $roleList = [];
         $isModerator = OW::getUser()->isAuthorized('base');
         
         if ( $this->access == BASE_CLASS_Widget::ACCESS_GUEST || !$isModerator )
@@ -154,7 +154,7 @@ class BASE_CMP_ComponentSettings extends OW_Component
 
 class IconCollection
 {
-    private static $all = array(
+    private static $all = [
         "ow_ic_add",
         "ow_ic_aloud",
         "ow_ic_app",
@@ -217,7 +217,7 @@ class IconCollection
         "ow_ic_video",
         "ow_ic_warning",
         "ow_ic_write"
-    );
+    ];
 
     public static function all()
     {
@@ -226,11 +226,11 @@ class IconCollection
 
     public static function allWithLabel()
     {
-        $out = array();
+        $out = [];
 
         foreach ( self::$all as $icon )
         {
-            $item = array();
+            $item = [];
             $item['class'] = $icon;
             $item['label'] = ucfirst(str_replace('_', ' ', substr($icon, 6)));
             $out[] = $item;

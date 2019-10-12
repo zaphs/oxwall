@@ -197,7 +197,7 @@ final class BOL_BillingService
         $this->billingSaleDao->save($sale);
         
         
-        $event = new OW_Event(self::EVENT_ON_AFTER_INIT_SALE, array("saleDbo" => $sale, "gateway" => $gateway));
+        $event = new OW_Event(self::EVENT_ON_AFTER_INIT_SALE, ["saleDbo" => $sale, "gateway" => $gateway]);
         OW::getEventManager()->trigger($event);
         
         
@@ -272,7 +272,7 @@ final class BOL_BillingService
         {
             $sale->status = BOL_BillingSaleDao::STATUS_DELIVERED;
             $this->saveSale($sale);
-            $event = new OW_Event(self::EVENT_ON_AFTER_DELIVER_SALE, array("saleDbo" => $sale, "adapter" => $adapter));
+            $event = new OW_Event(self::EVENT_ON_AFTER_DELIVER_SALE, ["saleDbo" => $sale, "adapter" => $adapter]);
             OW::getEventManager()->trigger($event);
             return true;
         }
@@ -694,7 +694,7 @@ final class BOL_BillingService
     {
         if ( isset($hash) && $sale = $this->getSaleByHash($hash) )
         {
-            return OW::getRouter()->urlForRoute('base_billing_completed', array('hash' => $hash));
+            return OW::getRouter()->urlForRoute('base_billing_completed', ['hash' => $hash]);
         }
         else
         {
@@ -712,7 +712,7 @@ final class BOL_BillingService
     {
         if ( isset($hash) && $sale = $this->getSaleByHash($hash) )
         {
-            return OW::getRouter()->urlForRoute('base_billing_canceled', array('hash' => $hash));
+            return OW::getRouter()->urlForRoute('base_billing_canceled', ['hash' => $hash]);
         }
         else
         {
@@ -756,7 +756,7 @@ final class BOL_BillingService
     {
         $currList = $this->getSalesCurrencies();
 
-        $incomeArr = array();
+        $incomeArr = [];
         
         foreach ( $currList as $currency )
         {
@@ -792,7 +792,7 @@ final class BOL_BillingService
         
         $pluginService = BOL_PluginService::getInstance();
         
-        $list = array();
+        $list = [];
         foreach ( $products as $prod )
         {
             $list[$prod->id]['dto'] = $prod;
@@ -866,7 +866,7 @@ final class BOL_BillingService
      */
     public function getCurrencies()
     {
-        $currencies = array(
+        $currencies = [
             'AED' => "UAE Dirham",
             'AFN' => "Afghani",
             'ALL' => "Lek",
@@ -1030,7 +1030,7 @@ final class BOL_BillingService
             'ZAR' => "Rand",
             'ZMK' => "Zambian Kwacha",
             'ZWL' => "Zimbabwe Dollar"
-        );
+        ];
 
         return $currencies;
     }

@@ -78,7 +78,7 @@ class ADMIN_CMP_AdminMenu extends BASE_CMP_Menu
      */
     public function getFirstElement()
     {
-        usort($this->menuItems, array(BOL_NavigationService::getInstance(), 'sortObjectListByAsc'));
+        usort($this->menuItems, [BOL_NavigationService::getInstance(), 'sortObjectListByAsc']);
         return $this->menuItems[0];
     }
 

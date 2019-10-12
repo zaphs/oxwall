@@ -56,9 +56,9 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
     {
         $router = OW_Router::getInstance();
 
-        $pageActions = array(array('name' => 'settings', 'iconClass' => 'ow_ic_gear_wheel'), array('name' => 'css', 'iconClass' => 'ow_ic_files'), array('name' => 'graphics', 'iconClass' => 'ow_ic_picture'));
+        $pageActions = [['name' => 'settings', 'iconClass' => 'ow_ic_gear_wheel'], ['name' => 'css', 'iconClass' => 'ow_ic_files'], ['name' => 'graphics', 'iconClass' => 'ow_ic_picture']];
 
-        $menuItems = array();
+        $menuItems = [];
 
         foreach ( $pageActions as $key => $item )
         {
@@ -132,7 +132,7 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
             $this->themeService->saveTheme($dto);
             $this->themeService->updateCustomCssFile($dto->getId());
 
-            echo json_encode(array('message' => OW::getLanguage()->text('admin', 'css_edit_success_message')));
+            echo json_encode(['message' => OW::getLanguage()->text('admin', 'css_edit_success_message')]);
         }
 
         if ( !OW::getRequest()->isAjax() )
@@ -154,16 +154,16 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
 
     private function imageObjToArray(BOL_ThemeImage $image)
     {
-        return array(
+        return [
             'url' => OW::getStorage()->getFileUrl($this->themeService->getUserfileImagesDir() . $image->getFilename()),
-            'delUrl' => OW::getRouter()->urlFor(__CLASS__, 'deleteImage', array('image-id' => $image->getId())),
+            'delUrl' => OW::getRouter()->urlFor(__CLASS__, 'deleteImage', ['image-id' => $image->getId()]),
             'cssUrl' => $this->themeService->getUserfileImagesUrl() . $image->getFilename(),
             'id' => $image->getId(),
             'dimensions' => $image->dimensions,
             'filesize' => $image->filesize,
             'title' => $image->title,
             'uploaddate' => UTIL_DateTime::formatSimpleDate($image->addDatetime, true)
-        );
+        ];
     }
 
     public function graphics()
@@ -174,7 +174,7 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
         }
 
         $images = $this->themeService->findAllCssImages();
-        $assignArray = array();
+        $assignArray = [];
 
         /* @var $image BOL_ThemeImage */
         foreach ( $images as $image )
@@ -191,7 +191,7 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
         $this->assign('confirmMessage', OW::getLanguage()->text('admin', 'theme_graphics_image_delete_confirm_message'));
 
         $cmp = OW::getClassInstance('ADMIN_CMP_UploadedFileList');
-        $this->initFloatbox(array('layout' => 'floatbox'));
+        $this->initFloatbox(['layout' => 'floatbox']);
         $this->addComponent('filelist', $cmp);
 
         if ( OW::getRequest()->isPost() )
@@ -220,7 +220,7 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
                 $items = isset($_POST['delete']) ? $_POST['delete'] : null;
                 if (is_null($items))
                 {
-                    $result = json_encode(array('error' => OW::getLanguage()->text('admin', 'not_enough_params')));
+                    $result = json_encode(['error' => OW::getLanguage()->text('admin', 'not_enough_params')]);
                 }
                 else
                 {
@@ -229,14 +229,14 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
                         $this->themeService->deleteImage((int) $item);
                         OW::getFeedback()->info(OW::getLanguage()->text('admin', 'theme_graphics_delete_success_message'));
                     }
-                    $result = json_encode(array(
+                    $result = json_encode([
                         'success' => OW::getLanguage()->text('admin', 'theme_graphics_delete_multiple_success_message'),
                         'reload' => true
-                    ));
+                    ]);
                 }
                 break;
             default:
-                $result = json_encode(array('error' => OW::getLanguage()->text('admin', 'undefined_action')));
+                $result = json_encode(['error' => OW::getLanguage()->text('admin', 'undefined_action')]);
                 break;
         }
         echo $result;
@@ -249,7 +249,7 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
         {
             $callFunc = (string)$_POST['ajaxFunc'];
 
-            $result = call_user_func(array($this, $callFunc), $_POST);
+            $result = call_user_func([$this, $callFunc], $_POST);
         }
         else
         {
@@ -270,17 +270,17 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
         $photoId = (int)$params['photoId'];
         if ( ($photo = $this->themeService->findImageById($photoId)) === null )
         {
-            return array('result' => 'error');
+            return ['result' => 'error'];
         }
 
-        $data = array();
+        $data = [];
         if ( isset($_POST['date']) && !empty($_POST['date']) )
         {
             $data['end'] = strtotime($_POST['date'] . ' 23:59:59');
             $data['start'] = strtotime(date('Y-m-01 00:00:00', $data['end']));
         }
 
-        $resp = array('result' => true);
+        $resp = ['result' => true];
 
         if ( !empty($params['photos']) )
         {
@@ -328,7 +328,7 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
 
     private function prepareMarkup( $photo, $layout = null )
     {
-        $markup = array();
+        $markup = [];
 
         $photo->title = UTIL_HtmlTag::autoLink($photo->title);
         $photo->url = OW::getStorage()->getFileUrl($this->themeService->getUserfileImagesDir() . $photo->getFilename());
@@ -414,12 +414,12 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
             $end = null;
         }
 
-        $result = BOL_ThemeService::getInstance()->filterCssImages(array(
+        $result = BOL_ThemeService::getInstance()->filterCssImages([
             'start' => $start,
             'end' => $end,
             'page' => $page,
             'limit' => $imagesLimit,
-        ));
+        ]);
 
         return $this->generatePhotoList($result);
     }
@@ -439,10 +439,12 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
             }
         }
 
-        return array('status' => 'success', 'data' => array(
+        return [
+            'status' => 'success', 'data' => [
             'photoList' => $photos,
             'unique' => $unique
-        ));
+            ]
+        ];
     }
 
     public function resetGraphics()
@@ -469,11 +471,11 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
     {
         $imageId = (int) $params['entityId'];
         $this->themeService->deleteImage($imageId);
-        return array(
+        return [
             'result' => true,
             'msg' => OW::getLanguage()->text('admin', 'theme_graphics_delete_success_message'),
             'imageId' => $imageId
-        );
+        ];
     }
 
     public function ajaxSaveImageData( $params )
@@ -485,10 +487,10 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
             $image->title = $params['title'];
         }
         BOL_ThemeImageDao::getInstance()->save($image);
-        return array(
+        return [
             'result' => true,
             'imageId' => $imageId
-        );
+        ];
     }
 
     private function initFloatbox( $params )
@@ -500,7 +502,7 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
             return;
         }
 
-        $layout = (!empty($params['layout']) && in_array($params['layout'], array('page', 'floatbox'))) ? $params['layout'] : 'floatbox';
+        $layout = (!empty($params['layout']) && in_array($params['layout'], ['page', 'floatbox'])) ? $params['layout'] : 'floatbox';
 
         $document = OW::getDocument();
         $basePlugin = OW::getPluginManager()->getPlugin('base');
@@ -535,7 +537,7 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
                     urlHome: {value: {$urlHome}, enumerable: true},
                     isDisabled: {value: {$isDisabled}, enumerable: true},
                     isEnableFullscreen: {value: {$isEnableFullscreen}, enumerable: true}
-                });', array(
+                });', [
                     'ajaxResponder' => OW::getRouter()->urlFor('ADMIN_CTRL_Theme', 'ajaxResponder'),
                     'rateUserId' => OW::getUser()->getId(),
                     'layout' => $layout,
@@ -543,7 +545,7 @@ class ADMIN_CTRL_Theme extends ADMIN_CTRL_Abstract
                     'urlHome' => OW_URL_HOME,
                     'isDisabled' => false,
                     'isEnableFullscreen' => true
-                )
+                ]
             )
         );
 
@@ -597,7 +599,7 @@ class AddCssForm extends Form
 
 class ThemeEditForm extends Form
 {
-    private $formElements = array();
+    private $formElements = [];
 
     public function __construct( $controls )
     {
@@ -605,14 +607,14 @@ class ThemeEditForm extends Form
 
         parent::__construct('theme-edit');
 
-        $typeArray = array(
+        $typeArray = [
             'text' => 'TextField',
             'color' => 'ColorField',
             'font' => 'FontFamilyField',
-            'image' => 'ImageField'        
-        );
+            'image' => 'ImageField'
+        ];
 
-        $inputArray = array();
+        $inputArray = [];
         
         foreach ( $controls as $value )
         {
@@ -626,7 +628,7 @@ class ThemeEditForm extends Form
             
             if(method_exists($field, "setMobile") )
             {
-                call_user_func(array($field, "setMobile"), $value["mobile"]);
+                call_user_func([$field, "setMobile"], $value["mobile"]);
             }
 
             if ( $this->getElement($field->getName()) !== null )
@@ -639,10 +641,10 @@ class ThemeEditForm extends Form
 
             if ( !array_key_exists(trim($value['section']), $this->formElements) )
             {
-                $this->formElements[trim($value['section'])] = array();
+                $this->formElements[trim($value['section'])] = [];
             }
 
-            $this->formElements[trim($value['section'])][] = array('name' => $value['key'], 'title' => $value['label'], 'desc' => $value['description']);
+            $this->formElements[trim($value['section'])][] = ['name' => $value['key'], 'title' => $value['label'], 'desc' => $value['description']];
         }
 
         ksort($this->formElements);
@@ -667,7 +669,7 @@ class FontFamilyField extends Selectbox
         parent::__construct($name);
 
         $this->setOptions(
-            array(
+            [
                 'default' => 'Default',
                 'Arial, Helvetica, sans-serif' => 'Arial, Helvetica, sans-serif',
                 'Times New Roman, Times, serif' => 'Times New Roman, Times, serif',
@@ -675,7 +677,7 @@ class FontFamilyField extends Selectbox
                 'Georgia, Times New Roman, Times, serif' => 'Georgia, Times New Roman, Times, serif',
                 'Verdana, Arial, Helvetica, sans-serif' => 'Verdana, Arial, Helvetica, sans-serif',
                 'Geneva, Arial, Helvetica, sans-serif' => 'Geneva, Arial, Helvetica, sans-serif'
-            )
+            ]
         );
 
         $this->setHasInvitation(false);
@@ -729,7 +731,7 @@ class ImageField extends FormElement
             OW::getDocument()->addOnloadScript($script);
             
             $output .= '<div class="clearfix"><a id="' . $randId . '" href="javascript://" class="theme_control theme_control_image" style="background-image:' . $this->value . ';"></a>
-                <div style="float:left;padding:10px 0 0 10px;"><a href="javascript://" onclick="window.location=\'' . OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlFor('ADMIN_CTRL_Theme', 'resetGraphics'), array('name' => $this->getName())) . '\'">' . OW::getLanguage()->text('admin', 'themes_settings_reset_label') . '</a></div></div>
+                <div style="float:left;padding:10px 0 0 10px;"><a href="javascript://" onclick="window.location=\'' . OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlFor('ADMIN_CTRL_Theme', 'resetGraphics'), ['name' => $this->getName()]) . '\'">' . OW::getLanguage()->text('admin', 'themes_settings_reset_label') . '</a></div></div>
                 <div style="display:none;"><div class="preview_graphics" id="image_view_' . $this->getName() . '" style="background-image:' . $this->value . '"></div></div>';
         }
 

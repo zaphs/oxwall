@@ -90,7 +90,7 @@ class BOL_LanguageValueDao extends OW_BaseDao
             }
         }
 
-        $query_part = array();
+        $query_part = [];
 
         $query_part['optional-prefix_criteria'] = ( $prefix !== null && $prefixId > 0 ) ? "`p`.`id` = {$prefixId}" : '1';
 
@@ -111,7 +111,7 @@ class BOL_LanguageValueDao extends OW_BaseDao
 		LIMIT ?, ?
 		";
 
-        return $this->dbo->queryForList($query, array($first, $count));
+        return $this->dbo->queryForList($query, [$first, $count]);
     }
 
     public function findSearchResultKeyList( $languageId, $first, $count, $search )
@@ -133,7 +133,7 @@ class BOL_LanguageValueDao extends OW_BaseDao
 			 LIMIT ?, ?
 			";
 
-        return $this->dbo->queryForList($_query, array("%{$search}%", $languageId, $first, $count));
+        return $this->dbo->queryForList($_query, ["%{$search}%", $languageId, $first, $count]);
     }
 
     public function findKeySearchResultKeyList( $languageId, $first, $count, $search )
@@ -151,7 +151,7 @@ class BOL_LanguageValueDao extends OW_BaseDao
 			 LIMIT :first, :count
 			";
 
-        return $this->dbo->queryForList($_query, array('keySearch'=>"%{$search}%", 'first'=>$first, 'count'=>$count));
+        return $this->dbo->queryForList($_query, ['keySearch' =>"%{$search}%", 'first' =>$first, 'count' =>$count]);
     }
 
 
@@ -172,7 +172,7 @@ class BOL_LanguageValueDao extends OW_BaseDao
 			 WHERE `v`.`value` LIKE ? AND `v`.`languageId` = ? 
 			";
 
-        return $this->dbo->queryForColumn($_query, array("%{$search}%", $languageId));
+        return $this->dbo->queryForColumn($_query, ["%{$search}%", $languageId]);
     }
 
     public function countKeySearchResultKeys( $languageId, $search )
@@ -188,7 +188,7 @@ class BOL_LanguageValueDao extends OW_BaseDao
 			 WHERE `k`.`key` LIKE :keySearch
 			";
 
-        return $this->dbo->queryForColumn($_query, array('keySearch'=>"%{$search}%"));
+        return $this->dbo->queryForColumn($_query, ['keySearch' =>"%{$search}%"]);
     }
 
     public function findValue( $languageId, $keyId )

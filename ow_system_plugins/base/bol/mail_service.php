@@ -41,7 +41,7 @@ class BOL_MailService
      * @var BOL_MailDao
      */
     private $mailDao;
-    private $defaultMailSettingList = array();
+    private $defaultMailSettingList = [];
 
     private function __construct()
     {
@@ -51,10 +51,10 @@ class BOL_MailService
         $siteEmail = OW::getConfig()->getValue('base', 'site_email');
         $senderSuffix = defined('OW_SENDER_MAIL_SUFFIX') ? OW_SENDER_MAIL_SUFFIX : null;
 
-        $this->defaultMailSettingList = array(
-            'sender' => array($siteEmail, $siteName),
+        $this->defaultMailSettingList = [
+            'sender' => [$siteEmail, $siteName],
             'senderSuffix' => intval($senderSuffix)
-        );
+        ];
     }
     /**
      * Class instance
@@ -138,13 +138,13 @@ class BOL_MailService
     {
         $configs = OW::getConfig()->getValues('base');
 
-        return array(
+        return [
             'connectionPrefix' => $configs['mail_smtp_connection_prefix'],
             'host' => $configs['mail_smtp_host'],
             'port' => $configs['mail_smtp_port'],
             'user' => $configs['mail_smtp_user'],
             'password' => $configs['mail_smtp_password']
-        );
+        ];
     }
 
     /**
@@ -240,7 +240,7 @@ class BOL_MailService
         $mailer = $this->getMailer();
         $mailState = $mail->saveToArray();
 
-        $event = new OW_Event('base.mail_service.send.check_mail_state', array(), $mailState);
+        $event = new OW_Event('base.mail_service.send.check_mail_state', [], $mailState);
         OW::getEventManager()->trigger($event);
         $mailState = $event->getData();
 
@@ -280,7 +280,7 @@ class BOL_MailService
     private function mailToDtoList( BASE_CLASS_Mail $mail )
     {
         $mailState = $mail->saveToArray();
-        $resultList = array();
+        $resultList = [];
 
         foreach ( $mailState['recipientEmailList'] as $email )
         {
@@ -314,7 +314,7 @@ class BOL_MailService
 
     public function addListToQueue( array $mailList )
     {
-        $fullDtoList = array();
+        $fullDtoList = [];
 
         foreach ( $mailList as $mail )
         {
@@ -336,7 +336,7 @@ class BOL_MailService
     {
         $list = $this->mailDao->findList($count);
 
-        $processedIdList = array();
+        $processedIdList = [];
 
         foreach ( $list as $item )
         {

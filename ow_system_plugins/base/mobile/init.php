@@ -56,7 +56,7 @@ $router->addRoute(new OW_Route('base_member_dashboard', 'dashboard', 'BASE_MCTRL
 $router->addRoute(new OW_Route('base_index', 'index', 'BASE_MCTRL_WidgetPanel', 'index'));
 //$router->addRoute(new OW_Route('base_user_profile', 'user/:username', 'BASE_MCTRL_WidgetPanel', 'profile'));
 
-$router->addRoute(new OW_Route('users', 'users', 'BASE_MCTRL_UserList', 'index', array('list' => array(OW_Route::PARAM_OPTION_HIDDEN_VAR => 'latest'))));
+$router->addRoute(new OW_Route('users', 'users', 'BASE_MCTRL_UserList', 'index', ['list' => [OW_Route::PARAM_OPTION_HIDDEN_VAR => 'latest']]));
 $router->addRoute(new OW_Route('base_user_lists', 'users/:list', 'BASE_MCTRL_UserList', 'index'));
 $router->addRoute(new OW_Route('base_user_lists_responder', 'responder', 'BASE_MCTRL_UserList', 'responder'));
 
@@ -76,19 +76,19 @@ $router->addRoute(new OW_Route('base.sitemap', 'sitemap.xml', 'BASE_CTRL_Base', 
 $owBasePlugin = OW::getPluginManager()->getPlugin('base');
 
 $themeManager = OW::getThemeManager();
-$baseDecorators = array('box_cap', 'box', 'button', 'paging', 'avatar_item', 'tooltip', 'box_toolbar', "floatbox", "ic");
+$baseDecorators = ['box_cap', 'box', 'button', 'paging', 'avatar_item', 'tooltip', 'box_toolbar', "floatbox", "ic"];
 
 foreach ( $baseDecorators as $name )
 {
     $themeManager->addDecoratorPath($name, $owBasePlugin->getMobileDecoratorDir() . $name . '.html');
 }
 
-$classesToAutoload = array(
+$classesToAutoload = [
     'BASE_Members' => $owBasePlugin->getCtrlDir() . 'user_list.php',
     'BASE_MenuItem' => $owBasePlugin->getCmpDir() . 'menu.php',
     'BASE_CommentsParams' => $owBasePlugin->getCmpDir() . 'comments.php',
     'BASE_ContextAction' => $owBasePlugin->getCmpDir() . 'context_action.php'
-);
+];
 
 OW::getAutoloader()->addClassArray($classesToAutoload);
 

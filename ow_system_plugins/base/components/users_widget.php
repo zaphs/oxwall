@@ -42,8 +42,8 @@ abstract class BASE_CMP_UsersWidget extends BASE_CLASS_Widget
         $this->assign('widgetId', $randId);
 
         $data = $this->getData($params);
-        $menuItems = array();
-        $dataToAssign = array();
+        $menuItems = [];
+        $dataToAssign = [];
 
         if ( !empty($data) )
         {
@@ -52,23 +52,23 @@ abstract class BASE_CMP_UsersWidget extends BASE_CLASS_Widget
                 $contId = "{$randId}_users_widget_{$key}";
                 $toolbarId = (!empty($item['toolbar']) ? "{$randId}_toolbar_{$key}" : false );
 
-                $menuItems[$key] = array(
+                $menuItems[$key] = [
                     'label' => $item['menu-label'],
                     'id' => "{$randId}_users_widget_menu_{$key}",
                     'contId' => $contId,
                     'active' => !empty($item['menu_active']),
                     'toolbarId' => $toolbarId
-                );
+                ];
 
                 $usersCmp = $this->getUsersCmp($item['userIds']);
 
-                $dataToAssign[$key] = array(
+                $dataToAssign[$key] = [
                     'users' => $usersCmp->render(),
                     'active' => !empty($item['menu_active']),
-                    'toolbar' => (!empty($item['toolbar']) ? $item['toolbar'] : array() ),
+                    'toolbar' => (!empty($item['toolbar']) ? $item['toolbar'] : []),
                     'toolbarId' => $toolbarId,
                     'contId' => $contId
-                );
+                ];
             }
         }
         $this->assign('data', $dataToAssign);
@@ -95,7 +95,7 @@ abstract class BASE_CMP_UsersWidget extends BASE_CLASS_Widget
 
     protected function getIdList( $users )
     {
-        $resultArray = array();
+        $resultArray = [];
 
         if ( $users )
         {

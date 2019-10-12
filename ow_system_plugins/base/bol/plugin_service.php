@@ -145,7 +145,7 @@ class BOL_PluginService
      */
     public function findActivePlugins()
     {
-        $activePlugins = array();
+        $activePlugins = [];
         $pluginList = $this->getPluginListCache();
 
         /* @var $plugin BOL_Plugin */
@@ -167,7 +167,7 @@ class BOL_PluginService
      */
     public function getAvailablePluginsList()
     {
-        $availPlugins = array();
+        $availPlugins = [];
         $dbPluginsArray = array_keys($this->getPluginListCache());
 
         $xmlPlugins = $this->getPluginsXmlInfo();
@@ -188,9 +188,9 @@ class BOL_PluginService
      */
     public function getPluginsXmlInfo()
     {
-        $resultArray = array();
+        $resultArray = [];
 
-        $xmlFiles = UTIL_File::findFiles(OW_DIR_PLUGIN, array("xml"), 1);
+        $xmlFiles = UTIL_File::findFiles(OW_DIR_PLUGIN, ["xml"], 1);
 
         foreach ( $xmlFiles as $pluginXml )
         {
@@ -242,7 +242,7 @@ class BOL_PluginService
             return null;
         }
 
-        $propList = array("key", "name", "description", "license", "author", "build", "copyright", "licenseUrl");
+        $propList = ["key", "name", "description", "license", "author", "build", "copyright", "licenseUrl"];
         $xmlInfo = (array) simplexml_load_file($pluginXmlPath);
 
         if ( !$xmlInfo )
@@ -280,7 +280,7 @@ class BOL_PluginService
      */
     public function findRegularPlugins()
     {
-        $regularPlugins = array();
+        $regularPlugins = [];
 
         /* @var $plugin BOL_Plugin */
         foreach ( $this->getPluginListCache() as $plugin )
@@ -300,9 +300,9 @@ class BOL_PluginService
      */
     public function installSystemPlugins()
     {
-        $files = UTIL_File::findFiles(OW_DIR_SYSTEM_PLUGIN, array("xml"), 1);
-        $pluginData = array();
-        $tempPluginData = array();
+        $files = UTIL_File::findFiles(OW_DIR_SYSTEM_PLUGIN, ["xml"], 1);
+        $pluginData = [];
+        $tempPluginData = [];
 
 // first element should be BASE plugin
         foreach ( $files as $file )
@@ -412,7 +412,7 @@ class BOL_PluginService
 
         // trigger event
         OW::getEventManager()->trigger(new OW_Event(OW_EventManager::ON_AFTER_PLUGIN_INSTALL,
-            array("pluginKey" => $pluginDto->getKey())));
+            ["pluginKey" => $pluginDto->getKey()]));
         return $pluginDto;
     }
 
@@ -475,17 +475,17 @@ class BOL_PluginService
 
         // trigger event
         OW::getEventManager()->trigger(new OW_Event(OW_EventManager::ON_BEFORE_PLUGIN_UNINSTALL,
-            array("pluginKey" => $pluginDto->getKey())));
+            ["pluginKey" => $pluginDto->getKey()]));
 
         $this->includeScript($plugin->getRootDir() . BOL_PluginService::SCRIPT_DEACTIVATE);
         $this->includeScript($plugin->getRootDir() . BOL_PluginService::SCRIPT_UNINSTALL);
 
         // delete plugin work dirs
-        $dirsToRemove = array(
+        $dirsToRemove = [
             $plugin->getPluginFilesDir(),
             $plugin->getUserFilesDir(),
             $plugin->getPublicStaticDir()
-        );
+        ];
 
         foreach ( $dirsToRemove as $dir )
         {
@@ -532,7 +532,7 @@ class BOL_PluginService
 
         // trigger event
         OW::getEventManager()->trigger(new OW_Event(OW_EventManager::ON_AFTER_PLUGIN_UNINSTALL,
-            array("pluginKey" => $pluginDto->getKey())));
+            ["pluginKey" => $pluginDto->getKey()]));
     }
 
     /**
@@ -558,7 +558,7 @@ class BOL_PluginService
         $this->updatePluginListCache();
 
         // trigger event
-        $event = new OW_Event(OW_EventManager::ON_AFTER_PLUGIN_ACTIVATE, array("pluginKey" => $pluginDto->getKey()));
+        $event = new OW_Event(OW_EventManager::ON_AFTER_PLUGIN_ACTIVATE, ["pluginKey" => $pluginDto->getKey()]);
         OW::getEventManager()->trigger($event);
     }
 
@@ -577,7 +577,7 @@ class BOL_PluginService
         }
 
         // trigger event
-        $event = new OW_Event(OW_EventManager::ON_BEFORE_PLUGIN_DEACTIVATE, array("pluginKey" => $pluginDto->getKey()));
+        $event = new OW_Event(OW_EventManager::ON_BEFORE_PLUGIN_DEACTIVATE, ["pluginKey" => $pluginDto->getKey()]);
         OW::getEventManager()->trigger($event);
 
         $pluginDto->setIsActive(false);
@@ -587,7 +587,7 @@ class BOL_PluginService
 
         $this->updatePluginListCache();
 
-        $event = new OW_Event(OW_EventManager::ON_AFTER_PLUGIN_DEACTIVATE, array("pluginKey" => $pluginDto->getKey()));
+        $event = new OW_Event(OW_EventManager::ON_AFTER_PLUGIN_DEACTIVATE, ["pluginKey" => $pluginDto->getKey()]);
         OW::getEventManager()->trigger($event);
     }
 
@@ -654,7 +654,7 @@ class BOL_PluginService
 
     private function updatePluginListCache()
     {
-        $this->pluginListCache = array();
+        $this->pluginListCache = [];
         $dbData = $this->pluginDao->findAll();
 
         /* @var $plugin BOL_Plugin */

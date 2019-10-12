@@ -54,12 +54,16 @@ class OW_MobileMasterPage extends OW_MasterPage
     public function __construct()
     {
         parent::__construct();
-        $this->buttonData = array(
-            "left" => array(self::BTN_DATA_ID => "owm_header_left_btn", self::BTN_DATA_CLASS => null, self::BTN_DATA_HREF => "javascript://",
-                self::BTN_DATA_EXTRA => ""),
-            "right" => array(self::BTN_DATA_ID => "owm_header_right_btn", self::BTN_DATA_CLASS => null, self::BTN_DATA_HREF => "javascript://",
-                self::BTN_DATA_EXTRA => "")
-        );
+        $this->buttonData = [
+            "left" => [
+                self::BTN_DATA_ID    => "owm_header_left_btn", self::BTN_DATA_CLASS => null, self::BTN_DATA_HREF => "javascript://",
+                self::BTN_DATA_EXTRA => ""
+            ],
+            "right" => [
+                self::BTN_DATA_ID    => "owm_header_right_btn", self::BTN_DATA_CLASS => null, self::BTN_DATA_HREF => "javascript://",
+                self::BTN_DATA_EXTRA => ""
+            ]
+        ];
     }
 
     /**
@@ -107,7 +111,7 @@ class OW_MobileMasterPage extends OW_MasterPage
         //TODO remove dirty hack for backcompat
         if ( substr(basename($template), 0, strlen(self::TEMPLATE_BLANK)) == self::TEMPLATE_BLANK )
         {
-            $this->buttonData = array("left" => array(), "right" => array());
+            $this->buttonData = ["left" => [], "right" => []];
         }
 
         parent::setTemplate($template);

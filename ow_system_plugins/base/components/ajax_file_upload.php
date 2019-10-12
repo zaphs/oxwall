@@ -57,11 +57,11 @@ class BASE_CMP_AjaxFileUpload extends OW_Component
                         enumerable: true
                     }
                 });',
-                array(
+                [
                     'url' => OW::getRouter()->urlForRoute('admin.ajax_upload'),
                     'size' => BOL_FileService::getInstance()->getUploadMaxFilesizeBytes(),
                     'deleteAction' => OW::getRouter()->urlForRoute('admin.ajax_upload_delete')
-                )
+                ]
             )
         );
         $document->addOnloadScript(';window.ajaxFileUploader.init();');

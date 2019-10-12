@@ -37,7 +37,7 @@ public function __construct()
         $languages = BOL_LanguageService::getInstance()->getLanguages();
         $session_language_id = BOL_LanguageService::getInstance()->getCurrent()->getId();
 
-        $active_languages = array();
+        $active_languages = [];
 
         foreach($languages as $id=>$language)
         {
@@ -45,15 +45,15 @@ public function __construct()
             {
                 $tag = $this->parseCountryFromTag($language->tag);
 
-                $active_lang = array(
+                $active_lang = [
                     'id'=>$language->id,
                     'label'=>$tag['label'],
                     'order'=>$language->order,
                     'tag'=>$language->tag,
                     'class'=>"ow_console_lang{$tag['country']}",
-                    'url'=> OW::getRequest()->buildUrlQueryString(null, array( "language_id"=>$language->id ) ),
+                    'url'=> OW::getRequest()->buildUrlQueryString(null, ["language_id" =>$language->id]),
                     'is_current'=>false
-                    );
+                ];
 
                 if ( $session_language_id == $language->id )
                 {
@@ -88,17 +88,17 @@ public function __construct()
 
         if (empty($matches))
         {
-            return array("label"=>$tag, "country"=>"");
+            return ["label" =>$tag, "country" =>""];
         }
         if (!empty($matches[1]))
         {
             $country = strtolower($matches[1]);
-            return array("label"=>$matches[1], "country"=>"_".$country);
+            return ["label" => $matches[1], "country" => "_" . $country];
         }
         else if (!empty($matches[2]))
         {
             $country = strtolower($matches[3]);
-            return array("label"=>$matches[2], "country"=>"_".$country);
+            return ["label" => $matches[2], "country" => "_" . $country];
         }
 
         return "";
@@ -107,11 +107,11 @@ public function __construct()
     protected function initJs()
     {
         $js = UTIL_JsGenerator::newInstance();
-        $js->addScript('OW.Console.addItem(new OW_ConsoleDropdownHover({$uniqId}, {$contentIniqId}), {$key});', array(
+        $js->addScript('OW.Console.addItem(new OW_ConsoleDropdownHover({$uniqId}, {$contentIniqId}), {$key});', [
             'key' => $this->getKey(),
             'uniqId' => $this->consoleItem->getUniqId(),
             'contentIniqId' => $this->consoleItem->getContentUniqId()
-        ));
+        ]);
 
         OW::getDocument()->addOnloadScript($js);
     }

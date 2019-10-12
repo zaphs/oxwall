@@ -92,7 +92,7 @@ class BOL_FileDao extends OW_BaseDao
 
         $query = "SELECT COUNT(`t`.`id`) FROM `" . $this->getTableName() . "` as t WHERE `t`.`userId` = :user";
 
-        return $this->dbo->queryForColumn($query, array('user' => $userId));
+        return $this->dbo->queryForColumn($query, ['user' => $userId]);
     }
 
 }

@@ -106,7 +106,7 @@ class BOL_QuestionDao extends OW_BaseDao
     {
         if ( empty($questionNameList) )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();
@@ -114,7 +114,7 @@ class BOL_QuestionDao extends OW_BaseDao
         $example->setOrder('sortOrder');
         $dtoList = $this->findListByExample($example);
 
-        $result = array();
+        $result = [];
 
         foreach ( $dtoList as $dto )
         {
@@ -128,7 +128,7 @@ class BOL_QuestionDao extends OW_BaseDao
     {
         if ( $presentation === null || !is_array($presentation) )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();
@@ -142,7 +142,7 @@ class BOL_QuestionDao extends OW_BaseDao
     {
         if ( $questionName === null || !is_array($questionName) || count($questionName) === 0 )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();
@@ -154,7 +154,7 @@ class BOL_QuestionDao extends OW_BaseDao
     {
         if ( $accountType === null )
         {
-            return array();
+            return [];
         }
 
         $accountTypeName = trim($accountType);
@@ -170,14 +170,14 @@ class BOL_QuestionDao extends OW_BaseDao
                     
                     ORDER BY IF( `section`.`name` IS NULL, 0, 1 ),  `section`.`sortOrder`, `question`.`sortOrder` ";
 
-        return $this->dbo->queryForList($sql, array('accountTypeName' => $accountTypeName));
+        return $this->dbo->queryForList($sql, ['accountTypeName' => $accountTypeName]);
     }
 
     public function findQuestionsForAccountType( $accountType )
     {
         if ( $accountType === null )
         {
-            return array();
+            return [];
         }
 
         $accountTypeName = trim($accountType);
@@ -192,7 +192,7 @@ class BOL_QuestionDao extends OW_BaseDao
                     WHERE ( `qta`.`accountType` = :accountTypeName )  AND ( `section`.isHidden IS NULL OR `section`.isHidden = 0 )
                     ORDER BY IF( `section`.`name` IS NULL, 0, 1 ),  `section`.`sortOrder`, `question`.`sortOrder` ";
         
-        return $this->dbo->queryForList($sql, array('accountTypeName' => $accountTypeName));
+        return $this->dbo->queryForList($sql, ['accountTypeName' => $accountTypeName]);
     }
 
     public function findSearchQuestionsForAccountType( $accountType )
@@ -209,14 +209,14 @@ class BOL_QuestionDao extends OW_BaseDao
                     WHERE ( `qta`.`accountType` = :accountTypeName OR :accountTypeName = 'all' ) AND `question`.`onSearch` = 1  AND ( `section`.isHidden IS NULL OR `section`.isHidden = 0 )
                     ORDER BY IF( `section`.`name` IS NULL, 0, 1 ),  `section`.`sortOrder`, `question`.`sortOrder` ";
 
-        return $this->dbo->queryForList($sql, array('accountTypeName' => $accountTypeName));
+        return $this->dbo->queryForList($sql, ['accountTypeName' => $accountTypeName]);
     }
 
     public function findAllQuestionsWithSectionForAccountType( $accountType )
     {
         if ( $accountType === null )
         {
-            return array();
+            return [];
         }
 
         $accountTypeName = trim($accountType);
@@ -237,14 +237,14 @@ class BOL_QuestionDao extends OW_BaseDao
 
                 ORDER BY IF( `section`.`name` IS NULL, 0, 1 )  ASC,  `section`.`sortOrder`, `question`.`sortOrder` ";
                 
-        return $this->dbo->queryForList($sql, array('accountTypeName' => $accountTypeName));
+        return $this->dbo->queryForList($sql, ['accountTypeName' => $accountTypeName]);
     }
 
     public function findSignUpQuestionsForAccountType( $accountType, $baseOnly = false )
     {
         if ( $accountType === null )
         {
-            return array();
+            return [];
         }
 
         $accountTypeName = trim($accountType);
@@ -267,14 +267,14 @@ class BOL_QuestionDao extends OW_BaseDao
                                   AND `question`.`onJoin` = '1' " . $questionAdds . "
                     ORDER BY IF( `section`.`name` IS NULL, 0, 1 ),  `section`.`sortOrder`, `question`.`sortOrder` ";
 
-        return $this->dbo->queryForList($sql, array('accountTypeName' => $accountTypeName));
+        return $this->dbo->queryForList($sql, ['accountTypeName' => $accountTypeName]);
     }
 
     public function findEditQuestionsForAccountType( $accountType )
     {
         if ( $accountType === null )
         {
-            return array();
+            return [];
         }
 
         $accountTypeName = trim($accountType);
@@ -290,14 +290,14 @@ class BOL_QuestionDao extends OW_BaseDao
                                   AND `question`.`onEdit` = '1'
                     ORDER BY IF( `section`.`name` IS NULL, 0, 1 ),  `section`.`sortOrder`, `question`.`sortOrder` ";
 
-        return $this->dbo->queryForList($sql, array('accountTypeName' => $accountTypeName));
+        return $this->dbo->queryForList($sql, ['accountTypeName' => $accountTypeName]);
     }
 
     public function findRequiredQuestionsForAccountType( $accountType )
     {
         if ( $accountType === null )
         {
-            return array();
+            return [];
         }
 
         $accountTypeName = trim($accountType);
@@ -312,14 +312,14 @@ class BOL_QuestionDao extends OW_BaseDao
                     WHERE `qta`.`accountType` = :accountTypeName AND `question`.`required` = '1' AND ( `section`.isHidden IS NULL OR `section`.isHidden = 0 )
                     ORDER BY IF( `section`.`name` IS NULL, 0, 1 ),  `section`.`sortOrder`, `question`.`sortOrder` ";
 
-        return $this->dbo->queryForList($sql, array('accountTypeName' => $accountTypeName));
+        return $this->dbo->queryForList($sql, ['accountTypeName' => $accountTypeName]);
     }
 
     public function findViewQuestionsForAccountType( $accountType )
     {
         if ( $accountType === null )
         {
-            return array();
+            return [];
         }
 
         $accountTypeName = trim($accountType);
@@ -335,7 +335,7 @@ class BOL_QuestionDao extends OW_BaseDao
                                   AND `question`.`onView` = '1' 
                     ORDER BY IF( `section`.`name` IS NULL, 0, 1 ),  `section`.`sortOrder`, `question`.`sortOrder` ";
 
-        return $this->dbo->queryForList($sql, array('accountTypeName' => $accountTypeName));
+        return $this->dbo->queryForList($sql, ['accountTypeName' => $accountTypeName]);
     }
 
     public function findBaseSignUpQuestions()
@@ -359,7 +359,7 @@ class BOL_QuestionDao extends OW_BaseDao
         if ( isset($sectionName) && count(trim($sectionName)) > 0 )
         {
             $sql .= ' WHERE `sectionName`= :sectionName ';
-            $result = $this->dbo->queryForColumn($sql, array('sectionName' => trim($sectionName)));
+            $result = $this->dbo->queryForColumn($sql, ['sectionName' => trim($sectionName)]);
         }
         else
         {
@@ -373,7 +373,7 @@ class BOL_QuestionDao extends OW_BaseDao
     {
         if ( $sectionNameList === null || !is_array($sectionNameList) || count($sectionNameList) === 0 )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();
@@ -392,7 +392,7 @@ class BOL_QuestionDao extends OW_BaseDao
     {
         if ( empty($parentQuestionName) )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();

@@ -56,7 +56,7 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
 
     public function getMenu()
     {
-        $items = array();
+        $items = [];
         $item = new BASE_MenuItem();
         $item->setLabel(OW::getLanguage()->text('admin', 'edit_language'));
         $item->setIconClass('ow_ic_edit');
@@ -175,14 +175,14 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
         $this->assign('origLabel', $current->getLabel());
         $this->assign('origTag', $current->getTag());
 
-        $this->assign('languageSwitchUrl', OW::getRequest()->buildUrlQueryString(null, array('language' => null)));
+        $this->assign('languageSwitchUrl', OW::getRequest()->buildUrlQueryString(null, ['language' => null]));
 
-        $this->assign('lang_switch_url', OW::getRequest()->buildUrlQueryString(null, array('langId' => null, 'page' => null)));
+        $this->assign('lang_switch_url', OW::getRequest()->buildUrlQueryString(null, ['langId' => null, 'page' => null]));
 
-        $this->assign('section_switch_url', OW::getRequest()->buildUrlQueryString(null, array('prefix' => null, 'page' => null)));
+        $this->assign('section_switch_url', OW::getRequest()->buildUrlQueryString(null, ['prefix' => null, 'page' => null]));
 
         $this->assign('searchFormActionUrl', OW::getRequest()->buildUrlQueryString(null,
-            array('prefix' => ((!empty($_GET['prefix'])) ? $_GET['prefix'] : null), 'language' => ((!empty($_GET['language'])) ? $_GET['language'] : null), 'search' => null, 'page' => null, 'in_keys' => null))
+            ['prefix' => ((!empty($_GET['prefix'])) ? $_GET['prefix'] : null), 'language' => ((!empty($_GET['language'])) ? $_GET['language'] : null), 'search' => null, 'page' => null, 'in_keys' => null])
         );
 
         $this->assign('langs', $languageService->getLanguages());
@@ -190,7 +190,7 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
 
         if ( isset($_POST['command']) && $_POST['command'] == 'edit-values' )
         {
-            $arr = empty($_POST['values']) ? array() : $_POST['values'];
+            $arr = empty($_POST['values']) ? [] : $_POST['values'];
 
             foreach ( $arr as $key => $value )
             {
@@ -205,7 +205,7 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
                 $languageService->saveValue($entity, false);
             }
 
-            $arr = empty($_POST['missing']) ? array() : $_POST['missing'];
+            $arr = empty($_POST['missing']) ? [] : $_POST['missing'];
 
             foreach ( $arr as $prefixStr => $value )
             {
@@ -332,11 +332,11 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
 
         $current = $languageService->getCurrent();
 
-        $result = array();
+        $result = [];
 
         $i = 0;
 
-        $indexes = array();
+        $indexes = [];
 
         foreach ( $set as $value )
         {
@@ -348,10 +348,11 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
 
                 $prefix = $value['prefix'];
 
-                $result[$index] = array(
+                $result[$index] = [
                     'prefix' => $prefix,
                     'label' => $value['label'],
-                    'keys' => array(),);
+                    'keys' => [],
+                ];
             }
 
             $key = $value['key'];
@@ -363,7 +364,7 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
 
             $origText = ($origText !== null) ? $origText : '';
 
-            $result[$index]['data'][] = array('key' => $key, 'value' => $text, 'origValue' => $origText);
+            $result[$index]['data'][] = ['key' => $key, 'value' => $text, 'origValue' => $origText];
         }
 
         return $result;
@@ -385,8 +386,8 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
     {
         $service = BOL_LanguageService::getInstance();
 
-        $langsToImport = array();
-        $prefixesToImport = array();
+        $langsToImport = [];
+        $prefixesToImport = [];
 
         $path = $this->getImportPath();
 
@@ -410,7 +411,7 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
 
                 $langXmlE = simplexml_load_file($dir . DS . 'language.xml'); /* @var $xmlElement SimpleXMLElement */
 
-                $l = array('label' => strval($langXmlE->attributes()->label), 'tag' => strval($langXmlE->attributes()->tag));
+                $l = ['label' => strval($langXmlE->attributes()->label), 'tag' => strval($langXmlE->attributes()->tag)];
 
                 if ( !in_array($l, $langsToImport) )
                 {
@@ -451,7 +452,7 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
                             }
                         }
 
-                        $p = array('label' => strval($prefixElement->attributes()->label), 'prefix' => $prefix);
+                        $p = ['label' => strval($prefixElement->attributes()->label), 'prefix' => $prefix];
                         if ( !in_array($p, $prefixesToImport) )
                             $prefixesToImport[] = $p;
                     }
@@ -490,16 +491,16 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
 
             if ( !empty($plugin) )
             {
-                $l = array(
+                $l = [
                     'tag' => strval($prefixElement->attributes()->language_tag),
                     'label' => strval($prefixElement->attributes()->language_label),
-                );
+                ];
                 $langsToImport[] = $l;
 
-                $prefixesToImport[] = array(
+                $prefixesToImport[] = [
                     'label' => $prefixElement->attributes()->label,
                     'prefix' => $prefixElement->attributes()->name,
-                );
+                ];
             }
         }
 
@@ -564,7 +565,7 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
 
                         if ( !empty($tmpLanguage) )
                         {
-                            exit(json_encode(array('result' => false, 'message' => OW::getLanguage()->text('admin', 'msg_lang_invalid_language_tag'))));
+                            exit(json_encode(['result' => false, 'message' => OW::getLanguage()->text('admin', 'msg_lang_invalid_language_tag')]));
                         }
                     }
 
@@ -580,17 +581,17 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
                         $language->setRtl(false);
                     }
 
-                    $event = new OW_Event('admin.before_save_lang_value', array('dto'=>$language));
+                    $event = new OW_Event('admin.before_save_lang_value', ['dto' =>$language]);
                     OW::getEventManager()->trigger($event);
 
                     $this->service->save($language);
 
-                    exit(json_encode(array('result' => true, 'message' => OW::getLanguage()->text('admin', 'language_edit_form_success_message'))));
+                    exit(json_encode(['result' => true, 'message' => OW::getLanguage()->text('admin', 'language_edit_form_success_message')]));
                 }
             }
         }
 
-        exit(json_encode(array('result' => false, 'message' => OW::getLanguage()->text('admin', 'language_edit_form_error_message'))));
+        exit(json_encode(['result' => false, 'message' => OW::getLanguage()->text('admin', 'language_edit_form_error_message')]));
     }
 
     public function mod()
@@ -737,7 +738,7 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
 
         $ls = $languageService->findAll();
 
-        $ls = empty($ls) ? array() : $ls;
+        $ls = empty($ls) ? [] : $ls;
 
         function lCmp( $a, $b )
         {
@@ -745,30 +746,32 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
         }
         uasort($ls, 'lCmp');
 
-        $active_langs = array();
-        $inactive_langs = array();
+        $active_langs = [];
+        $inactive_langs = [];
 
         foreach ( $ls as $l )
         {
             switch ( $l->getStatus() )
             {
                 case 'active':
-                    $active_langs[] = array(
+                    $active_langs[] = [
                         'id' => $l->getId(),
                         'label' => $l->getLabel(),
                         'isDefault' => ( $l->getOrder() == 1 ? true : false ),
                         'tag' => $l->getTag(),
-                        'missing_key_count' => $languageService->findMissingKeyCount($l->getId()));
+                        'missing_key_count' => $languageService->findMissingKeyCount($l->getId())
+                    ];
 
                     break;
 
                 case 'inactive':
-                    $inactive_langs[] = array(
+                    $inactive_langs[] = [
                         'id' => $l->getId(),
                         'label' => $l->getLabel(),
                         'tag' => $l->getTag(),
                         'isDefault' => false,
-                        'missing_key_count' => $languageService->findMissingKeyCount($l->getId()));
+                        'missing_key_count' => $languageService->findMissingKeyCount($l->getId())
+                    ];
 
                     break;
             }
@@ -780,7 +783,7 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
         $langsEventParam = new stdClass();
         $langsEventParam->languages = $languages;
         $langsEventParam->inactiveLangs = $inactive_langs;
-        $event = new OW_Event('admin.get_additional_langs', array('langs' => $langsEventParam));
+        $event = new OW_Event('admin.get_additional_langs', ['langs' => $langsEventParam]);
         OW::getEventManager()->trigger($event);
         $inactive_langs = $langsEventParam->inactiveLangs;
 
@@ -902,7 +905,7 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
             {
                 if ( !$languageService->isKeyUnique($data['prefix'], $data['key']) )
                 {
-                    exit(json_encode(array('result' => 'dublicate')));
+                    exit(json_encode(['result' => 'dublicate']));
                 }
 
                 $prefixId = $languageService->findPrefixId($data['prefix']);
@@ -928,7 +931,7 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
             $languageService->generateCache($language->getId());
 
             OW::getFeedback()->info('Added');
-            exit(json_encode(array('result' => 'success')));
+            exit(json_encode(['result' => 'success']));
         }
     }
 
@@ -954,7 +957,7 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
             }
 
             OW::getFeedback()->error($errorMessage);
-            exit(json_encode(array('result' => 'invalid_data')));
+            exit(json_encode(['result' => 'invalid_data']));
         }
 
         $languageService = BOL_LanguageService::getInstance();
@@ -970,7 +973,7 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
 
         OW::getFeedback()->info(OW::getLanguage()->text('admin', 'msg_lang_cloned'));
 
-        exit(json_encode(array('result' => 'success')));
+        exit(json_encode(['result' => 'success']));
     }
 
     public function ajaxOrder()
@@ -1031,11 +1034,11 @@ class ADMIN_CTRL_Languages extends ADMIN_CTRL_Abstract
 
         exit(
         json_encode(
-            array(
+            [
                 'markup' => $cmp->render(),
                 'js' => OW::getDocument()->getOnloadScript(),
                 'include_js' => OW::getDocument()->getScripts()
-            )
+            ]
         )
         );
     }
@@ -1106,7 +1109,7 @@ class AddKeyForm extends Form
         {
             $prefixSelectBox->setValue($_GET['prefix']);
         }
-        $options = array();
+        $options = [];
 
         foreach ( $prefixes as $prefix )
         {
@@ -1121,7 +1124,7 @@ class AddKeyForm extends Form
         $valueTextArea = new Textarea('value');
 
         $this->addElement(
-            $valueTextArea->setRequired(true)->setLabel(OW::getLanguage()->text('admin', 'add_key_form_lbl_val', array('label' => $language->getLabel(), 'tag' => $language->getTag()))));
+            $valueTextArea->setRequired(true)->setLabel(OW::getLanguage()->text('admin', 'add_key_form_lbl_val', ['label' => $language->getLabel(), 'tag' => $language->getTag()])));
 
         $submit = new Submit('submit');
 

@@ -67,13 +67,13 @@ class OW_Route
      *
      * @var array
      */
-    private $dispatchAttrs = array();
+    private $dispatchAttrs = [];
     /**
      * Default route params.
      * 
      * @var array
      */
-    private $routeParamOptions = array();
+    private $routeParamOptions = [];
 
     /**
      * @return string
@@ -159,7 +159,7 @@ class OW_Route
      * @param string $action
      * @param array $paramOptions
      */
-    public function __construct( $routeName, $routePath, $controller, $action, array $paramOptions = array() )
+    public function __construct( $routeName, $routePath, $controller, $action, array $paramOptions = [])
     {
         if ( empty($routeName) || empty($routePath) || empty($controller) || empty($action) )
         {
@@ -191,7 +191,7 @@ class OW_Route
     {
         if ( empty($this->routeParamOptions[$paramName]) )
         {
-            $this->routeParamOptions[$paramName] = array();
+            $this->routeParamOptions[$paramName] = [];
         }
 
         $this->routeParamOptions[$paramName][$option] = $optionValue;
@@ -204,7 +204,7 @@ class OW_Route
      * @param array $params
      * @return string
      */
-    public function generateUri( $params = array() )
+    public function generateUri( $params = [])
     {
         // if route path is static we can return it without params processing 
         if ( $this->isStatic )
@@ -253,7 +253,7 @@ class OW_Route
     {
         $uri = UTIL_String::removeFirstAndLastSlashes(trim($uri));
 
-        $this->dispatchAttrs[self::DISPATCH_ATTRS_VARLIST] = array();
+        $this->dispatchAttrs[self::DISPATCH_ATTRS_VARLIST] = [];
 
         foreach ( $this->routeParamOptions as $paramName => $paramArray )
         {

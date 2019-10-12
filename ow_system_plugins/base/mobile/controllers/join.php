@@ -55,13 +55,13 @@ class BASE_MCTRL_Join extends BASE_CTRL_Join
         }
 
         // set meta info
-        $params = array(
+        $params = [
             "sectionKey" => "base.base_pages",
             "entityKey" => "join",
             "title" => "base+meta_title_join",
             "description" => "base+meta_desc_join",
             "keywords" => "base+meta_keywords_join"
-        );
+        ];
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }
@@ -98,16 +98,16 @@ class BASE_MCTRL_Join extends BASE_CTRL_Join
             return false;
         }
 
-        $event = new OW_Event('base.before_avatar_change', array(
+        $event = new OW_Event('base.before_avatar_change', [
             'userId' => $userId,
             'avatarId' => null,
             'upload' => true,
             'crop' => false,
             'isModerable' => false
-        ));
+        ]);
         OW::getEventManager()->trigger($event);
 
-        $avatarSet = $avatarService->setUserAvatar($userId, $path, array('isModerable' => true, 'trackAction' => false ));
+        $avatarSet = $avatarService->setUserAvatar($userId, $path, ['isModerable' => true, 'trackAction' => false]);
 
         if ( $avatarSet )
         {
@@ -115,12 +115,12 @@ class BASE_MCTRL_Join extends BASE_CTRL_Join
             
             if ( $avatar )
             {
-                $event = new OW_Event('base.after_avatar_change', array(
+                $event = new OW_Event('base.after_avatar_change', [
                     'userId' => $userId,
                     'avatarId' => $avatar->id,
                     'upload' => true,
                     'crop' => false
-                ));
+                ]);
                 OW::getEventManager()->trigger($event);
             }
         }

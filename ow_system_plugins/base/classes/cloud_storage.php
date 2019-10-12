@@ -320,13 +320,13 @@ class BASE_CLASS_CloudStorage implements OW_Storage
     {
         if ( !$this->fileExists($path) || !$this->isDir($path) )
         {
-            return array();
+            return [];
         }
 
         $path = $this->getCloudFilePath($path);
         $marker = ( $marker === null ) ? null : $this->getCloudFilePath($marker);
         $cloudPrefix = $prefix === null ? null : $path . self::CLOUD_FILES_DS . $prefix;
-        $files = array();
+        $files = [];
 
 //        try
 //        {
@@ -340,7 +340,7 @@ class BASE_CLASS_CloudStorage implements OW_Storage
 //        printVar($files);
 //        printVar('----');
 
-        $result = array();
+        $result = [];
 
         foreach ( $files as $file )
         {

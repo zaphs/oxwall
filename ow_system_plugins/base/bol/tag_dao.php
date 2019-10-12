@@ -102,7 +102,7 @@ class BOL_TagDao extends OW_BaseDao
 			INNER JOIN `" . BOL_EntityTagDao::getInstance()->getTableName() . "` AS `et` ON ( `et`.`tagId` = `t`.`id` )
 			WHERE `et`.`entityId` IN (" . $this->dbo->mergeInClause($idList) . ") AND `et`.`entityType` = :entityType";
 
-        return $this->dbo->queryForList($query, array('entityType' => $entityType));
+        return $this->dbo->queryForList($query, ['entityType' => $entityType]);
     }
 
     /**
@@ -115,15 +115,15 @@ class BOL_TagDao extends OW_BaseDao
      */
     public function findMostPopularTags( $entityType, $limit, $offset  = 0)
     {
-        $queryParts = BOL_ContentService::getInstance()->getQueryFilter(array(
+        $queryParts = BOL_ContentService::getInstance()->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_CONTENT => 'et',
             'base_tag' => 't'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_CONTENT_ID => 'id'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::OPTION_METHOD => __METHOD__,
             BASE_CLASS_QueryBuilderEvent::OPTION_TYPE => $entityType
-        ));
+        ]);
 
         $query = "SELECT * FROM
             (
@@ -138,7 +138,7 @@ class BOL_TagDao extends OW_BaseDao
             ) AS `t`
             ORDER BY `t`.`label`";
 
-        return $this->dbo->queryForList($query, array('offset' => (int) $offset, 'limit' => (int) $limit, 'entityType' => $entityType));
+        return $this->dbo->queryForList($query, ['offset' => (int) $offset, 'limit' => (int) $limit, 'entityType' => $entityType]);
     }
 
     /**
@@ -150,15 +150,15 @@ class BOL_TagDao extends OW_BaseDao
      */
     public function findEntityTagsWithPopularity( $entityId, $entityType )
     {
-        $queryParts = BOL_ContentService::getInstance()->getQueryFilter(array(
+        $queryParts = BOL_ContentService::getInstance()->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_CONTENT => 'et',
             'base_tag' => 't'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_CONTENT_ID => 'id'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::OPTION_METHOD => __METHOD__,
             BASE_CLASS_QueryBuilderEvent::OPTION_TYPE => $entityType
-        ));
+        ]);
 
         $query = "SELECT * FROM
 	    		(
@@ -172,6 +172,6 @@ class BOL_TagDao extends OW_BaseDao
 				) AS `t` 
 				ORDER BY `t`.`label`";
 
-        return $this->dbo->queryForList($query, array('entityId' => $entityId, 'entityType' => $entityType));
+        return $this->dbo->queryForList($query, ['entityId' => $entityId, 'entityType' => $entityType]);
     }
 }

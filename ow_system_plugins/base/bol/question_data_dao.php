@@ -87,7 +87,7 @@ class BOL_QuestionDataDao extends OW_BaseDao
     {
         if ( $questionNames === null || count($questionNames) === 0 || empty($userId) )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();
@@ -117,12 +117,12 @@ class BOL_QuestionDataDao extends OW_BaseDao
     {
         if ( $questionlNameList === null || count($questionlNameList) === 0 )
         {
-            return array();
+            return [];
         }
 
         if ( $userIdList === null || count($userIdList) === 0 )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();
@@ -131,7 +131,7 @@ class BOL_QuestionDataDao extends OW_BaseDao
 
         $data = $this->findListByExample($example);
 
-        $result = array();
+        $result = [];
         foreach ( $data as $object )
         {
             $result[$object->userId][$object->questionName] = $object;

@@ -7,7 +7,7 @@ class ADMIN_CLASS_SeoSitemapForm extends Form
      *
      * @var array
      */
-    protected $entities = array();
+    protected $entities = [];
 
     /**
      * Get entities
@@ -28,11 +28,11 @@ class ADMIN_CLASS_SeoSitemapForm extends Form
 
         $this->generateEntities();
 
-        $scheduleOptions = array(
+        $scheduleOptions = [
             BOL_SeoService::SITEMAP_UPDATE_DAILY => OW::getLanguage()->text('admin', 'seo_sitemap_update_daily'),
             BOL_SeoService::SITEMAP_UPDATE_WEEKLY => OW::getLanguage()->text('admin', 'seo_sitemap_update_weekly'),
             BOL_SeoService::SITEMAP_UPDATE_MONTHLY => OW::getLanguage()->text('admin', 'seo_sitemap_update_monthly'),
-        );
+        ];
 
         $scheduleField = new Selectbox('schedule');
         $scheduleField->setHasInvitation(false);

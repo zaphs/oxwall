@@ -62,9 +62,9 @@ class OW_Smarty_Security extends Smarty_Security
     public function __construct( $smarty )
     {
         parent::__construct($smarty);
-        $this->secure_dir = array(OW_DIR_THEME, OW_DIR_SYSTEM_PLUGIN, OW_DIR_PLUGIN);
-        $this->php_functions = array('array', 'list', 'isset', 'empty', 'count', 'sizeof', 'in_array', 'is_array', 'true', 'false', 'null', 'strstr');
-        $this->php_modifiers = array('count');
+        $this->secure_dir = [OW_DIR_THEME, OW_DIR_SYSTEM_PLUGIN, OW_DIR_PLUGIN];
+        $this->php_functions = ['array', 'list', 'isset', 'empty', 'count', 'sizeof', 'in_array', 'is_array', 'true', 'false', 'null', 'strstr'];
+        $this->php_modifiers = ['count'];
         $this->allow_constants = false;
         $this->allow_super_globals = false;
         $this->static_classes = null;

@@ -16,7 +16,7 @@ trait BASE_CLASS_UploadTmpAvatarTrait {
 
             if ( !UTIL_File::validateImage($file['name']) )
             {
-                return array('result' => false, 'error' => $lang->text('base', 'not_valid_image'));
+                return ['result' => false, 'error' => $lang->text('base', 'not_valid_image')];
             }
 
             if ( !empty($file['error']) ) {
@@ -25,7 +25,7 @@ trait BASE_CLASS_UploadTmpAvatarTrait {
 
             if ( !empty($message) )
             {
-                return array('result' => false, 'error' => $message);
+                return ['result' => false, 'error' => $message];
             }
 
             $filesize = OW::getConfig()->getValue('base', 'avatar_max_upload_size');
@@ -33,7 +33,7 @@ trait BASE_CLASS_UploadTmpAvatarTrait {
             if ( empty($file['size']) || $filesize*1024*1024 < $file['size'] )
             {
                 $message = OW::getLanguage()->text('base', 'upload_file_max_upload_filesize_error');
-                return array('result' => false, 'error' => $message);
+                return ['result' => false, 'error' => $message];
             }
 
             $avatarService = BOL_AvatarService::getInstance();
@@ -43,14 +43,14 @@ trait BASE_CLASS_UploadTmpAvatarTrait {
 
             if ( !$uploaded )
             {
-                return array('result' => false, 'error' => $lang->text('base', 'upload_avatar_faild'));
+                return ['result' => false, 'error' => $lang->text('base', 'upload_avatar_faild')];
             }
 
             $url = $avatarService->getTempAvatarUrl($key, 3);
 
-            return array('result' => true, 'url' => $url);
+            return ['result' => true, 'url' => $url];
         }
 
-        return array('result' => false);
+        return ['result' => false];
     }
 }

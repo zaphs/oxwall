@@ -31,7 +31,7 @@ class BASE_MCMP_ProfileAbout extends OW_MobileComponent
         }
         
         $this->assign('aboutMe', $content);
-        $this->assign('aboutUrl', OW::getRouter()->urlForRoute('base_about_profile', array('username' => $this->user->username)));
+        $this->assign('aboutUrl', OW::getRouter()->urlForRoute('base_about_profile', ['username' => $this->user->username]));
         
         $this->assign("previewMode", !empty($this->length));
     }
@@ -39,7 +39,7 @@ class BASE_MCMP_ProfileAbout extends OW_MobileComponent
     protected function getAboutMeContent()
     {
         $settings = BOL_ComponentEntityService::getInstance()->findSettingList(
-            'profile-BASE_CMP_AboutMeWidget', $this->user->id, array('content')
+            'profile-BASE_CMP_AboutMeWidget', $this->user->id, ['content']
         );
         
         if ( empty($settings['content']) )

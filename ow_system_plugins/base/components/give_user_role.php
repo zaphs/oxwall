@@ -57,13 +57,13 @@ class BASE_CMP_GiveUserRole extends OW_Component
         $form->addElement($hidden->setValue($userId));
         $userRoles = $aService->findUserRoleList($user->getId());
 
-        $userRolesIdList = array();
+        $userRolesIdList = [];
         foreach ( $userRoles as $role )
         {
             $userRolesIdList[] = $role->getId();
         }
 
-        $tplRoleList = array();
+        $tplRoleList = [];
 
         /* @var $role BOL_AuthorizationRole */
         foreach ( $roleList as $role )

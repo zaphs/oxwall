@@ -31,11 +31,11 @@
  */
 class BASE_CLASS_EventCollector extends OW_Event
 {
-    public function __construct( $name, $params = array() )
+    public function __construct( $name, $params = [])
     {
         parent::__construct($name, $params);
 
-        $this->data = array();
+        $this->data = [];
     }
 
     public function add( $item )

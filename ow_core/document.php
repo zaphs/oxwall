@@ -126,7 +126,7 @@ abstract class OW_Document
     public function setDescription( $description )
     {
         $description = str_replace(PHP_EOL, "", $description);
-        $this->throwEvent("core.set_document_description", array("str" => $description));
+        $this->throwEvent("core.set_document_description", ["str" => $description]);
         $this->description = $description;
     }
 
@@ -192,7 +192,7 @@ abstract class OW_Document
     public function setTitle( $title )
     {
         $title = str_replace(PHP_EOL, "", $title);
-        $this->throwEvent("core.set_document_title", array("str" => $title));
+        $this->throwEvent("core.set_document_title", ["str" => $title]);
         $this->title = $title;
     }
 
@@ -228,7 +228,7 @@ abstract class OW_Document
         $this->template = $template;
     }
 
-    protected function throwEvent( $name, $params = array() )
+    protected function throwEvent( $name, $params = [])
     {
         
     }

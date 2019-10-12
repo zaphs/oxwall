@@ -87,7 +87,7 @@ class BOL_LanguageKeyDao extends OW_BaseDao
                     INNER JOIN ' . $prefixTable . ' AS p ON k.prefixId = p.id
                     INNER JOIN ' . $valueTable . ' AS v ON k.id = v.keyId AND v.languageId = ?';
 
-        return $this->dbo->queryForList($sql, array($langId));
+        return $this->dbo->queryForList($sql, [$langId]);
     }
 
     public function countKeyByPrefix( $prefixId )
@@ -104,7 +104,7 @@ class BOL_LanguageKeyDao extends OW_BaseDao
 
         $query = "SELECT `id` FROM `{$this->getTableName()}` WHERE `prefixId` = ? AND `key` = ? LIMIT 1";
 
-        return $this->dbo->queryForColumn($query, array($prefixId, $key));
+        return $this->dbo->queryForColumn($query, [$prefixId, $key]);
     }
 
     public function findMissingKeys( $languageId, $first, $count )
@@ -121,7 +121,7 @@ class BOL_LanguageKeyDao extends OW_BaseDao
                 LIMIT ?, ?
 			";
 
-        return $this->dbo->queryForList($query, array($languageId, $first, $count));
+        return $this->dbo->queryForList($query, [$languageId, $first, $count]);
     }
 
     public function findMissingKeyCount( $languageId )
@@ -136,7 +136,7 @@ class BOL_LanguageKeyDao extends OW_BaseDao
                 WHERE v.keyId IS NULL OR (`v`.`value` IS NOT NULL AND LENGTH(`v`.`value`) = 0 )
 			";
 
-        return $this->dbo->queryForColumn($query, array($languageId));
+        return $this->dbo->queryForColumn($query, [$languageId]);
     }
 
     public function findAllPrefixKeys( $prefixId )

@@ -98,7 +98,7 @@ class UTIL_Profiler
     {
         if ( self::$classInstances === null )
         {
-            self::$classInstances = array();
+            self::$classInstances = [];
         }
 
         if ( !isset(self::$classInstances[$key]) )
@@ -124,7 +124,7 @@ class UTIL_Profiler
      */
     private function stop()
     {
-        $this->result['marks'] = array();
+        $this->result['marks'] = [];
 
         foreach ( $this->checkPoints as $key => $value )
         {
@@ -142,9 +142,9 @@ class UTIL_Profiler
      */
     public function reset()
     {
-        $this->checkPoints = array();
+        $this->checkPoints = [];
         $this->checkPoints['start'] = microtime(true);
-        $this->result = array();
+        $this->result = [];
         $this->chkCounter = 0;
     }
 }

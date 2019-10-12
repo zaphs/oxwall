@@ -51,7 +51,7 @@ class OW_Log
     {
         if ( self::$classInstances === null )
         {
-            self::$classInstances = array();
+            self::$classInstances = [];
         }
 
         if ( empty(self::$classInstances[$type]) )
@@ -72,7 +72,7 @@ class OW_Log
      *
      * @var array
      */
-    private $entries = array();
+    private $entries = [];
     /**
      * @var OW_LogWriter
      */
@@ -88,8 +88,8 @@ class OW_Log
     {
         $this->type = $type;
         $this->logWriter = new BASE_CLASS_DbLogWriter();
-        OW::getEventManager()->bind('core.exit', array($this, 'writeLog'));
-        OW::getEventManager()->bind('core.emergency_exit', array($this, 'writeLog'));
+        OW::getEventManager()->bind('core.exit', [$this, 'writeLog']);
+        OW::getEventManager()->bind('core.emergency_exit', [$this, 'writeLog']);
     }
 
     /**
@@ -100,7 +100,7 @@ class OW_Log
      */
     public function addEntry( $message, $key = null )
     {
-        $this->entries[] = array(self::TYPE => $this->type, self::KEY => $key, self::MESSAGE => $message, self::TIME_STAMP => time());        
+        $this->entries[] = [self::TYPE => $this->type, self::KEY => $key, self::MESSAGE => $message, self::TIME_STAMP => time()];
     }
 
     /**
@@ -131,7 +131,7 @@ class OW_Log
         if ( $this->logWriter !== null && !empty($this->entries))
         {
             $this->logWriter->processEntries($this->entries);
-            $this->entries = array();
+            $this->entries = [];
         }
     }
 }

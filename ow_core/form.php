@@ -50,21 +50,21 @@ class Form
      * 
      * @var array
      */
-    protected $attributes = array();
+    protected $attributes = [];
 
     /**
      * Form elements list.
      *
      * @var array
      */
-    protected $elements = array();
+    protected $elements = [];
 
     /**
      * Form submit elements list <Submit/Button>.
      * 
      * @var array
      */
-    protected $submitElements = array();
+    protected $submitElements = [];
 
     /**
      * Form ajax flag.
@@ -106,7 +106,7 @@ class Form
         $this->setAction('');
         $this->setAjaxResetOnSuccess(true);
         $this->setAjaxDataType(self::AJAX_DATA_TYPE_JSON);
-        $this->bindedFunctions = array(self::BIND_SUBMIT => array(), self::BIND_SUCCESS => array());
+        $this->bindedFunctions = [self::BIND_SUBMIT => [], self::BIND_SUCCESS => []];
         $this->setEmptyElementsErrorMessage(OW::getLanguage()->text('base', 'form_validate_common_error_message'));
 
         $formNameHidden = new HiddenField(self::ELEMENT_FORM_NAME);
@@ -215,7 +215,7 @@ class Form
      */
     public function setMethod( $method )
     {
-        if ( !in_array(trim($method), array(self::METHOD_GET, self::METHOD_POST)) )
+        if ( !in_array(trim($method), [self::METHOD_GET, self::METHOD_POST]) )
         {
             throw new InvalidArgumentException('Invalid form method type!');
         }
@@ -241,7 +241,7 @@ class Form
      */
     public function setEnctype( $enctype )
     {
-        if ( !in_array(trim($enctype), array(self::ENCTYPE_APP_FORM_URLENCODED, self::ENCTYPE_MULTYPART_FORMDATA)) )
+        if ( !in_array(trim($enctype), [self::ENCTYPE_APP_FORM_URLENCODED, self::ENCTYPE_MULTYPART_FORMDATA]) )
         {
             throw new InvalidArgumentException('Invalid form enctype!');
         }
@@ -462,7 +462,7 @@ class Form
      */
     public function getValues()
     {
-        $values = array();
+        $values = [];
 
         /* @var $element FormElement */
         foreach ( $this->elements as $element )
@@ -497,7 +497,7 @@ class Form
      */
     public function getErrors()
     {
-        $errors = array();
+        $errors = [];
 
         /* @var $value FormElement */
         foreach ( $this->elements as $key => $value )
@@ -535,7 +535,7 @@ class Form
      * @param string $decorator
      * @return string
      */
-    public function render( $formContent, array $params = array() )
+    public function render( $formContent, array $params = [])
     {
         $formElementJS = '';
 
@@ -546,14 +546,14 @@ class Form
             $formElementJS .= "form.addElement(formElement);" . PHP_EOL;
         }
 
-        $formInitParams = array(
+        $formInitParams = [
             'id' => $this->getId(),
             'name' => $this->getName(),
             'reset' => $this->getAjaxResetOnSuccess(),
             'ajax' => $this->isAjax(),
             'ajaxDataType' => $this->getAjaxDataType(),
             'validateErrorMessage' => $this->emptyElementsErrorMessage,
-        );
+        ];
 
         $jsString = " var form = new OwForm(" . json_encode($formInitParams) . ");window.owForms[form.name] = form;
 			" . PHP_EOL . $formElementJS . "

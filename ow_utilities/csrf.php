@@ -62,7 +62,7 @@ class UTIL_Csrf
 
     private static function getTokenList()
     {
-        return OW::getSession()->isKeySet(self::SESSION_VAR_NAME) ? OW::getSession()->get(self::SESSION_VAR_NAME) : array();
+        return OW::getSession()->isKeySet(self::SESSION_VAR_NAME) ? OW::getSession()->get(self::SESSION_VAR_NAME) : [];
     }
 
     private static function saveTokenList( array $list )

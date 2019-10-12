@@ -36,7 +36,7 @@ abstract class OW_Cron
     {
         $this->addJob('run', $this->getRunInterval());
     }
-    private $jobs = array();
+    private $jobs = [];
 
     /**
      * Add cron job

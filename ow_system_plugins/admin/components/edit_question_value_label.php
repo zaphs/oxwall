@@ -45,9 +45,9 @@ class ADMIN_CMP_EditQuestionValueLabel extends OW_Component
                 return false;
             })';
 
-        $script = UTIL_JsGenerator::composeJsString($jsString, array(
+        $script = UTIL_JsGenerator::composeJsString($jsString, [
 		  'formName' => $form->getName()
-		));
+        ]);
 
 		OW::getDocument()->addOnloadScript($script);
     }

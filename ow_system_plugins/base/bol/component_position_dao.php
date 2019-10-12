@@ -92,7 +92,7 @@ class BOL_ComponentPositionDao extends OW_BaseDao
     				WHERE `c`.`placeId`=? 
     	';
     	
-    	return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), array( $placeId ));
+    	return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), [$placeId]);
     }
     
     public function findAllPositionIds( $placeId )
@@ -105,7 +105,7 @@ class BOL_ComponentPositionDao extends OW_BaseDao
     				WHERE `c`.`placeId`=? 
     	';
     	
-    	return $this->dbo->queryForColumnList($query, array( $placeId ));
+    	return $this->dbo->queryForColumnList($query, [$placeId]);
     }
     
     public function findSectionPositionList( $placeId, $section)
@@ -118,7 +118,7 @@ class BOL_ComponentPositionDao extends OW_BaseDao
     				WHERE `c`.`placeId`=? AND `p`.`section`=? 
     	';
     	
-    	return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), array( $placeId, $section ));
+    	return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), [$placeId, $section]);
     }
     
     public function findSectionPositionIdList( $placeId, $section)
@@ -131,7 +131,7 @@ class BOL_ComponentPositionDao extends OW_BaseDao
     				WHERE `c`.`placeId`=? AND `p`.`section`=? 
     	';
     	
-    	return $this->dbo->queryForColumnList($query, array( $placeId, $section ));
+    	return $this->dbo->queryForColumnList($query, [$placeId, $section]);
     }
     
     public function deleteByUniqNameList($uniqNameList)

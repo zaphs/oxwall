@@ -23,21 +23,23 @@
  */
 $owBasePlugin = OW::getPluginManager()->getPlugin('base');
 $themeManager = OW::getThemeManager();
-$baseDecoratorsToRegister = array('form_base', 'main_menu', 'box_toolbar', 'avatar_item', 'box_cap', 'box', 'ipc',
-    'mini_ipc', 'tooltip', 'paging', 'floatbox', 'button', 'user_list_item', 'button_list_item', 'ic');
+$baseDecoratorsToRegister = [
+    'form_base', 'main_menu', 'box_toolbar', 'avatar_item', 'box_cap', 'box', 'ipc',
+    'mini_ipc', 'tooltip', 'paging', 'floatbox', 'button', 'user_list_item', 'button_list_item', 'ic'
+];
 
 foreach ( $baseDecoratorsToRegister as $name )
 {
     $themeManager->addDecorator($name, $owBasePlugin->getKey());
 }
 
-$classesToAutoload = array(
+$classesToAutoload = [
     'BASE_Members' => $owBasePlugin->getCtrlDir() . 'user_list.php',
     'BASE_MenuItem' => $owBasePlugin->getCmpDir() . 'menu.php',
     'BASE_CommentsParams' => $owBasePlugin->getCmpDir() . 'comments.php',
     'BASE_ContextAction' => $owBasePlugin->getCmpDir() . 'context_action.php',
     'JoinForm' => $owBasePlugin->getCtrlDir() . 'join.php'
-);
+];
 
 OW::getAutoloader()->addClassArray($classesToAutoload);
 
@@ -48,7 +50,7 @@ $router->addRoute(new OW_Route('base_forgot_password', 'forgot-password', 'BASE_
 $router->addRoute(new OW_Route('base_sign_out', 'sign-out', 'BASE_CTRL_User', 'signOut'));
 $router->addRoute(new OW_Route('ajax-form', 'ajax-form', 'BASE_CTRL_AjaxForm', 'index'));
 
-$router->addRoute(new OW_Route('users', 'users', 'BASE_CTRL_UserList', 'index', array('list' => array(OW_Route::PARAM_OPTION_HIDDEN_VAR => 'latest'))));
+$router->addRoute(new OW_Route('users', 'users', 'BASE_CTRL_UserList', 'index', ['list' => [OW_Route::PARAM_OPTION_HIDDEN_VAR => 'latest']]));
 $router->addRoute(new OW_Route('base_user_lists', 'users/:list', 'BASE_CTRL_UserList', 'index'));
 
 $router->addRoute(new OW_Route('users-waiting-for-approval', 'users/waiting-for-approval', 'BASE_CTRL_UserList', 'forApproval'));
@@ -71,17 +73,23 @@ $router->addRoute(new OW_Route('base.mobile_version', 'mobile-version', 'BASE_CT
 
 // Drag And Drop panels
 $router->addRoute(new OW_Route('base_member_dashboard', 'dashboard', 'BASE_CTRL_ComponentPanel', 'dashboard'));
-$router->addRoute(new OW_Route('base_member_dashboard_customize', 'dashboard/customize', 'BASE_CTRL_ComponentPanel', 'dashboard', array(
-        'mode' => array(OW_Route::PARAM_OPTION_HIDDEN_VAR => 'customize'
-        ))));
+$router->addRoute(new OW_Route('base_member_dashboard_customize', 'dashboard/customize', 'BASE_CTRL_ComponentPanel', 'dashboard', [
+        'mode' => [
+            OW_Route::PARAM_OPTION_HIDDEN_VAR => 'customize'
+        ]
+]));
 
-$router->addRoute(new OW_Route('base_member_profile_customize', 'my-profile/customize', 'BASE_CTRL_ComponentPanel', 'myProfile', array(
-        'mode' => array(OW_Route::PARAM_OPTION_HIDDEN_VAR => 'customize'
-        ))));
+$router->addRoute(new OW_Route('base_member_profile_customize', 'my-profile/customize', 'BASE_CTRL_ComponentPanel', 'myProfile', [
+        'mode' => [
+            OW_Route::PARAM_OPTION_HIDDEN_VAR => 'customize'
+        ]
+]));
 
-$router->addRoute(new OW_Route('base_index_customize', 'index/customize', 'BASE_CTRL_ComponentPanel', 'index', array(
-        'mode' => array(OW_Route::PARAM_OPTION_HIDDEN_VAR => 'customize'
-        ))));
+$router->addRoute(new OW_Route('base_index_customize', 'index/customize', 'BASE_CTRL_ComponentPanel', 'index', [
+        'mode' => [
+            OW_Route::PARAM_OPTION_HIDDEN_VAR => 'customize'
+        ]
+]));
 
 $router->addRoute(new OW_Route('base_index', 'index', 'BASE_CTRL_ComponentPanel', 'index'));
 $router->addRoute(new OW_Route('base_member_profile', 'my-profile', 'BASE_CTRL_ComponentPanel', 'myProfile'));
@@ -123,7 +131,7 @@ $router->addRoute(new OW_Route('base.moderation_flags_index', 'moderation/flags'
 $router->addRoute(new OW_Route('base.moderation_tools', 'moderation', 'BASE_CTRL_Moderation', 'index'));
 
 
-OW_ViewRenderer::getInstance()->registerFunction('display_rate', array('BASE_CTRL_Rate', 'displayRate'));
+OW_ViewRenderer::getInstance()->registerFunction('display_rate', ['BASE_CTRL_Rate', 'displayRate']);
 
 $eventHandler = new BASE_CLASS_EventHandler();
 $eventHandler->init();

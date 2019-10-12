@@ -85,7 +85,7 @@ class BOL_PreferenceDataDao extends OW_BaseDao
     {
         if ( $preferenceNameList === null || count($preferenceNameList) === 0 || empty($userId) )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();
@@ -115,12 +115,12 @@ class BOL_PreferenceDataDao extends OW_BaseDao
     {
         if ( $preferenceNameList === null || count($preferenceNameList) === 0 )
         {
-            return array();
+            return [];
         }
 
         if ( $userIdList === null || count($userIdList) === 0 )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();
@@ -129,7 +129,7 @@ class BOL_PreferenceDataDao extends OW_BaseDao
 
         $data = $this->findListByExample($example);
 
-        $result = array();
+        $result = [];
         foreach ( $data as $object )
         {
             $result[$object->userId][$object->key] = $object;

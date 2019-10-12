@@ -69,9 +69,9 @@ class BOL_ContentService
         return self::$classInstance;
     }
 
-    private $contentTypes = array();
+    private $contentTypes = [];
     
-    private $contentDataDefaults = array(
+    private $contentDataDefaults = [
         "id" => null,
         "userId" => null,
         "status" => null,
@@ -82,19 +82,19 @@ class BOL_ContentService
         "html" => null,
         "text" => null,
         "label" => null,
-        "image" => array(
+        "image" => [
             "thumbnail" => null,
             "preview" => null,
             "view" => null,
             "fullsize" => null
-        )
-    );
+        ]
+    ];
     
-    private $updateDataDefaults = array(
+    private $updateDataDefaults = [
         "status" => null
-    );
+    ];
     
-    private $contentTypeDefaults = array(
+    private $contentTypeDefaults = [
         "pluginKey" => null,
         "authorizationGroup" => null,
         "group" => null,
@@ -102,8 +102,8 @@ class BOL_ContentService
         "entityType" => null,
         "entityLabel" => null,
         "displayFormat" => null,
-        "moderation" => array(self::MODERATION_TOOL_FLAG, self::MODERATION_TOOL_APPROVE)
-    );
+        "moderation" => [self::MODERATION_TOOL_FLAG, self::MODERATION_TOOL_APPROVE]
+    ];
     
     /**
      * Constructor.
@@ -113,25 +113,25 @@ class BOL_ContentService
         $this->contentTypes = $this->collectContentTypes();
     }
     
-    private function checkArray( $array, $requiredProps = array() )
+    private function checkArray( $array, $requiredProps = [])
     {
         return !array_diff($requiredProps, array_keys(array_filter($array)));
     }
     
     private function collectContentTypes()
     {
-        $requiredProperties = array(
+        $requiredProperties = [
             "pluginKey",
             "group",
             "groupLabel",
             "entityType",
             "entityLabel"
-        );
+        ];
         
         $event = new BASE_CLASS_EventCollector(self::EVENT_COLLECT_TYPES);
         OW::getEventManager()->trigger($event);
         
-        $types = array();
+        $types = [];
         
         foreach ( $event->getData() as $typeInfo )
         {
@@ -165,7 +165,7 @@ class BOL_ContentService
     public function getContentGroups( array $entityTypes = null )
     {
         $types = $this->getContentTypes();
-        $groups = array();
+        $groups = [];
         
         foreach ( $types as $type )
         {
@@ -176,11 +176,11 @@ class BOL_ContentService
             
             if ( empty($groups[$type["group"]]) )
             {
-                $groups[$type["group"]] = array(
+                $groups[$type["group"]] = [
                     "name" => $type["group"],
                     "label" => $type["groupLabel"],
-                    "entityTypes" => array()
-                );
+                    "entityTypes" => []
+                ];
             }
             
             $groups[$type["group"]]["entityTypes"][] = $type["entityType"];
@@ -198,16 +198,16 @@ class BOL_ContentService
     {
         $typeInfo = $this->getContentTypeByEntityType($entityType);
         
-        $event = new OW_Event(self::EVENT_GET_INFO, array(
+        $event = new OW_Event(self::EVENT_GET_INFO, [
             "entityType" => $entityType,
             "entityIds" => $entityIds
-        ));
+        ]);
         OW::getEventManager()->trigger($event);
         
         $data = $event->getData();
-        $data = empty($data) ? array() : $data;
+        $data = empty($data) ? [] : $data;
         
-        $out = array();
+        $out = [];
         foreach ( $entityIds as $entityId )
         {
             if ( empty($data[$entityId]) )
@@ -220,7 +220,7 @@ class BOL_ContentService
             $info = $data[$entityId];
             $info["label"] = empty($info["label"]) ? $typeInfo["entityLabel"] : $info["label"];
             
-            $out[$entityId] = array_merge($this->contentDataDefaults, $info, array("typeInfo" => $typeInfo));
+            $out[$entityId] = array_merge($this->contentDataDefaults, $info, ["typeInfo" => $typeInfo]);
         }
                 
         return $out;
@@ -228,45 +228,45 @@ class BOL_ContentService
     
     public function getContent( $entityType, $entityId )
     {
-        $out = $this->getContentList($entityType, array($entityId));
+        $out = $this->getContentList($entityType, [$entityId]);
         
         return $out[$entityId];
     }
     
     public function updateContentList( $entityType, array $entityIds, array $data )
     {
-        $dataList = array();
+        $dataList = [];
         foreach ( $entityIds as $entityId )
         {
             $dataList[$entityId] = array_merge($this->updateDataDefaults, $data);
         }
         
-        $event = new OW_Event(self::EVENT_UPDATE_INFO, array(
+        $event = new OW_Event(self::EVENT_UPDATE_INFO, [
             "entityType" => $entityType,
             "entityIds" => array_keys($dataList)
-        ), $dataList);
+        ], $dataList);
         
         OW::getEventManager()->trigger($event);
     }
     
     public function updateContent( $entityType, $entityId, $data )
     {
-        $this->updateContentList($entityType, array($entityId), $data);
+        $this->updateContentList($entityType, [$entityId], $data);
     }
     
     public function deleteContentList( $entityType, array $entityIds )
     {
-        $event = new OW_Event(self::EVENT_DELETE, array(
+        $event = new OW_Event(self::EVENT_DELETE, [
             "entityType" => $entityType,
             "entityIds" => $entityIds
-        ));
+        ]);
         
         OW::getEventManager()->trigger($event);
     }
     
     public function deleteContent( $entityType, $entityId )
     {
-        $this->deleteContentList($entityType, array($entityId));
+        $this->deleteContentList($entityType, [$entityId]);
     }
     
     /**
@@ -278,7 +278,7 @@ class BOL_ContentService
      * @param array $options
      * @return array
      */
-    public function getQueryFilter( array $tables, array $fields, $options = array() )
+    public function getQueryFilter( array $tables, array $fields, $options = [])
     {
         if ( empty($tables[BASE_CLASS_QueryBuilderEvent::TABLE_CONTENT]) 
                 || empty($fields[BASE_CLASS_QueryBuilderEvent::FIELD_CONTENT_ID]) )
@@ -286,18 +286,18 @@ class BOL_ContentService
             throw new InvalidArgumentException("Content table name or key field were not provided.");
         }
         
-        $event = new BASE_CLASS_QueryBuilderEvent("base.query.content_filter", array_merge(array(
+        $event = new BASE_CLASS_QueryBuilderEvent("base.query.content_filter", array_merge([
             "tables" => $tables,
             "fields" => $fields
-        ), $options));
+        ], $options));
 
         OW::getEventManager()->trigger($event);
 
-        return array(
+        return [
             "join" => $event->getJoin(),
             "where" => $event->getWhere(),
             "order" => $event->getOrder(),
             "params" => $event->getQueryParams()
-        );
+        ];
     }
 }

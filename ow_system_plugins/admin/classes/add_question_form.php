@@ -4,11 +4,11 @@ require_once OW_DIR_SYSTEM_PLUGIN . 'admin' . DS . 'classes' . DS . 'form_fields
 
 class ADMIN_CLASS_AddQuestionForm extends Form
 {
-    public  $presentations2types = array();
-    public  $questionConfigs = array();
+    public  $presentations2types = [];
+    public  $questionConfigs = [];
     protected $qstColumnCountValues;
-    protected $presentations2FormElements = array();
-    protected $configToPresentation = array();
+    protected $presentations2FormElements = [];
+    protected $configToPresentation = [];
     protected $questionService;
 
     public function __construct( $name, $responderUrl )
@@ -21,8 +21,8 @@ class ADMIN_CLASS_AddQuestionForm extends Form
         $this->presentations2types = $this->questionService->getPresentations();
         $presentationConfigList = BOL_QuestionService::getInstance()->getAllConfigs();
 
-        $this->questionConfigs = array();
-        $this->configToPresentation = array();
+        $this->questionConfigs = [];
+        $this->configToPresentation = [];
         
         foreach ( $presentationConfigList as $config )
         {
@@ -34,7 +34,7 @@ class ADMIN_CLASS_AddQuestionForm extends Form
         unset($this->presentations2types[BOL_QuestionService::QUESTION_PRESENTATION_PASSWORD]);
         unset($this->presentations2types[BOL_QuestionService::QUESTION_PRESENTATION_RANGE]);
 
-        $this->qstColumnCountValues = array();
+        $this->qstColumnCountValues = [];
         
         for ( $i = 1; $i <= 5; $i++ )
         {
@@ -89,7 +89,7 @@ class ADMIN_CLASS_AddQuestionForm extends Form
             return $this->presentations2FormElements;
         }
 
-        $displayFieldList = array(
+        $displayFieldList = [
             'qst_name' => true,
             'qst_description' => true,
             'qst_section' => true,
@@ -103,7 +103,7 @@ class ADMIN_CLASS_AddQuestionForm extends Form
             'qst_on_edit' => true,
             'qst_on_view' => true,
             'qst_on_search' => true
-        );
+        ];
 
         //$configToPresentation = array();
         /*@var $config BOL_QuestionConfig */
@@ -113,22 +113,22 @@ class ADMIN_CLASS_AddQuestionForm extends Form
             //$configToPresentation[$config->questionPresentation][$config->name] = $config;
         }
 
-        $columnCountPresentation = array(
+        $columnCountPresentation = [
             BOL_QuestionService::QUESTION_PRESENTATION_MULTICHECKBOX,
             BOL_QuestionService::QUESTION_PRESENTATION_RADIO,
             BOL_QuestionService::QUESTION_PRESENTATION_SELECT
-        );
+        ];
 
-        $possibleValuesTypeList = array(
+        $possibleValuesTypeList = [
             BOL_QuestionService::QUESTION_VALUE_TYPE_SELECT,
             BOL_QuestionService::QUESTION_VALUE_TYPE_MULTISELECT
-        );
+        ];
 
-        $infinitePossibleValuesTypeList = array(
+        $infinitePossibleValuesTypeList = [
             BOL_QuestionService::QUESTION_VALUE_TYPE_FSELECT,
-        );
+        ];
 
-        $result = array();
+        $result = [];
 
         foreach ( $this->presentations2types as $presentation => $type )
         {
@@ -163,7 +163,7 @@ class ADMIN_CLASS_AddQuestionForm extends Form
         return $result;
     }
 
-    protected function init( $params = array() )
+    protected function init( $params = [])
     {
         $accountTypes = $this->questionService->findAllAccountTypes();
 
@@ -171,7 +171,7 @@ class ADMIN_CLASS_AddQuestionForm extends Form
         $language = OW::getLanguage();
         $currentLanguageId = OW::getLanguage()->getCurrentId();
 
-        $accounts = array();
+        $accounts = [];
 
         /* @var $value BOL_QuestionAccount */
         foreach ( $accountTypes as $value )
@@ -187,7 +187,7 @@ class ADMIN_CLASS_AddQuestionForm extends Form
             $this->assign('no_sections', true);
         }
 
-        $sectionsArray = array();
+        $sectionsArray = [];
 
         /* @var $section BOL_QuestionSection */
         foreach ( $sections as $section )
@@ -202,8 +202,8 @@ class ADMIN_CLASS_AddQuestionForm extends Form
         
         $presentationList = array_keys($this->presentations2types);
 
-        $presentations = array();
-        $presentationsLabel = array();
+        $presentations = [];
+        $presentationsLabel = [];
 
         foreach ( $presentationList as $item )
         {
@@ -416,7 +416,7 @@ class ADMIN_CLASS_AddQuestionForm extends Form
                 $question->sortOrder = ( (int) BOL_QuestionService::getInstance()->findLastQuestionOrder($question->sectionName) ) + 1;
 
                 // save question configs
-                $configs = array();
+                $configs = [];
 
                 if ( !empty($configToPresentation[$question->presentation]) )
                 {
@@ -437,7 +437,7 @@ class ADMIN_CLASS_AddQuestionForm extends Form
                 }
                 else
                 {
-                    $questionValues = !empty($data['qst_possible_values']) ? $data['qst_possible_values'] : array();
+                    $questionValues = !empty($data['qst_possible_values']) ? $data['qst_possible_values'] : [];
                 }
 
                 $name = !empty($data['qst_name']) ? trim($data['qst_name']) : '';
@@ -476,12 +476,12 @@ class ADMIN_CLASS_AddQuestionForm extends Form
 
                 OW::getFeedback()->info(OW::getLanguage()->text( 'admin', 'questions_add_question_message' ));
 
-                echo json_encode( array( 'result' => true, 'errors' => array()) );
+                echo json_encode( ['result' => true, 'errors' => []]);
 
             }
             else
             {
-                echo json_encode( array( 'result' => false, 'errors' => $this->getErrors(), 'message' => OW::getLanguage()->text( 'admin', 'questions_add_question_error' ) ) );
+                echo json_encode( ['result' => false, 'errors' => $this->getErrors(), 'message' => OW::getLanguage()->text( 'admin', 'questions_add_question_error' )]);
             }
             exit;
 

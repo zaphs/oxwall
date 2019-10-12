@@ -50,7 +50,7 @@ class OW_Response
      *
      * @var array
      */
-    private $headers = array();
+    private $headers = [];
 
     /**
      * Document to send
@@ -114,7 +114,7 @@ class OW_Response
      */
     public function clearHeaders()
     {
-        $this->headers = array();
+        $this->headers = [];
     }
 
     /**

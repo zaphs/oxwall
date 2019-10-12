@@ -76,7 +76,7 @@ class OW_EventManager
     /**
      * @var array
      */
-    private $eventsToSkip = array(
+    private $eventsToSkip = [
         "core.get_text",
         "core.get_storage",
         "class.get_instance",
@@ -85,7 +85,7 @@ class OW_EventManager
         "core.sql.set_query_result",
         "core.sql.exec_query",
         "core.performance_test"
-    );
+    ];
 
     /**
      * @var int
@@ -100,7 +100,7 @@ class OW_EventManager
     /**
      * @var array
      */
-    private $eventsLog = array();
+    private $eventsLog = [];
 
     /**
      * @var UTIL_Profiler
@@ -112,7 +112,7 @@ class OW_EventManager
      *
      * @var array
      */
-    private $listeners = array();
+    private $listeners = [];
 
     /**
      * Constructor.
@@ -157,7 +157,7 @@ class OW_EventManager
 
         if ( !isset($this->listeners[$name][$priority]) )
         {
-            $this->listeners[$name][$priority] = array();
+            $this->listeners[$name][$priority] = [];
         }
 
         $this->listeners[$name][$priority][] = $listener;
@@ -215,8 +215,10 @@ class OW_EventManager
 
                 if ( !in_array($event->getName(), $this->eventsToSkip) && count($this->eventsLog) < $this->maxItemsInLog )
                 {
-                    $this->eventsLog[] = array('type' => 'trigger', 'start' => $startTime, 'exec' => $this->profiler->getTotalTime(),
-                        'event' => $event, 'listeners' => $this->listeners[$event->getName()]);
+                    $this->eventsLog[] = [
+                        'type'  => 'trigger', 'start' => $startTime, 'exec' => $this->profiler->getTotalTime(),
+                        'event' => $event, 'listeners' => $this->listeners[$event->getName()]
+                    ];
                 }
             }
             else
@@ -240,8 +242,10 @@ class OW_EventManager
 
             if ( $this->devMode && !in_array($event->getName(), $this->eventsToSkip) && count($this->eventsLog) < $this->maxItemsInLog )
             {
-                $this->eventsLog[] = array('type' => 'trigger', 'start' => $startTime, 'event' => $event, 'listeners' => array(),
-                    'exec' => 0);
+                $this->eventsLog[] = [
+                    'type' => 'trigger', 'start' => $startTime, 'event' => $event, 'listeners' => [],
+                    'exec' => 0
+                ];
             }
         }
 
@@ -255,7 +259,7 @@ class OW_EventManager
      * @param array $eventParams
      * @return mixed
      */
-    public function call( $eventName, $eventParams = array() )
+    public function call( $eventName, $eventParams = [])
     {
         $event = new OW_Event($eventName, $eventParams);
 
@@ -273,8 +277,10 @@ class OW_EventManager
 
                 if ( !in_array($event->getName(), $this->eventsToSkip) && count($this->eventsLog) < $this->maxItemsInLog )
                 {
-                    $this->eventsLog[] = array('type' => 'call', 'start' => $startTime, 'exec' => $this->profiler->getTotalTime(),
-                        'event' => $event, 'listeners' => $this->listeners[$event->getName()]);
+                    $this->eventsLog[] = [
+                        'type'  => 'call', 'start' => $startTime, 'exec' => $this->profiler->getTotalTime(),
+                        'event' => $event, 'listeners' => $this->listeners[$event->getName()]
+                    ];
                 }
             }
             else
@@ -292,8 +298,10 @@ class OW_EventManager
 
             if ( $this->devMode && !in_array($event->getName(), $this->eventsToSkip) && count($this->eventsLog) < $this->maxItemsInLog )
             {
-                $this->eventsLog[] = array('type' => 'call', 'start' => $startTime, 'event' => $event, 'listeners' => array(),
-                    'exec' => 0);
+                $this->eventsLog[] = [
+                    'type' => 'call', 'start' => $startTime, 'event' => $event, 'listeners' => [],
+                    'exec' => 0
+                ];
             }
         }
     }
@@ -311,6 +319,6 @@ class OW_EventManager
      */
     public function getLog()
     {
-        return array('bind' => $this->listeners, 'call' => $this->eventsLog);
+        return ['bind' => $this->listeners, 'call' => $this->eventsLog];
     }
 }

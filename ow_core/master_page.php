@@ -131,9 +131,9 @@ class OW_MasterPage extends OW_Renderable
         
         $this->addMenu(BOL_NavigationService::MENU_TYPE_MAIN, $mainMenu);
         
-        $this->addComponent('main_menu', new BASE_CMP_MainMenu(array(
+        $this->addComponent('main_menu', new BASE_CMP_MainMenu([
             "responsive" => false
-        )));
+        ]));
 
         // add bottom menu
         $bottomMenu = new BASE_CMP_BottomMenu();

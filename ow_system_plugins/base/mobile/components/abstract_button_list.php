@@ -31,14 +31,14 @@ abstract class BASE_MCMP_AbstractButtonList extends OW_MobileComponent
 {
     protected function prepareItem( $item, $defaultClass = "" )
     {
-        $action = array();
+        $action = [];
 
         $action['label'] = $item["label"];
         $action['order'] = 999;
 
         $attrs = isset($item["attributes"]) && is_array($item["attributes"])
             ? $item["attributes"]
-            : array();
+            : [];
 
         $attrs['class'] = empty($attrs['class']) 
                 ? $defaultClass 
@@ -61,7 +61,7 @@ abstract class BASE_MCMP_AbstractButtonList extends OW_MobileComponent
             $action['order'] = $item["order"];
         }
 
-        $_attrs = array();
+        $_attrs = [];
         foreach ( $attrs as $name => $value )
         {
             $_attrs[] = $name . '="' . $value . '"';
@@ -74,7 +74,7 @@ abstract class BASE_MCMP_AbstractButtonList extends OW_MobileComponent
     
     protected function getSortedItems( $items )
     {
-        usort($items, array($this, "itemsSorter"));
+        usort($items, [$this, "itemsSorter"]);
         
         return $items;
     }

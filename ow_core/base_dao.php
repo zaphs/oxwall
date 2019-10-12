@@ -53,11 +53,11 @@ abstract class OW_BaseDao
      * @param int $id
      * @return OW_Entity
      */
-    public function findById( $id, $cacheLifeTime = 0, $tags = array() )
+    public function findById( $id, $cacheLifeTime = 0, $tags = [])
     {
         $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE `id` = ?';
 
-        return $this->dbo->queryForObject($sql, $this->getDtoClassName(), array((int) $id), $cacheLifeTime, $tags);
+        return $this->dbo->queryForObject($sql, $this->getDtoClassName(), [(int) $id], $cacheLifeTime, $tags);
     }
 
     /**
@@ -66,18 +66,18 @@ abstract class OW_BaseDao
      * @param array $idList
      * @return array
      */
-    public function findByIdList( array $idList, $cacheLifeTime = 0, $tags = array() )
+    public function findByIdList( array $idList, $cacheLifeTime = 0, $tags = [])
     {
         if ( $idList === null || count($idList) === 0 )
         {
-            return array();
+            return [];
         }
         $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE `id` IN(' . $this->dbo->mergeInClause($idList) . ')';
 
-        return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), [], $cacheLifeTime, $tags);
     }
 
-    public function findListByExample( OW_Example $example, $cacheLifeTime = 0, $tags = array() )
+    public function findListByExample( OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
         if ( $example === null )
         {
@@ -86,10 +86,10 @@ abstract class OW_BaseDao
 
         $sql = 'SELECT * FROM ' . $this->getTableName() . $example;
 
-        return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), [], $cacheLifeTime, $tags);
     }
 
-    public function countByExample( OW_Example $example, $cacheLifeTime = 0, $tags = array() )
+    public function countByExample( OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
         if ( $example === null )
         {
@@ -98,10 +98,10 @@ abstract class OW_BaseDao
 
         $sql = 'SELECT COUNT(*) FROM ' . $this->getTableName() . $example;
 
-        return $this->dbo->queryForColumn($sql, array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForColumn($sql, [], $cacheLifeTime, $tags);
     }
 
-    public function findObjectByExample( OW_Example $example, $cacheLifeTime = 0, $tags = array() )
+    public function findObjectByExample( OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
         if ( $example === null )
         {
@@ -111,7 +111,7 @@ abstract class OW_BaseDao
         $example->setLimitClause(0, 1);
         $sql = 'SELECT * FROM ' . $this->getTableName() . $example;
 
-        return $this->dbo->queryForObject($sql, $this->getDtoClassName(), array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForObject($sql, $this->getDtoClassName(), [], $cacheLifeTime, $tags);
     }
 
     /**
@@ -119,11 +119,11 @@ abstract class OW_BaseDao
      *
      * @return array
      */
-    public function findAll( $cacheLifeTime = 0, $tags = array() )
+    public function findAll( $cacheLifeTime = 0, $tags = [])
     {
         $sql = 'SELECT * FROM ' . $this->getTableName();
 
-        return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), [], $cacheLifeTime, $tags);
     }
 
     /**
@@ -149,7 +149,7 @@ abstract class OW_BaseDao
         if ( $id > 0 )
         {
             $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE `id` = ?';
-            $result = $this->dbo->delete($sql, array($id));
+            $result = $this->dbo->delete($sql, [$id]);
             $this->clearCache();
             return $result;
         }
@@ -246,7 +246,7 @@ abstract class OW_BaseDao
         $this->clearCache();
     }
 
-    public function findIdByExample( OW_Example $example, $cacheLifeTime = 0, $tags = array() )
+    public function findIdByExample( OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
         if ( $example === null )
         {
@@ -256,10 +256,10 @@ abstract class OW_BaseDao
         $example->setLimitClause(0, 1);
         $sql = 'SELECT `id` FROM ' . $this->getTableName() . $example;
 
-        return $this->dbo->queryForColumn($sql, array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForColumn($sql, [], $cacheLifeTime, $tags);
     }
 
-    public function findIdListByExample( OW_Example $example, $cacheLifeTime = 0, $tags = array() )
+    public function findIdListByExample( OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
         if ( $example === null )
         {
@@ -268,7 +268,7 @@ abstract class OW_BaseDao
 
         $sql = 'SELECT `id` FROM ' . $this->getTableName() . $example;
 
-        return $this->dbo->queryForColumnList($sql, array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForColumnList($sql, [], $cacheLifeTime, $tags);
     }
 
     protected function clearCache()
@@ -286,7 +286,7 @@ abstract class OW_BaseDao
      */
     protected function getClearCacheTags()
     {
-        return array();
+        return [];
     }
     
     protected function tableDataChanged()

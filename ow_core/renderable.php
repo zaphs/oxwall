@@ -36,14 +36,14 @@ abstract class OW_Renderable extends OW_View
      *
      * @var array
      */
-    protected $components = array();
+    protected $components = [];
 
     /**
      * List of registered forms.
      *
      * @var array
      */
-    protected $forms = array();
+    protected $forms = [];
 
     /**
      * Constructor.
@@ -117,7 +117,7 @@ abstract class OW_Renderable extends OW_View
 
         if ( !empty($this->components) )
         {
-            $renderedCmps = array();
+            $renderedCmps = [];
 
             foreach ( $this->components as $key => $value )
             {

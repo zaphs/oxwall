@@ -29,7 +29,7 @@
  */
 abstract class BASE_MCMP_UserList extends OW_MobileComponent
 {
-    protected $showOnline = true, $list = array();
+    protected $showOnline = true, $list = [];
 
     public function __construct( $list, $showOnline = true )
     {
@@ -49,16 +49,16 @@ abstract class BASE_MCMP_UserList extends OW_MobileComponent
         
         if ( empty($idList) )
         {
-            $idList = array();
+            $idList = [];
         }
         
-        $userList = array();
+        $userList = [];
 
         $dtoList = BOL_UserService::getInstance()->findUserListByIdList($idList);
-        $tmpUserList = array();
+        $tmpUserList = [];
         foreach ( $dtoList as $dto )
         {
-            $tmpUserList[$dto->id] = array('dto' => $dto);
+            $tmpUserList[$dto->id] = ['dto' => $dto];
         }
         
         foreach ( $idList as $id )
@@ -66,11 +66,11 @@ abstract class BASE_MCMP_UserList extends OW_MobileComponent
             $userList[$id] = $tmpUserList[$id];
         }
 
-        $avatars = array();
-        $usernameList = array();
-        $displayNameList = array();
-        $onlineInfo = array();
-        $questionList = array();
+        $avatars = [];
+        $usernameList = [];
+        $displayNameList = [];
+        $onlineInfo = [];
+        $questionList = [];
 
         if ( !empty($idList) )
         {
@@ -89,20 +89,20 @@ abstract class BASE_MCMP_UserList extends OW_MobileComponent
             }
         }
 
-        $showPresenceList = array();
+        $showPresenceList = [];
 
-        $ownerIdList = array();
+        $ownerIdList = [];
 
         foreach ( $onlineInfo as $userId => $isOnline )
         {
             $ownerIdList[$userId] = $userId;
         }
 
-        $eventParams = array(
+        $eventParams = [
                 'action' => 'base_view_my_presence_on_site',
                 'ownerIdList' => $ownerIdList,
                 'viewerId' => OW::getUser()->getId()
-            );
+        ];
 
         $permissions = OW::getEventManager()->getInstance()->call('privacy_check_permission_for_user_list', $eventParams);
 
@@ -118,7 +118,7 @@ abstract class BASE_MCMP_UserList extends OW_MobileComponent
             $showPresenceList[$userId] = true;
         }
 
-        $contextMenuList = array();
+        $contextMenuList = [];
         foreach ( $idList as $uid )
         {
             $contextMenu = $this->getContextMenu($uid);

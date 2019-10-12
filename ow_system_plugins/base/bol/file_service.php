@@ -128,7 +128,7 @@ class BOL_FileService
             case 'k': $intUploadMaxSize *= 1024;
         }
 
-        $possibleSize = array($postMaxSize => $intPostMaxSize, $uploadMaxSize => $intUploadMaxSize);
+        $possibleSize = [$postMaxSize => $intPostMaxSize, $uploadMaxSize => $intUploadMaxSize];
         return min($possibleSize);
     }
     

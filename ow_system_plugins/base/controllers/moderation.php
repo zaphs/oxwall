@@ -133,31 +133,31 @@ class BASE_CTRL_Moderation extends OW_ActionController
         // Paging
         $page = (isset($_GET['page']) && intval($_GET['page']) > 0) ? $_GET['page'] : 1;
         $perPage = self::ITEMS_PER_PAGE;
-        $limit = array(
+        $limit = [
             ($page - 1) * $perPage,
             $perPage
-        );
+        ];
         
         $this->addComponent("paging", new BASE_CMP_Paging($page, ceil($currentGroup["count"] / $perPage), 5));
         
         // List
         
         $flags = BOL_FlagService::getInstance()->findFlagsByEntityTypeList($currentGroup["entityTypes"], $limit);
-        $entityList = array();
-        $userIds = array();
-        $reporterIds = array();
+        $entityList = [];
+        $userIds = [];
+        $reporterIds = [];
         
         foreach ( $flags as $flag )
         {
             $entityList[$flag->entityType] = empty($entityList[$flag->entityType])
-                    ? array()
+                    ? []
                     : $entityList[$flag->entityType];
             
             $entityList[$flag->entityType][] = $flag->entityId;
             $reporterIds[$flag->userId] = $flag->userId;
         }
         
-        $contentData = array();
+        $contentData = [];
         foreach ( $entityList as $entityType => $entityIds )
         {
             $infoList = BOL_ContentService::getInstance()->getContentList($entityType, $entityIds);
@@ -172,7 +172,7 @@ class BASE_CTRL_Moderation extends OW_ActionController
         $reporterUrls = BOL_UserService::getInstance()->getUserUrlsForList($reporterIds);
         $reporterNames = BOL_UserService::getInstance()->getDisplayNamesForList($reporterIds);
         
-        $tplFlags = array();
+        $tplFlags = [];
         
         foreach ( $flags as $flag )
         {
@@ -184,27 +184,27 @@ class BASE_CTRL_Moderation extends OW_ActionController
             
             $label = empty($content["label"]) ? $content["typeInfo"]["entityLabel"] : $content["label"];
             
-            $tplFlags[] = array(
+            $tplFlags[] = [
                 "content" => $contentPresenter->render(),
                 "avatar" => $avatarData[$content["userId"]],
-                "string" => OW::getLanguage()->text("base", "moderation_flags_item_string", array(
+                "string" => OW::getLanguage()->text("base", "moderation_flags_item_string", [
                     "userName" => $userName,
                     "userUrl" => $userUrl,
                     "content" => strtolower($label)
-                )),
-                
+                ]),
+
                 "contentLabel" => strtolower($label),
-                
+
                 "entityType" => $flag->entityType,
                 "entityId" => $flag->entityId,
                 "time" => UTIL_DateTime::formatDate($flag->timeStamp),
-                
+
                 "reason" => $flag->reason,
-                "reporter" => array(
+                "reporter" => [
                     "url" => $reporterUrls[$flag->userId],
                     "name" => $reporterNames[$flag->userId]
-                )
-            );
+                ]
+            ];
         }
         
         $uniqId = uniqid("m-");
@@ -213,23 +213,23 @@ class BASE_CTRL_Moderation extends OW_ActionController
         $this->assign("flags", $tplFlags);
         $this->assign("group", $currentGroup);
                 
-        $this->assign("responderUrl", OW::getRouter()->urlFor(__CLASS__, "flagsResponder", array(
+        $this->assign("responderUrl", OW::getRouter()->urlFor(__CLASS__, "flagsResponder", [
             "group" => $currentGroup["name"]
-        )));
+        ]));
         
         OW::getLanguage()->addKeyForJs("base", "are_you_sure");
         OW::getLanguage()->addKeyForJs("base", "moderation_delete_confirmation");
         OW::getLanguage()->addKeyForJs("base", "moderation_delete_multiple_confirmation");
         OW::getLanguage()->addKeyForJs("base", "moderation_no_items_warning");
         
-        $options = array(
+        $options = [
             "groupLabel" => strtolower($currentGroup["label"])
-        );
+        ];
         
         $js = UTIL_JsGenerator::newInstance();
-        $js->callFunction("MODERATION_FlagsInit", array(
+        $js->callFunction("MODERATION_FlagsInit", [
             $uniqId, $options
-        ));
+        ]);
         
         OW::getDocument()->addOnloadScript($js);
     }
@@ -243,14 +243,14 @@ class BASE_CTRL_Moderation extends OW_ActionController
         }
         
         $data = $_POST;
-        $data["items"] = empty($data["items"]) ? array() : $data["items"];
+        $data["items"] = empty($data["items"]) ? [] : $data["items"];
         list($command, $type) = explode(".", $data["command"]);
         
-        $backUrl = OW::getRouter()->urlForRoute("base.moderation_flags", array(
+        $backUrl = OW::getRouter()->urlForRoute("base.moderation_flags", [
             "group" => $params["group"]
-        ));
+        ]);
         
-        $itemKeys = $type == "single" ? array($data["item"]) : $data["items"];
+        $itemKeys = $type == "single" ? [$data["item"]] : $data["items"];
         
         if ( empty($itemKeys) )
         {
@@ -258,11 +258,11 @@ class BASE_CTRL_Moderation extends OW_ActionController
             $this->redirect($backUrl);
         }
         
-        $itemIds = array();
+        $itemIds = [];
         foreach ( $itemKeys as $itemKey )
         {
             list($entityType, $entityId) = explode(":", $itemKey);
-            $itemIds[$entityType] = empty($itemIds[$entityType]) ? array() : $itemIds[$entityType];
+            $itemIds[$entityType] = empty($itemIds[$entityType]) ? [] : $itemIds[$entityType];
             
             $itemIds[$entityType][] = $entityId;
         }
@@ -288,7 +288,7 @@ class BASE_CTRL_Moderation extends OW_ActionController
         }
         
         // Feedback
-        $assigns = array();
+        $assigns = [];
         
         $multiple = $affected > 1;
         

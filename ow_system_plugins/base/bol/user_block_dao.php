@@ -85,22 +85,22 @@ class BOL_UserBlockDao extends OW_BaseDao
 
     public function findBlockedUserList($userId, $first, $count)
     {
-        $queryParts = BOL_UserService::getInstance()->getQueryFilter(array(
+        $queryParts = BOL_UserService::getInstance()->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_USER => 'u'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_USER_ID => 'blockedUserId'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::OPTION_METHOD => __METHOD__
-        ));
+        ]);
 
         $query = "SELECT u.* FROM " . $this->getTableName() . " u " . $queryParts["join"]
             . " WHERE " . $queryParts["where"] . " AND u.userId=:userId  LIMIT :lf, :lc";
 
-        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), array(
+        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), [
             "userId" => $userId,
             "lf" => $first,
             "lc" => $count
-        ));
+        ]);
     }
 
     /**
@@ -114,7 +114,7 @@ class BOL_UserBlockDao extends OW_BaseDao
         $example->andFieldEqual(self::USER_ID, (int) $userId);
         $example->andFieldEqual(self::BLOCKED_USER_ID, (int) $blockedUserId);
 
-        return $this->findObjectByExample($example, BOL_UserBlockDao::CACHE_LIFE_TIME, array(BOL_UserBlockDao::CACHE_TAG_BLOCKED_USER));
+        return $this->findObjectByExample($example, BOL_UserBlockDao::CACHE_LIFE_TIME, [BOL_UserBlockDao::CACHE_TAG_BLOCKED_USER]);
     }
 
     public function findBlockedList( $userId, $userIdList )
@@ -123,7 +123,7 @@ class BOL_UserBlockDao extends OW_BaseDao
         $example->andFieldEqual(self::USER_ID, (int) $userId);
         $example->andFieldInArray(self::BLOCKED_USER_ID, $userIdList);
 
-        return $this->findListByExample($example, BOL_UserBlockDao::CACHE_LIFE_TIME, array(BOL_UserBlockDao::CACHE_TAG_BLOCKED_USER));
+        return $this->findListByExample($example, BOL_UserBlockDao::CACHE_LIFE_TIME, [BOL_UserBlockDao::CACHE_TAG_BLOCKED_USER]);
     }
 
     public function deleteBlockedUser( $userId, $blockedUserId )
@@ -137,20 +137,20 @@ class BOL_UserBlockDao extends OW_BaseDao
 
     public function countBlockedUsers( $userId )
     {
-        $queryParts = BOL_UserService::getInstance()->getQueryFilter(array(
+        $queryParts = BOL_UserService::getInstance()->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_USER => 'u'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_USER_ID => 'blockedUserId'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::OPTION_METHOD => __METHOD__
-        ));
+        ]);
 
         $query = "SELECT COUNT(DISTINCT u.blockedUserId) FROM " . $this->getTableName() . " u " . $queryParts["join"]
             . " WHERE " . $queryParts["where"] . " AND u.userId=:userId";
 
-        return $this->dbo->queryForColumn($query, array(
+        return $this->dbo->queryForColumn($query, [
             "userId" => $userId
-        ));
+        ]);
     }
 
     public function deleteByUserId( $userId )
@@ -166,6 +166,6 @@ class BOL_UserBlockDao extends OW_BaseDao
 
     protected function clearCache()
     {
-        OW::getCacheManager()->clean(array(BOL_UserBlockDao::CACHE_TAG_BLOCKED_USER));
+        OW::getCacheManager()->clean([BOL_UserBlockDao::CACHE_TAG_BLOCKED_USER]);
     }
 }

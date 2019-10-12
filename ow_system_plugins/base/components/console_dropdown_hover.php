@@ -17,11 +17,11 @@ class BASE_CMP_ConsoleDropdownHover extends BASE_CMP_ConsoleDropdown
     protected function initJs()
     {
         $js = UTIL_JsGenerator::newInstance();
-        $js->addScript('OW.Console.addItem(new OW_ConsoleDropdownHover({$uniqId}, {$contentIniqId}), {$key});', array(
+        $js->addScript('OW.Console.addItem(new OW_ConsoleDropdownHover({$uniqId}, {$contentIniqId}), {$key});', [
             'key' => $this->getKey(),
             'uniqId' => $this->consoleItem->getUniqId(),
             'contentIniqId' => $this->consoleItem->getContentUniqId()
-        ));
+        ]);
 
         OW::getDocument()->addOnloadScript($js);
     }

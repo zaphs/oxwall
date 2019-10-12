@@ -74,9 +74,11 @@ class ADMIN_CTRL_Pages extends ADMIN_CTRL_Abstract
         $hiddenMenuItems = $service->findMenuItems(BOL_NavigationService::MENU_TYPE_HIDDEN);
         usort($hiddenMenuItems, 'compare');
 
-        $menuItems = array( 'main' => $mainMenuItems,
+        $menuItems = [
+            'main'   => $mainMenuItems,
             'bottom' => $bottomMenuItems,
-            'hidden' => $hiddenMenuItems );
+            'hidden' => $hiddenMenuItems
+        ];
 
         $this->assign('menuItems', $menuItems);
     }
@@ -319,10 +321,10 @@ class SaveForm extends Form
 
         $visibleForCheckboxGroup = new CheckboxGroup('visible-for');
 
-        $opts = array(
+        $opts = [
             '1' => OW::getLanguage()->text('admin', 'pages_edit_visible_for_guests'),
             '2' => OW::getLanguage()->text('admin', 'pages_edit_visible_for_members')
-        );
+        ];
 
         $visibleForCheckboxGroup->setOptions($opts);
         $visibleForCheckboxGroup->setLabel(OW::getLanguage()->text('admin', 'pages_edit_local_visible_for'));
@@ -357,10 +359,10 @@ class SaveForm extends Form
         $contentTextArea->setLabel(OW::getLanguage()->text('admin', 'pages_add_page_content'))
                 ->setId('content')
                 ->setDescription(
-                        OW::getLanguage()->text('admin', 'pages_page_field_content_desc', array(
+                        OW::getLanguage()->text('admin', 'pages_page_field_content_desc', [
                             'src' => OW::getThemeManager()->getCurrentTheme()->getStaticImagesUrl() . 'question.png',
                             'url' => '#'
-                                )
+                            ]
                         )
         );
 
@@ -422,7 +424,7 @@ class SaveForm extends Form
 
         $visibleFor = 0;
 
-        $arr = !empty($_POST['visible-for']) ? $_POST['visible-for'] : array( );
+        $arr = !empty($_POST['visible-for']) ? $_POST['visible-for'] : [];
 
         foreach ( $arr as $val )
         {
@@ -691,4 +693,4 @@ class ExternalPageUrlValidator extends UrlValidator
 
 }
 
-?>
+

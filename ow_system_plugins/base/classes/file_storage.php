@@ -86,7 +86,7 @@ class BASE_CLASS_FileStorage implements OW_Storage
     {
         $dirPath = UTIL_File::removeLastDS($dirPath);
 
-        $resultList = array();
+        $resultList = [];
 
         $handle = opendir($dirPath);
 
@@ -182,4 +182,4 @@ class BASE_CLASS_FileStorage implements OW_Storage
         chmod($path, $permissions);
     }
 }
-?>
+

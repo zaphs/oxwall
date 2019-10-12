@@ -31,8 +31,8 @@
  */
 abstract class BASE_CTRL_AjaxComponentPanel extends OW_ActionController
 {
-    private $actions = array();
-    private $debug = array();
+    private $actions = [];
+    private $debug = [];
 
     /**
      * @see OW_ActionController::init()
@@ -45,14 +45,14 @@ abstract class BASE_CTRL_AjaxComponentPanel extends OW_ActionController
             throw new Redirect404Exception();
         }
 
-        $this->registerAction('saveComponentPlacePositions', array($this, 'saveComponentPlacePositions'));
-        $this->registerAction('cloneComponent', array($this, 'cloneComponent'));
-        $this->registerAction('deleteComponent', array($this, 'deleteComponent'));
-        $this->registerAction('getSettingsMarkup', array($this, 'getSettingsMarkup'));
-        $this->registerAction('saveSettings', array($this, 'saveSettings'));
-        $this->registerAction('savePlaceScheme', array($this, 'savePlaceScheme'));
-        $this->registerAction('moveComponentToPanel', array($this, 'moveComponentToPanel'));
-        $this->registerAction('reload', array($this, 'reloadComponent'));
+        $this->registerAction('saveComponentPlacePositions', [$this, 'saveComponentPlacePositions']);
+        $this->registerAction('cloneComponent', [$this, 'cloneComponent']);
+        $this->registerAction('deleteComponent', [$this, 'deleteComponent']);
+        $this->registerAction('getSettingsMarkup', [$this, 'getSettingsMarkup']);
+        $this->registerAction('saveSettings', [$this, 'saveSettings']);
+        $this->registerAction('savePlaceScheme', [$this, 'savePlaceScheme']);
+        $this->registerAction('moveComponentToPanel', [$this, 'moveComponentToPanel']);
+        $this->registerAction('reload', [$this, 'reloadComponent']);
     }
 
     public function registerAction( $actionName, $actionCallback )
@@ -64,7 +64,7 @@ abstract class BASE_CTRL_AjaxComponentPanel extends OW_ActionController
     {
         $requestQueue = json_decode(urldecode($_POST['request']), true);
 
-        $responseQueue = array();
+        $responseQueue = [];
         $exception = false;
 
         foreach ( $requestQueue as $request )
@@ -75,7 +75,7 @@ abstract class BASE_CTRL_AjaxComponentPanel extends OW_ActionController
             }
             $command = $request['command'];
             $commandId = $request['commandId'];
-            $data = empty($request['data']) ? array() : $request['data'];
+            $data = empty($request['data']) ? [] : $request['data'];
 
             BASE_CLASS_Widget::setPlaceData($request['data']);
 
@@ -83,10 +83,10 @@ abstract class BASE_CTRL_AjaxComponentPanel extends OW_ActionController
             $responseQueue[$commandId] = $result;
         }
 
-        $response = array(
+        $response = [
             'responseQueue' => $responseQueue,
             'debug' => $this->debug
-        );
+        ];
 
         echo json_encode($response);
         exit();
@@ -107,39 +107,39 @@ abstract class BASE_CTRL_AjaxComponentPanel extends OW_ActionController
         }
     }
 
-    protected function getComponentSettingList( $componentClassName, $params = array() )
+    protected function getComponentSettingList( $componentClassName, $params = [])
     {
         $this->checkComponentClass($componentClassName);
 
-        return call_user_func(array($componentClassName, 'getSettingList'), $params["componentId"]);
+        return call_user_func([$componentClassName, 'getSettingList'], $params["componentId"]);
     }
 
-    protected function getComponentAccess( $componentClassName, $params = array() )
+    protected function getComponentAccess( $componentClassName, $params = [])
     {
         $this->checkComponentClass($componentClassName);
 
-        return call_user_func(array($componentClassName, 'getAccess'), $params["componentId"]);
+        return call_user_func([$componentClassName, 'getAccess'], $params["componentId"]);
     }
 
-    protected function getComponentStandardSettingValueList( $componentClassName, $params = array() )
+    protected function getComponentStandardSettingValueList( $componentClassName, $params = [])
     {
         $this->checkComponentClass($componentClassName);
 
-        return call_user_func(array($componentClassName, 'getStandardSettingValueList'), !empty($params["componentId"]) ? $params["componentId"] : null);
+        return call_user_func([$componentClassName, 'getStandardSettingValueList'], !empty($params["componentId"]) ? $params["componentId"] : null);
     }
 
-    protected function validateComponentSettingList( $componentClassName, $settingList, $place, $params = array() )
+    protected function validateComponentSettingList( $componentClassName, $settingList, $place, $params = [])
     {
         $this->checkComponentClass($componentClassName);
 
-        return call_user_func(array($componentClassName, 'validateSettingList'), $settingList, $place, $params["componentId"]);
+        return call_user_func([$componentClassName, 'validateSettingList'], $settingList, $place, $params["componentId"]);
     }
 
-    protected function processSettingList( $componentClassName, $settingList, $place, $isAdmin, $params = array() )
+    protected function processSettingList( $componentClassName, $settingList, $place, $isAdmin, $params = [])
     {
         $this->checkComponentClass($componentClassName);
 
-        return call_user_func(array($componentClassName, 'processSettingList'), $settingList, $place, $isAdmin, $params["componentId"]);
+        return call_user_func([$componentClassName, 'processSettingList'], $settingList, $place, $isAdmin, $params["componentId"]);
     }
 
     protected function getComponentMarkup( BASE_CMP_DragAndDropItem $viewInstance, $renderView = false )
@@ -148,7 +148,7 @@ abstract class BASE_CTRL_AjaxComponentPanel extends OW_ActionController
         /* @var $document OW_AjaxDocument */
         $document = OW::getDocument();
 
-        $responce = array();
+        $responce = [];
 
         if ( $renderView )
         {
@@ -190,7 +190,7 @@ abstract class BASE_CTRL_AjaxComponentPanel extends OW_ActionController
         /* @var $document OW_AjaxDocument */
         $document = OW::getDocument();
 
-        $responce = array();
+        $responce = [];
         $responce['content'] = $viewInstance->render();
 
         foreach ( $document->getScripts() as $script )

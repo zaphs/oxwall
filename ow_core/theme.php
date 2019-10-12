@@ -36,19 +36,19 @@ class OW_Theme
      *
      * @var array
      */
-    protected $decorators = array();
+    protected $decorators = [];
     /**
      * List of master pages available in theme.
      *
      * @var array
      */
-    protected $masterPages = array();
+    protected $masterPages = [];
     /**
      * List of overriden master pages.
      *
      * @var array
      */
-    protected $documentMasterPages = array();
+    protected $documentMasterPages = [];
     /**
      * @var BOL_ThemeService
      */

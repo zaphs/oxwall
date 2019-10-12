@@ -29,7 +29,7 @@
  */
 class UTIL_String
 {
-    private static $caps = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+    private static $caps = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
     /**
      * Replaces upper case chars in string with delimeter + lowercase chars 
@@ -40,12 +40,12 @@ class UTIL_String
      */
     public static function capsToDelimiter( $string, $delimiter = '_' )
     {
-        static $delimiters = array();
+        static $delimiters = [];
 
         if ( !isset($delimiters[$delimiter]) )
         {
-            $delimiters[$delimiter]['search'] = array();
-            $delimiters[$delimiter]['replace'] = array();
+            $delimiters[$delimiter]['search'] = [];
+            $delimiters[$delimiter]['replace'] = [];
 
             foreach ( self::$caps as $value )
             {
@@ -66,8 +66,8 @@ class UTIL_String
      */
     public static function delimiterToCaps( $string, $delimiter = '_' )
     {
-        $searchArray = array();
-        $replaceArray = array();
+        $searchArray = [];
+        $replaceArray = [];
 
         foreach ( self::$caps as $value )
         {

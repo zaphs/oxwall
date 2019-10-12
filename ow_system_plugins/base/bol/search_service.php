@@ -88,7 +88,7 @@ class BOL_SearchService
 
         $this->searchResultDao->saveSearchResult($search->id, $idList);
 
-        $event = new OW_Event('base.after_save_search_result', array('searchDto' => $search, 'userIdList' => $idList), array());
+        $event = new OW_Event('base.after_save_search_result', ['searchDto' => $search, 'userIdList' => $idList], []);
         OW::getEventManager()->trigger($event);
 
         return $search->id;
@@ -103,10 +103,10 @@ class BOL_SearchService
     public function updateSearchResult( $id, array $idList )
     {
 
-        $this->searchResultDao->deleteSearchResultItems(array($id));
+        $this->searchResultDao->deleteSearchResultItems([$id]);
         $this->searchResultDao->saveSearchResult($id, $idList);
 
-        $event = new OW_Event('base.after_update_search_result', array('userIdList' => $idList), array());
+        $event = new OW_Event('base.after_update_search_result', ['userIdList' => $idList], []);
         OW::getEventManager()->trigger($event);
 
     }
@@ -119,7 +119,7 @@ class BOL_SearchService
      * @param int $count
      * @return array
      */
-    public function getUserIdList( $listId, $first, $count, $excludeList = array() )
+    public function getUserIdList( $listId, $first, $count, $excludeList = [])
     {
         return $this->searchResultDao->getUserIdList($listId, $first, $count, $excludeList);
     }

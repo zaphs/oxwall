@@ -109,6 +109,6 @@ class BOL_ThemeControlDao extends OW_BaseDao
                 AS `cv` ON (`c`.`key` = `cv`.`themeControlKey`)
             WHERE `c`.`themeId` = :themeId ORDER BY `" . self::LABEL . "`";
 
-        return $this->dbo->queryForList($query, array('themeId' => $themeId, 'themeId2' => $themeId));
+        return $this->dbo->queryForList($query, ['themeId' => $themeId, 'themeId2' => $themeId]);
     }
 }

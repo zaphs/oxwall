@@ -81,7 +81,7 @@ class BOL_GeolocationIpToCountryDao extends OW_BaseDao
 
         return $prefix . 'base_geolocation_ip_to_country';
     }
-    private $cachedItems = array();
+    private $cachedItems = [];
 
     public function ipToCountryCode3( $ip )
     {
@@ -89,7 +89,7 @@ class BOL_GeolocationIpToCountryDao extends OW_BaseDao
         {
             $sql = 'SELECT `cc3` FROM `' . $this->getTableName() . '` WHERE inet_aton(:ip) >= ipFrom AND inet_aton(:ip) <= ipTo';
 
-            $this->cachedItems[$ip] = $this->dbo->queryForColumn($sql, array('ip' => $ip));
+            $this->cachedItems[$ip] = $this->dbo->queryForColumn($sql, ['ip' => $ip]);
         }
 
         return empty($this->cachedItems[$ip]) ? null : $this->cachedItems[$ip];

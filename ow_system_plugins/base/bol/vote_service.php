@@ -95,12 +95,12 @@ final class BOL_VoteService
     {
         if ( empty($entityIdList) )
         {
-            return array();
+            return [];
         }
 
         $arr = $this->voteDao->findTotalVoteForList($entityIdList, $entityType);
 
-        $resultArray = array();
+        $resultArray = [];
 
         foreach ( $arr as $value )
         {
@@ -134,7 +134,7 @@ final class BOL_VoteService
     public function findUserVoteForList( $entityIds, $entityType, $userId )
     {
         $list = $this->voteDao->findUserVoteForList($entityIds, $entityType, $userId);
-        $res = array();
+        $res = [];
         foreach ( $list as $item )
         {
             if ( $item->vote > 0 )
@@ -162,7 +162,7 @@ final class BOL_VoteService
     {
         $arr = $this->voteDao->findMostVotedEntityList($entityType, $first, $count);
 
-        $resultArray = array();
+        $resultArray = [];
 
         foreach ( $arr as $value )
         {

@@ -23,23 +23,23 @@
  */
 class BASE_Export extends DATAEXPORTER_CLASS_Export
 {
-    public $configs = array();
+    public $configs = [];
 
     public function excludeTableList()
     {
-        return array(
+        return [
             OW_DB_PREFIX . 'base_config',
             OW_DB_PREFIX . 'base_theme',
             OW_DB_PREFIX . 'base_plugin',
             OW_DB_PREFIX . 'base_theme_control',
             OW_DB_PREFIX . 'base_theme_control_value',
             OW_DB_PREFIX . 'base_component_place_cache'
-        );
+        ];
     }
 
     public function includeTableList()
     {
-        return array();
+        return [];
     }
 
     public function export( $params )
@@ -81,7 +81,7 @@ class BASE_Export extends DATAEXPORTER_CLASS_Export
         $currentThemeDir = OW::getThemeManager()->getSelectedTheme()->getRootDir();
         $currentThemeUserfilesDir = OW_DIR_THEME_USERFILES;
 
-        $this->configs['currentTheme'] = array(
+        $this->configs['currentTheme'] = [
             'name' => $currentTheme->name,
             'customCss' => $currentTheme->customCss,
             'customCssFileName' => $currentTheme->customCssFileName,
@@ -89,9 +89,9 @@ class BASE_Export extends DATAEXPORTER_CLASS_Export
             'isActive' => $currentTheme->isActive,
             'sidebarPosition' => $currentTheme->sidebarPosition,
             'title' => $currentTheme->title
-        );
+        ];
 
-        $controlValueList = OW::getDbo()->queryForList(" SELECT * FROM " . BOL_ThemeControlValueDao::getInstance()->getTableName() . " WHERE themeId = :themeId ", array('themeId' => $currentTheme->id));
+        $controlValueList = OW::getDbo()->queryForList(" SELECT * FROM " . BOL_ThemeControlValueDao::getInstance()->getTableName() . " WHERE themeId = :themeId ", ['themeId' => $currentTheme->id]);
 
         foreach ( $controlValueList as $controlValue )
         {
@@ -143,4 +143,4 @@ class BASE_Export extends DATAEXPORTER_CLASS_Export
     }
 }
 
-?>
+

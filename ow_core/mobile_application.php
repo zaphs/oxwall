@@ -50,10 +50,10 @@ class OW_MobileApplication extends OW_Application
         //members only
         if ( (int) $baseConfigs['guests_can_view'] === BOL_UserService::PERMISSIONS_GUESTS_CANT_VIEW && !OW::getUser()->isAuthenticated() )
         {
-            $attributes = array(
+            $attributes = [
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_MCTRL_User',
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'standardSignIn'
-            );
+            ];
 
             OW::getRequestHandler()->setCatchAllRequestsAttributes('base.members_only', $attributes);
             $this->addCatchAllRequestsException('base.members_only_exceptions', 'base.members_only');
@@ -62,13 +62,13 @@ class OW_MobileApplication extends OW_Application
         //splash screen
         if ( (bool) OW::getConfig()->getValue('base', 'splash_screen') && !isset($_COOKIE['splashScreen']) )
         {
-            $attributes = array(
+            $attributes = [
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_MCTRL_BaseDocument',
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'splashScreen',
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_REDIRECT => true,
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_JS => true,
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ROUTE => 'base_page_splash_screen'
-            );
+            ];
 
             OW::getRequestHandler()->setCatchAllRequestsAttributes('base.splash_screen', $attributes);
             $this->addCatchAllRequestsException('base.splash_screen_exceptions', 'base.splash_screen');
@@ -78,10 +78,10 @@ class OW_MobileApplication extends OW_Application
         if ( (int) $baseConfigs['guests_can_view'] === BOL_UserService::PERMISSIONS_GUESTS_PASSWORD_VIEW && !OW::getUser()->isAuthenticated() && !isset($_COOKIE['base_password_protection'])
         )
         {
-            $attributes = array(
+            $attributes = [
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_MCTRL_BaseDocument',
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'passwordProtection'
-            );
+            ];
 
             OW::getRequestHandler()->setCatchAllRequestsAttributes('base.password_protected', $attributes);
             $this->addCatchAllRequestsException('base.password_protected_exceptions', 'base.password_protected');
@@ -90,11 +90,11 @@ class OW_MobileApplication extends OW_Application
         // maintenance mode
         if ( (bool) $baseConfigs['maintenance'] && !OW::getUser()->isAdmin() )
         {
-            $attributes = array(
+            $attributes = [
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_MCTRL_BaseDocument',
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'maintenance',
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_REDIRECT => true
-            );
+            ];
 
             OW::getRequestHandler()->setCatchAllRequestsAttributes('base.maintenance_mode', $attributes);
             $this->addCatchAllRequestsException('base.maintenance_mode_exceptions', 'base.maintenance_mode');
@@ -207,7 +207,7 @@ class OW_MobileApplication extends OW_Application
             'text/javascript', (-100));
         $document->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'mobile.js?' . OW::getConfig()->getValue('base',
                 'cachedEntitiesPostfix'), 'text/javascript', (-50));
-        OW::getEventManager()->bind(OW_EventManager::ON_AFTER_REQUEST_HANDLE, array($this, 'onBeforeDocumentRender'));
+        OW::getEventManager()->bind(OW_EventManager::ON_AFTER_REQUEST_HANDLE, [$this, 'onBeforeDocumentRender']);
 
         return $document;
     }

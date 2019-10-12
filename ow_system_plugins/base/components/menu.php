@@ -34,7 +34,7 @@ class BASE_CMP_Menu extends OW_Component
     /**
      * @var array
      */
-    protected $menuItems = array();
+    protected $menuItems = [];
     /**
      * @var string
      */
@@ -46,7 +46,7 @@ class BASE_CMP_Menu extends OW_Component
      * @param array $menuItems
      * @param string $template
      */
-    public function __construct( $menuItems = array() )
+    public function __construct( $menuItems = [])
     {
         parent::__construct();
 
@@ -142,7 +142,7 @@ class BASE_CMP_Menu extends OW_Component
 
     protected function getItemViewData( BASE_MenuItem $menuItem )
     {
-        return array(
+        return [
             'label' => $menuItem->getLabel(),
             'url' => $menuItem->getUrl(),
             'class' => $menuItem->getPrefix() . '_' . $menuItem->getKey(),
@@ -151,7 +151,7 @@ class BASE_CMP_Menu extends OW_Component
             'new_window' => $menuItem->getNewWindow(),
             'prefix' => $menuItem->getPrefix(),
             'key' => $menuItem->getKey()
-        );
+        ];
     }
 
 
@@ -161,9 +161,9 @@ class BASE_CMP_Menu extends OW_Component
      */
     public function onBeforeRender()
     {
-        $arrayToAssign = array();
+        $arrayToAssign = [];
 
-        usort($this->menuItems, array(BOL_NavigationService::getInstance(), 'sortObjectListByAsc'));
+        usort($this->menuItems, [BOL_NavigationService::getInstance(), 'sortObjectListByAsc']);
 
         /* @var $menuItem BASE_MenuItem */
         foreach ( $this->menuItems as $menuItem )

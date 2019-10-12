@@ -144,9 +144,9 @@ class BOL_QuestionService
      * @var array
      */
     private $presentations;
-    private $questionsBOL = array();
-    private $questionsData = array();
-    private $presentation2config = array();
+    private $questionsBOL = [];
+    private $questionsData = [];
+    private $presentation2config = [];
     /**
      * Singleton instance.
      *
@@ -160,8 +160,8 @@ class BOL_QuestionService
      */
     private function __construct()
     {
-        $this->questionsBOL['base'] = array();
-        $this->questionsBOL['notBase'] = array();
+        $this->questionsBOL['base'] = [];
+        $this->questionsBOL['notBase'] = [];
 
         $this->questionDao = BOL_QuestionDao::getInstance();
         $this->valueDao = BOL_QuestionValueDao::getInstance();
@@ -173,7 +173,7 @@ class BOL_QuestionService
         $this->questionConfigDao = BOL_QuestionConfigDao::getInstance();
 
         // all available presentations are hardcoded here
-        $this->presentations = array(
+        $this->presentations = [
             self::QUESTION_PRESENTATION_TEXT => self::QUESTION_VALUE_TYPE_TEXT,
             self::QUESTION_PRESENTATION_SELECT => self::QUESTION_VALUE_TYPE_SELECT,
             self::QUESTION_PRESENTATION_FSELECT => self::QUESTION_VALUE_TYPE_FSELECT,
@@ -187,7 +187,7 @@ class BOL_QuestionService
             self::QUESTION_PRESENTATION_RANGE => self::QUESTION_VALUE_TYPE_TEXT, // Now we don't use this presentation
             self::QUESTION_PRESENTATION_URL => self::QUESTION_VALUE_TYPE_TEXT,
             self::QUESTION_PRESENTATION_PASSWORD => self::QUESTION_VALUE_TYPE_TEXT
-        );
+        ];
     }
 
     /**
@@ -232,7 +232,7 @@ class BOL_QuestionService
     {
         $result = $this->questionConfigDao->getAllConfigs();
 
-        $list = array();
+        $list = [];
 
         foreach ( $result as $item )
         {
@@ -255,12 +255,12 @@ class BOL_QuestionService
      */
     public function getPresentationClass( $presentation, $fieldName, $configs = null )
     {
-        $event = new OW_Event('base.questions_field_get_label', array(
+        $event = new OW_Event('base.questions_field_get_label', [
             'presentation' => $presentation,
             'fieldName' => $fieldName,
             'configs' => $configs,
             'type' => 'edit'
-        ));
+        ]);
 
         OW::getEventManager()->trigger($event);
 
@@ -268,12 +268,12 @@ class BOL_QuestionService
 
         $class = null;
 
-        $event = new OW_Event('base.questions_field_init', array(
+        $event = new OW_Event('base.questions_field_init', [
             'type' => 'main',
             'presentation' => $presentation,
             'fieldName' => $fieldName,
             'configs' => $configs
-        ));
+        ]);
 
         OW::getEventManager()->trigger($event);
 
@@ -352,9 +352,9 @@ class BOL_QuestionService
                                 $minValue = date("Y") - $value['to'];
                                 $maxValue = date("Y") - $value['from'];
 
-                                $event = new OW_Event('base.questions_question_set_range_join', array(
+                                $event = new OW_Event('base.questions_question_set_range_join', [
                                     'questionName' => $class->getAttribute('name')
-                                ));
+                                ]);
 
                                 OW::getEventManager()->trigger($event);
 
@@ -401,14 +401,14 @@ class BOL_QuestionService
      *
      * @return array<string>
      */
-    public function getSearchPresentationClass( $presentation, $fieldName, $configs = array() )
+    public function getSearchPresentationClass( $presentation, $fieldName, $configs = [])
     {
-        $event = new OW_Event('base.questions_field_get_label', array(
+        $event = new OW_Event('base.questions_field_get_label', [
             'presentation' => $presentation,
             'fieldName' => $fieldName,
             'configs' => $configs,
             'type' => 'edit'
-        ));
+        ]);
 
         OW::getEventManager()->trigger($event);
 
@@ -416,12 +416,12 @@ class BOL_QuestionService
 
         $class = null;
 
-        $event = new OW_Event('base.questions_field_init', array(
+        $event = new OW_Event('base.questions_field_init', [
             'type' => 'search',
             'presentation' => $presentation,
             'fieldName' => $fieldName,
             'configs' => $configs
-        ));
+        ]);
 
         OW::getEventManager()->trigger($event);
 
@@ -549,7 +549,7 @@ class BOL_QuestionService
 
     public function getQuestionConfig( $configString, $configName = null )
     {
-        $configsList = array();
+        $configsList = [];
 
         if ( !empty($configString) && mb_strlen( trim($configString) ) > 0 )
         {
@@ -558,7 +558,7 @@ class BOL_QuestionService
 
         if ( !empty($configName) )
         {
-            return isset($configsList[$configName]) ? $configsList[$configName] : array();
+            return isset($configsList[$configName]) ? $configsList[$configName] : [];
         }
         else
         {
@@ -586,7 +586,7 @@ class BOL_QuestionService
         }
 
         $question = $this->findQuestionByName($questionName);
-        $values = $this->findQuestionsValuesByQuestionNameList(array($questionName));
+        $values = $this->findQuestionsValuesByQuestionNameList([$questionName]);
 
         return $this->getFormElementByQuestionDto($question, $values, $type);
     }
@@ -607,8 +607,8 @@ class BOL_QuestionService
             return $class;
         }
         else if ( !empty($this->presentations[$presentation]) && ( $question->type == $this->presentations[$presentation]
-            || in_array($question->type, array(self::QUESTION_VALUE_TYPE_SELECT, self::QUESTION_VALUE_TYPE_MULTISELECT) )
-            &&  in_array($this->presentations[$presentation], array(self::QUESTION_VALUE_TYPE_SELECT, self::QUESTION_VALUE_TYPE_MULTISELECT) ) ) )
+            || in_array($question->type, [self::QUESTION_VALUE_TYPE_SELECT, self::QUESTION_VALUE_TYPE_MULTISELECT])
+            &&  in_array($this->presentations[$presentation], [self::QUESTION_VALUE_TYPE_SELECT, self::QUESTION_VALUE_TYPE_MULTISELECT]) ) )
         {
             // ignore
         }
@@ -633,7 +633,7 @@ class BOL_QuestionService
         {
             $class->setLabel(OW::getLanguage()->text('base', 'questions_question_' . $question->name . '_label'));
 
-            if ( in_array($question->type, array(BOL_QuestionService::QUESTION_VALUE_TYPE_SELECT, BOL_QuestionService::QUESTION_VALUE_TYPE_MULTISELECT) ) )
+            if ( in_array($question->type, [BOL_QuestionService::QUESTION_VALUE_TYPE_SELECT, BOL_QuestionService::QUESTION_VALUE_TYPE_MULTISELECT]) )
             {
                 if ( method_exists($class, 'setColumnCount') )
                 {
@@ -644,7 +644,7 @@ class BOL_QuestionService
                 {
                     if ( !empty($values[$question->name]['values']) && is_array($values[$question->name]['values']) )
                     {
-                        $valuesArray = array();
+                        $valuesArray = [];
 
                         foreach ( $values[$question->name]['values'] as $value )
                         {
@@ -676,7 +676,7 @@ class BOL_QuestionService
     {
         $questionList = $this->questionDao->findAllQuestionsWithSectionForAccountType($accountType);
 
-        $list = array();
+        $list = [];
 
         foreach ( $questionList as $question )
         {
@@ -685,14 +685,14 @@ class BOL_QuestionService
 
         $sections = $this->sectionDao->findSortedSectionList();
 
-        $result = array();
+        $result = [];
 
         /* @var $section BOL_QuestionSection */
         foreach ( $sections as $section )
         {
             if ( !$section->isHidden )
             {
-                $result[$section->name] = !empty($list[$section->name]) ? $list[$section->name] : array();
+                $result[$section->name] = !empty($list[$section->name]) ? $list[$section->name] : [];
             }
         }
 
@@ -732,10 +732,10 @@ class BOL_QuestionService
     {
         $questionsList = $this->questionDao->findSignUpQuestionsForAccountType($accountType, $baseOnly);
 
-        $event = new OW_Event(self::EVENT_ON_FIND_SIGN_UP_QUESTIONS_FOR_ACCOUNT_TYPE, array(
+        $event = new OW_Event(self::EVENT_ON_FIND_SIGN_UP_QUESTIONS_FOR_ACCOUNT_TYPE, [
             'account' => $accountType,
             'baseOnly' => $baseOnly
-        ), $questionsList);
+        ], $questionsList);
 
         OW::getEventManager()->trigger($event);
 
@@ -746,7 +746,7 @@ class BOL_QuestionService
     {
         $questionsList = $this->questionDao->findBaseSignUpQuestions();
 
-        $event = new OW_Event(self::EVENT_ON_FIND_BASE_SIGN_UP_QUESTIONS, array(), $questionsList);
+        $event = new OW_Event(self::EVENT_ON_FIND_BASE_SIGN_UP_QUESTIONS, [], $questionsList);
 
         OW::getEventManager()->trigger($event);
 
@@ -757,9 +757,9 @@ class BOL_QuestionService
     {
         $questionsList = $this->questionDao->findEditQuestionsForAccountType($accountType);
 
-        $event = new OW_Event(self::EVENT_ON_FIND_QUESTIONS_FOR_ACCOUNT_TYPE, array(
+        $event = new OW_Event(self::EVENT_ON_FIND_QUESTIONS_FOR_ACCOUNT_TYPE, [
             'account' => $accountType
-        ), $questionsList);
+        ], $questionsList);
 
         OW::getEventManager()->trigger($event);
 
@@ -770,9 +770,9 @@ class BOL_QuestionService
     {
         $questionsList = $this->questionDao->findViewQuestionsForAccountType($accountType);
 
-        $event = new OW_Event(self::EVENT_ON_FIND_VIEW_QUESTIONS_FOR_ACCOUNT_TYPE, array(
+        $event = new OW_Event(self::EVENT_ON_FIND_VIEW_QUESTIONS_FOR_ACCOUNT_TYPE, [
             'account' => $accountType
-        ), $questionsList);
+        ], $questionsList);
 
         OW::getEventManager()->trigger($event);
 
@@ -783,9 +783,9 @@ class BOL_QuestionService
     {
         $questionsList = $this->questionDao->findAllQuestionsForAccountType($accountType);
 
-        $event = new OW_Event(self::EVENT_ON_FIND_ALL_QUESTIONS_FOR_ACCOUNT_TYPE, array(
+        $event = new OW_Event(self::EVENT_ON_FIND_ALL_QUESTIONS_FOR_ACCOUNT_TYPE, [
             'account' => $accountType
-        ), $questionsList);
+        ], $questionsList);
 
         OW::getEventManager()->trigger($event);
 
@@ -801,14 +801,14 @@ class BOL_QuestionService
     {
         if ( empty($questionList) )
         {
-            return array();
+            return [];
         }
         
-        $result = array(); 
+        $result = [];
         
         $sections = $this->findHiddenSections();
         
-        $sectionList = array();
+        $sectionList = [];
         
         foreach ( $sections as $dto )
         {
@@ -868,7 +868,7 @@ class BOL_QuestionService
     {
         $list = $this->questionDao->findQuestionByNameList($questionNameList);
 
-        $result = array();
+        $result = [];
 
         if ( !empty($list) )
         {
@@ -885,7 +885,7 @@ class BOL_QuestionService
     {
         $questions = $this->questionDao->findQuestionsByPresentationList($presentation);
 
-        $result = array();
+        $result = [];
 
         foreach ( $questions as $question )
         {
@@ -902,7 +902,7 @@ class BOL_QuestionService
      */
     public function saveOrUpdateQuestion( BOL_Question $question )
     {
-        $event = new OW_Event(self::EVENT_ON_BEFORE_ADD_QUESTION, array(), $question);
+        $event = new OW_Event(self::EVENT_ON_BEFORE_ADD_QUESTION, [], $question);
         OW::getEventManager()->trigger($event);
 
         $this->questionDao->save($question);
@@ -1006,14 +1006,14 @@ class BOL_QuestionService
 
             $this->updateQuestionsEditStamp();
 
-            $event = new OW_Event(self::EVENT_AFTER_DELETE_QUESTION_VALUE, array('questionName' => $questionName, 'value' => $value));
+            $event = new OW_Event(self::EVENT_AFTER_DELETE_QUESTION_VALUE, ['questionName' => $questionName, 'value' => $value]);
             OW::getEventManager()->trigger($event);
         }
 
         return $isDelete;
     }
 
-    public function addQuestion(BOL_Question $question, $label, array $values = array(), array $accountTypes = array(), $description = null, $generateCache = true)
+    public function addQuestion(BOL_Question $question, $label, array $values = [], array $accountTypes = [], $description = null, $generateCache = true)
     {
         $this->saveOrUpdateQuestion($question);
 
@@ -1122,7 +1122,7 @@ class BOL_QuestionService
 
         if ( $deleted )
         {
-            $event = new OW_Event(self::EVENT_ON_ACCOUNT_TYPE_DELETE, array('id' => $account->id, 'name' => $account->name));
+            $event = new OW_Event(self::EVENT_ON_ACCOUNT_TYPE_DELETE, ['id' => $account->id, 'name' => $account->name]);
             OW::getEventManager()->trigger($event);
         }
         
@@ -1185,7 +1185,7 @@ class BOL_QuestionService
             return false;
         }
 
-        $questions = $this->questionDao->findQuestionsBySectionNameList(array($sectionName));
+        $questions = $this->questionDao->findQuestionsBySectionNameList([$sectionName]);
         $nextSectionName = isset($moveQuestionsToSection) ? $moveQuestionsToSection->name : null;
 
         $lastOrder = $this->questionDao->findLastQuestionOrder($nextSectionName);
@@ -1212,7 +1212,7 @@ class BOL_QuestionService
             BOL_LanguageService::getInstance()->deleteKey($key->id);
         }
 
-        $event = new OW_Event( self::EVENT_ON_SECTION_DELETE, array( 'dto' => $section ) );
+        $event = new OW_Event( self::EVENT_ON_SECTION_DELETE, ['dto' => $section]);
         OW::getEventManager()->trigger($event);
         
         $this->sectionDao->deleteById($section->id);
@@ -1230,8 +1230,8 @@ class BOL_QuestionService
 
         $questionArray = $this->questionDao->findByIdList($questionIdList);
 
-        $questionsNameList = array();
-        $deleteQuestionIdList = array();
+        $questionsNameList = [];
+        $deleteQuestionIdList = [];
 
         foreach ( $questionArray as $question )
         {
@@ -1245,7 +1245,7 @@ class BOL_QuestionService
 
             $valuesObjects = $this->valueDao->findQuestionValues($question->name);
 
-            $values = array();
+            $values = [];
 
             foreach($valuesObjects as $v)
             {
@@ -1276,7 +1276,7 @@ class BOL_QuestionService
                 BOL_LanguageService::getInstance()->deleteKey($key->id);
             }
 
-            $event = new OW_Event( self::EVENT_ON_QUESTION_DELETE, array( 'questionName' => $question->name, 'dto' => $question ) );
+            $event = new OW_Event( self::EVENT_ON_QUESTION_DELETE, ['questionName' => $question->name, 'dto' => $question]);
 
             OW::getEventManager()->trigger($event);
 
@@ -1318,7 +1318,7 @@ class BOL_QuestionService
         }
 
         $lang = OW::getLanguage();
-        $list = array();
+        $list = [];
 
         /* @var $type BOL_QuestionAccountType */
         foreach ( $types as $type )
@@ -1400,7 +1400,7 @@ class BOL_QuestionService
     {
         $list = $this->sectionDao->findBySectionNameList($list);
         
-        $result = array();
+        $result = [];
         
         if ( !empty($list) )
         {
@@ -1469,7 +1469,7 @@ class BOL_QuestionService
 
         $oldUserEmail = $user->email;
         
-        $event = new OW_Event('base.questions_save_data', array('userId' => $userId), $data);
+        $event = new OW_Event('base.questions_save_data', ['userId' => $userId], $data);
 
         OW::getEventManager()->trigger($event);
 
@@ -1480,14 +1480,14 @@ class BOL_QuestionService
         $questions = $this->questionDao->findQuestionsByQuestionNameList($dataFields);
         $questionsData = $this->dataDao->findByQuestionsNameList($dataFields, $userId);
 
-        $questionsUserData = array();
+        $questionsUserData = [];
 
         foreach ( $questionsData as $questionData )
         {
             $questionsUserData[$questionData->questionName] = $questionData;
         }
 
-        $questionDataArray = array();
+        $questionDataArray = [];
 
         foreach ( $questions as $key => $question )
         {
@@ -1619,7 +1619,7 @@ class BOL_QuestionService
 
                         $value = false;
 
-                        $issetValues = array('1', 'true', 'on');
+                        $issetValues = ['1', 'true', 'on'];
 
                         if ( in_array(mb_strtolower((string) $data[$question->name]), $issetValues) )
                         {
@@ -1701,10 +1701,10 @@ class BOL_QuestionService
      */
     public function questionTextFormatter( $questionName, $value )
     {
-        $event = new OW_Event('base.question_text_formatter', array(
+        $event = new OW_Event('base.question_text_formatter', [
             'questionName' => $questionName,
             'questionValue' => $value
-        ));
+        ]);
 
         OW::getEventManager()->trigger($event);
 
@@ -1769,7 +1769,7 @@ class BOL_QuestionService
             return false;
         }
         
-        $event = new OW_Event( self::EVENT_ON_SORT_QUESTION, array('sectionName' => $sectionName, 'questionOrder' => $questionOrder));
+        $event = new OW_Event( self::EVENT_ON_SORT_QUESTION, ['sectionName' => $sectionName, 'questionOrder' => $questionOrder]);
         OW::getEventManager()->trigger($event);
         
         foreach ( $questions as $key => $question )
@@ -1831,25 +1831,25 @@ class BOL_QuestionService
     {
         if ( $userIdList === null || !is_array($userIdList) || count($userIdList) === 0 )
         {
-            return array();
+            return [];
         }
 
         if ( $fieldsList === null || !is_array($fieldsList) || count($fieldsList) === 0 )
         {
-            return array();
+            return [];
         }
 
         $usersBol = BOL_UserService::getInstance()->findUserListByIdList($userIdList);
 
         if ( $usersBol === null || count($usersBol) === 0 )
         {
-            return array();
+            return [];
         }
 
-        $userData = array();
+        $userData = [];
 
         // get not cached questions
-        $notCachedQuestionsData = array();
+        $notCachedQuestionsData = [];
 
         foreach ( $userIdList as $userId )
         {
@@ -1872,7 +1872,7 @@ class BOL_QuestionService
             }
             else
             {
-                $userData = array();
+                $userData = [];
                 $notCachedQuestionsData = $fieldsList;
                 break;
             }
@@ -1880,12 +1880,12 @@ class BOL_QuestionService
 
         if ( count($notCachedQuestionsData) > 0 )
         {
-           $questionsBolArray['base'] = array();
-           $questionsBolArray['notBase'] = array();
+           $questionsBolArray['base'] = [];
+           $questionsBolArray['notBase'] = [];
 
             // -- get questions BOL --
 
-            $notCachedQuestions = array();
+            $notCachedQuestions = [];
 
             foreach ( $notCachedQuestionsData as $field )
             {
@@ -1972,7 +1972,7 @@ class BOL_QuestionService
             {
                 //get base question values
 
-                $usersBolArray = array();
+                $usersBolArray = [];
 
                 foreach ( $usersBol as $userBol )
                 {
@@ -2010,14 +2010,14 @@ class BOL_QuestionService
             }
         }
 
-        $result = array();
+        $result = [];
 
         foreach ( $usersBol as $user )
         {
-            $result[$user->id] = isset($userData[$user->id]) ? $userData[$user->id] : array();
+            $result[$user->id] = isset($userData[$user->id]) ? $userData[$user->id] : [];
         }
 
-        $event = new OW_Event('base.questions_get_data', array('userIdList' => $userIdList, 'fieldsList' => $fieldsList), $result);
+        $event = new OW_Event('base.questions_get_data', ['userIdList' => $userIdList, 'fieldsList' => $fieldsList], $result);
 
         OW::getEventManager()->trigger($event);
         return $event->getData();
@@ -2052,7 +2052,7 @@ class BOL_QuestionService
     {
         $key = null;
 
-        $event = new OW_Event( self::EVENT_ON_GET_QUESTION_LANG, array('type' => $type, 'name' => $name, 'value' => $value));
+        $event = new OW_Event( self::EVENT_ON_GET_QUESTION_LANG, ['type' => $type, 'name' => $name, 'value' => $value]);
         OW::getEventManager()->trigger($event);
 
         $key = $event->getData();
@@ -2141,14 +2141,14 @@ class BOL_QuestionService
             return null;
         }
 
-        $types = $this->accountDao->findAccountTypeByNameList(array($name));
+        $types = $this->accountDao->findAccountTypeByNameList([$name]);
 
         if ( !$types )
         {
             return null;
         }
 
-        $res = array();
+        $res = [];
         foreach ( $types as $type )
         {
             $res[$type->name] = $type;
@@ -2172,7 +2172,7 @@ class BOL_QuestionService
         return $this->questionDao->findSearchQuestionsForAccountType($accountType);
     }
 
-    public function createQuestion( BOL_Question $question, $label, $description = '', $values = array(), $saveValuesKeys = false, $generateCache = true )
+    public function createQuestion( BOL_Question $question, $label, $description = '', $values = [], $saveValuesKeys = false, $generateCache = true )
     {
         if ( empty($question) )
         {
@@ -2184,7 +2184,7 @@ class BOL_QuestionService
         $this->setQuestionLabel($question->name, $label, false);
         
         //add question values
-        if ( !empty($values) && is_array($values) && count($values) > 0 && in_array( $question->type,  array('fselect','select', 'multiselect') ) )
+        if ( !empty($values) && is_array($values) && count($values) > 0 && in_array( $question->type,  ['fselect', 'select', 'multiselect']) )
         {
             $order = 0;
             foreach ( $values as $key => $value )
@@ -2247,7 +2247,7 @@ class BOL_QuestionService
         if ( is_array($values) && count($values) > 0 )
         {
             $existingQuestionValues = $this->findRealQuestionValues($questionName);
-            $existingValuesList = array();
+            $existingValuesList = [];
 
             foreach( $existingQuestionValues as $value )
             {
@@ -2269,7 +2269,7 @@ class BOL_QuestionService
 
                     $this->saveOrUpdateQuestionValue($existingValuesList[$key]);
 //                    BOL_LanguageService::getInstance()->addOrUpdateValue(OW::getLanguage()->getCurrentId(), 'base', 'questions_question_' . ($questionName) . '_value_' . $value, $label, $generateCache);
-                    $event = new OW_Event(self::EVENT_AFTER_UPDATE_QUESTION_VALUE, array('dto' => $existingValuesList[$key]));
+                    $event = new OW_Event(self::EVENT_AFTER_UPDATE_QUESTION_VALUE, ['dto' => $existingValuesList[$key]]);
                     OW::getEventManager()->trigger($event);
                 }
                 else
@@ -2298,7 +2298,7 @@ class BOL_QuestionService
 
         $this->saveOrUpdateQuestionValue($questionValue);
 
-        $event = new OW_Event(self::EVENT_AFTER_ADD_QUESTION_VALUE, array('dto' => $questionValue));
+        $event = new OW_Event(self::EVENT_AFTER_ADD_QUESTION_VALUE, ['dto' => $questionValue]);
         OW::getEventManager()->trigger($event);
 
         BOL_LanguageService::getInstance()->addOrUpdateValue(OW::getLanguage()->getCurrentId(), 'base', 'questions_question_' . ($questionName) . '_value_' . $value, $label, $generateCache);
@@ -2346,7 +2346,7 @@ class BOL_QuestionService
             return;
         }
 
-        $list = array();
+        $list = [];
 
         foreach ( $accountTypeList as $key => $value )
         {
@@ -2370,7 +2370,7 @@ class BOL_QuestionService
             {
                 $this->updateQuestionsEditStamp();
                 $this->accountToQuestionDao->batchReplace($list);
-                $list = array();
+                $list = [];
             }
         }
     }
@@ -2382,7 +2382,7 @@ class BOL_QuestionService
             return;
         }
 
-        $this->addQuestionListToAccountTypeList(array($questionName), $accountTypeList);
+        $this->addQuestionListToAccountTypeList([$questionName], $accountTypeList);
     }
 
     public function deleteQuestionToAccountTypeByQuestionName( $questionName )
@@ -2399,7 +2399,7 @@ class BOL_QuestionService
 
     public function getQuestionDisableActionList( BOL_question $question )
     {
-        $disableActionList = array(
+        $disableActionList = [
             'disable_account_type' => false,
             'disable_answer_type' => false,
             'disable_presentation' => false,
@@ -2411,9 +2411,9 @@ class BOL_QuestionService
             'disable_on_view' => false,
             'disable_on_search' => false,
             'disable_on_edit' => false
-        );
+        ];
 
-        $event = new OW_Event( 'admin.disable_fields_on_edit_profile_question', array( 'questionDto' => $question ), $disableActionList );
+        $event = new OW_Event( 'admin.disable_fields_on_edit_profile_question', ['questionDto' => $question], $disableActionList );
         OW::getEventManager()->trigger($event);
         
         return $event->getData();
@@ -2423,12 +2423,12 @@ class BOL_QuestionService
     {
         $questions = BOL_QuestionService::getInstance()->findAllQuestions();
 
-        $questionNameList = array();
+        $questionNameList = [];
 
         foreach ( $questions as $question )
         {
             /* @var $question BOL_Question */
-            if ( $question->base == 1 || in_array($question->name, array('birthdate', 'realname', 'match_sex', 'sex', 'joinStamp')) )
+            if ( $question->base == 1 || in_array($question->name, ['birthdate', 'realname', 'match_sex', 'sex', 'joinStamp']) )
             {
                 $questionNameList[$question->name] = $question->name;
             }
@@ -2460,17 +2460,17 @@ class BOL_QuestionService
 
         BOL_QuestionService::getInstance()->saveOrUpdateAccountType($accountType);
 
-        $event = new OW_Event(self::EVENT_ON_ACCOUNT_TYPE_ADD, array('dto' => $accountType, 'id' => $accountType->id));
+        $event = new OW_Event(self::EVENT_ON_ACCOUNT_TYPE_ADD, ['dto' => $accountType, 'id' => $accountType->id]);
         OW::getEventManager()->trigger($event);
 
         $questionNameList = $this->getRequiredQuestionsForNewAccountType();
         
-        $event = new OW_Event(self::EVENT_BEFORE_ADD_QUESTIONS_TO_NEW_ACCOUNT_TYPE, array('dto' => $accountType), $questionNameList);
+        $event = new OW_Event(self::EVENT_BEFORE_ADD_QUESTIONS_TO_NEW_ACCOUNT_TYPE, ['dto' => $accountType], $questionNameList);
         OW::getEventManager()->trigger($event);
 
         $questionNameList = $event->getData();
 
-        $this->addQuestionListToAccountTypeList($questionNameList, array($accountType->name));
+        $this->addQuestionListToAccountTypeList($questionNameList, [$accountType->name]);
 
         if ( !empty($label) )
         {
@@ -2523,31 +2523,31 @@ class BOL_QuestionService
         
         if ( empty($user) )
         {
-            return array();
+            return [];
         }
 
         $accountType = $this->findAccountTypeByName($user->accountType);
 
         if ( empty($accountType) )
         {
-            return array();
+            return [];
         }
 
         $questionsList = $this->findRequiredQuestionsForAccountType($user->accountType);
 
-        $event = new OW_Event(self::EVENT_ON_GET_EMPTY_REQUIRED_QUESTIONS, array(
+        $event = new OW_Event(self::EVENT_ON_GET_EMPTY_REQUIRED_QUESTIONS, [
             'account' => $user->accountType
-        ), $questionsList);
+        ], $questionsList);
 
         OW::getEventManager()->trigger($event);
         $questionsList = $event->getData();
 
         if ( empty($questionsList) )
         {
-            return array();
+            return [];
         }
 
-        $questionNameList = array();
+        $questionNameList = [];
 
         foreach ( $questionsList as $question )
         {
@@ -2556,9 +2556,9 @@ class BOL_QuestionService
 
         $values = $this->findQuestionsValuesByQuestionNameList($questionNameList);
         $questionDtoList = $this->findQuestionByNameList($questionNameList);
-        $data = $this->getQuestionData( array($userId), $questionNameList );
+        $data = $this->getQuestionData( [$userId], $questionNameList );
 
-        $emptyQuestionsList = array();
+        $emptyQuestionsList = [];
 
         foreach ( $questionsList as $question )
         {
@@ -2590,10 +2590,10 @@ class BOL_QuestionService
             }
         }
 
-        $event = new OW_Event(self::EVENT_ON_GET_EMPTY_QUESTIONS_LIST, array(
+        $event = new OW_Event(self::EVENT_ON_GET_EMPTY_QUESTIONS_LIST, [
             'account' => $user->accountType,
             'userId' => $user->id
-        ), $emptyQuestionsList);
+        ], $emptyQuestionsList);
 
         OW::getEventManager()->trigger($event);
         $emptyQuestionsList = $event->getData();
@@ -2638,7 +2638,7 @@ class BOL_QuestionService
 
             case BOL_QuestionService::QUESTION_PRESENTATION_MULTICHECKBOX:
 
-                $data = array();
+                $data = [];
                 $multicheckboxValue = (int) $value;
 
                 for ( $i = 0; $i < BOL_QuestionService::MAX_QUESTION_VALUES_COUNT; $i++ )
@@ -2699,7 +2699,7 @@ class BOL_QuestionService
 
                 if ( !is_array($value) )
                 {
-                    $data = array();
+                    $data = [];
                     $multicheckboxValue = (int) $value;
 
                     for ( $i = 0; $i < BOL_QuestionService::MAX_QUESTION_VALUES_COUNT; $i++ )
@@ -2895,8 +2895,8 @@ class BOL_QuestionService
         // get changes list
         $fields = array_keys($data);
         $questions = $this->findQuestionByNameList($fields);
-        $oldData = $this->getQuestionData(array($userId), $fields);
-        $changesList = array();
+        $oldData = $this->getQuestionData([$userId], $fields);
+        $changesList = [];
 
         foreach ( $questions as $question )
         {
@@ -2923,7 +2923,7 @@ class BOL_QuestionService
     public function isNeedToModerate($changesList)
     {
         $questions = $this->findQuestionByNameList($changesList);
-        $textFields = array(self::QUESTION_PRESENTATION_TEXT, self::QUESTION_PRESENTATION_TEXTAREA );
+        $textFields = [self::QUESTION_PRESENTATION_TEXT, self::QUESTION_PRESENTATION_TEXTAREA];
 
         foreach ( $questions as $question )
         {
@@ -2937,10 +2937,10 @@ class BOL_QuestionService
 
     public function getPresentationRange()
     {
-        $range = array(
+        $range = [
             'from' => self::AGE_RANGE_FROM,
             'to' => self::AGE_RANGE_TO
-        );
+        ];
 
         if ( empty($this->birthdayConfig) )
         {
@@ -2960,10 +2960,10 @@ class BOL_QuestionService
             {
                 if ( $name == 'year_range' && isset($value['from']) && isset($value['to']) )
                 {
-                    $range = array(
+                    $range = [
                         'from' => date("Y") - $value['to'],
                         'to' => date("Y") - $value['from']
-                    );
+                    ];
                 }
             }
         }

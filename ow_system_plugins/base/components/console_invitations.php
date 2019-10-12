@@ -16,12 +16,12 @@ class BASE_CMP_ConsoleInvitations extends BASE_CMP_ConsoleDropdownList
         parent::initJs();
 
         $js = UTIL_JsGenerator::newInstance();
-        $js->addScript('OW.Invitation = new OW_Invitation({$key}, {$params});', array(
+        $js->addScript('OW.Invitation = new OW_Invitation({$key}, {$params});', [
             'key' => $this->getKey(),
-            'params' => array(
+            'params' => [
                 'rsp' => OW::getRouter()->urlFor('BASE_CTRL_Invitation', 'ajax')
-            )
-        ));
+            ]
+        ]);
         
         OW::getDocument()->addOnloadScript($js);
     }

@@ -41,11 +41,11 @@ class BASE_MCMP_ProfileActionToolbar extends BASE_MCMP_ButtonList
      */
     public function __construct( $userId )
     {
-        parent::__construct(array());
+        parent::__construct([]);
         
         $this->userId = (int) $userId;
         
-        $event = new BASE_CLASS_EventCollector(self::EVENT_NAME, array("userId" => $this->userId));
+        $event = new BASE_CLASS_EventCollector(self::EVENT_NAME, ["userId" => $this->userId]);
 
         OW::getEventManager()->trigger($event);
 
@@ -73,8 +73,8 @@ class BASE_MCMP_ProfileActionToolbar extends BASE_MCMP_ButtonList
 
     protected function initList()
     {
-        $itemGroups = array();
-        $buttons = array();
+        $itemGroups = [];
+        $buttons = [];
 
         foreach ( $this->items as $item  )
         {
@@ -82,11 +82,11 @@ class BASE_MCMP_ProfileActionToolbar extends BASE_MCMP_ButtonList
             {
                 if ( empty($itemGroups[$item["group"]]) )
                 {
-                    $itemGroups[$item["group"]] = array(
+                    $itemGroups[$item["group"]] = [
                         "key" => $item["group"],
                         "label" => isset($item["groupLabel"]) ? $item["groupLabel"] : null,
-                        "context" => array()
-                    );
+                        "context" => []
+                    ];
                 }
 
                 $itemGroups[$item["group"]]["items"][] = $item;
@@ -97,14 +97,14 @@ class BASE_MCMP_ProfileActionToolbar extends BASE_MCMP_ButtonList
             }
         }
 
-        $tplGroups = array();
+        $tplGroups = [];
         foreach ( $itemGroups as $group )
         {
-            $event = new OW_Event(self::EVENT_GROUP_MENU_CLASS, array("key" => $group["key"], "userId" => $this->userId), array(
+            $event = new OW_Event(self::EVENT_GROUP_MENU_CLASS, ["key" => $group["key"], "userId" => $this->userId], [
                 "owm_btn_list_item_wrap",
                 "owm_view_more",
                 "owm_float_right"
-            ));
+            ]);
 
             OW::getEventManager()->trigger($event);
             $contextAction = new BASE_MCMP_ContextAction($group["items"], $group["label"]);

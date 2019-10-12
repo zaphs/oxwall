@@ -169,11 +169,11 @@ class BOL_NavigationService
     {
         $items = $this->menuItemDao->findMenuItemsForMenuTypes($menuTypes);
 
-        $resultArray = array();
+        $resultArray = [];
 
         foreach ( $menuTypes as $type )
         {
-            $resultArray[$type] = array();
+            $resultArray[$type] = [];
         }
 
         /* @var $item BOL_MenuItem */
@@ -270,7 +270,7 @@ class BOL_NavigationService
      */
     public function getMenuItems( array $menuItems )
     {
-        $resultArray = array();
+        $resultArray = [];
 
         foreach ( $menuItems as $value )
         {

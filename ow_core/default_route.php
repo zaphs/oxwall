@@ -60,7 +60,7 @@ class OW_DefaultRoute
      * @param array $params
      * @return string
      */
-    public function generateUri( $controller, $action = null, array $params = array() )
+    public function generateUri( $controller, $action = null, array $params = [])
     {
         if ( empty($controller) || ( empty($action) && !empty($params) ) )
         {
@@ -124,7 +124,7 @@ class OW_DefaultRoute
             $controllerNamePrefixAdd = strtoupper($uriPartArray[0]);
         }
 
-        $dispatchAttrs = array();
+        $dispatchAttrs = [];
 
         $classPrefix = null;
 

@@ -58,14 +58,14 @@ class ADMIN_CTRL_AjaxUpload extends ADMIN_CTRL_Abstract
             $params["entityId"] = OW::getUser()->getId();
         }
         
-        return array($params["entityType"], $params["entityId"]);
+        return [$params["entityType"], $params["entityId"]];
     }
 
     private function isAvailableFile( $file )
     {
         return !empty($file['file']) && 
             $file['file']['error'] === UPLOAD_ERR_OK && 
-            in_array($file['file']['type'], array('image/jpeg', 'image/png', 'image/gif')) && 
+            in_array($file['file']['type'], ['image/jpeg', 'image/png', 'image/gif']) &&
             $_FILES['file']['size'] <= $this->fileService->getUploadMaxFilesizeBytes() &&
             is_uploaded_file($file['file']['tmp_name']);
     }
@@ -113,7 +113,7 @@ class ADMIN_CTRL_AjaxUpload extends ADMIN_CTRL_Abstract
         
         if ( count($tmpList = $fileTmpService->findUserTemporaryFiles($userId, 'order')) === 0 )
         {
-            $resp = array('result' => false, 'msg' => OW::getLanguage()->text('admin', 'photo_upload_error'));
+            $resp = ['result' => false, 'msg' => OW::getLanguage()->text('admin', 'photo_upload_error')];
             
             $this->returnResponse($resp);
         }
@@ -122,14 +122,14 @@ class ADMIN_CTRL_AjaxUpload extends ADMIN_CTRL_Abstract
         
         if ( !$form->isValid($_POST) )
         {
-            $resp = array('result' => false);
+            $resp = ['result' => false];
             $resp['msg'] = OW::getLanguage()->text('admin', 'photo_upload_error');
             $this->returnResponse($resp);
         }
         
         list($entityType, $entityId) = $this->getEntity($params);
 
-        $files = array();
+        $files = [];
         $tmpList = array_reverse($tmpList);
 
         foreach ( $tmpList as $tmpFile )
@@ -153,7 +153,7 @@ class ADMIN_CTRL_AjaxUpload extends ADMIN_CTRL_Abstract
 
     protected function onSubmitComplete( $entityType, $entityId, $files )
     {
-        $result = array('result' => true);
+        $result = ['result' => true];
         
         if ( empty($files) )
         {
@@ -162,28 +162,28 @@ class ADMIN_CTRL_AjaxUpload extends ADMIN_CTRL_Abstract
             return $result;
         }
         
-        $movedArray = array();
+        $movedArray = [];
         foreach ( $files as $file )
         {
-            $movedArray[] = array(
+            $movedArray[] = [
                 'entityType' => $entityType,
                 'entityId' => $entityId,
                 'addTimestamp' => $file->addDatetime,
                 'fileId' => $file->id,
                 'filename' => $file->filename,
                 'title' => $file->title
-            );
+            ];
         }
         
         $fileCount = count($files);
-        $fileIdList = array();
+        $fileIdList = [];
         foreach ( $files as $file )
         {
             $fileIdList[] = $file->id;
         };
 
         $result['url'] = OW::getRouter()->urlForRoute('admin_theme_graphics');
-        OW::getFeedback()->info(OW::getLanguage()->text('admin', 'photos_uploaded', array('count' => $fileCount)));
+        OW::getFeedback()->info(OW::getLanguage()->text('admin', 'photos_uploaded', ['count' => $fileCount]));
         
         return $result;
     }
@@ -198,27 +198,28 @@ class ADMIN_CTRL_AjaxUpload extends ADMIN_CTRL_Abstract
             {
                 $fileUrl = BOL_FileTemporaryService::getInstance()->getTemporaryFileUrl($id);
                 
-                $this->returnResponse(array(
+                $this->returnResponse([
                     'status' => self::STATUS_SUCCESS,
                     'fileUrl' => $fileUrl,
                     'id' => $id,
-                    'filename' => $_FILES['file']['name'])
+                    'filename' => $_FILES['file']['name']
+                    ]
                 );
             }
             else
             {
-                $this->returnResponse(array('status' => self::STATUS_ERROR, 'msg' => OW::getLanguage()->text('admin', 'no_photo_uploaded')));
+                $this->returnResponse(['status' => self::STATUS_ERROR, 'msg' => OW::getLanguage()->text('admin', 'no_photo_uploaded')]);
             }
         }
         else
         {
             $msg = $this->getErrorMsg($_FILES);
 
-            $this->returnResponse(array('status' => self::STATUS_ERROR, 'msg' => $msg));
+            $this->returnResponse(['status' => self::STATUS_ERROR, 'msg' => $msg]);
         }
     }
     
-    public function delete( array $params = array() )
+    public function delete( array $params = [])
     {
         if ( !empty($_POST['id']) )
         {

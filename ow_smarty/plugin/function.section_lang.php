@@ -41,4 +41,4 @@ function smarty_function_section_lang( $params, $smarty )
 {
     return BOL_QuestionService::getInstance()->getSectionLang(trim($params['name']));
 }
-?>
+

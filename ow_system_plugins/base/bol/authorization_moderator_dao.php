@@ -90,17 +90,17 @@ class BOL_AuthorizationModeratorDao extends OW_BaseDao
 
     protected function clearCache()
     {
-        OW::getCacheManager()->clean(array(BOL_AuthorizationActionDao::CACHE_TAG_AUTHORIZATION));
+        OW::getCacheManager()->clean([BOL_AuthorizationActionDao::CACHE_TAG_AUTHORIZATION]);
     }
 
-    public function findAll( $cacheLifeTime = 0, $tags = array() )
+    public function findAll( $cacheLifeTime = 0, $tags = [])
     {
         $example = new OW_Example();
         $example->setOrder('id');
 
-        return $this->findListByExample($example, 3600 * 24, array(
+        return $this->findListByExample($example, 3600 * 24, [
             BOL_AuthorizationActionDao::CACHE_TAG_AUTHORIZATION,
             OW_CacheManager::TAG_OPTION_INSTANT_LOAD
-        ));
+        ]);
     }
 }

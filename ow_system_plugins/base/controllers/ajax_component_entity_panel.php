@@ -50,7 +50,7 @@ class BASE_CTRL_AjaxComponentEntityPanel extends BASE_CTRL_AjaxComponentPanel
             throw new Redirect404Exception();
         }
 
-        $this->registerAction('reset', array($this, 'resetCustomization'));
+        $this->registerAction('reset', [$this, 'resetCustomization']);
 
         $this->componentService = BOL_ComponentEntityService::getInstance();
     }
@@ -105,10 +105,12 @@ class BASE_CTRL_AjaxComponentEntityPanel extends BASE_CTRL_AjaxComponentPanel
         }
         catch ( WidgetSettingValidateException $e )
         {
-            return array('error' => array(
+            return [
+                'error' => [
                     'message' => $e->getMessage(),
                     'field' => $e->getFieldName()
-                ));
+                ]
+            ];
         }
 
         $settings = $this->processSettingList($componentClass, $settings, $data['place'], false, $data);
@@ -117,7 +119,7 @@ class BASE_CTRL_AjaxComponentEntityPanel extends BASE_CTRL_AjaxComponentPanel
         $componentSettings = $this->componentService->findSettingList($componentPlaceUniqName, $entity);
         $this->clearCache($data['place'], $entity);
 
-        return array('settingList' => $componentSettings);
+        return ['settingList' => $componentSettings];
     }
 
     protected function getSettingsMarkup( $data )

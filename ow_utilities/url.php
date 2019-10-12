@@ -29,7 +29,7 @@
  */
 class UTIL_Url
 {
-    private static $redirectCodes = array(
+    private static $redirectCodes = [
         100 => "HTTP/1.1 100 Continue",
         101 => "HTTP/1.1 101 Switching Protocols",
         200 => "HTTP/1.1 200 OK",
@@ -69,7 +69,7 @@ class UTIL_Url
         502 => "HTTP/1.1 502 Bad Gateway",
         503 => "HTTP/1.1 503 Service Unavailable",
         504 => "HTTP/1.1 504 Gateway Time-out"
-    );
+    ];
 
     /**
      * Makes search engines friendly redirect to provided URL.
@@ -136,7 +136,7 @@ class UTIL_Url
             if ( !empty($uriInfo['query']) )
             {
                 // parse uri params
-                $uriParams = array();
+                $uriParams = [];
                 parse_str($uriInfo['query'], $uriParams);
 
                 $processedUri .= '?' . http_build_query($uriParams);

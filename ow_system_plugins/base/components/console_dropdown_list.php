@@ -2,10 +2,10 @@
 
 class BASE_CMP_ConsoleDropdownList extends BASE_CMP_ConsoleDropdownClick
 {
-    protected $counter = array(
+    protected $counter = [
         'number' => 0,
         'active' => false
-    );
+    ];
 
     /**
      *
@@ -26,11 +26,11 @@ class BASE_CMP_ConsoleDropdownList extends BASE_CMP_ConsoleDropdownClick
     protected function initJs()
     {
         $js = UTIL_JsGenerator::newInstance();
-        $js->addScript('OW.Console.addItem(new OW_ConsoleDropdownList({$uniqId}, {$contentIniqId}), {$key});', array(
+        $js->addScript('OW.Console.addItem(new OW_ConsoleDropdownList({$uniqId}, {$contentIniqId}), {$key});', [
             'uniqId' => $this->consoleItem->getUniqId(),
             'key' => $this->getKey(),
             'contentIniqId' => $this->consoleItem->getContentUniqId()
-        ));
+        ]);
         OW::getDocument()->addOnloadScript($js);
 
         $this->list->initJs();

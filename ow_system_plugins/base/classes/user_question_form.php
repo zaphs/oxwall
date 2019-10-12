@@ -68,7 +68,7 @@ class BASE_CLASS_UserQuestionForm extends Form
      *
      * @return BASE_UserQuestionForm
      */
-    public function addQuestions( $questionList, $questionValueList = array(), $questionData = array() )
+    public function addQuestions( $questionList, $questionValueList = [], $questionData = [])
     {
         foreach ( $questionList as $key => $question )
         {
@@ -94,7 +94,7 @@ class BASE_CLASS_UserQuestionForm extends Form
 
             $this->setLabel($formField, $question);
 
-            if ( in_array($question['type'], array( BOL_QuestionService::QUESTION_VALUE_TYPE_MULTISELECT, BOL_QuestionService::QUESTION_VALUE_TYPE_SELECT) ) 
+            if ( in_array($question['type'], [BOL_QuestionService::QUESTION_VALUE_TYPE_MULTISELECT, BOL_QuestionService::QUESTION_VALUE_TYPE_SELECT])
                 && method_exists($formField, 'setColumnCount') )
             {
                 $this->setColumnCount($formField, $question);
@@ -144,7 +144,7 @@ class BASE_CLASS_UserQuestionForm extends Form
      */
     protected function setFieldOptions( $formField, $questionName, array $questionValues )
     {
-        $valuesArray = array();
+        $valuesArray = [];
 
         foreach ( $questionValues as $values )
         {
@@ -171,7 +171,7 @@ class BASE_CLASS_UserQuestionForm extends Form
         // get available account types from DB
         $accountTypes = BOL_QuestionService::getInstance()->findAllAccountTypes();
 
-        $accounts = array();
+        $accounts = [];
 
 
 

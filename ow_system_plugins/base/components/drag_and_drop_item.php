@@ -31,22 +31,22 @@
  */
 class BASE_CMP_DragAndDropItem extends OW_Component
 {
-    private $boxSettingList = array(
+    private $boxSettingList = [
         'type' => 'empty',
         'title' => 'No Title',
         'icon' => 'ow_ic_file',
         'show_title' => true,
         'freeze' => false,
         'wrap_in_box' => false,
-        'toolbar' => array(),
+        'toolbar' => [],
         'capContent' => null
-    );
-    private $settingList = array();
-    private $runTimeSettingList = array();
+    ];
+    private $settingList = [];
+    private $runTimeSettingList = [];
     private $componentContentClass;
-    private $standartSettings = array();
+    private $standartSettings = [];
 
-    protected $sharedData = array();
+    protected $sharedData = [];
 
     /**
      *
@@ -54,7 +54,7 @@ class BASE_CMP_DragAndDropItem extends OW_Component
      */
     public $componentParamObject;
 
-    public function __construct( $componentUniqName, $isClone = false, $template = null, $sharedData = array() )
+    public function __construct( $componentUniqName, $isClone = false, $template = null, $sharedData = [])
     {
         parent::__construct();
         if ( $template !== null )
@@ -82,7 +82,7 @@ class BASE_CMP_DragAndDropItem extends OW_Component
         $settingList['capContent'] = $this->componentParamObject->standartParamList->capContent;
     }
     
-    public function setSettingList( array $settingList, array $entitySettingList = array() )
+    public function setSettingList( array $settingList, array $entitySettingList = [])
     {
         $this->settingList = array_merge($settingList, $entitySettingList);
     }
@@ -97,13 +97,13 @@ class BASE_CMP_DragAndDropItem extends OW_Component
 
     protected function getBoxSettingList( array $settingList, array $runTimeSettingList )
     {
-        $paramsSettingList = array();
+        $paramsSettingList = [];
         
         $standartSettingList = $this->getComponentStandartSettingValueList();
         $this->syncFromParamsObject($paramsSettingList);
         $settingList = array_merge($standartSettingList, $settingList, $paramsSettingList, $runTimeSettingList);
         
-        $resultSettingList = array();
+        $resultSettingList = [];
 
         foreach ( $settingList as $name => $value )
         {
@@ -125,13 +125,13 @@ class BASE_CMP_DragAndDropItem extends OW_Component
                     $resultSettingList[$name] = $value;
                     break;
                 case 'toolbar':
-                    $resultSettingList[$name] = empty($value) ? array() : $value;
+                    $resultSettingList[$name] = empty($value) ? [] : $value;
                     break;
                 case 'avaliable_sections':
-                    $resultSettingList[$name] = is_array($value) ? implode(',', $value) : array();
+                    $resultSettingList[$name] = is_array($value) ? implode(',', $value) : [];
                     break;
                 case BASE_CLASS_Widget::SETTING_ACCESS_RESTRICTIONS:
-                    $resultSettingList[$name] = empty($value) ? array() : $value;
+                    $resultSettingList[$name] = empty($value) ? [] : $value;
                     break;
             }
         }
@@ -147,8 +147,8 @@ class BASE_CMP_DragAndDropItem extends OW_Component
     {
         $paramObject = $this->componentParamObject;
 
-        $componentSettingList = array();
-        foreach ( call_user_func(array($this->componentContentClass, 'getSettingList'), $this->componentParamObject->widgetDetails->uniqName) as $key => $item )
+        $componentSettingList = [];
+        foreach (call_user_func([$this->componentContentClass, 'getSettingList'], $this->componentParamObject->widgetDetails->uniqName) as $key => $item )
         {
             $componentSettingList[$key] = empty($item['value']) ? null : $item['value'];
         }
@@ -174,7 +174,7 @@ class BASE_CMP_DragAndDropItem extends OW_Component
                     break;
 
                 case BASE_CLASS_Widget::SETTING_ACCESS_RESTRICTIONS:
-                    $paramObject->standartParamList->accessRestriction = empty($value) ? array() : $value;
+                    $paramObject->standartParamList->accessRestriction = empty($value) ? [] : $value;
                     break;
 
                 case BASE_CLASS_Widget::SETTING_TOOLBAR:
@@ -226,7 +226,7 @@ class BASE_CMP_DragAndDropItem extends OW_Component
         }
         else
         {
-            $standardSettingValueList = call_user_func(array($this->componentContentClass, 'getStandardSettingValueList'), $this->componentParamObject->widgetDetails->uniqName);
+            $standardSettingValueList = call_user_func([$this->componentContentClass, 'getStandardSettingValueList'], $this->componentParamObject->widgetDetails->uniqName);
         }
 
         return array_merge($this->boxSettingList, $standardSettingValueList);
@@ -234,7 +234,7 @@ class BASE_CMP_DragAndDropItem extends OW_Component
 
     private function getComponentAccess()
     {
-        return call_user_func(array($this->componentContentClass, 'getAccess'), $this->componentParamObject->widgetDetails->uniqName);
+        return call_user_func([$this->componentContentClass, 'getAccess'], $this->componentParamObject->widgetDetails->uniqName);
     }
 
     private function isComponentAvaliable( BASE_CLASS_WidgetParameter $paramsObject )
@@ -258,7 +258,7 @@ class BASE_CMP_DragAndDropItem extends OW_Component
             return true;
         }
 
-        if ( in_array($access, array(BASE_CLASS_Widget::ACCESS_ALL, BASE_CLASS_Widget::ACCESS_MEMBER)) )
+        if ( in_array($access, [BASE_CLASS_Widget::ACCESS_ALL, BASE_CLASS_Widget::ACCESS_MEMBER]) )
         {
             if ( $paramsObject->standartParamList->accessRestriction === null )
             {

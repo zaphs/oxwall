@@ -101,7 +101,7 @@ class ADMIN_CMP_ContentStatistic extends OW_Component
         $contentTypes = BOL_ContentService::getInstance()->getContentTypes();
 
         // get entity labels
-        $entityLabels = array();
+        $entityLabels = [];
         foreach ($entityTypes as $entityType)
         {
             $entityLabels[$entityType] = $contentTypes[$entityType]['entityLabel'];

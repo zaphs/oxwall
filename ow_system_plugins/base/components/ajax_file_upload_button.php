@@ -30,7 +30,7 @@
 class BASE_CMP_AjaxFileUploadButton extends OW_Component
 {
 
-    public function __construct($params = array())
+    public function __construct($params = [])
     {
         parent::__construct();
         $plugin = OW::getPluginManager()->getPlugin('base');
@@ -53,11 +53,11 @@ class BASE_CMP_AjaxFileUploadButton extends OW_Component
                             $title: {$title},
                             addClass: "ow_admin_ajax_file_upload_form"
                         });
-                    };', array(
+                    };', [
                 'addNewFile' => $id,
                 'title' => OW::getLanguage()->text('base', 'upload_files'),
                 'close_alert' => OW::getLanguage()->text('base', 'close_alert')
-            )
+            ]
         )
     );
 

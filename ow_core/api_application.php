@@ -189,11 +189,11 @@ class OW_ApiApplication extends OW_Application
         {
             $errorType = "exception";
             
-            $responseData = array(
+            $responseData = [
                 "exception" => get_class($e),
                 "message" => $e->getMessage(),
                 "code" => $e->getCode()
-            );
+            ];
             
             if ( $e instanceof ApiResponseErrorException )
             {
@@ -205,10 +205,10 @@ class OW_ApiApplication extends OW_Application
                 $responseData["trace"] = $e->getTraceAsString();
             }
             
-            $apiResponse = array(
+            $apiResponse = [
                 "type" => $errorType,
                 "data" => $responseData
-            );
+            ];
             
             //OW::getResponse()->setHeader(OW_Response::HD_CNT_TYPE, "application/json");
             //OW::getDocument()->setBody($apiResponse);

@@ -33,7 +33,7 @@ class UTIL_HttpClientParams
     /**
      * @var array
      */
-    private $options = array("params" => array());
+    private $options = ["params" => []];
 
     public function __construct()
     {
@@ -64,7 +64,7 @@ class UTIL_HttpClientParams
     {
         if ( array_key_exists(RequestOptions::HEADERS, $this->options) )
         {
-            $this->options[RequestOptions::HEADERS] = array();
+            $this->options[RequestOptions::HEADERS] = [];
         }
 
         $this->options[RequestOptions::HEADERS][trim($headerName)] = trim($headerVal);

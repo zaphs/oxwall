@@ -48,12 +48,12 @@ class ADMIN_CMP_AuthorizationRoleEdit extends OW_Component
         $form = new EditRoleForm($role);
         $this->addForm($form);
         
-        $colors = array(
+        $colors = [
             '#999999', '#85db18', '#a7c520', '#046390', '#db4105', '#ff9800', '#01a2a6', 
             '#29d9c2', '#dc3522', '#1a9481', '#003d5c', '#046380', '#f23005', '#8b0f03', 
             '#2f6d7a', '#70a99a', '#b6d051', '#b52841', '#ff8939', '#e85f4d', '#590051', 
             '#303133', '#585956', '#99917c', '#ccc794', '#e66a00'
-        );
+        ];
         
         $this->assign('colors', $colors);
         
@@ -96,7 +96,7 @@ class ADMIN_CMP_AuthorizationRoleEdit extends OW_Component
         $roleId = (int) $data['roleId'];
         $role = $authService->getRoleById($roleId);
         
-        $resp = array();
+        $resp = [];
         
         if ( !$role )
         {

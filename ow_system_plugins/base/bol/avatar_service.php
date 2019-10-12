@@ -161,7 +161,7 @@ class BOL_AvatarService
 
         $avatar = $this->findByUserId($userId);
 
-        $event = new OW_Event('base.before_user_avatar_delete', array('avatarId' => $avatar->id ));
+        $event = new OW_Event('base.before_user_avatar_delete', ['avatarId' => $avatar->id]);
         OW::getEventManager()->trigger($event);
 
         if ( $avatar )
@@ -222,7 +222,7 @@ class BOL_AvatarService
      * @param int $viewSize
      * @return bool
      */
-    public function cropAvatar( $userId, $path, $coords, $viewSize, array $editionalParams = array() )
+    public function cropAvatar( $userId, $path, $coords, $viewSize, array $editionalParams = [])
     {
         $this->deleteUserAvatar($userId);
 
@@ -232,11 +232,11 @@ class BOL_AvatarService
 
         $this->updateAvatar($avatar);
 
-        $params = array(
+        $params = [
             'avatarId' => $avatar->id,
             'userId' => $userId,
             'trackAction' => isset($editionalParams['trackAction'])  ? $editionalParams['trackAction'] : true
-        );
+        ];
 
         $event = new OW_Event('base.after_avatar_update', array_merge($editionalParams, $params));
         OW::getEventManager()->trigger($event);
@@ -332,7 +332,7 @@ class BOL_AvatarService
         return true;
     }
 
-    public function setUserAvatar( $userId, $uploadedFileName, array $editionalParams = array() )
+    public function setUserAvatar( $userId, $uploadedFileName, array $editionalParams = [])
     {
         $avatar = $this->findByUserId($userId);
 
@@ -386,11 +386,11 @@ class BOL_AvatarService
 
             $this->updateAvatar($avatar);
 
-            $params = array(
+            $params = [
                 'avatarId' => $avatar->id,
                 'userId' => $userId,
                 'trackAction' => isset($editionalParams['trackAction'])  ? $editionalParams['trackAction'] : true
-            );
+            ];
 
             $event = new OW_Event('base.after_avatar_update', array_merge( $editionalParams, $params) );
             OW::getEventManager()->trigger($event);
@@ -529,11 +529,11 @@ class BOL_AvatarService
      */
     public function getAvatarUrl( $userId, $size = 1, $hash = null, $checkCache = true, $checkModerationStatus = true )
     {
-        $event = new OW_Event("base.avatars.get_list", array(
-            "userIds" => array($userId),
+        $event = new OW_Event("base.avatars.get_list", [
+            "userIds" => [$userId],
             "size" => $size,
             "checkModerationStatus" => $checkModerationStatus
-        ));
+        ]);
 
         $eventAvatars = OW::getEventManager()->trigger($event)->getData();
 
@@ -582,7 +582,7 @@ class BOL_AvatarService
 
     private function getCustomDefaultAvatarUrl( $size = 1 )
     {
-        if ( !in_array($size, array(1, 2)) )
+        if ( !in_array($size, [1, 2]) )
         {
             return null;
         }
@@ -662,14 +662,14 @@ class BOL_AvatarService
     {
         if ( empty($userIds) || !is_array($userIds) )
         {
-            return array();
+            return [];
         }
 
-        $event = new OW_Event("base.avatars.get_list", array(
+        $event = new OW_Event("base.avatars.get_list", [
             "userIds" => $userIds,
             "size" => $size,
             "checkModerationStatus" => true
-        ));
+        ]);
 
         $eventAvatars = OW::getEventManager()->trigger($event)->getData();
 
@@ -851,19 +851,19 @@ class BOL_AvatarService
     public function trackAvatarChangeActivity( $userId, $avatarId )
     {
         // Newsfeed
-        $event = new OW_Event('feed.action', array(
+        $event = new OW_Event('feed.action', [
             'pluginKey' => 'base',
             'entityType' => 'avatar-change',
             'entityId' => $avatarId,
             'userId' => $userId,
             'replace' => true
-        ), array(
+        ], [
             'string' => OW::getLanguage()->text('base', 'avatar_feed_string'),
             /* 'content' => '<img src="' . $this->getAvatarUrl($userId) . '" />', */
-            'view' => array(
+            'view' => [
                 'iconClass' => 'ow_ic_picture'
-            )
-        ));
+            ]
+        ]);
         OW::getEventManager()->trigger($event);
     }
 
@@ -874,7 +874,7 @@ class BOL_AvatarService
             return null;
         }
 
-        $data = array();
+        $data = [];
 
         if ( $src )
         {
@@ -892,10 +892,10 @@ class BOL_AvatarService
             {
                 foreach ( $urlArr as $userId => $userUrl )
                 {
-                    $data[$userId]['urlInfo'] = array(
+                    $data[$userId]['urlInfo'] = [
                         'routeName' => 'base_user_profile',
-                        'vars' => array('username' => $usernameList[$userId])
-                    );
+                        'vars' => ['username' => $usernameList[$userId]]
+                    ];
                 }
             }
         }
@@ -940,7 +940,7 @@ class BOL_AvatarService
     {
         $event = new BASE_CLASS_EventCollector(
             'base.avatar_change_collect_sections',
-            array('limit' => self::AVATAR_CHANGE_GALLERY_LIMIT)
+            ['limit' => self::AVATAR_CHANGE_GALLERY_LIMIT]
         );
 
         OW::getEventManager()->trigger($event);
@@ -952,7 +952,7 @@ class BOL_AvatarService
 
     public function getAvatarChangeSection( $entityType, $entityId, $offset )
     {
-        $params = array('entityType' => $entityType, 'entityId' => $entityId, 'offset' => $offset, 'limit' => self::AVATAR_CHANGE_GALLERY_LIMIT);
+        $params = ['entityType' => $entityType, 'entityId' => $entityId, 'offset' => $offset, 'limit' => self::AVATAR_CHANGE_GALLERY_LIMIT];
         $event = new BASE_CLASS_EventCollector('base.avatar_change_get_section', $params);
 
         OW::getEventManager()->trigger($event);
@@ -980,7 +980,7 @@ class BOL_AvatarService
             return null;
         }
 
-        $params = array('entityType' => $entityType, 'entityId' => $entityId, 'id' => $itemId);
+        $params = ['entityType' => $entityType, 'entityId' => $entityId, 'id' => $itemId];
         $event = new OW_Event('base.avatar_change_get_item', $params);
 
         OW::getEventManager()->trigger($event);
@@ -1023,16 +1023,16 @@ class BOL_AvatarService
             return false;
         }
 
-        $event = new OW_Event('base.before_avatar_change', array(
+        $event = new OW_Event('base.before_avatar_change', [
             'userId' => $userId,
             'avatarId' => null,
             'upload' => true,
             'crop' => false,
             'isModerable' => $isModerable
-        ));
+        ]);
         OW::getEventManager()->trigger($event);
 
-        $avatarSet = $this->setUserAvatar($userId, $path, array('isModerable' => $isModerable, 'trackAction' => $trackAction ));
+        $avatarSet = $this->setUserAvatar($userId, $path, ['isModerable' => $isModerable, 'trackAction' => $trackAction]);
 
         if ( $avatarSet )
         {
@@ -1040,12 +1040,12 @@ class BOL_AvatarService
 
             if ( $avatar )
             {
-                $event = new OW_Event('base.after_avatar_change', array(
+                $event = new OW_Event('base.after_avatar_change', [
                     'userId' => $userId,
                     'avatarId' => $avatar->id,
                     'upload' => true,
                     'crop' => false
-                ));
+                ]);
                 OW::getEventManager()->trigger($event);
             }
 

@@ -144,13 +144,13 @@ class UTIL_DateTime
                     return $language->text('base', 'date_time_one_minute_ago');
 
                 case $secondsPast < 3600:
-                    return $language->text('base', 'date_time_minutes_ago', array('minutes' => floor($secondsPast / 60)));
+                    return $language->text('base', 'date_time_minutes_ago', ['minutes' => floor($secondsPast / 60)]);
 
                 case $secondsPast < 7200:
                     return $language->text('base', 'date_time_one_hour_ago');
 
                 default:
-                    return $language->text('base', 'date_time_hours_ago', array('hours' => floor($secondsPast / 3600)));
+                    return $language->text('base', 'date_time_hours_ago', ['hours' => floor($secondsPast / 3600)]);
             }
         }
         else if ( ( date('j', $currentTs) - date('j', $timeStamp) ) === 1 &&
@@ -333,13 +333,14 @@ class UTIL_DateTime
             $second = (int) $second;
         }
 
-        return array(
+        return [
             'minute' => $minute,
             'hour' => $hour,
             'second' => $second,
             'day' => $day,
             'month' => $month,
-            'year' => $year);
+            'year' => $year
+        ];
 
 //               $dateTime = new DateTime();
 //               $dateTime->setDate( $year, $month, $day );
@@ -351,9 +352,9 @@ class UTIL_DateTime
     private static function tokenize( $pattern )
     {
         if ( !($n = strlen($pattern)) )
-            return array();
+            return [];
 
-        $tokens = array();
+        $tokens = [];
         for ( $c0 = $pattern[0], $start = 0, $i = 1; $i < $n; ++$i )
         {
             if ( ($c = $pattern[$i]) !== $c0 )
@@ -421,7 +422,7 @@ class UTIL_DateTime
 
     public static function getTimezones()
     {
-        $zones = array(
+        $zones = [
             "Australia/West", "Australia/Victoria", "Australia/Tasmania", "Australia/Sydney", "Australia/South",
             "Australia/Queensland", "Australia/Perth", "Australia/North", "Australia/NSW", "Australia/Melbourne",
             "Australia/Lord_Howe", "Australia/Lindeman", "Australia/LHI", "Australia/Hobart", "Australia/Darwin",
@@ -513,11 +514,11 @@ class UTIL_DateTime
             "Pacific/Wallis", "Pacific/Yap", "US/Alaska", "US/Aleutian", "US/Arizona",
             "US/Central", "US/East-Indiana", "US/Eastern", "US/Hawaii", "US/Indiana-Starke",
             "US/Michigan", "US/Mountain", "US/Pacific", "US/Pacific-New", "US/Samoa"
-        );
+        ];
 
 
 
-        $timezones = array();
+        $timezones = [];
         foreach ( $zones as $z )
         {
             $timezones[$z] = $z;

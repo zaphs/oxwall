@@ -37,7 +37,7 @@ class BASE_MCMP_InsertVideo extends OW_MobileComponent
      * @param array $params
      *      string linkText
      */
-    public function __construct( array $params = array() )
+    public function __construct( array $params = [])
     {
         parent::__construct();
 

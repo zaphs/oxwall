@@ -68,12 +68,12 @@ class BASE_CTRL_Attachment extends OW_ActionController
 
         unset($oembed['allImages']);
 
-        $response = array(
+        $response = [
             'content' => $this->getMarkup($oembedCmp->render()),
             'type' => 'link',
             'result' => $oembed,
             'attachment' => $attacmentUniqId
-        );
+        ];
 
         echo json_encode($response);
 
@@ -85,7 +85,7 @@ class BASE_CTRL_Attachment extends OW_ActionController
         /* @var $document OW_AjaxDocument */
         $document = OW::getDocument();
 
-        $markup = array();
+        $markup = [];
         $markup['html'] = $html;
 
         $onloadScript = $document->getOnloadScript();
@@ -100,7 +100,7 @@ class BASE_CTRL_Attachment extends OW_ActionController
 
     public function addPhoto( $params )
     {
-        $resultArr = array('result' => false, 'message' => 'General error');
+        $resultArr = ['result' => false, 'message' => 'General error'];
         $bundle = $_GET['flUid'];
 
         if ( OW::getUser()->isAuthenticated() && !empty($_POST['flUid']) && !empty($_POST['pluginKey']) && !empty($_FILES['attachment']) )
@@ -110,7 +110,7 @@ class BASE_CTRL_Attachment extends OW_ActionController
 
             try
             {
-                $dtoArr = $this->service->processUploadedFile($pluginKey, $item, $bundle, array('jpg', 'jpeg', 'png', 'gif'), 2000);
+                $dtoArr = $this->service->processUploadedFile($pluginKey, $item, $bundle, ['jpg', 'jpeg', 'png', 'gif'], 2000);
                 $resultArr['result'] = true;
                 $resultArr['url'] = $dtoArr['url'];
             }
@@ -125,16 +125,16 @@ class BASE_CTRL_Attachment extends OW_ActionController
 
     public function addFile()
     {
-        $respondArr = array();
+        $respondArr = [];
         $bundle = $_GET['flUid'];
         if ( OW::getUser()->isAuthenticated() && !empty($_POST['flData']) && !empty($_POST['pluginKey']) && !empty($_FILES['ow_file_attachment']) )
         {
             $respondArr['noData'] = false;
-            $respondArr['items'] = array();
+            $respondArr['items'] = [];
             $nameArray = json_decode(urldecode($_POST['flData']), true);
             $pluginKey = $_POST['pluginKey'];
 
-            $finalFileArr = array();
+            $finalFileArr = [];
 
             foreach ( $_FILES['ow_file_attachment'] as $key => $items )
             {
@@ -142,7 +142,7 @@ class BASE_CTRL_Attachment extends OW_ActionController
                 {
                     if ( !isset($finalFileArr[$index]) )
                     {
-                        $finalFileArr[$index] = array();
+                        $finalFileArr[$index] = [];
                     }
 
                     $finalFileArr[$index][$key] = $item;
@@ -158,22 +158,22 @@ class BASE_CTRL_Attachment extends OW_ActionController
                 }
                 catch ( Exception $e )
                 {
-                    $respondArr['items'][$nameArray[$item['name']]] = array('result' => false, 'message' => $e->getMessage());
+                    $respondArr['items'][$nameArray[$item['name']]] = ['result' => false, 'message' => $e->getMessage()];
                 }
 
                 if ( !array_key_exists($nameArray[$item['name']], $respondArr['items']) )
                 {
-                    $respondArr['items'][$nameArray[$item['name']]] = array('result' => true, 'dbId' => $dtoArr['dto']->getId());
+                    $respondArr['items'][$nameArray[$item['name']]] = ['result' => true, 'dbId' => $dtoArr['dto']->getId()];
                 }
             }
 
             $items = $this->service->getFilesByBundleName($pluginKey, $bundle);
 
-            OW::getEventManager()->trigger(new OW_Event('base.attachment_uploaded', array('pluginKey' => $pluginKey, 'uid' => $bundle, 'files' => $items)));
+            OW::getEventManager()->trigger(new OW_Event('base.attachment_uploaded', ['pluginKey' => $pluginKey, 'uid' => $bundle, 'files' => $items]));
         }
         else
         {
-            $respondArr = array('result' => false, 'message' => 'General error', 'noData' => true);
+            $respondArr = ['result' => false, 'message' => 'General error', 'noData' => true];
         }
 
         exit("<script>if(parent.window.owFileAttachments['" . $bundle . "']){parent.window.owFileAttachments['" . $bundle . "'].updateItems(" . json_encode($respondArr) . ");}</script>");

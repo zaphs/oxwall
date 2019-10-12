@@ -155,4 +155,4 @@ class BOL_EmailVerifyDao extends OW_BaseDao
         $this->deleteByExample($example);
     }
 }
-?>
+

@@ -58,11 +58,11 @@ class BASE_MCMP_UserListWidget extends BASE_CMP_UserListWidget
 
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_WRAP_IN_BOX => true,
             self::SETTING_SHOW_TITLE => true,
             self::SETTING_TITLE => OW::getLanguage()->text('base', 'user_list_widget_settings_title'),
             self::SETTING_ICON => self::ICON_USER
-        );
+        ];
     }
 }

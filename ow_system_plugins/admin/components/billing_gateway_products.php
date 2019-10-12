@@ -31,7 +31,7 @@
  */
 class ADMIN_CMP_BillingGatewayProducts extends OW_Component
 {
-    public function __construct( $params = array() )
+    public function __construct( $params = [])
     {
         parent::__construct();
 
@@ -49,7 +49,7 @@ class ADMIN_CMP_BillingGatewayProducts extends OW_Component
         OW::getEventManager()->trigger($event);
         $data = $event->getData();
         
-        $eventProducts = array();
+        $eventProducts = [];
         if ( $data )
         {
             foreach ( $data as $plugin )

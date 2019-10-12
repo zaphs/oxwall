@@ -33,11 +33,11 @@ require_once OW_DIR_LIB . 'rss' . DS . 'rss.php';
 
 class BASE_CMP_RssWidget extends BASE_CLASS_Widget
 {
-    private $rss = array();
+    private $rss = [];
 
     private $titleOnly = false;
 
-    private static $countInterval = array(1, 10);
+    private static $countInterval = [1, 10];
 
     private $count = 5;
 
@@ -112,12 +112,12 @@ class BASE_CMP_RssWidget extends BASE_CLASS_Widget
         $rss = array_slice($this->rss, 0, $this->count);
         $this->assign('rss', $rss);
 
-        $toolbars = array();
+        $toolbars = [];
         if ( !$this->titleOnly )
         {
             foreach ( $rss as $key => $item )
             {
-                $toolbars[$key] = array(array('label' => UTIL_DateTime::formatDate($item['time'])));
+                $toolbars[$key] = [['label' => UTIL_DateTime::formatDate($item['time'])]];
             }
         }
         $this->assign('toolbars', $toolbars);
@@ -127,29 +127,29 @@ class BASE_CMP_RssWidget extends BASE_CLASS_Widget
 
     public static function getSettingList()
     {
-        $settingList = array();
-        $settingList['rss_url'] = array(
+        $settingList = [];
+        $settingList['rss_url'] = [
             'presentation' => self::PRESENTATION_TEXT,
             'label' => OW::getLanguage()->text('base', 'rss_widget_url_label'),
             'value' => ''
-        );
+        ];
 
-        $settingList['item_count'] = array(
+        $settingList['item_count'] = [
             'presentation' => self::PRESENTATION_SELECT,
             'label' => OW::getLanguage()->text('base', 'rss_widget_count_label'),
             'value' => 5
-        );
+        ];
 
         for ( $i = self::$countInterval[0]; $i <= self::$countInterval[1]; $i++ )
         {
             $settingList['item_count']['optionList'][$i] = $i;
         }
 
-        $settingList['title_only'] = array(
+        $settingList['title_only'] = [
             'presentation' => self::PRESENTATION_CHECKBOX,
             'label' => OW::getLanguage()->text('base', 'rss_widget_title_only_label'),
             'value' => false
-        );
+        ];
 
         return $settingList;
     }
@@ -166,10 +166,10 @@ class BASE_CMP_RssWidget extends BASE_CLASS_Widget
 
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_TITLE => OW::getLanguage()->text('base', 'rss_widget_default_title'),
             self::SETTING_ICON => self::ICON_RSS
-        );
+        ];
     }
 
 

@@ -61,10 +61,11 @@ class FlagForm extends Form
         
 
         $element = new RadioField('reason');
-        $element->setOptions(array(
+        $element->setOptions([
             'spam' => OW::getLanguage()->text('base', 'flag_spam'),
             'offence' => OW::getLanguage()->text('base', 'flag_offence'),
-            'illegal' => OW::getLanguage()->text('base', 'flag_illegal'))
+            'illegal' => OW::getLanguage()->text('base', 'flag_illegal')
+            ]
         );
 
         $flagDto = BOL_FlagService::getInstance()->findFlag($entityType, $entityId, OW::getUser()->getId());

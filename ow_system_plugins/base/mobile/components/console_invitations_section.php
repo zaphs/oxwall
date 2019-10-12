@@ -58,9 +58,9 @@ class BASE_MCMP_ConsoleInvitationsSection extends OW_MobileComponent
         $this->addComponent('itemsCmp', new BASE_MCMP_ConsoleInvitations($limit));
         $this->assign('loadMore', $this->service->findInvitationCount(OW::getUser()->getId()) > $limit);
 
-        $params = array(
+        $params = [
             'cmdUrl' => OW::getRouter()->urlFor('BASE_MCTRL_Invitations', 'command')
-        );
+        ];
 
         $script = 'var invitationsConsole = new OWM_InvitationsConsole(' . json_encode($params) . ');';
 

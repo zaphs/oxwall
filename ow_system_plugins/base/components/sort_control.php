@@ -33,12 +33,12 @@ class BASE_CMP_SortControl extends OW_Component
     const ITEM_URL = 'url';
     const ITEM_ISACTIVE = 'isActive';
     
-    public $sortItems = array();
+    public $sortItems = [];
     /**
      * Constructor.
      *
      */
-    public function __construct( array $sortItems = array() )
+    public function __construct( array $sortItems = [])
     {
         parent::__construct();
         
@@ -52,11 +52,11 @@ class BASE_CMP_SortControl extends OW_Component
 
     public function addItem($sortOrder, $label, $url, $isActive = false)
     {
-        $this->sortItems[$sortOrder] = array(
+        $this->sortItems[$sortOrder] = [
             self::ITEM_LABEL => $label,
             self::ITEM_URL => $url,
             self::ITEM_ISACTIVE => $isActive
-        );
+        ];
     }
     
     public function setActive($sortOrder)

@@ -50,14 +50,14 @@ class BASE_MCMP_TopMenu extends BASE_CMP_Menu
         $event = new BASE_CLASS_EventCollector('base.mobile_top_menu_add_options');
         OW::getEventManager()->trigger($event);
         $data = $event->getData();
-        $optionsArray = array();
+        $optionsArray = [];
 
         foreach ( $data as $item )
         {
-            $optionsArray[$item['prefix'].$item['key']] = array(
+            $optionsArray[$item['prefix'].$item['key']] = [
                 'url' => (isset($item['url']) ? trim($item['url']) : null),
                 'id' => (isset($item['id']) ? trim($item['id']) : null)
-            );
+            ];
         }
         
         foreach ( $this->assignedVars['data'] as $key => $dataItem )

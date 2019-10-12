@@ -88,7 +88,7 @@ class OW_DeveloperTools
 
         OW_View::setCollectDevInfo(true);
         OW::getEventManager()->setDevMode(true);
-        OW::getEventManager()->bind("base.append_markup", array($this, "onAppendMarkup"));
+        OW::getEventManager()->bind("base.append_markup", [$this, "onAppendMarkup"]);
     }
     /* ---------------------------------------- Developer handlers -------------------------------------------------- */
 
@@ -121,7 +121,7 @@ class OW_DeveloperTools
             $this->updateStructureforAllPlugins();
         }
 
-        OW::getEventManager()->trigger(new OW_Event(self::EVENT_UPDATE_CACHE_ENTITIES, array("options" => $options)));
+        OW::getEventManager()->trigger(new OW_Event(self::EVENT_UPDATE_CACHE_ENTITIES, ["options" => $options]));
     }
 
     /**
@@ -196,7 +196,7 @@ class OW_DeveloperTools
         }
 
         $requestHandlerData["ctrlPath"] = $ctrlPath;
-        $requestHandlerData["paramsExp"] = var_export(( empty($requestHandlerData["params"]) ? array() : $requestHandlerData["params"]),
+        $requestHandlerData["paramsExp"] = var_export(( empty($requestHandlerData["params"]) ? [] : $requestHandlerData["params"]),
             true);
 
         $view->assign("requestHandler", $requestHandlerData);
@@ -226,7 +226,7 @@ class OW_DeveloperTools
         $view->assign("events", $this->getEventInfo(OW::getEventManager()->getLog()));
 
         $view->assign("clrBtnUrl", OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlFor("BASE_CTRL_Base", "turnDevModeOn"),
-            array("back-uri" => urlencode(OW::getRouter()->getUri()))));
+            ["back-uri" => urlencode(OW::getRouter()->getUri())]));
 
         $event->add($view->render());
     }
@@ -250,33 +250,33 @@ class OW_DeveloperTools
             }
         }
 
-        return array("qet" => $totalTime, "ql" => $sqlData, "qc" => count($sqlData));
+        return ["qet" => $totalTime, "ql" => $sqlData, "qc" => count($sqlData)];
     }
 
     protected function getEventInfo( array $eventsData )
     {
-        $eventsDataArray = array("bind" => array(), "calls" => array());
+        $eventsDataArray = ["bind" => [], "calls" => []];
 
         foreach ( $eventsData["bind"] as $eventName => $listeners )
         {
-            $eventsDataArray["bind"][] = array(
+            $eventsDataArray["bind"][] = [
                 "name" => $eventName,
                 "listeners" => $this->getEventListeners($listeners)
-            );
+            ];
         }
 
         foreach ( $eventsData["call"] as $eventItem )
         {
             $paramsData = var_export($eventItem["event"]->getParams(), true);
 
-            $eventsDataArray["call"][] = array(
+            $eventsDataArray["call"][] = [
                 "type" => $eventItem["type"],
                 "name" => $eventItem["event"]->getName(),
                 "listeners" => $this->getEventListeners($eventItem["listeners"]),
                 "params" => $paramsData,
                 "start" => sprintf("%.3f", $eventItem["start"]),
                 "exec" => sprintf("%.3f", $eventItem["exec"])
-            );
+            ];
         }
 
         $eventsDataArray["bindsCount"] = count($eventsDataArray["bind"]);
@@ -287,7 +287,7 @@ class OW_DeveloperTools
 
     protected function getEventListeners( array $eventData )
     {
-        $listenersList = array();
+        $listenersList = [];
 
         foreach ( $eventData as $priority )
         {
@@ -322,7 +322,7 @@ class OW_DeveloperTools
 
     protected function getViewInfo( array $viewData )
     {
-        $viewDataArray = array("mp" => array(), "cmp" => array(), "ctrl" => array());
+        $viewDataArray = ["mp" => [], "cmp" => [], "ctrl" => []];
 
         foreach ( $viewData as $class => $item )
         {
@@ -335,7 +335,7 @@ class OW_DeveloperTools
                 $src = "not_found";
             }
 
-            $addItem = array("class" => $class, "src" => $src, "tpl" => $item);
+            $addItem = ["class" => $class, "src" => $src, "tpl" => $item];
 
             if ( is_subclass_of($class, OW_MasterPage::class) )
             {
@@ -355,6 +355,6 @@ class OW_DeveloperTools
             }
         }
 
-        return array("items" => $viewDataArray, "count" => ( count($viewData) - 2 ));
+        return ["items" => $viewDataArray, "count" => (count($viewData) - 2 )];
     }
 }

@@ -98,8 +98,8 @@ foreach ( $plugins as $plugin )
         $className = strtoupper($plugin->getKey()) . '_Cron';
         $cron = new $className;
 
-        $runJobs = array();
-        $newRunJobDtos = array();
+        $runJobs = [];
+        $newRunJobDtos = [];
 
         foreach ( BOL_CronService::getInstance()->findJobList() as $runJob )
         {
@@ -123,7 +123,7 @@ foreach ( $plugins as $plugin )
 
                 BOL_CronService::getInstance()->batchSave($newRunJobDtos);
 
-                $newRunJobDtos = array();
+                $newRunJobDtos = [];
 
                 $cron->$job();
             }

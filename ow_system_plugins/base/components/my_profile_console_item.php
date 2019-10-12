@@ -16,9 +16,9 @@ class BASE_CMP_MyProfileConsoleItem extends BASE_CMP_ConsoleDropdownMenu
 
         parent::__construct($label, self::KEY);
 
-        $url = OW::getRouter()->urlForRoute('base_user_profile', array(
+        $url = OW::getRouter()->urlForRoute('base_user_profile', [
             'username' => $this->userName
-        ));
+        ]);
 
         $this->setUrl($url);
         $this->collectItems();
@@ -29,35 +29,35 @@ class BASE_CMP_MyProfileConsoleItem extends BASE_CMP_ConsoleDropdownMenu
         $language = OW::getLanguage();
         $router = OW::getRouter();
 
-        $this->addItem('main', array(
+        $this->addItem('main', [
             'label' => $language->text('base', 'console_item_label_profile'),
-            'url' => $router->urlForRoute('base_user_profile', array(
+            'url' => $router->urlForRoute('base_user_profile', [
                 'username' => $this->userName
-            ))
-        ));
+            ])
+        ]);
 
-        $this->addItem('main', array(
+        $this->addItem('main', [
             'label' => $language->text('base', 'edit_index'),
             'url' => $router->urlForRoute('base_edit')
-        ));
+        ]);
 
-        $this->addItem('main', array(
+        $this->addItem('main', [
             'label' => $language->text('base', 'preference_index'),
             'url' => $router->urlForRoute('base_preference_index')
-        ));
+        ]);
 
         if ( OW::getUser()->isAdmin() || BOL_AuthorizationService::getInstance()->isModerator() )
         {
-            $this->addItem('main', array(
+            $this->addItem('main', [
                 'label' => $language->text('base', 'moderation_tools'),
                 'url' => $router->urlForRoute('base.moderation_tools')
-            ));
+            ]);
         }
 
-        $this->addItem('foot', array(
+        $this->addItem('foot', [
             'label' => $language->text('base', 'console_item_label_sign_out'),
             'url' => $router->urlForRoute('base_sign_out')
-        ));
+        ]);
 
         $addItemsEvent = new BASE_CLASS_EventCollector('base.add_main_console_item');
         OW::getEventManager()->trigger($addItemsEvent);
@@ -68,9 +68,10 @@ class BASE_CMP_MyProfileConsoleItem extends BASE_CMP_ConsoleDropdownMenu
         {
             if ( !empty($addItem['label']) && !empty($addItem['url']) )
             {
-                $this->addItem('main', array(
+                $this->addItem('main', [
                     'label' => $addItem['label'],
-                    'url' => $addItem['url'])
+                    'url' => $addItem['url']
+                    ]
                 );
             }
         }

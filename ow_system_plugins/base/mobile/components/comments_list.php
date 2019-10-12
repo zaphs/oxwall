@@ -57,18 +57,18 @@ class BASE_MCMP_CommentsList extends BASE_CMP_CommentsList
 
         if ( !$dataInit )
         {
-            $staticDataArray = array(
+            $staticDataArray = [
                 'respondUrl' => OW::getRouter()->urlFor('BASE_CTRL_Comments', 'getMobileCommentList'),
                 'delUrl' => OW::getRouter()->urlFor('BASE_CTRL_Comments', 'deleteComment'),
                 'delAtchUrl' => OW::getRouter()->urlFor('BASE_CTRL_Comments', 'deleteCommentAtatchment'),
                 'delConfirmMsg' => OW::getLanguage()->text('base', 'comment_delete_confirm_message'),
-            );
+            ];
             OW::getDocument()->addOnloadScript("window.owCommentListCmps.staticData=" . json_encode($staticDataArray) . ";");
             $dataInit = true;
         }
         
         $jsParams = json_encode(
-                array(
+                [
                     'totalCount' => $this->commentCount,
                     'contextId' => $this->cmpContextId,
                     'displayType' => $this->params->getDisplayType(),
@@ -80,7 +80,7 @@ class BASE_MCMP_CommentsList extends BASE_CMP_CommentsList
                     'commentCountOnPage' => $this->params->getCommentCountOnPage(),
                     'cid' => $this->id,
                     'loadCount' => $this->commentService->getConfigValue(BOL_CommentService::CONFIG_MB_COMMENTS_COUNT_TO_LOAD)
-                )
+                ]
         );
 
         OW::getDocument()->addOnloadScript(

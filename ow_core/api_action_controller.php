@@ -36,7 +36,7 @@ abstract class OW_ApiActionController
      *
      * @var array
      */
-    protected $assignedVars = array();
+    protected $assignedVars = [];
 
     /**
      * Constructor.

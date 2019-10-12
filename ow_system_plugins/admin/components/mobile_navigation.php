@@ -30,24 +30,24 @@
  */
 class ADMIN_CMP_MobileNavigation extends OW_Component
 {
-    protected $panels = array();
+    protected $panels = [];
     protected $prefix;
-    protected $sharedData = array();
+    protected $sharedData = [];
     protected $responderUrl;
 
     public function __construct() 
     {
         parent::__construct();
         
-        OW_ViewRenderer::getInstance()->registerFunction('dnd_item', array($this, 'tplItem'));
+        OW_ViewRenderer::getInstance()->registerFunction('dnd_item', [$this, 'tplItem']);
     }
     
     public function setupPanel( $panel, $settings )
     {
-        $this->panels[$panel] = empty($this->panels[$panel]) ? array(
+        $this->panels[$panel] = empty($this->panels[$panel]) ? [
             "key" => $panel,
-            "items" => array()
-        ) : $this->panels[$panel];
+            "items" => []
+        ] : $this->panels[$panel];
         
         $this->panels[$panel] = array_merge($this->panels[$panel], $settings);
     }
@@ -75,13 +75,13 @@ class ADMIN_CMP_MobileNavigation extends OW_Component
         OW::getDocument()->addScript($baseJsUrl . "jquery-ui.min.js");
         OW::getDocument()->addScript($adminJsUrl . "mobile.js");
         
-        $settings = array();
+        $settings = [];
         $settings["rsp"] = $this->responderUrl;
         $settings["prefix"] = $this->prefix;
         $settings["shared"] = $this->sharedData;
         
         $js = UTIL_JsGenerator::newInstance();
-        $js->callFunction(array("MOBILE", "Navigation", "init"), array($settings));
+        $js->callFunction(["MOBILE", "Navigation", "init"], [$settings]);
         
         OW::getDocument()->addOnloadScript($js);
         

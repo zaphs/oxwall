@@ -46,7 +46,7 @@ class BASE_MCTRL_User extends OW_MobileActionController
 
         if ( !$form->isValid($_POST) )
         {
-            exit(json_encode(array('result' => false, 'message' => 'Error!')));
+            exit(json_encode(['result' => false, 'message' => 'Error!']));
         }
 
         $data = $form->getValues();
@@ -61,11 +61,11 @@ class BASE_MCTRL_User extends OW_MobileActionController
 
         if ( $result->isValid() )
         {
-            exit(json_encode(array('result' => true, 'message' => $message)));
+            exit(json_encode(['result' => true, 'message' => $message]));
         }
         else
         {
-            exit(json_encode(array('result' => false, 'message' => $message)));
+            exit(json_encode(['result' => false, 'message' => $message]));
         }
     }
 
@@ -73,7 +73,7 @@ class BASE_MCTRL_User extends OW_MobileActionController
     {
         if ( OW::getRequest()->isAjax() )
         {
-            exit(json_encode(array()));
+            exit(json_encode([]));
         }
 
         if ( OW::getUser()->isAuthenticated() )
@@ -119,17 +119,17 @@ class BASE_MCTRL_User extends OW_MobileActionController
             }
         }
 
-        OW::getDocument()->getMasterPage()->setRButtonData(array('extraString' => ' style="display:none;"'));
+        OW::getDocument()->getMasterPage()->setRButtonData(['extraString' => ' style="display:none;"']);
         $this->addComponent('signIn', OW::getClassInstance("BASE_MCMP_SignIn", false));
 
         // set meta info
-        $params = array(
+        $params = [
             "sectionKey" => "base.base_pages",
             "entityKey" => "sign_in",
             "title" => "base+meta_title_sign_in",
             "description" => "base+meta_desc_sign_in",
             "keywords" => "base+meta_keywords_sign_in"
-        );
+        ];
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }
@@ -168,11 +168,11 @@ class BASE_MCTRL_User extends OW_MobileActionController
             return null;
         }
         
-        $eventParams = array(
+        $eventParams = [
             'action' => 'base_view_profile',
             'ownerId' => $userDto->id,
             'viewerId' => OW::getUser()->getId()
-        );
+        ];
 
         $event = new OW_Event('privacy_check_permission', $eventParams);
 
@@ -184,7 +184,7 @@ class BASE_MCTRL_User extends OW_MobileActionController
         }
         catch ( RedirectException $ex )
         {
-            throw new RedirectException(OW::getRouter()->urlForRoute('base_user_privacy_no_permission', array('username' => $displayName)));
+            throw new RedirectException(OW::getRouter()->urlForRoute('base_user_privacy_no_permission', ['username' => $displayName]));
         }
 
         return $userDto;
@@ -201,8 +201,8 @@ class BASE_MCTRL_User extends OW_MobileActionController
 
         $displayName = BOL_UserService::getInstance()->getDisplayName($userDto->id);
 
-        $this->setPageTitle(OW::getLanguage()->text('base', 'profile_view_title', array('username' => $displayName)));
-        $this->setPageHeading(OW::getLanguage()->text('base', 'profile_view_heading', array('username' => $displayName)));
+        $this->setPageTitle(OW::getLanguage()->text('base', 'profile_view_title', ['username' => $displayName]));
+        $this->setPageHeading(OW::getLanguage()->text('base', 'profile_view_heading', ['username' => $displayName]));
         $this->setPageHeadingIconClass('ow_ic_user');
 
         $this->addComponent("header", OW::getClassInstance("BASE_MCMP_ProfileHeader", $userDto));
@@ -217,7 +217,7 @@ class BASE_MCTRL_User extends OW_MobileActionController
         $vars = BOL_SeoService::getInstance()->getUserMetaInfo($userDto);
 
         // set meta info
-        $params = array(
+        $params = [
             "sectionKey" => "base.users",
             "entityKey" => "userPage",
             "title" => "base+meta_title_user_page",
@@ -225,7 +225,7 @@ class BASE_MCTRL_User extends OW_MobileActionController
             "keywords" => "base+meta_keywords_user_page",
             "vars" => $vars,
             "image" => BOL_AvatarService::getInstance()->getAvatarUrl($userDto->getId(), 2)
-        );
+        ];
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }
@@ -241,8 +241,8 @@ class BASE_MCTRL_User extends OW_MobileActionController
 
         $displayName = BOL_UserService::getInstance()->getDisplayName($userDto->id);
 
-        $this->setPageTitle(OW::getLanguage()->text('base', 'profile_view_title', array('username' => $displayName)));
-        $this->setPageHeading(OW::getLanguage()->text('base', 'profile_view_heading', array('username' => $displayName)));
+        $this->setPageTitle(OW::getLanguage()->text('base', 'profile_view_title', ['username' => $displayName]));
+        $this->setPageHeading(OW::getLanguage()->text('base', 'profile_view_heading', ['username' => $displayName]));
         $this->setPageHeadingIconClass('ow_ic_user');
 
         $this->addComponent("header", OW::getClassInstance("BASE_MCMP_ProfileHeader", $userDto));
@@ -301,13 +301,13 @@ class BASE_MCTRL_User extends OW_MobileActionController
         }
 
         // set meta info
-        $params = array(
+        $params = [
             "sectionKey" => "base.base_pages",
             "entityKey" => "forgot_pass",
             "title" => "base+meta_title_forgot_pass",
             "description" => "base+meta_desc_forgot_pass",
             "keywords" => "base+meta_keywords_forgot_pass"
-        );
+        ];
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }
@@ -337,7 +337,7 @@ class BASE_MCTRL_User extends OW_MobileActionController
                     $this->redirect();
                 }
 
-                $this->redirect(OW::getRouter()->urlForRoute('base.reset_user_password', array('code' => $resetPassword->getCode())));
+                $this->redirect(OW::getRouter()->urlForRoute('base.reset_user_password', ['code' => $resetPassword->getCode()]));
             }
             else
             {
@@ -380,7 +380,7 @@ class BASE_MCTRL_User extends OW_MobileActionController
         $form = $this->userService->getResetPasswordForm();
         $this->addForm($form);
 
-        $this->assign('formText', $language->text('base', 'reset_password_form_text', array('username' => $user->getUsername())));
+        $this->assign('formText', $language->text('base', 'reset_password_form_text', ['username' => $user->getUsername()]));
 
         if ( OW::getRequest()->isPost() )
         {
@@ -412,7 +412,7 @@ class BASE_MCTRL_User extends OW_MobileActionController
     public function resetPasswordCodeExpired()
     {
         $this->setPageHeading(OW::getLanguage()->text('base', 'reset_password_code_expired_cap_label'));        
-        $this->assign('text', OW::getLanguage()->text('base', 'reset_password_code_expired_text', array('url' => OW::getRouter()->urlForRoute('base_forgot_password'))));        
+        $this->assign('text', OW::getLanguage()->text('base', 'reset_password_code_expired_text', ['url' => OW::getRouter()->urlForRoute('base_forgot_password')]));
     }
 }
 

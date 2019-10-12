@@ -186,7 +186,7 @@ class WyswygRequiredValidator extends OW_Validator
     public function isValid( $value )
     {
         // process value
-        $value = htmlentities(str_replace(array('&nbsp;', '&nbsp'), array(' ', ' '), $value));
+        $value = htmlentities(str_replace(['&nbsp;', '&nbsp'], [' ', ' '], $value));
 
         return mb_strlen(trim($value));
     }
@@ -652,14 +652,14 @@ class InArrayValidator extends OW_Validator
      *
      * @var array
      */
-    protected $predefinedValues = array();
+    protected $predefinedValues = [];
 
     /**
      * Class constructor
      *
      * @param array $predefinedValues
      */
-    public function __construct( array $predefinedValues  = array() )
+    public function __construct( array $predefinedValues  = [])
     {
         $this->predefinedValues = $predefinedValues;
         $this->errorMessage = OW::getLanguage()->text('base', 'form_validate_common_error_message');
@@ -671,7 +671,7 @@ class InArrayValidator extends OW_Validator
      * @param array $predefinedValues
      * @return void
      */
-    public function setPredefinedValues( array $predefinedValues = array() )
+    public function setPredefinedValues( array $predefinedValues = [])
     {
         $this->predefinedValues = $predefinedValues;
     }

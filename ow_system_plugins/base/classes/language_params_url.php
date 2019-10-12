@@ -32,14 +32,14 @@ class BASE_CLASS_LanguageParamsUrl extends BASE_CLASS_LanguageParams {
     protected $route;
     protected $controller;
     protected $action;
-    protected $params = array();
+    protected $params = [];
 
     /**
      * @param string $route
      * @param array $params
      */
 
-    public function setRoute( $route, $params = array() ) {
+    public function setRoute( $route, $params = []) {
         $this->route = $route;
         $this->params = $params;
     }
@@ -50,7 +50,7 @@ class BASE_CLASS_LanguageParamsUrl extends BASE_CLASS_LanguageParams {
      * @param array $params
      */
 
-    public function setActionController( $controller, $action, $params = array() ) {
+    public function setActionController( $controller, $action, $params = []) {
         $this->controller = $controller;
         $this->action = $action;
         $this->params = $params;
@@ -64,7 +64,7 @@ class BASE_CLASS_LanguageParamsUrl extends BASE_CLASS_LanguageParams {
      */
     public function serialize()
     {
-        return serialize(array('route' => $this->route, 'controller' =>$this->controller, 'action' => $this->action, 'params' => $this->params ));
+        return serialize(['route' => $this->route, 'controller' =>$this->controller, 'action' => $this->action, 'params' => $this->params]);
     }
 
     /**
@@ -84,7 +84,7 @@ class BASE_CLASS_LanguageParamsUrl extends BASE_CLASS_LanguageParams {
             $this->route = !empty($data['route']) ? $data['route'] : null;
             $this->controller = !empty($data['controller']) ? $data['controller'] : null;
             $this->action = !empty($data['action']) ? $data['action'] : null;
-            $this->params = !empty($data['params']) ? $data['params'] : array();
+            $this->params = !empty($data['params']) ? $data['params'] : [];
         }
     }
 

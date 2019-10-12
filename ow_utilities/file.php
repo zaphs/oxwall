@@ -34,14 +34,14 @@ class UTIL_File
      *
      * @var array
      */
-    public static $imageExtensions = array('jpg', 'jpeg', 'png', 'gif');
+    public static $imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
 
     /**
      * Avaliable video extensions
      *
      * @var array
      */
-    public static $videoExtensions = array('avi', 'mpeg', 'wmv', 'flv', 'mov', 'mp4');
+    public static $videoExtensions = ['avi', 'mpeg', 'wmv', 'flv', 'mov', 'mp4'];
 
     /**
      * Copies whole directory from source to destination folder. The destionation folder will be created if it doesn't exist.
@@ -117,7 +117,7 @@ class UTIL_File
     {
         $dirPath = self::removeLastDS($dirPath);
 
-        $resultList = array();
+        $resultList = [];
 
         $handle = opendir($dirPath);
 
@@ -288,7 +288,7 @@ class UTIL_File
      * bleExtensions
      * @return bool
      */
-    public static function validate( $fileName, array $avaliableExtensions = array() )
+    public static function validate( $fileName, array $avaliableExtensions = [])
     {
         if ( !( $fileName = trim($fileName) ) )
         {
@@ -340,8 +340,10 @@ class UTIL_File
             return false;
         }
 
-        $specialChars = array("?", "[", "]", "/", "\\", "=", "<", ">", ":", ";", ",", "'", "\"", "&", "$", "#", "*", "(",
-            ")", "|", "~", "`", "!", "{", "}");
+        $specialChars = [
+            "?", "[", "]", "/", "\\", "=", "<", ">", ":", ";", ",", "'", "\"", "&", "$", "#", "*", "(",
+            ")", "|", "~", "`", "!", "{", "}"
+        ];
         $fileName = str_replace($specialChars, '', $fileName);
         $fileName = preg_replace('/[\s-]+/', '-', $fileName);
         $fileName = trim($fileName, '.-_');
@@ -361,7 +363,7 @@ class UTIL_File
 
         if ( empty($filesItem) || !array_key_exists("tmp_name", $filesItem) || !array_key_exists("size", $filesItem) )
         {
-            return array("result" => false, "message" => $language->text("base", "upload_file_fail"));
+            return ["result" => false, "message" => $language->text("base", "upload_file_fail")];
         }
 
         if ( $fileSizeLimitInBytes == null )
@@ -375,7 +377,7 @@ class UTIL_File
             {
                 case UPLOAD_ERR_INI_SIZE:
                     $errorString = $language->text("base", "upload_file_max_upload_filesize_error",
-                        array("limit" => ($fileSizeLimitInBytes / 1024 / 1024) . "MB"));
+                        ["limit" => ($fileSizeLimitInBytes / 1024 / 1024) . "MB"]);
                     break;
 
                 case UPLOAD_ERR_PARTIAL:
@@ -402,22 +404,24 @@ class UTIL_File
                     $errorString = $language->text("base", "upload_file_fail");
             }
 
-            return array("result" => false, "message" => $errorString);
+            return ["result" => false, "message" => $errorString];
         }
 
         if ( $filesItem['size'] > $fileSizeLimitInBytes )
         {
-            return array("result" => false, "message" => $language->text("base",
+            return [
+                "result" => false, "message" => $language->text("base",
                     "upload_file_max_upload_filesize_error",
-                    array("limit" => ($fileSizeLimitInBytes / 1024 / 1024) . "MB")));
+                    ["limit" => ($fileSizeLimitInBytes / 1024 / 1024) . "MB"])
+            ];
         }
 
         if ( !is_uploaded_file($filesItem["tmp_name"]) )
         {
-            return array("result" => false, "message" => $language->text("base", "upload_file_fail"));
+            return ["result" => false, "message" => $language->text("base", "upload_file_fail")];
         }
 
-        return array("result" => true);
+        return ["result" => true];
     }
 
     /**
@@ -467,7 +471,7 @@ class UTIL_File
      */
     public static function convertBytesToHumanReadable( $bytes, $decimals = 2 )
     {
-        $size = array("B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB");
+        $size = ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
         $factor = (int) floor((strlen($bytes) - 1) / 3);
 

@@ -175,24 +175,24 @@ class BOL_SearchEntityDao extends OW_BaseDao
      */
     public function findAllEntities( $first, $limit, $entityType = null )
     {
-        $params = array(
+        $params = [
             self::ENTITY_STATUS_DELETED
-        );
+        ];
 
         $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE status <> ?';
 
         if ( $entityType ) 
         {
             $sql .=  ' AND `' . self::ENTITY_TYPE . '` = ? ';
-            $params = array_merge($params, array(
+            $params = array_merge($params, [
                 $entityType
-            ));
+            ]);
         }
 
-        $params = array_merge($params, array(
+        $params = array_merge($params, [
             $first,
             $limit
-        ));
+        ]);
 
         $sql .= ' LIMIT ?, ?';
 
@@ -209,10 +209,10 @@ class BOL_SearchEntityDao extends OW_BaseDao
      */
     public function setEntitiesStatus( $entityType = null, $status = self::ENTITY_STATUS_ACTIVE, $entityId = null )
     {
-        $params = array(
+        $params = [
             $status,
             self::ENTITY_STATUS_DELETED
-        );
+        ];
 
         $sql = 'UPDATE `' . $this->
                 getTableName() . '` SET `' . self::STATUS . '` = ? WHERE `' . self::STATUS . '` <> ?';
@@ -220,17 +220,17 @@ class BOL_SearchEntityDao extends OW_BaseDao
         if ( $entityType ) 
         {
             $sql .=  ' AND `' . self::ENTITY_TYPE . '` = ? ';
-            $params = array_merge($params, array(
+            $params = array_merge($params, [
                 $entityType
-            ));
+            ]);
         }
 
         if ( $entityId ) 
         {
             $sql .=  ' AND `' . self::ENTITY_ID . '` = ? ';
-            $params = array_merge($params, array(
+            $params = array_merge($params, [
                 $entityId
-            ));
+            ]);
         }
 
         $this->dbo->query($sql, $params);
@@ -245,9 +245,9 @@ class BOL_SearchEntityDao extends OW_BaseDao
      */
     public function changeActivationStatus( $entityType = null, $activate = true )
     {
-        $params = array(
+        $params = [
             ($activate ? self::ENTITY_ACTIVATED : self::ENTITY_NOT_ACTIVATED)
-        );
+        ];
 
         $sql = 'UPDATE `' . $this->
                 getTableName() . '` SET `' . self::ACTIVATED . '` = ? WHERE 1';
@@ -255,9 +255,9 @@ class BOL_SearchEntityDao extends OW_BaseDao
         if ( $entityType ) 
         {
             $sql .=  ' AND `' . self::ENTITY_TYPE . '` = ? ';
-            $params = array_merge($params, array(
+            $params = array_merge($params, [
                 $entityType
-            ));
+            ]);
         }
 
         $this->dbo->query($sql, $params);
@@ -274,9 +274,9 @@ class BOL_SearchEntityDao extends OW_BaseDao
     {
         $enityTags = BOL_SearchEntityTagDao::getInstance();
 
-        $params = array(
+        $params = [
             ($activate ? self::ENTITY_ACTIVATED : self::ENTITY_NOT_ACTIVATED)
-        );
+        ];
 
         $query = '
             UPDATE 
@@ -302,14 +302,14 @@ class BOL_SearchEntityDao extends OW_BaseDao
      * @param integer $timeEnd
      * @return integer
      */
-    public function findEntitiesCountByText(  $text, array $tags = array(), $timeStart = 0, $timeEnd = 0)
+    public function findEntitiesCountByText(  $text, array $tags = [], $timeStart = 0, $timeEnd = 0)
     {
         // sql params
-        $queryParams = array(
+        $queryParams = [
             ':search' => $text,
             ':status' => self::ENTITY_STATUS_ACTIVE,
             ':activated' => self::ENTITY_ACTIVATED
-        );
+        ];
 
         $subQueryTimeStampFilter = null;
 
@@ -318,18 +318,18 @@ class BOL_SearchEntityDao extends OW_BaseDao
         {
             if ( $timeStart )
             {
-                $queryParams = array_merge($queryParams, array(
+                $queryParams = array_merge($queryParams, [
                     ':timeStampStart' => $timeStart
-                ));
+                ]);
 
                 $subQueryTimeStampFilter .= ' AND b.timeStamp >= :timeStampStart';
             }
 
             if ( $timeEnd )
             {
-                $queryParams = array_merge($queryParams, array(
+                $queryParams = array_merge($queryParams, [
                     ':timeStampEnd' => $timeEnd
-                ));
+                ]);
 
                 $subQueryTimeStampFilter .= ' AND b.timeStamp <= :timeStampEnd';
             }
@@ -432,16 +432,16 @@ class BOL_SearchEntityDao extends OW_BaseDao
      * @return array
      */
     public function findEntitiesByText(  $text, $first, $limit, 
-            array $tags = array(), $sort = self::SORT_BY_RELEVANCE, $sortDesc = true, $timeStart = 0, $timeEnd = 0)
+            array $tags = [], $sort = self::SORT_BY_RELEVANCE, $sortDesc = true, $timeStart = 0, $timeEnd = 0)
     {
         // sql params
-        $queryParams = array(
+        $queryParams = [
             ':search' => $text,
             ':first' => $first,
             ':limit' => $limit,
             ':status' => self::ENTITY_STATUS_ACTIVE,
             ':activated' => self::ENTITY_ACTIVATED
-        );
+        ];
 
         $subQueryTimeStampFilter = null;
 
@@ -450,18 +450,18 @@ class BOL_SearchEntityDao extends OW_BaseDao
         {
             if ( $timeStart )
             {
-                $queryParams = array_merge($queryParams, array(
+                $queryParams = array_merge($queryParams, [
                     ':timeStampStart' => $timeStart
-                ));
+                ]);
 
                 $subQueryTimeStampFilter .= ' AND b.timeStamp >= :timeStampStart';
             }
 
             if ( $timeEnd )
             {
-                $queryParams = array_merge($queryParams, array(
+                $queryParams = array_merge($queryParams, [
                     ':timeStampEnd' => $timeEnd
-                ));
+                ]);
 
                 $subQueryTimeStampFilter .= ' AND b.timeStamp <= :timeStampEnd';
             }
@@ -566,10 +566,10 @@ class BOL_SearchEntityDao extends OW_BaseDao
         $enityTags = BOL_SearchEntityTagDao::getInstance();
 
         // sql params
-        $queryParams = array(
+        $queryParams = [
             ':status' => self::ENTITY_STATUS_ACTIVE,
             ':activated' => self::ENTITY_ACTIVATED
-        );
+        ];
 
         $subQueryTimeStampFilter = null;
 
@@ -578,18 +578,18 @@ class BOL_SearchEntityDao extends OW_BaseDao
         {
             if ( $timeStart )
             {
-                $queryParams = array_merge($queryParams, array(
+                $queryParams = array_merge($queryParams, [
                     ':timeStampStart' => $timeStart
-                ));
+                ]);
 
                 $subQueryTimeStampFilter .= ' AND b.timeStamp >= :timeStampStart';
             }
 
             if ( $timeEnd )
             {
-                $queryParams = array_merge($queryParams, array(
+                $queryParams = array_merge($queryParams, [
                     ':timeStampEnd' => $timeEnd
-                ));
+                ]);
 
                 $subQueryTimeStampFilter .= ' AND b.timeStamp <= :timeStampEnd';
             }
@@ -659,12 +659,12 @@ class BOL_SearchEntityDao extends OW_BaseDao
             $sort = self::SORT_BY_DATE, $sortDesc = true, $timeStart = 0, $timeEnd = 0)
     {
         // sql params
-        $queryParams = array(
+        $queryParams = [
             ':first' => $first,
             ':limit' => $limit,
             ':status' => self::ENTITY_STATUS_ACTIVE,
             ':activated' => self::ENTITY_ACTIVATED
-        );
+        ];
 
         $subQueryTimeStampFilter = null;
 
@@ -673,18 +673,18 @@ class BOL_SearchEntityDao extends OW_BaseDao
         {
             if ( $timeStart )
             {
-                $queryParams = array_merge($queryParams, array(
+                $queryParams = array_merge($queryParams, [
                     ':timeStampStart' => $timeStart
-                ));
+                ]);
 
                 $subQueryTimeStampFilter .= ' AND b.timeStamp >= :timeStampStart';
             }
 
             if ( $timeEnd )
             {
-                $queryParams = array_merge($queryParams, array(
+                $queryParams = array_merge($queryParams, [
                     ':timeStampEnd' => $timeEnd
-                ));
+                ]);
 
                 $subQueryTimeStampFilter .= ' AND b.timeStamp <= :timeStampEnd';
             }
@@ -750,10 +750,10 @@ class BOL_SearchEntityDao extends OW_BaseDao
     {
         $enityTags = BOL_SearchEntityTagDao::getInstance();
 
-        $params = array(
+        $params = [
             ':deleted_status' => self::ENTITY_STATUS_DELETED,
             ':status' => $status
-        );
+        ];
 
         $query = '
             UPDATE 

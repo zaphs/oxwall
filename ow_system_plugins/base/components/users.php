@@ -29,7 +29,7 @@
  */
 abstract class BASE_CMP_Users extends OW_Component
 {
-    protected $showOnline = true, $list = array();
+    protected $showOnline = true, $list = [];
 
     public function getContextMenu( $userId )
     {
@@ -56,20 +56,20 @@ abstract class BASE_CMP_Users extends OW_Component
     {
         $service = BOL_UserService::getInstance();
 
-        $idList = array();
-        $userList = array();
+        $idList = [];
+        $userList = [];
 
         foreach ( $list as $dto )
         {
-            $userList[] = array('dto' => $dto);
+            $userList[] = ['dto' => $dto];
             $idList[] = $dto->getId();
         }
 
-        $avatars = array();
-        $usernameList = array();
-        $displayNameList = array();
-        $onlineInfo = array();
-        $questionList = array();
+        $avatars = [];
+        $usernameList = [];
+        $displayNameList = [];
+        $onlineInfo = [];
+        $questionList = [];
 
         if ( !empty($idList) )
         {
@@ -87,20 +87,20 @@ abstract class BASE_CMP_Users extends OW_Component
             }
         }
 
-        $showPresenceList = array();
+        $showPresenceList = [];
 
-        $ownerIdList = array();
+        $ownerIdList = [];
 
         foreach ( $onlineInfo as $userId => $isOnline )
         {
             $ownerIdList[$userId] = $userId;
         }
 
-        $eventParams = array(
+        $eventParams = [
                 'action' => 'base_view_my_presence_on_site',
                 'ownerIdList' => $ownerIdList,
                 'viewerId' => OW::getUser()->getId()
-            );
+        ];
 
         $permissions = OW::getEventManager()->getInstance()->call('privacy_check_permission_for_user_list', $eventParams);
 
@@ -116,7 +116,7 @@ abstract class BASE_CMP_Users extends OW_Component
             $showPresenceList[$userId] = true;
         }
 
-        $contextMenuList = array();
+        $contextMenuList = [];
         foreach ( $idList as $uid )
         {
             $contextMenu = $this->getContextMenu($uid);
@@ -130,7 +130,7 @@ abstract class BASE_CMP_Users extends OW_Component
             }
         }
 
-        $fields = array();
+        $fields = [];
 
         $this->assign('contextMenuList', $contextMenuList);
 

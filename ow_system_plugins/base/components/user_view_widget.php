@@ -36,7 +36,7 @@ class BASE_CMP_UserViewWidget extends BASE_CLASS_Widget
 
     /**
      * @param BASE_CLASS_WidgetParameter $params
-     * @return \BASE_CMP_UserViewWidget
+     * @return BASE_CMP_UserViewWidget
      */
     public function __construct( BASE_CLASS_WidgetParameter $params )
     {
@@ -100,16 +100,16 @@ class BASE_CMP_UserViewWidget extends BASE_CLASS_Widget
         {
             if ( !isset($questionArray[$sections[0]]) )
             {
-                $questionArray[$sections[0]] = array();
+                $questionArray[$sections[0]] = [];
             }
 
-            array_unshift($questionArray[$sections[0]], array('name' => 'accountType', 'presentation' => 'select'));
+            array_unshift($questionArray[$sections[0]], ['name' => 'accountType', 'presentation' => 'select']);
             $questionData[$userId]['accountType'] = $questionService->getAccountTypeLang($accountType);
         }
 
         if ( !isset($questionData[$userId]) )
         {
-            $questionData[$userId] = array();
+            $questionData[$userId] = [];
         } 
 
         $this->assign('firstSection', $sections[0]);
@@ -123,7 +123,7 @@ class BASE_CMP_UserViewWidget extends BASE_CLASS_Widget
 
         if ( $adminMode && !$ownerMode )
         {
-            $this->assign('profileEditUrl', OW::getRouter()->urlForRoute('base_edit_user_datails', array('userId' => $userId) ));
+            $this->assign('profileEditUrl', OW::getRouter()->urlForRoute('base_edit_user_datails', ['userId' => $userId]));
         }
 
         $this->assign('avatarUrl', BOL_AvatarService::getInstance()->getAvatarUrl($userId) );
@@ -135,12 +135,12 @@ class BASE_CMP_UserViewWidget extends BASE_CLASS_Widget
     public static function getStandardSettingValueList()
     {
         $language = OW::getLanguage();
-        return array(
+        return [
             self::SETTING_SHOW_TITLE => false,
             self::SETTING_WRAP_IN_BOX => false,
             self::SETTING_TITLE => $language->text('base', 'view_index'),
             self::SETTING_FREEZE => true
-        );
+        ];
     }
 
     public static function getAccess()
@@ -150,7 +150,7 @@ class BASE_CMP_UserViewWidget extends BASE_CLASS_Widget
 
     public function addMenu( $sections )
     {
-        $menuItems = array();
+        $menuItems = [];
 
         foreach ( $sections as $key => $section )
         {
@@ -175,11 +175,11 @@ class BASE_CMP_UserViewWidget extends BASE_CLASS_Widget
         $this->addComponent('menu', new BASE_CMP_ContentMenu($menuItems));
     }
 
-    public static function getUserViewQuestions( $userId, $adminMode = false, $questionNames = array(), $sectionNames = null )
+    public static function getUserViewQuestions( $userId, $adminMode = false, $questionNames = [], $sectionNames = null )
     {
         $questions = BOL_UserService::getInstance()->getUserViewQuestions($userId, $adminMode, $questionNames, $sectionNames);
 
-        $event = new OW_Event(BOL_QuestionService::EVENT_ON_COLLECT_QUESTIONS_SECTIONS_LIST, array('userId' => $userId), $questions);
+        $event = new OW_Event(BOL_QuestionService::EVENT_ON_COLLECT_QUESTIONS_SECTIONS_LIST, ['userId' => $userId], $questions);
 
         OW::getEventManager()->trigger($event);
 
@@ -187,7 +187,7 @@ class BASE_CMP_UserViewWidget extends BASE_CLASS_Widget
 
         if ( !empty($questions['data'][$userId]) )
         {
-            $data = array();
+            $data = [];
             foreach ( $questions['data'][$userId] as $key => $value )
             {
                 if ( is_array($value) )
@@ -197,7 +197,7 @@ class BASE_CMP_UserViewWidget extends BASE_CLASS_Widget
             }
         }
 
-        $sectionList = array();
+        $sectionList = [];
 
         $userViewPresntation = OW::getConfig()->getValue('base', 'user_view_presentation');
 
@@ -215,9 +215,9 @@ class BASE_CMP_UserViewWidget extends BASE_CLASS_Widget
                     $isHidden = true;
                 }
 
-                $sectionQuestions = !empty($questions['questions'][$section]) ? $questions['questions'][$section] : array();
-                $data = !empty($questions['data'][$userId]) ? $questions['data'][$userId] : array();
-                $component = OW::getClassInstance( 'BASE_CMP_UserViewSection', $section, $sectionQuestions, $data, $questions['labels'], $userViewPresntation, $isHidden, array('userId' => $userId) );
+                $sectionQuestions = !empty($questions['questions'][$section]) ? $questions['questions'][$section] : [];
+                $data = !empty($questions['data'][$userId]) ? $questions['data'][$userId] : [];
+                $component = OW::getClassInstance( 'BASE_CMP_UserViewSection', $section, $sectionQuestions, $data, $questions['labels'], $userViewPresntation, $isHidden, ['userId' => $userId]);
 
                 if ( !empty($component) )
                 {

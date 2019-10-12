@@ -61,7 +61,7 @@ class OW_Entity
 
     public function generateFieldsHash()
     {
-        $this->_fieldsHash = array();
+        $this->_fieldsHash = [];
         $vars = get_object_vars($this);
 
         foreach ( $vars as $varName => $varValue )
@@ -75,12 +75,12 @@ class OW_Entity
 
     public function getEntinyUpdatedFields()
     {
-        $updatedFields = array();
+        $updatedFields = [];
         $vars = get_object_vars($this);
         
         foreach ( $vars as $varName => $varValue )
         {
-            if ( !in_array($varName, array('_fieldsHash', 'id')) && (!isset($this->_fieldsHash[$varName]) || $this->_fieldsHash[$varName] !== crc32($varValue) ) )
+            if (!in_array($varName, ['_fieldsHash', 'id']) && (!isset($this->_fieldsHash[$varName]) || $this->_fieldsHash[$varName] !== crc32($varValue) ) )
             {
                 $updatedFields[] = $varName;
             }

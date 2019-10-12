@@ -34,7 +34,7 @@ class OW_Session
 {
     use OW_Singleton;
     
-    private static $protectedKeys = array('session.home_url', 'session.user_agent');
+    private static $protectedKeys = ['session.home_url', 'session.user_agent'];
 
     private function __construct()
     {
@@ -92,7 +92,7 @@ class OW_Session
     {
         session_regenerate_id();
 
-        $_SESSION = array();
+        $_SESSION = [];
 
         if ( isset($_COOKIE[$this->getName()]) )
         {

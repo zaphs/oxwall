@@ -16,7 +16,7 @@ class BASE_CLASS_ConsoleDataEvent extends OW_Event
             return $this->data;
         }
 
-        return empty($this->data[$key]) ? array() : $this->data[$key];
+        return empty($this->data[$key]) ? [] : $this->data[$key];
     }
 
     public function setItemData( $key, $data )

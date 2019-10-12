@@ -5,4 +5,3 @@ function smarty_function_display_name($params, $smarty)
 
 	return $service->getDisplayName($params['id']);
 }
-?>

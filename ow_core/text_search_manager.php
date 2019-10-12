@@ -87,7 +87,7 @@ class OW_TextSearchManager
      * @throws Exception
      * @return void
      */
-    public function addEntity( $entityType, $entityId, $text, $timeStamp, array $tags = array(), $status = null )
+    public function addEntity( $entityType, $entityId, $text, $timeStamp, array $tags = [], $status = null )
     {
         $this->defaultStorageInstance->addEntity($entityType, $entityId, $text, $timeStamp, $tags, $status);
 
@@ -269,7 +269,7 @@ class OW_TextSearchManager
      * @return array
      */
     public function searchEntities( $text, $first, $limit, 
-            array $tags = array(), $sort = self::SORT_BY_RELEVANCE, $sortDesc = true, $timeStart = 0, $timeEnd = 0 )
+            array $tags = [], $sort = self::SORT_BY_RELEVANCE, $sortDesc = true, $timeStart = 0, $timeEnd = 0 )
     {
         if ( $this->activeStorageInstance )
         {
@@ -291,7 +291,7 @@ class OW_TextSearchManager
      * @throws Exception
      * @return integer
      */
-    public function searchEntitiesCount( $text, array $tags = array(), $timeStart = 0, $timeEnd = 0 )
+    public function searchEntitiesCount( $text, array $tags = [], $timeStart = 0, $timeEnd = 0 )
     {
         if ( $this->activeStorageInstance )
         {

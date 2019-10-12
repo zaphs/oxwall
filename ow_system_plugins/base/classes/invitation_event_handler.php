@@ -76,11 +76,11 @@ class BASE_CLASS_InvitationEventHandler
         {
             $invitation->viewed = 0;
 
-            $dublicateParams = array(
+            $dublicateParams = [
                 'originalEvent' => $event,
                 'invitationDto' => $invitation,
                 'oldData' => $invitation->getData()
-            );
+            ];
 
             $dublicateParams = array_merge($params, $dublicateParams);
 
@@ -131,10 +131,10 @@ class BASE_CLASS_InvitationEventHandler
         $allInvitationCount = $this->service->findInvitationCount($userId);
         $newInvitationCount = $this->service->findInvitationCount($userId, false);
 
-        $data['counter'] = array(
+        $data['counter'] = [
             'all' => $allInvitationCount,
             'new' => $newInvitationCount
-        );
+        ];
 
         $event->setItemData('invitation', $data);
     }
@@ -154,10 +154,10 @@ class BASE_CLASS_InvitationEventHandler
         $invitations = $this->service->findInvitationList($userId, $params['console']['time'], $params['ids'], $loadItemsCount);
         $data['listFull'] = count($invitations) < $loadItemsCount;
 
-        $invitationIds = array();
+        $invitationIds = [];
         foreach ( $invitations as $invitation )
         {
-            $itemEvent = new OW_Event('invitations.on_item_render', array(
+            $itemEvent = new OW_Event('invitations.on_item_render', [
                 'key' => 'invitation_' . $invitation->id,
                 'entityType' => $invitation->entityType,
                 'entityId' => $invitation->entityId,
@@ -165,7 +165,7 @@ class BASE_CLASS_InvitationEventHandler
                 'userId' => $invitation->userId,
                 'viewed' => (bool) $invitation->viewed,
                 'data' => $invitation->getData()
-            ), $invitation->getData());
+            ], $invitation->getData());
 
             OW::getEventManager()->trigger($itemEvent);
 
@@ -190,15 +190,15 @@ class BASE_CLASS_InvitationEventHandler
     {
         if ( empty($data['avatar']) )
         {
-            return array();
+            return [];
         }
 
-        foreach ( array('string', 'conten') as $langProperty )
+        foreach (['string', 'conten'] as $langProperty )
         {
             if ( !empty($data[$langProperty]) && is_array($data[$langProperty]) )
             {
                 $key = explode('+', $data[$langProperty]['key']);
-                $vars = empty($data[$langProperty]['vars']) ? array() : $data[$langProperty]['vars'];
+                $vars = empty($data[$langProperty]['vars']) ? [] : $data[$langProperty]['vars'];
                 if ( count($key) < 2 )
                 {
                     $data[$langProperty] = '-';
@@ -212,13 +212,13 @@ class BASE_CLASS_InvitationEventHandler
 
         if ( empty($data['string']) )
         {
-            return array();
+            return [];
         }
 
         if ( !empty($data['contentImage']) )
         {
             $data['contentImage'] = is_string($data['contentImage'])
-                ? array( 'src' => $data['contentImage'] )
+                ? ['src' => $data['contentImage']]
                 : $data['contentImage'];
         }
         else
@@ -228,12 +228,12 @@ class BASE_CLASS_InvitationEventHandler
         
         if ( !empty($data["avatar"]["userId"]) )
         {
-            $avatarData = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($data["avatar"]["userId"]));
+            $avatarData = BOL_AvatarService::getInstance()->getDataForUserAvatars([$data["avatar"]["userId"]]);
             $data["avatar"] = $avatarData[$data["avatar"]["userId"]];
         }
 
-        $data['contentImage'] = empty($data['contentImage']) ? array() : $data['contentImage'];
-        $data['toolbar'] = empty($data['toolbar']) ? array() : $data['toolbar'];
+        $data['contentImage'] = empty($data['contentImage']) ? [] : $data['contentImage'];
+        $data['toolbar'] = empty($data['toolbar']) ? [] : $data['toolbar'];
         $data['key'] = isset($data['key']) ? $data['key'] : $params['key'];
         $data['viewed'] = isset($params['viewed']) && !$params['viewed'];
 
@@ -280,11 +280,11 @@ class BASE_CLASS_InvitationEventHandler
         $userIdList = $params['userIdList'];
 
         $invitations = $this->service->findInvitationListForSend($userIdList);
-        $invitationIds = array();
+        $invitationIds = [];
 
         foreach ( $invitations as $invitation )
         {
-            $event->add(array(
+            $event->add([
                 'pluginKey' => $invitation->pluginKey,
                 'entityType' => $invitation->entityType,
                 'entityId' => $invitation->entityId,
@@ -293,7 +293,7 @@ class BASE_CLASS_InvitationEventHandler
                 'time' => $invitation->timeStamp,
 
                 'data' => $invitation->getData()
-            ));
+            ]);
 
             $invitationIds[] = $invitation->id;
         }
@@ -328,30 +328,30 @@ class BASE_CLASS_InvitationEventHandler
 
     public function afterInits()
     {
-        OW::getEventManager()->bind('invitations.on_item_render', array($this, 'renderItem'));
-        OW::getEventManager()->bind('invitations.add', array($this, 'addInvitation'));
+        OW::getEventManager()->bind('invitations.on_item_render', [$this, 'renderItem']);
+        OW::getEventManager()->bind('invitations.add', [$this, 'addInvitation']);
 
-        OW::getEventManager()->bind('invitations.remove', array($this, 'removeInvitation'));
+        OW::getEventManager()->bind('invitations.remove', [$this, 'removeInvitation']);
     }
 
     public function init()
     {
-        OW::getEventManager()->bind(OW_EventManager::ON_PLUGINS_INIT, array($this, 'afterInits'));
+        OW::getEventManager()->bind(OW_EventManager::ON_PLUGINS_INIT, [$this, 'afterInits']);
 
-        OW::getEventManager()->bind(OW_EventManager::ON_AFTER_PLUGIN_ACTIVATE, array($this, 'pluginActivate'));
-        OW::getEventManager()->bind(OW_EventManager::ON_BEFORE_PLUGIN_DEACTIVATE, array($this, 'pluginDeactivate'));
-        OW::getEventManager()->bind(OW_EventManager::ON_BEFORE_PLUGIN_UNINSTALL, array($this, 'pluginUninstall'));
+        OW::getEventManager()->bind(OW_EventManager::ON_AFTER_PLUGIN_ACTIVATE, [$this, 'pluginActivate']);
+        OW::getEventManager()->bind(OW_EventManager::ON_BEFORE_PLUGIN_DEACTIVATE, [$this, 'pluginDeactivate']);
+        OW::getEventManager()->bind(OW_EventManager::ON_BEFORE_PLUGIN_UNINSTALL, [$this, 'pluginUninstall']);
 
-        OW::getEventManager()->bind('console.load_list', array($this, 'loadList'));
-        OW::getEventManager()->bind('console.ping', array($this, 'ping'));
-        OW::getEventManager()->bind('console.collect_items', array($this, 'collectItems'));
+        OW::getEventManager()->bind('console.load_list', [$this, 'loadList']);
+        OW::getEventManager()->bind('console.ping', [$this, 'ping']);
+        OW::getEventManager()->bind('console.collect_items', [$this, 'collectItems']);
 
-        OW::getEventManager()->bind('notifications.send_list', array($this, 'sendList'));
+        OW::getEventManager()->bind('notifications.send_list', [$this, 'sendList']);
     }
 
     public function genericInit()
     {
-        OW::getEventManager()->bind('invitations.add', array($this, 'addInvitation'));
-        OW::getEventManager()->bind('invitations.remove', array($this, 'removeInvitation'));
+        OW::getEventManager()->bind('invitations.add', [$this, 'addInvitation']);
+        OW::getEventManager()->bind('invitations.remove', [$this, 'removeInvitation']);
     }
 }

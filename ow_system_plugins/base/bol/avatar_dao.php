@@ -81,7 +81,7 @@ class BOL_AvatarDao extends OW_BaseDao
         return OW_DB_PREFIX . 'base_avatar';
     }
 
-    protected $cachedItems = array();
+    protected $cachedItems = [];
 
     public function clearCahche( $userId )
     {
@@ -121,13 +121,13 @@ class BOL_AvatarDao extends OW_BaseDao
     {
         if ( empty($idList) )
         {
-            return array();
+            return [];
         }
 
         $idList = array_unique(array_map('intval', $idList));
 
-        $idsToRequire = array();
-        $result = array();
+        $idsToRequire = [];
+        $result = [];
 
         foreach ( $idList as $id )
         {
@@ -141,7 +141,7 @@ class BOL_AvatarDao extends OW_BaseDao
             }
         }
 
-        $items = array();
+        $items = [];
 
         if ( !empty($idsToRequire) )
         {

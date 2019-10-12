@@ -33,13 +33,13 @@ class ADMIN_CLASS_EventHandler
     public function init()
     {
         $eventManager = OW::getEventManager();
-        $eventManager->bind("admin.disable_fields_on_edit_profile_question", array($this, "onGetDisableActionList"));
+        $eventManager->bind("admin.disable_fields_on_edit_profile_question", [$this, "onGetDisableActionList"]);
         $eventManager->bind("admin.disable_fields_on_edit_profile_question",
-            array($this, "onGetJoinStampDisableActionList"), 999);
+            [$this, "onGetJoinStampDisableActionList"], 999);
 
-        $eventManager->bind("admin.add_admin_notification", array($this, "onAddAdminNotification"));
-        $eventManager->bind(OW_EventManager::ON_AFTER_ROUTE, array($this, "onAfterRoute"));
-        $eventManager->bind("admin.check_if_admin_page", array($this, "checkIfAdminPage"));
+        $eventManager->bind("admin.add_admin_notification", [$this, "onAddAdminNotification"]);
+        $eventManager->bind(OW_EventManager::ON_AFTER_ROUTE, [$this, "onAfterRoute"]);
+        $eventManager->bind("admin.check_if_admin_page", [$this, "checkIfAdminPage"]);
     }
 
     public function onAddAdminNotification( ADMIN_CLASS_NotificationCollector $coll )
@@ -55,7 +55,7 @@ class ADMIN_CLASS_EventHandler
         if ( OW::getConfig()->getValue("base", "update_soft") )
         {
             $coll->add($language->text("admin", "notification_soft_update",
-                    array("link" => $router->urlForRoute("admin_core_update_request"))),
+                    ["link" => $router->urlForRoute("admin_core_update_request")]),
                 ADMIN_CLASS_NotificationCollector::NOTIFICATION_UPDATE);
         }
 
@@ -65,7 +65,7 @@ class ADMIN_CLASS_EventHandler
         if ( $pluginsToUpdateCount > 0 )
         {
             $coll->add($language->text("admin", "notification_plugins_to_update",
-                    array("link" => $router->urlForRoute("admin_plugins_installed"), "count" => $pluginsToUpdateCount)),
+                    ["link" => $router->urlForRoute("admin_plugins_installed"), "count" => $pluginsToUpdateCount]),
                 ADMIN_CLASS_NotificationCollector::NOTIFICATION_UPDATE);
         }
 
@@ -75,7 +75,7 @@ class ADMIN_CLASS_EventHandler
         if ( $themesToUpdateCount > 0 )
         {
             $coll->add($language->text("admin", "notification_themes_to_update",
-                    array("link" => $router->urlForRoute("admin_themes_choose"), "count" => $themesToUpdateCount)),
+                    ["link" => $router->urlForRoute("admin_themes_choose"), "count" => $themesToUpdateCount]),
                 ADMIN_CLASS_NotificationCollector::NOTIFICATION_UPDATE);
         }
 
@@ -83,7 +83,7 @@ class ADMIN_CLASS_EventHandler
                 "cron_is_active") == 0 )
         {
             $coll->add($language->text("admin", "warning_cron_is_not_active",
-                    array("path" => OW_DIR_ROOT . "ow_cron" . DS . "run.php")),
+                    ["path" => OW_DIR_ROOT . "ow_cron" . DS . "run.php"]),
                 ADMIN_CLASS_NotificationCollector::NOTIFICATION_WARNING);
         }
 
@@ -96,17 +96,17 @@ class ADMIN_CLASS_EventHandler
         {
             $type = ($item instanceof BOL_Plugin) ? BOL_StorageService::URI_VAR_ITEM_TYPE_VAL_PLUGIN : BOL_StorageService::URI_VAR_ITEM_TYPE_VAL_THEME;
 
-            $params = array(
+            $params = [
                 BOL_StorageService::URI_VAR_ITEM_TYPE => $type,
                 BOL_StorageService::URI_VAR_KEY => $item->getKey(),
                 BOL_StorageService::URI_VAR_DEV_KEY => $item->getDeveloperKey(),
                 BOL_StorageService::URI_VAR_BACK_URI => $backUri
-            );
+            ];
 
-            $langParams = array(
+            $langParams = [
                 "name" => $item->getTitle(),
                 "url" => $request->buildUrlQueryString($licenseRequestUrl, $params)
-            );
+            ];
 
             $coll->add($language->text("admin", "invalid _license_item_notification", $langParams),
                 ADMIN_CLASS_NotificationCollector::NOTIFICATION_WARNING);
@@ -187,26 +187,26 @@ class ADMIN_CLASS_EventHandler
                         break;
                     case "disable_on_join" :
 
-                        if ( in_array($dto->name, array("password")) || $dto->base == 1 )
+                        if (in_array($dto->name, ["password"]) || $dto->base == 1 )
                         {
                             $data["disable_on_join"] = true;
                         }
 
                         break;
                     case "disable_on_view" :
-                        if ( in_array($dto->name, array("password")) )
+                        if ( in_array($dto->name, ["password"]) )
                         {
                             $data["disable_on_view"] = true;
                         }
                         break;
                     case "disable_on_search" :
-                        if ( in_array($dto->name, array("password")) )
+                        if ( in_array($dto->name, ["password"]) )
                         {
                             $data["disable_on_search"] = true;
                         }
                         break;
                     case "disable_on_edit" :
-                        if ( in_array($dto->name, array("password")) )
+                        if ( in_array($dto->name, ["password"]) )
                         {
                             $data["disable_on_edit"] = true;
                         }
@@ -225,7 +225,7 @@ class ADMIN_CLASS_EventHandler
 
         if ( !empty($params["questionDto"]) && $params["questionDto"] instanceof BOL_Question && $params["questionDto"]->name == "joinStamp" )
         {
-            $disableActionList = array(
+            $disableActionList = [
                 "disable_account_type" => true,
                 "disable_answer_type" => true,
                 "disable_presentation" => true,
@@ -237,7 +237,7 @@ class ADMIN_CLASS_EventHandler
                 "disable_on_view" => false,
                 "disable_on_search" => true,
                 "disable_on_edit" => true
-            );
+            ];
 
             $e->setData($disableActionList);
         }
@@ -255,11 +255,11 @@ class ADMIN_CLASS_EventHandler
 
             if ( $pluginService->findNextManualUpdatePlugin() != null )
             {
-                $params = array(
+                $params = [
                     OW_RequestHandler::ATTRS_KEY_CTRL => "ADMIN_CTRL_Plugins",
                     OW_RequestHandler::ATTRS_KEY_ACTION => "manualUpdateRequest",
                     OW_RequestHandler::CATCH_ALL_REQUEST_KEY_REDIRECT => true
-                );
+                ];
 
                 OW::getRequestHandler()->setCatchAllRequestsAttributes("admin.manual_update", $params);
                 OW::getRequestHandler()->addCatchAllRequestsExclude("admin.manual_update", "ADMIN_CTRL_Plugins",

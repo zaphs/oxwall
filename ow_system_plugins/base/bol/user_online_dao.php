@@ -103,7 +103,7 @@ class BOL_UserOnlineDao extends OW_BaseDao
     {
         if ( empty($idList) )
         {
-            return array();
+            return [];
         }
 
         $query = "SELECT * FROM `" . $this->getTableName() . "` WHERE `" . self::USER_ID . "` IN (" . $this->dbo->mergeInClause($idList) . ")";
@@ -115,6 +115,6 @@ class BOL_UserOnlineDao extends OW_BaseDao
     {
         $query = "DELETE FROM `{$this->getTableName()}` WHERE `activityStamp` < ?";
 
-        $this->dbo->query($query, array($timestamp));
+        $this->dbo->query($query, [$timestamp]);
     }
 }

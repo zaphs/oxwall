@@ -3,9 +3,9 @@
 function smarty_function_text($params, $smarty)
 {
     // Reserved params
-    $keys = array(
+    $keys = [
         "key", "escape"
-    );
+    ];
     
     list($prefix, $key) = explode('+', $params["key"]);
     $out = OW::getLanguage()->text($prefix, $key, array_diff_key($params, array_flip($keys)));

@@ -5,7 +5,7 @@ function smarty_function_offline_now( $params, $smarty )
     $chatNowMarkup = '';
     if ( OW::getUser()->isAuthenticated() && isset($params['userId']) && OW::getUser()->getId() != $params['userId'])
     {
-        $allowChat = OW::getEventManager()->call('base.online_now_click', array('userId'=>OW::getUser()->getId(), 'onlineUserId'=>$params['userId']));
+        $allowChat = OW::getEventManager()->call('base.online_now_click', ['userId' =>OW::getUser()->getId(), 'onlineUserId' => $params['userId']]);
 
         if ($allowChat)
         {
@@ -17,4 +17,4 @@ function smarty_function_offline_now( $params, $smarty )
 
     return $buttonMarkup;
 }
-?>
+

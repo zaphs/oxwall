@@ -50,15 +50,15 @@ class BASE_CMP_Comments extends OW_Component
         parent::__construct();
         $this->params = $params;
         $this->batchData = $params->getBatchData();
-        $this->staticData = empty($this->batchData['_static']) ? array() : $this->batchData['_static'];
-        $this->batchData = isset($this->batchData[$params->getEntityType()][$params->getEntityId()]) ? $this->batchData[$params->getEntityType()][$params->getEntityId()] : array();
+        $this->staticData = empty($this->batchData['_static']) ? [] : $this->batchData['_static'];
+        $this->batchData = isset($this->batchData[$params->getEntityType()][$params->getEntityId()]) ? $this->batchData[$params->getEntityType()][$params->getEntityId()] : [];
 
         srand(time());
         $this->id = $params->getEntityType() . $params->getEntityId() . rand(1, 10000);
         $this->cmpContextId = "comments-$this->id";
         $this->assign('cmpContext', $this->cmpContextId);
         $this->assign('wrapInBox', $params->getWrapInBox());
-        $this->assign('topList', in_array($params->getDisplayType(), array(BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST, BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST_MINI)));
+        $this->assign('topList', in_array($params->getDisplayType(), [BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST, BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST_MINI]));
         $this->assign('bottomList', $params->getDisplayType() == BASE_CommentsParams::DISPLAY_TYPE_WITH_PAGING);
         $this->assign('mini', $params->getDisplayType() == BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST_MINI);
 
@@ -82,14 +82,14 @@ class BASE_CMP_Comments extends OW_Component
 
     public function initForm()
     {
-        $jsParams = array(
+        $jsParams = [
             'entityType' => $this->params->getEntityType(),
             'entityId' => $this->params->getEntityId(),
             'pluginKey' => $this->params->getPluginKey(),
             'contextId' => $this->cmpContextId,
             'userAuthorized' => $this->isAuthorized,
             'customId' => $this->params->getCustomId()
-        );
+        ];
 
         if ( $this->isAuthorized )
         {
@@ -111,11 +111,11 @@ class BASE_CMP_Comments extends OW_Component
             $jsParams['attchUid'] = $attchUid;
             $jsParams['enableSubmit'] = true;
             $jsParams['mediaAllowed'] = BOL_TextFormatService::getInstance()->isCommentsRichMediaAllowed();
-            $jsParams['labels'] = array(
+            $jsParams['labels'] = [
                 'emptyCommentMsg' => OW::getLanguage()->text('base', 'empty_comment_error_msg'),
                 'disabledSubmit' => OW::getLanguage()->text('base', 'submit_disabled_error_msg'),
                 'attachmentLoading' => OW::getLanguage()->text('base', 'submit_attachment_not_loaded'),
-            );
+            ];
 
             if ( !empty($this->staticData['currentUserInfo']) )
             {
@@ -123,7 +123,7 @@ class BASE_CMP_Comments extends OW_Component
             }
             else
             {
-                $currentUserInfo = BOL_AvatarService::getInstance()->getDataForUserAvatars(array(OW::getUser()->getId()));
+                $currentUserInfo = BOL_AvatarService::getInstance()->getDataForUserAvatars([OW::getUser()->getId()]);
                 $userInfoToAssign = $currentUserInfo[OW::getUser()->getId()];
             }
 
@@ -284,7 +284,7 @@ final class BASE_CommentsParams
      */
     public function setDisplayType( $displayType )
     {
-        if ( in_array($displayType, array(self::DISPLAY_TYPE_WITH_PAGING, self::DISPLAY_TYPE_WITH_LOAD_LIST, self::DISPLAY_TYPE_WITH_LOAD_LIST_MINI)) )
+        if ( in_array($displayType, [self::DISPLAY_TYPE_WITH_PAGING, self::DISPLAY_TYPE_WITH_LOAD_LIST, self::DISPLAY_TYPE_WITH_LOAD_LIST_MINI]) )
         {
             $this->displayType = (int) $displayType;
             return $this;

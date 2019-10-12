@@ -81,7 +81,7 @@ class UTIL_Ftp
             $dirRoot = substr($dirRoot, 0, -1);
         }
 
-        $pathList = array($dirRoot);
+        $pathList = [$dirRoot];
 
         while ( true )
         {
@@ -311,13 +311,13 @@ class UTIL_Ftp
             trigger_error("Can't set passive mode for FTP connection", E_USER_WARNING);
         }
 
-        $resultArray = array();
+        $resultArray = [];
         $list = ftp_rawlist($this->stream, $dirPath);
 
         if ( $list === false )
         {
             trigger_error("Can't get dir contents `" . $dirPath . "`", E_USER_WARNING);
-            return array();
+            return [];
         }
 
         if ( empty($list[0]) )
@@ -342,12 +342,12 @@ class UTIL_Ftp
 
                 foreach ( $list as $item )
                 {
-                    $tempRegs = array();
+                    $tempRegs = [];
                     $tempArray = null;
 
                     if ( preg_match($pattern, $item, $tempRegs) )
                     {
-                        $tempArray = array(
+                        $tempArray = [
                             'type' => ( strpos("-dl", substr($tempRegs[1], 0, 1)) ? 'dir' : 'file' ),
                             'rights' => $tempRegs[1],
                             'user' => $tempRegs[3],
@@ -356,7 +356,7 @@ class UTIL_Ftp
                             'date' => $tempRegs[6],
                             'time' => $tempRegs[7],
                             'name' => $tempRegs[9]
-                        );
+                        ];
                     }
 
                     if ( !empty($tempArray) && $tempArray['name'] !== '.' && $tempArray['name'] !== '..' && ( $type === 'all' || $type === $tempArray['type'] ) )

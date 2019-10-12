@@ -121,7 +121,7 @@ class BOL_PreferenceDao extends OW_BaseDao
     {
         if ( empty( $keyList ) || !is_array($keyList) )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();
@@ -159,7 +159,7 @@ class BOL_PreferenceDao extends OW_BaseDao
     {
         if ( empty( $section ) )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();

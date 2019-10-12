@@ -127,13 +127,13 @@ class BOL_ComponentEntityPlaceDao extends OW_BaseDao
                  LEFT JOIN `" . $placeDao->getTableName() . "` AS `p` ON `p`.`uniqName`=`up`.`uniqName`
                     WHERE `p`.`uniqName` IS NOT NULL AND `up`.`placeId`=? AND `up`.`entityId`=?";
 
-        return $this->dbo->queryForList($query, array($placeId, $entityId));
+        return $this->dbo->queryForList($query, [$placeId, $entityId]);
     }
 
     public function findAdminComponentIdList( $placeId, $entityId )
     {
         $dtoList = $this->findAdminComponentList($placeId, $entityId);
-        $idList = array();
+        $idList = [];
         foreach ( $dtoList as $dto )
         {
             $idList[] = $dto['id'];
@@ -159,7 +159,7 @@ class BOL_ComponentEntityPlaceDao extends OW_BaseDao
     			INNER JOIN `' . $componentDao->getTableName() . '` AS `c` ON `cp`.`componentId` = `c`.`id`
     				WHERE `cp`.`placeId`=? AND `cp`.`entityId`=?';
 
-        return $this->dbo->queryForList($query, array($placeId, $entityId));
+        return $this->dbo->queryForList($query, [$placeId, $entityId]);
     }
 
     public function findComponentListByIdList( array $componentIds )
@@ -172,6 +172,6 @@ class BOL_ComponentEntityPlaceDao extends OW_BaseDao
     				WHERE `cp`.`componentId` IN (' . implode(', ', $componentIds) . ')
     	';
 
-        return $this->dbo->queryForColumnList($query, array($placeId));
+        return $this->dbo->queryForColumnList($query, [$placeId]);
     }
 }

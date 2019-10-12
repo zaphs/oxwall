@@ -66,10 +66,10 @@ class OW_ApiDocument extends OW_Document
 
         $body = $this->getBody();
         
-        $apiResponse = array(
+        $apiResponse = [
             "type" => "success",
             "data" => empty($body) ? new stdClass() : $body
-        );
+        ];
         
         return json_encode($apiResponse);
     }

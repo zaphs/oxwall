@@ -15,11 +15,11 @@ class BASE_CMP_ConsoleDropdownClick extends BASE_CMP_ConsoleDropdown
     protected function initJs()
     {
         $js = UTIL_JsGenerator::newInstance();
-        $js->addScript('OW.Console.addItem(new OW_ConsoleDropdownClick({$uniqId}, {$contentIniqId}), {$key});', array(
+        $js->addScript('OW.Console.addItem(new OW_ConsoleDropdownClick({$uniqId}, {$contentIniqId}), {$key});', [
             'uniqId' => $this->consoleItem->getUniqId(),
             'key' => $this->getKey(),
             'contentIniqId' => $this->consoleItem->getContentUniqId()
-        ));
+        ]);
 
         OW::getDocument()->addOnloadScript($js);
 

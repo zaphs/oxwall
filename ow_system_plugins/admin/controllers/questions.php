@@ -41,7 +41,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
      */
     private $questionService;
     private $ajaxResponderUrl;
-    private $columnCountValues = array();
+    private $columnCountValues = [];
     /**
      * @var BASE_CMP_ContentMenu
      */
@@ -62,7 +62,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
         OW::getNavigation()->activateMenuItem('admin_users', 'admin', 'sidebar_menu_item_questions');
     }
 
-    public function pages( $params = array() )
+    public function pages( $params = [])
     {
         $serviceLang = BOL_LanguageService::getInstance();
         $language = OW::getLanguage();
@@ -73,23 +73,23 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
         $questions = $this->questionService->findAllQuestionsBySectionForAccountType('all');
 
         $section = null;
-        $questionBySectionList = array();
-        $sectionDeleteUrlList = array();
-        $parentList = array();
-        $questionNameList = array();
-        $questionList = array();
+        $questionBySectionList = [];
+        $sectionDeleteUrlList = [];
+        $parentList = [];
+        $questionNameList = [];
+        $questionList = [];
 
-        $deleteEditButtonsContent = array();
-        $previewQuestionValuesContent = array();
-        $pagesCheckboxContent = array();
+        $deleteEditButtonsContent = [];
+        $previewQuestionValuesContent = [];
+        $pagesCheckboxContent = [];
         
         $sectionsNameList = array_keys($questions);
         $sectionDtoList = BOL_QuestionService::getInstance()->findSectionBySectionNameList($sectionsNameList);
         
         foreach ( $questions as $section => $list )
         {
-            $sectionDeleteUrlList[$section] = OW::getRouter()->urlFor('ADMIN_CTRL_Questions', 'deleteSection', array("sectionName" => $section));
-            $questionBySectionList[$section] = array();
+            $sectionDeleteUrlList[$section] = OW::getRouter()->urlFor('ADMIN_CTRL_Questions', 'deleteSection', ["sectionName" => $section]);
+            $questionBySectionList[$section] = [];
 
             foreach ( $list as $question )
             {
@@ -105,9 +105,10 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                         $question['parentLabel'] = $this->questionService->getQuestionLang($parent->name);
                         $question['parentId'] = $parent->id;
                         
-                        $parentList[$question['parent']][] = array(
+                        $parentList[$question['parent']][] = [
                             'name' => $question['name'],
-                            'editUrl' => 'javascript://');
+                            'editUrl' => 'javascript://'
+                        ];
                     }
                     else
                     {
@@ -118,28 +119,29 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                 $questionBySectionList[$section][] = $question;
                 $questionNameList[] = $question['name'];
 
-                $event = new OW_Event('admin.questions.get_edit_delete_question_buttons_content', array( 'question' => $question ), null);
+                $event = new OW_Event('admin.questions.get_edit_delete_question_buttons_content', ['question' => $question], null);
                 OW::getEventManager()->trigger($event);
 
                 $data = $event->getData();
 
                 $deleteEditButtonsContent[$question['name']] = $data;
 
-                $event = new OW_Event('admin.questions.get_preview_question_values_content', array( 'question' => $question ), null);
+                $event = new OW_Event('admin.questions.get_preview_question_values_content', ['question' => $question], null);
                 OW::getEventManager()->trigger($event);
 
                 $data = $event->getData();
 
                 $previewQuestionValuesContent[$question['name']] = $data;
                 
-                $pageCheckboxData = array(
+                $pageCheckboxData = [
                     'required' => null, 
                     'join' => null, 
                     'edit' => null, 
                     'view' => null, 
-                    'search' => null);
+                    'search' => null
+                ];
                 
-                $event = new OW_Event('admin.questions.get_question_page_checkbox_content', array( 'actionList' => $pageCheckboxData, 'question' => $question ), $pageCheckboxData);
+                $event = new OW_Event('admin.questions.get_question_page_checkbox_content', ['actionList' => $pageCheckboxData, 'question' => $question], $pageCheckboxData);
                 OW::getEventManager()->trigger($event);
 
                 $data = $event->getData();
@@ -161,13 +163,13 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
             if ( array_key_exists($question['name'], $parentList) )
             {
-                $questionStringList = array();
+                $questionStringList = [];
                 foreach ( $parentList[$question['name']] as $child )
                 {
                     $questionStringList[] = BOL_QuestionService::getInstance()->getQuestionLang($child['name']);
                 }
 
-                $text = $language->text('admin', 'questions_delete_question_parent_confirmation', array('questions' => implode(', ', $questionStringList)));
+                $text = $language->text('admin', 'questions_delete_question_parent_confirmation', ['questions' => implode(', ', $questionStringList)]);
             }
 
             $text = json_encode($text);
@@ -184,13 +186,13 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
         $questionValues = $this->questionService->findQuestionsValuesByQuestionNameList($questionNameList);
 
-        $valueLabels = array();
+        $valueLabels = [];
 
         foreach ( $questionValues as $name => $value )
         {
             if ( empty($valueLabels[$name]) )
             {
-                $valueLabels[$name] = array();
+                $valueLabels[$name] = [];
             }
 
             /* @var $value BOL_QuestionValue */
@@ -213,7 +215,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
         $language->addKeyForJs('admin', 'questions_delete_section_confirmation');
 
-        $script = ' window.indexQuest = new indexQuestions( ' . json_encode(array('questions' => $questionList, 'questionAddUrl' => OW::getRouter()->urlFor("ADMIN_CTRL_Questions", "add"), 'ajaxResponderUrl' => $this->ajaxResponderUrl)) . ' )'; //' . json_encode( array( 'questionEditUrl' => $questionEditUrl ) ) . ' ); ';
+        $script = ' window.indexQuest = new indexQuestions( ' . json_encode(['questions' => $questionList, 'questionAddUrl' => OW::getRouter()->urlFor("ADMIN_CTRL_Questions", "add"), 'ajaxResponderUrl' => $this->ajaxResponderUrl]) . ' )'; //' . json_encode( array( 'questionEditUrl' => $questionEditUrl ) ) . ' ); ';
 
         OW::getDocument()->addOnloadScript($script);
 
@@ -231,7 +233,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
         OW::getLanguage()->addKeyForJs('admin', 'questions_values_should_not_be_empty');
     }
 
-    public function accountTypes( $params = array() )
+    public function accountTypes( $params = [])
     {
         $serviceLang = BOL_LanguageService::getInstance();
         $language = OW::getLanguage();
@@ -242,23 +244,23 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
         $questions = $this->questionService->findAllQuestionsBySectionForAccountType('all');
 
         $section = null;
-        $questionBySectionList = array();
-        $sectionDeleteUrlList = array();
-        $parentList = array();
-        $questionNameList = array();
-        $questionList = array();
+        $questionBySectionList = [];
+        $sectionDeleteUrlList = [];
+        $parentList = [];
+        $questionNameList = [];
+        $questionList = [];
 
-        $deleteEditButtonsContent = array();
-        $previewQuestionValuesContent = array();
-        $accountTypesCheckboxContent = array();
+        $deleteEditButtonsContent = [];
+        $previewQuestionValuesContent = [];
+        $accountTypesCheckboxContent = [];
 
         $sectionsNameList = array_keys($questions);
         $sectionDtoList = BOL_QuestionService::getInstance()->findSectionBySectionNameList($sectionsNameList);
         
         foreach ( $questions as $section => $list )
         {
-            $sectionDeleteUrlList[$section] = OW::getRouter()->urlFor('ADMIN_CTRL_Questions', 'deleteSection', array("sectionName" => $section));
-            $questionBySectionList[$section] = array();
+            $sectionDeleteUrlList[$section] = OW::getRouter()->urlFor('ADMIN_CTRL_Questions', 'deleteSection', ["sectionName" => $section]);
+            $questionBySectionList[$section] = [];
 
             foreach ( $list as $question )
             {
@@ -277,9 +279,10 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                         $question['parentLabel'] = $this->questionService->getQuestionLang($parent->name);
                         $question['parentId'] = $parent->id;
                         
-                        $parentList[$question['parent']][] = array(
+                        $parentList[$question['parent']][] = [
                             'name' => $question['name'],
-                            'editUrl' => 'javascript://');
+                            'editUrl' => 'javascript://'
+                        ];
                     }
                     else
                     {
@@ -290,21 +293,21 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                 $questionBySectionList[$section][] = $question;
                 $questionNameList[] = $question['name'];
 
-                $event = new OW_Event('admin.questions.get_edit_delete_question_buttons_content', array( 'question' => $question ), null);
+                $event = new OW_Event('admin.questions.get_edit_delete_question_buttons_content', ['question' => $question], null);
                 OW::getEventManager()->trigger($event);
 
                 $data = $event->getData();
 
                 $deleteEditButtonsContent[$question['name']] = $data;
 
-                $event = new OW_Event('admin.questions.get_preview_question_values_content', array( 'question' => $question ), null);
+                $event = new OW_Event('admin.questions.get_preview_question_values_content', ['question' => $question], null);
                 OW::getEventManager()->trigger($event);
 
                 $data = $event->getData();
 
                 $previewQuestionValuesContent[$question['name']] = $data;
 
-                $event = new OW_Event('admin.questions.get_account_types_checkbox_content', array( 'question' => $question ), null);
+                $event = new OW_Event('admin.questions.get_account_types_checkbox_content', ['question' => $question], null);
                 OW::getEventManager()->trigger($event);
 
                 $data = $event->getData();
@@ -326,13 +329,13 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
             if ( array_key_exists($question['name'], $parentList) )
             {
-                $questionStringList = array();
+                $questionStringList = [];
                 foreach ( $parentList[$question['name']] as $child )
                 {
                     $questionStringList[] = BOL_QuestionService::getInstance()->getQuestionLang($child['name']);
                 }
 
-                $text = $language->text('admin', 'questions_delete_question_parent_confirmation', array('questions' => implode(', ', $questionStringList)));
+                $text = $language->text('admin', 'questions_delete_question_parent_confirmation', ['questions' => implode(', ', $questionStringList)]);
             }
 
             $text = json_encode($text);
@@ -349,14 +352,14 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
         $questionValues = $this->questionService->findQuestionsValuesByQuestionNameList($questionNameList);
         $accountTypeDtoList = $this->questionService->findAllAccountTypes();
-        $accountTypeList = array();
-        $valueLabels = array();
+        $accountTypeList = [];
+        $valueLabels = [];
 
         foreach ( $questionValues as $name => $value )
         {
             if ( empty($valueLabels[$name]) )
             {
-                $valueLabels[$name] = array();
+                $valueLabels[$name] = [];
             }
 
             /* @var $value BOL_QuestionValue */
@@ -392,7 +395,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
         $language->addKeyForJs('admin', 'questions_delete_section_confirmation');
 
-        $script = ' window.indexQuest = new indexQuestions( ' . json_encode(array('questions' => $questionList, 'ajaxResponderUrl' => $this->ajaxResponderUrl, 'accountTypes' => array_keys($accountTypeList)) ) . ' )';
+        $script = ' window.indexQuest = new indexQuestions( ' . json_encode(['questions' => $questionList, 'ajaxResponderUrl' => $this->ajaxResponderUrl, 'accountTypes' => array_keys($accountTypeList)]) . ' )';
 
         OW::getDocument()->addOnloadScript($script);
 
@@ -453,7 +456,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
     {
         $list = $this->questionService->getAccountTypesToQuestionsList();
 
-        $result = array();
+        $result = [];
 
         /* @var $dto BOL_QuestionToAccountType */
         foreach ( $list as $dto )
@@ -470,7 +473,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
         $router = OW_Router::getInstance();
 
-        $menuItems = array();
+        $menuItems = [];
 
         $menuItem = new BASE_MenuItem();
         $menuItem->setKey('qst_index')->setLabel($language->text('base', 'questions_menu_index'))->setUrl($router->urlForRoute('questions_account_types'))->setOrder('1');
@@ -502,7 +505,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
                 if ( empty($question) )
                 {
-                    echo json_encode(array('result' => false));
+                    echo json_encode(['result' => false]);
                     exit;
                 }
 
@@ -515,14 +518,14 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
                 if ( $question->base == 1 || !$question->removable || !empty($parent) )
                 {
-                    echo json_encode(array('result' => false));
+                    echo json_encode(['result' => false]);
                     exit;
                 }
 
                 $childList = $this->questionService->findQuestionChildren($question->name);
 
-                $deleteList = array();
-                $deleteQuestionNameList = array();
+                $deleteList = [];
+                $deleteQuestionNameList = [];
 
                 foreach ( $childList as $child )
                 {
@@ -535,13 +538,13 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                     $this->questionService->deleteQuestion($deleteList);
                 }
 
-                if ( $this->questionService->deleteQuestion(array((int) $_POST['questionId'])) )
+                if ( $this->questionService->deleteQuestion([(int)$_POST['questionId']]) )
                 {
-                    echo json_encode(array('result' => "success", 'message' => OW::getLanguage()->text('admin', 'questions_question_was_deleted'), 'deleteList' => $deleteQuestionNameList));
+                    echo json_encode(['result' => "success", 'message' => OW::getLanguage()->text('admin', 'questions_question_was_deleted'), 'deleteList' => $deleteQuestionNameList]);
                     exit;
                 }
 
-                echo json_encode(array('result' => false));
+                echo json_encode(['result' => false]);
                 exit;
 
                 break;
@@ -557,7 +560,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                     
                     if ( empty($section) )
                     {
-                        echo json_encode(array('result' => false));
+                        echo json_encode(['result' => false]);
                         exit;
                     }
                     
@@ -565,18 +568,18 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                             
                     if ( empty($nearSection) )
                     {
-                        echo json_encode(array('result' => false));
+                        echo json_encode(['result' => false]);
                         exit;
                     }
                     
-                    echo json_encode( array(
+                    echo json_encode( [
                         'result' => "success", 
-                        'message' => OW::getLanguage()->text('admin', 'questions_delete_section_confirmation_with_move_questions' , array('sectionName' => BOL_QuestionService::getInstance()->getSectionLang($nearSection->name) ))
-                    ) );
+                        'message' => OW::getLanguage()->text('admin', 'questions_delete_section_confirmation_with_move_questions' , ['sectionName' => BOL_QuestionService::getInstance()->getSectionLang($nearSection->name)])
+                    ]);
                     exit;
                 }
                 
-                echo json_encode(array('result' => false));
+                echo json_encode(['result' => false]);
                 exit;
 
                 break;
@@ -592,7 +595,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                     
                     if ( !empty($nearSection) && $nearSection->isDeletable && $this->questionService->deleteSection(htmlspecialchars($_POST['sectionName']), $moveQuestionsToSection) )
                     {
-                        $result = array('result' => "success", 'message' => OW::getLanguage()->text('admin', 'questions_section_was_deleted'));
+                        $result = ['result' => "success", 'message' => OW::getLanguage()->text('admin', 'questions_section_was_deleted')];
                         
                         if ( !empty($moveQuestionsToSection) )
                         {
@@ -603,7 +606,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                         exit;
                     }
                 }
-                echo json_encode(array('result' => "false"));
+                echo json_encode(['result' => "false"]);
                 exit;
                 break;
 
@@ -619,7 +622,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
                 if ( empty($question) || (empty($value) && $value !== 0) )
                 {
-                    echo json_encode(array('result' => $result));
+                    echo json_encode(['result' => $result]);
                     return;
                 }
 
@@ -628,7 +631,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                     $result = true;
                 }
 
-                echo json_encode(array('result' => $result));
+                echo json_encode(['result' => $result]);
 
                 break;
 
@@ -637,7 +640,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                 if ( !empty($_POST['accountType']) && mb_strlen($_POST['accountType']) > 0 )
                 {
                     $accountTypes = $this->questionService->findAllAccountTypes();
-                    $accountTypeList = array();
+                    $accountTypeList = [];
                     
                     foreach ( $accountTypes as $key => $account )
                     {
@@ -649,17 +652,17 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
                     if ( empty($accountTypeList) )
                     {
-                        echo json_encode(array('result' => "false", 'message' => OW::getLanguage()->text('admin', 'questions_cant_delete_last_account_type')));
+                        echo json_encode(['result' => "false", 'message' => OW::getLanguage()->text('admin', 'questions_cant_delete_last_account_type')]);
                         exit;
                     }
                     else if ( $this->questionService->deleteAccountType($_POST['accountType']) )
                     {
-                        echo json_encode(array('result' => "success", 'message' => OW::getLanguage()->text('admin', 'questions_account_type_was_deleted')));
+                        echo json_encode(['result' => "success", 'message' => OW::getLanguage()->text('admin', 'questions_account_type_was_deleted')]);
                         exit;
                     }
                 }
 
-                echo json_encode(array('result' => "false"));
+                echo json_encode(['result' => "false"]);
                 exit;
 
                 break;
@@ -671,11 +674,11 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                 $questionId = (int) $_POST["questionId"];
 
                 $question = $this->questionService->findQuestionById($questionId);
-                $values = !empty($_POST["values"]) && is_array($_POST["values"]) ? $_POST["values"] : array();
+                $values = !empty($_POST["values"]) && is_array($_POST["values"]) ? $_POST["values"] : [];
 
                 if ( empty($question) || empty($values) )
                 {
-                    echo json_encode(array('result' => $result));
+                    echo json_encode(['result' => $result]);
                     exit;
                 }
 
@@ -684,7 +687,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                     $result = true;
                 }
 
-                echo (json_encode(array('result' => $result)));
+                echo (json_encode(['result' => $result]));
                 exit;
                 break;
 
@@ -708,7 +711,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                     $result = $form->process($_POST);
                 }
 
-                echo json_encode(array('result' => $result, 'accountTypeName' => $name, 'roleId' => $roleId ));
+                echo json_encode(['result' => $result, 'accountTypeName' => $name, 'roleId' => $roleId]);
 
                 break;
 
@@ -723,7 +726,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                     $result = $this->questionService->reOrderAccountType($sortAccountType);
                 }
 
-                echo json_encode(array('result' => $result));
+                echo json_encode(['result' => $result]);
 
                 break;
 
@@ -755,7 +758,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                     $result = $this->questionService->reOrderQuestion($sectionName, $sectionQuestionOrder);
                 }
 
-                echo json_encode(array('result' => $result));
+                echo json_encode(['result' => $result]);
 
                 break;
 
@@ -770,7 +773,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
                 $result = $this->questionService->reOrderSection($sectionOrder);
 
-                echo json_encode(array('result' => $result));
+                echo json_encode(['result' => $result]);
 
                 break;
 
@@ -788,7 +791,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                 
                 if ( empty($question) ) 
                 {
-                    echo json_encode(array('result' => false));
+                    echo json_encode(['result' => false]);
                     exit;
                 }
 
@@ -878,7 +881,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
                 $this->questionService->saveOrUpdateQuestion($questionDto);
 
-                echo json_encode(json_encode(array('result' => true)));
+                echo json_encode(json_encode(['result' => true]));
 
                 break;
 
@@ -889,7 +892,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
                 if ( empty($question) || empty($data) )
                 {
-                    echo json_encode(array('result' => false));
+                    echo json_encode(['result' => false]);
                     exit;
                 }
                 
@@ -902,8 +905,8 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
                     if ( !$disableActionList['disable_account_type'] )
                     {
-                        $add = array();
-                        $delete = array();
+                        $add = [];
+                        $delete = [];
 
                         foreach ( $data as $accountType => $value )
                         {
@@ -929,7 +932,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
                     }
                 }
 
-                echo json_encode(json_encode(array('result' => true)));
+                echo json_encode(json_encode(['result' => true]));
 
                 break;
 
@@ -937,7 +940,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
                 if ( empty($_POST['section_name']) )
                 {
-                    echo json_encode(array('result' => false, 'message' => ''));
+                    echo json_encode(['result' => false, 'message' => '']);
                     exit;
                 }
 
@@ -953,7 +956,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
                 if ( OW::getDbo()->getAffectedRows() > 0 )
                 {
-                    echo json_encode(array('result' => true, 'message' => OW::getLanguage()->text('admin', 'questions_section_was_added')));
+                    echo json_encode(['result' => true, 'message' => OW::getLanguage()->text('admin', 'questions_section_was_added')]);
                 }
 
                 break;
@@ -969,7 +972,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
                 if ( empty($_POST['questionId']) )
                 {
-                    echo json_encode(array('result' => false, 'errors' => array(), 'message' => OW::getLanguage()->text('admin', 'questions_not_found')));
+                    echo json_encode(['result' => false, 'errors' => [], 'message' => OW::getLanguage()->text('admin', 'questions_not_found')]);
                     exit;
                 }
 
@@ -977,7 +980,7 @@ class ADMIN_CTRL_Questions extends ADMIN_CTRL_Abstract
 
                 if ( empty($question) || !($question instanceof BOL_Question) )
                 {
-                    echo json_encode(array('result' => false, 'errors' => array(), 'message' => OW::getLanguage()->text('admin', 'questions_not_found')));
+                    echo json_encode(['result' => false, 'errors' => [], 'message' => OW::getLanguage()->text('admin', 'questions_not_found')]);
                     exit;
                 }
 

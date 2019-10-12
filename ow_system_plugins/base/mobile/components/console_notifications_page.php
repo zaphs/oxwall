@@ -50,7 +50,7 @@ class BASE_MCMP_ConsoleNotificationsPage extends OW_MobileComponent
 
         $sections = MBOL_ConsoleService::getInstance()->getPageSections('notifications');
 
-        $tplSections = array();
+        $tplSections = [];
         foreach ( $sections as $section )
         {
             $tplSections[] = $section['item'];

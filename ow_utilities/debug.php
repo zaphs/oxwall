@@ -38,7 +38,7 @@ final class UTIL_Debug
         self::addDebugStyles();
 
         self::$pvOutput = '';
-        self::$pvObjects = array();
+        self::$pvObjects = [];
         self::dumper($var, 0);
 
         $debugString = '
@@ -138,7 +138,7 @@ final class UTIL_Debug
 
                     foreach ( $keys as $key )
                     {
-                        $keyDisplay = strtr(trim($key) . '</span>', array("\0" => ':<span class="class_prop">'));
+                        $keyDisplay = strtr(trim($key) . '</span>', ["\0" => ':<span class="class_prop">']);
                         self::$pvOutput .= "\n" . $spaces . "    [$keyDisplay] => ";
                         self::$pvOutput .= self::dumper($members[$key], ($level + 1));
                     }

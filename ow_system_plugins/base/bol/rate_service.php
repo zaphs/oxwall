@@ -38,7 +38,7 @@ final class BOL_RateService
     /**
      * @var array
      */
-    private $configs = array();
+    private $configs = [];
     /**
      * Singleton instance.
      *
@@ -147,7 +147,7 @@ final class BOL_RateService
     {
         $result = $this->rateDao->findRateInfoForEntityList($entityType, $entityIdList);
 
-        $resultArray = array();
+        $resultArray = [];
 
         foreach ( $result as $item )
         {
@@ -158,7 +158,7 @@ final class BOL_RateService
         {
             if ( !isset($resultArray[$id]) )
             {
-                $resultArray[$id] = array('rates_count' => 0, 'avg_score' => 0);
+                $resultArray[$id] = ['rates_count' => 0, 'avg_score' => 0];
             }
         }
 
@@ -169,7 +169,7 @@ final class BOL_RateService
     {
         $arr = $this->rateDao->findMostRatedEntityList($entityType, $first, $count, $exclude);
 
-        $resultArray = array();
+        $resultArray = [];
 
         foreach ( $arr as $value )
         {
@@ -225,7 +225,7 @@ final class BOL_RateService
     public function findUserSocre( $userId, $entityType, array $entityIdList )
     {
         $score = $this->rateDao->findUserScore($userId, $entityType, $entityIdList);
-        $result = array();
+        $result = [];
 
         foreach ( $score as $val )
         {

@@ -45,13 +45,13 @@ class OW_Router
      *
      * @var array
      */
-    private $staticRoutes = array();
+    private $staticRoutes = [];
     /**
      * Dynamic routes.
      *
      * @var array
      */
-    private $routes = array();
+    private $routes = [];
     /**
      * Default route. Used for default url generation strategy.
      * 
@@ -129,7 +129,7 @@ class OW_Router
      */
     public function getRoutes()
     {
-        return array('staticRoutes' => $this->staticRoutes, 'routes' => $this->routes);
+        return ['staticRoutes' => $this->staticRoutes, 'routes' => $this->routes];
     }
 
     /**
@@ -219,7 +219,7 @@ class OW_Router
      * @param array $params
      * @return string
      */
-    public function uriForRoute( $routeName, array $params = array() )
+    public function uriForRoute( $routeName, array $params = [])
     {
         $routeName = trim($routeName);
 
@@ -245,7 +245,7 @@ class OW_Router
      * @param array $params
      * @return string
      */
-    public function urlForRoute( $routeName, array $params = array() )
+    public function urlForRoute( $routeName, array $params = [])
     {
         return $this->baseUrl . $this->uriForRoute($routeName, $params);
     }
@@ -259,7 +259,7 @@ class OW_Router
      * @param array $params
      * @return string
      */
-    public function urlFor( $controller, $action = null, array $params = array() )
+    public function urlFor( $controller, $action = null, array $params = [])
     {
         //return $this->baseUrl . $this->uriFor($controller, $action, $params);
 
@@ -276,7 +276,7 @@ class OW_Router
      * @param array $params
      * @return string
      */
-    public function uriFor( $controller, $action = null, array $params = array() )
+    public function uriFor( $controller, $action = null, array $params = [])
     {
         return $this->defaultRoute->generateUri($controller, $action, $params);
     }

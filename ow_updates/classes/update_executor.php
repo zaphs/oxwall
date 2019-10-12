@@ -68,7 +68,7 @@ class UPDATE_UpdateExecutor
     public function updateSinglePlugin( $pluginKey )
     {
         $pluginData = $this->db->queryForRow("SELECT * FROM `{$this->dbPrefix}base_plugin` WHERE `key` = :key AND `update` = :statusVal",
-            array("key" => $pluginKey, "statusVal" => BOL_PluginDao::UPDATE_VAL_MANUAL_UPDATE));
+            ["key" => $pluginKey, "statusVal" => BOL_PluginDao::UPDATE_VAL_MANUAL_UPDATE]);
 
         // plugin not found
         if ( empty($pluginData) )
@@ -99,7 +99,7 @@ class UPDATE_UpdateExecutor
     public function updateAllPlugins()
     {
         $result = $this->db->queryForList("SELECT * FROM `{$this->dbPrefix}base_plugin` WHERE `update` = :statusVal",
-            array("statusVal" => BOL_PluginDao::UPDATE_VAL_MANUAL_UPDATE));
+            ["statusVal" => BOL_PluginDao::UPDATE_VAL_MANUAL_UPDATE]);
 
         // plugin not found
         if ( empty($result) )
@@ -206,7 +206,7 @@ class UPDATE_UpdateExecutor
         {
             $owpUpdateDir = $pluginRootPath . "update" . DS;
 
-            $updateDirList = array();
+            $updateDirList = [];
 
             if ( file_exists($owpUpdateDir) )
             {
@@ -237,7 +237,7 @@ class UPDATE_UpdateExecutor
                     {
                         $this->includeScript($scriptPath);
                         $query = "UPDATE `{$this->dbPrefix}base_plugin` SET `build` = :build, `update` = 0 WHERE `key` = :key";
-                        $this->db->query($query, array("build" => (int) $item, "key" => $pluginArr["key"]));
+                        $this->db->query($query, ["build" => (int) $item, "key" => $pluginArr["key"]]);
                     }
                 }
 
@@ -247,12 +247,13 @@ class UPDATE_UpdateExecutor
             $query = "UPDATE `{$this->dbPrefix}base_plugin` SET `build` = :build, `update` = :updateVal, `title` = :title, `description` = :desc WHERE `key` = :key";
 
             $this->db->query($query,
-                array(
+                [
                 "build" => (int) $xmlInfoArray["build"],
                 "key" => $pluginArr["key"],
                 "title" => $xmlInfoArray["name"],
                 "desc" => $xmlInfoArray["description"],
-                "updateVal" => BOL_PluginDao::UPDATE_VAL_UP_TO_DATE)
+                "updateVal" => BOL_PluginDao::UPDATE_VAL_UP_TO_DATE
+                ]
             );
 
             return true;
@@ -261,9 +262,10 @@ class UPDATE_UpdateExecutor
         $query = "UPDATE `{$this->dbPrefix}base_plugin` SET `update` = :updateVal WHERE `key` = :key";
 
         $this->db->query($query,
-            array(
+            [
             "key" => $pluginArr["key"],
-            "updateVal" => BOL_PluginDao::UPDATE_VAL_UP_TO_DATE)
+            "updateVal" => BOL_PluginDao::UPDATE_VAL_UP_TO_DATE
+            ]
         );
 
         return false;
@@ -278,7 +280,7 @@ class UPDATE_UpdateExecutor
             $query = "INSERT INTO `{$this->dbPrefix}base_log` (`message`, `type`, `key`, `timeStamp`) VALUES (:message, 'ow_update', :key, :time)";
             try
             {
-                $this->db->query($query, array("message" => json_encode($entries), "key" => $key, "time" => time()));
+                $this->db->query($query, ["message" => json_encode($entries), "key" => $key, "time" => time()]);
             }
             catch ( Exception $e )
             {
@@ -297,7 +299,7 @@ class UPDATE_UpdateExecutor
         $mode = $mode ? 1 : 0;
 
         $this->db->query("UPDATE `{$this->dbPrefix}base_config` SET `value` = :mode WHERE `key` = 'base' AND `name` = 'maintenance'",
-            array("mode" => $mode));
+            ["mode" => $mode]);
     }
 
     private function setDevMode( $mode = null )
@@ -305,7 +307,7 @@ class UPDATE_UpdateExecutor
         $mode = $mode ? intval($mode) : 1;
 
         $this->db->query("UPDATE `{$this->dbPrefix}base_config` SET `value` = 1 WHERE `key` = 'base' AND `name` = 'dev_mode'",
-            array("mode" => $mode));
+            ["mode" => $mode]);
     }
 }
 

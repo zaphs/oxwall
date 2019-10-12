@@ -41,17 +41,17 @@ class BASE_CLASS_WidgetParameter
      *
      * @var array
      */
-    public $customParamList = array();
+    public $customParamList = [];
     /**
      *
      * @var array
      */
-    public $additionalParamList = array();
+    public $additionalParamList = [];
     /**
      *
      * @var WidgetStandartParamList
      */
-    public $standartParamList = array();
+    public $standartParamList = [];
     /**
      *
      * @var bool
@@ -70,7 +70,7 @@ class WidgetStandartParamList
     public $wrapInBox = false;
     public $showTitle = true;
     public $freezed = false;
-    public $toolbar = array();
+    public $toolbar = [];
     public $restrictView = false;
     public $accessRestriction = null;
     public $capContent = null;

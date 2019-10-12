@@ -52,17 +52,17 @@ class BASE_CTRL_AjaxSendMessageToEmail extends OW_ActionController
 
         if ( empty($user) )
         {
-            exit(json_encode(array('result' => false, 'message' => OW::getLanguage()->text('base', 'invalid_user'))));
+            exit(json_encode(['result' => false, 'message' => OW::getLanguage()->text('base', 'invalid_user')]));
         }
 
         if ( empty($subject) )
         {
-            exit(json_encode(array('result' => false, 'message' => OW::getLanguage()->text('base', 'empty_subject'))));
+            exit(json_encode(['result' => false, 'message' => OW::getLanguage()->text('base', 'empty_subject')]));
         }
 
         if ( empty($message) )
         {
-            exit(json_encode(array('result' => false, 'message' => OW::getLanguage()->text('base', 'empty_message'))));
+            exit(json_encode(['result' => false, 'message' => OW::getLanguage()->text('base', 'empty_message')]));
         }
 
         $mail = OW::getMailer()->createMail();
@@ -73,6 +73,6 @@ class BASE_CTRL_AjaxSendMessageToEmail extends OW_ActionController
 
         OW::getMailer()->send($mail);
 
-        exit(json_encode(array('result' => true, 'message' => OW::getLanguage()->text('base', 'message_send'))));
+        exit(json_encode(['result' => true, 'message' => OW::getLanguage()->text('base', 'message_send')]));
     }
 }

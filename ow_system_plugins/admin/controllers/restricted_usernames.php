@@ -43,7 +43,7 @@ class ADMIN_CTRL_RestrictedUsernames extends ADMIN_CTRL_Abstract
         parent::__construct();
     }
 
-    public function index( $params = array() )
+    public function index( $params = [])
     {
         $userService = BOL_UserService::getInstance();
 

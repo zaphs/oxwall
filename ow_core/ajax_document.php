@@ -76,7 +76,7 @@ class OW_AjaxDocument extends OW_HtmlDocument
 
     public function getScripts()
     {
-        $jsUrlList = array();
+        $jsUrlList = [];
 
         ksort($this->javaScripts['items']);
 
@@ -96,7 +96,7 @@ class OW_AjaxDocument extends OW_HtmlDocument
 
     public function getStyleSheets()
     {
-        $cssFiles = array();
+        $cssFiles = [];
 
         ksort($this->styleSheets['items']);
 

@@ -40,7 +40,7 @@ class BASE_CMP_MainMenu extends BASE_CMP_Menu
     /**
      * Constructor.
      */
-    public function __construct( array $params = array() )
+    public function __construct( array $params = [])
     {
         parent::__construct();
         

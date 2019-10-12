@@ -113,11 +113,11 @@ class BOL_AuthorizationGroupDao extends OW_BaseDao
 
     protected function clearCache()
     {
-        OW::getCacheManager()->clean(array(BOL_AuthorizationActionDao::CACHE_TAG_AUTHORIZATION));
+        OW::getCacheManager()->clean([BOL_AuthorizationActionDao::CACHE_TAG_AUTHORIZATION]);
     }
 
-    public function findAll( $cacheLifeTime = 0, $tags = array() )
+    public function findAll( $cacheLifeTime = 0, $tags = [])
     {
-        return parent::findAll(3600 * 24, array(BOL_AuthorizationActionDao::CACHE_TAG_AUTHORIZATION, OW_CacheManager::TAG_OPTION_INSTANT_LOAD));
+        return parent::findAll(3600 * 24, [BOL_AuthorizationActionDao::CACHE_TAG_AUTHORIZATION, OW_CacheManager::TAG_OPTION_INSTANT_LOAD]);
     }
 }

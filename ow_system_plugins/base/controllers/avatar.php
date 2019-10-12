@@ -61,7 +61,7 @@ class BASE_CTRL_Avatar extends OW_ActionController
         {
             $callFunc = (string) $request['ajaxFunc'];
 
-            $result = call_user_func(array($this, $callFunc), $request);
+            $result = call_user_func([$this, $callFunc], $request);
         }
         else
         {
@@ -78,7 +78,7 @@ class BASE_CTRL_Avatar extends OW_ActionController
             return $this->uploadTmpAvatar($_FILES['file']);
         }
 
-        return array('result' => false);
+        return ['result' => false];
     }
 
     public function ajaxDeleteImage( $params )
@@ -88,7 +88,7 @@ class BASE_CTRL_Avatar extends OW_ActionController
         $key = $avatarService->getAvatarChangeSessionKey();
         $avatarService->deleteUserTempAvatar($key);
 
-        return array('result' => true);
+        return ['result' => true];
     }
 
     public function ajaxLoadMore( $params )
@@ -106,18 +106,18 @@ class BASE_CTRL_Avatar extends OW_ActionController
                 $cmp = new BASE_CMP_AvatarLibrarySection($section['list'], $offset, $section['count']);
                 $markup = $cmp->render();
 
-                return array('result' => true, 'markup' => $markup, 'count' => $section['count']);
+                return ['result' => true, 'markup' => $markup, 'count' => $section['count']];
             }
         }
 
-        return array('result' => false);
+        return ['result' => false];
     }
 
     public function ajaxCropPhoto( $params )
     {
         if ( !isset($params['coords']) || !isset($params['view_size']) )
         {
-            return array('result' => false, 'case' => 0);
+            return ['result' => false, 'case' => 0];
         }
 
         $changeUserAvatar = isset($params['changeUserAvatar']) && (int) !$params['changeUserAvatar'] ? false : true;
@@ -135,7 +135,7 @@ class BASE_CTRL_Avatar extends OW_ActionController
             
             if ( !$item || empty($item['path']) || !OW::getStorage()->fileExists($item['path']) )
             {
-                return array('result' => false, 'case' => 1);
+                return ['result' => false, 'case' => 1];
             }
 
             $path = $item['path'];
@@ -148,7 +148,7 @@ class BASE_CTRL_Avatar extends OW_ActionController
             {
                 if ( !file_exists($path) )
                 {
-                    return array('result' => false, 'case' => 2);
+                    return ['result' => false, 'case' => 2];
                 }
                 
                 $localFile = true;
@@ -162,42 +162,42 @@ class BASE_CTRL_Avatar extends OW_ActionController
 
             try
             {
-                $event = new OW_Event('base.before_avatar_change', array(
+                $event = new OW_Event('base.before_avatar_change', [
                     'userId' => $userId,
                     'avatarId' => $avatar ? $avatar->id : null,
                     'upload' => false,
                     'crop' => true
-                ));
+                ]);
                 OW::getEventManager()->trigger($event);
 
-                if ( !$avatarService->cropAvatar($userId, $path, $coords, $viewSize, array('isLocalFile' => $localFile )) )
+                if ( !$avatarService->cropAvatar($userId, $path, $coords, $viewSize, ['isLocalFile' => $localFile]) )
                 {
-                    return array(
+                    return [
                         'result' => false,
                         'case' => 6
-                    );
+                    ];
                 }
 
                 $avatar = $avatarService->findByUserId($userId, false);
 
-                $event = new OW_Event('base.after_avatar_change', array(
+                $event = new OW_Event('base.after_avatar_change', [
                     'userId' => $userId,
                     'avatarId' => $avatar ? $avatar->id : null,
                     'upload' => false,
                     'crop' => true
-                ));
+                ]);
                 OW::getEventManager()->trigger($event);
 
-                return array(
+                return [
                     'result' => true,
                     'modearationStatus' => $avatar->status,
                     'url' => $avatarService->getAvatarUrl($userId, 1, null, false, false),
                     'bigUrl' => $avatarService->getAvatarUrl($userId, 2, null, false, false)
-                );
+                ];
             }
             catch ( Exception $e )
             {
-                return array('result' => false, 'case' => 4);
+                return ['result' => false, 'case' => 4];
             }
         }
         else
@@ -207,16 +207,16 @@ class BASE_CTRL_Avatar extends OW_ActionController
             
             if ( !file_exists($path) )
             {
-                return array('result' => false, 'case' => 5);
+                return ['result' => false, 'case' => 5];
             }
             
             $avatarService->cropTempAvatar($key, $coords, $viewSize);
 
-            return array(
+            return [
                 'result' => true,
                 'url' => $avatarService->getTempAvatarUrl($key, 1),
                 'bigUrl' => $avatarService->getTempAvatarUrl($key, 2)
-            );
+            ];
         }
     }
     
@@ -227,10 +227,10 @@ class BASE_CTRL_Avatar extends OW_ActionController
             $entityId = $params['avatarId'];
             $entityType = BASE_CLASS_ContentProvider::ENTITY_TYPE_AVATAR;
 
-            $event = new OW_Event("moderation.approve", array(
+            $event = new OW_Event("moderation.approve", [
                 "entityType" => $entityType,
                 "entityId" => $entityId
-            ));
+            ]);
 
             OW::getEventManager()->trigger($event);
 
@@ -238,19 +238,19 @@ class BASE_CTRL_Avatar extends OW_ActionController
             
             if ( empty($data) )
             {
-                return array('result' => true);
+                return ['result' => true];
             }
             
             if ( !empty($data["message"]) )
             {
-                return array('result' => true, 'message' => $data["message"]);
+                return ['result' => true, 'message' => $data["message"]];
             }
             else
             {
-                return array('result' => false, 'error' => $data["error"]);
+                return ['result' => false, 'error' => $data["error"]];
             }
         }
 
-        return array('result' => false);
+        return ['result' => false];
     }
 }

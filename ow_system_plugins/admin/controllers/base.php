@@ -67,7 +67,7 @@ class ADMIN_CTRL_Base extends ADMIN_CTRL_Abstract
 
         if ( empty($state) )
         {
-            $state = array();
+            $state = [];
             $state['defaultComponents'] = $service->findPlaceComponentList($place);
             $state['defaultPositions'] = $service->findAllPositionList($place);
             $state['defaultSettings'] = $service->findAllSettingList();
@@ -84,10 +84,10 @@ class ADMIN_CTRL_Base extends ADMIN_CTRL_Abstract
         $componentPanel = new ADMIN_CMP_DashboardWidgetPage($place, $state['defaultComponents'], $customize);
         $componentPanel->allowCustomize(true);
 
-        $customizeUrls = array(
-            'customize' => OW::getRouter()->urlForRoute('admin_dashboard_customize', array('mode' => 'customize')),
+        $customizeUrls = [
+            'customize' => OW::getRouter()->urlForRoute('admin_dashboard_customize', ['mode' => 'customize']),
             'normal' => OW::getRouter()->urlForRoute('admin_dashboard')
-        );
+        ];
 
         $componentPanel->customizeControlCunfigure($customizeUrls['customize'], $customizeUrls['normal']);
 

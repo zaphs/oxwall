@@ -28,7 +28,7 @@ class ADMIN_CMP_AddQuestion extends OW_Component
             $this->assign('no_sections', true);
         }
 
-        $fields = array();
+        $fields = [];
         foreach ( $addForm->getElements() as $element )
         {
             if ( !($element instanceof HiddenField) )
@@ -44,10 +44,10 @@ class ADMIN_CMP_AddQuestion extends OW_Component
 
         $formId = $addForm->getId();
 
-        $script = ' window.addQuest = new QuestionFormModel( ' . json_encode(array(
+        $script = ' window.addQuest = new QuestionFormModel( ' . json_encode([
                 'formName' => 'qst_add_form',
                 'presentations2FormElements' => $presentations2FormElements
-                )) . ' );
+            ]) . ' );
 
        OW.bind("admin.questions_edit_question_value", function(data) {
 

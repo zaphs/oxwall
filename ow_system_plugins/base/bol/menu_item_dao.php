@@ -126,7 +126,7 @@ class BOL_MenuItemDao extends OW_BaseDao
 			SELECT `mi`.*, `mi`.`key` AS `menu_key`, `d`.`class`, `d`.`action`, `d`.`uri`, `d`.`isStatic`
 			FROM `" . $this->getTableName() . "` AS `mi`
 			LEFT JOIN `" . $this->documentDao->getTableName() . "` AS `d` ON ( `mi`.`" . self::DOCUMENT_KEY . "` = `d`.`" . BOL_DocumentDao::KEY . "`)
-			WHERE `mi`.`" . self::TYPE . "` = :menuType ORDER BY `mi`.`order` ASC", array('menuType' => $menuType), 24 * 3600, array(self::CACHE_TAG_MENU_TYPE_LIST, OW_CacheManager::TAG_OPTION_INSTANT_LOAD));
+			WHERE `mi`.`" . self::TYPE . "` = :menuType ORDER BY `mi`.`order` ASC", ['menuType' => $menuType], 24 * 3600, [self::CACHE_TAG_MENU_TYPE_LIST, OW_CacheManager::TAG_OPTION_INSTANT_LOAD]);
     }
 
     /**
@@ -152,7 +152,7 @@ class BOL_MenuItemDao extends OW_BaseDao
      */
     public function findMaxOrderForMenuType( $menuType )
     {
-        return (int) $this->dbo->queryForColumn("SELECT MAX(`" . self::ORDER . "`) FROM `" . $this->getTableName() . "` WHERE `" . self::TYPE . "` = :menuType", array('menuType' => $menuType));
+        return (int) $this->dbo->queryForColumn("SELECT MAX(`" . self::ORDER . "`) FROM `" . $this->getTableName() . "` WHERE `" . self::TYPE . "` = :menuType", ['menuType' => $menuType]);
     }
 
     /**
@@ -178,7 +178,7 @@ class BOL_MenuItemDao extends OW_BaseDao
 			FROM `" . $this->getTableName() . "`
 			WHERE `visibleFor` & ? AND `externalUrl` IS NULL AND `type` = ?
 			ORDER BY `order` ASC
-			LIMIT 1", $this->getDtoClassName(), array($visibleFor, $menuType));
+			LIMIT 1", $this->getDtoClassName(), [$visibleFor, $menuType]);
     }
 
     public function findByDocumentKey( $docKey )
@@ -191,6 +191,6 @@ class BOL_MenuItemDao extends OW_BaseDao
 
     protected function clearCache()
     {
-        OW::getCacheManager()->clean(array(BOL_MenuItemDao::CACHE_TAG_MENU_TYPE_LIST));
+        OW::getCacheManager()->clean([BOL_MenuItemDao::CACHE_TAG_MENU_TYPE_LIST]);
     }
 }

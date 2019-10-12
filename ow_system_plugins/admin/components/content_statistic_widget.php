@@ -72,10 +72,10 @@ class ADMIN_CMP_ContentStatisticWidget extends ADMIN_CMP_AbstractStatisticWidget
         $this->addForm(new ContentStatisticForm('content_statistics_form', $this->defaultContentGroup));
 
         // register components
-        $this->addComponent('statistics', new ADMIN_CMP_ContentStatistic(array(
+        $this->addComponent('statistics', new ADMIN_CMP_ContentStatistic([
             'defaultContentGroup' => $this->defaultContentGroup,
             'defaultPeriod' => $this->defaultPeriod
-        )));
+        ]));
 
         $this->addMenu('content');
 
@@ -91,28 +91,28 @@ class ADMIN_CMP_ContentStatisticWidget extends ADMIN_CMP_AbstractStatisticWidget
      */
     public static function getSettingList()
     {
-        $settingList = array();
+        $settingList = [];
 
         $contentGroups = self::getContentTypes();;
-        $settingList['defaultContentGroup'] = array(
+        $settingList['defaultContentGroup'] = [
             'presentation' => self::PRESENTATION_SELECT,
             'label' => OW::getLanguage()->text('admin', 'widget_content_statistics_default_content_group'),
             'value' => !empty($contentGroups) ? key($contentGroups) : null,
             'optionList' => $contentGroups
-        );
+        ];
 
-        $settingList['defaultPeriod'] = array(
+        $settingList['defaultPeriod'] = [
             'presentation' => self::PRESENTATION_SELECT,
             'label' => OW::getLanguage()->text('admin', 'site_statistics_default_period'),
             'value' => BOL_SiteStatisticService::PERIOD_TYPE_LAST_7_DAYS,
-            'optionList' => array(
+            'optionList' => [
                 BOL_SiteStatisticService::PERIOD_TYPE_TODAY => OW::getLanguage()->text('admin', 'site_statistics_today_period'),
                 BOL_SiteStatisticService::PERIOD_TYPE_YESTERDAY => OW::getLanguage()->text('admin', 'site_statistics_yesterday_period'),
                 BOL_SiteStatisticService::PERIOD_TYPE_LAST_7_DAYS => OW::getLanguage()->text('admin', 'site_statistics_last_7_days_period'),
                 BOL_SiteStatisticService::PERIOD_TYPE_LAST_30_DAYS => OW::getLanguage()->text('admin', 'site_statistics_last_30_days_period'),
                 BOL_SiteStatisticService::PERIOD_TYPE_LAST_YEAR => OW::getLanguage()->text('admin', 'site_statistics_last_year_period')
-            )
-        );
+            ]
+        ];
 
         return $settingList;
     }
@@ -124,12 +124,12 @@ class ADMIN_CMP_ContentStatisticWidget extends ADMIN_CMP_AbstractStatisticWidget
      */
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_TITLE => OW::getLanguage()->text('admin', 'widget_content_statistics'),
             self::SETTING_ICON => self::ICON_FILES,
             self::SETTING_SHOW_TITLE => true,
             self::SETTING_WRAP_IN_BOX => true
-        );
+        ];
     }
 
     /**
@@ -140,7 +140,7 @@ class ADMIN_CMP_ContentStatisticWidget extends ADMIN_CMP_AbstractStatisticWidget
     public static function getContentTypes()
     {
         $contentGroups = BOL_ContentService::getInstance()->getContentGroups();
-        $processedGroups = array();
+        $processedGroups = [];
 
         $disallowedEntityTypes = explode(',',
                 OW::getConfig()->getValue('base', 'site_statistics_disallowed_entity_types'));

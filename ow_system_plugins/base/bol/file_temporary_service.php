@@ -93,7 +93,7 @@ final class BOL_FileTemporaryService
     {
         $list = $this->fileTemporaryDao->findByUserId($userId, $orderBy);
         
-        $result = array();
+        $result = [];
         if ( $list )
         {
             foreach ( $list as $file )

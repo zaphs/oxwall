@@ -93,7 +93,7 @@ class BOL_LanguagePrefixDao extends OW_BaseDao
     {
         $query = "SELECT `id` FROM `" . $this->getTableName() . "` WHERE `prefix`=?";
 
-        return $this->dbo->queryForColumn($query, array($prefix));
+        return $this->dbo->queryForColumn($query, [$prefix]);
     }
 
     public function findByPrefix( $prefix )

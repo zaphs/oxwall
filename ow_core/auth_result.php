@@ -67,7 +67,7 @@ class OW_AuthResult
     /**
      * Constructor.
      */
-    public function __construct( $code, $userId = null, array $messages = array() )
+    public function __construct( $code, $userId = null, array $messages = [])
     {
         $code = (int) $code;
 

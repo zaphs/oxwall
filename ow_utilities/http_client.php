@@ -49,7 +49,7 @@ class UTIL_HttpClient
      */
     public static function get( $url, UTIL_HttpClientParams $params = null )
     {
-        $options = $params ? $params->getOptions() : array();
+        $options = $params ? $params->getOptions() : [];
 
         if ( !empty($options["params"]) )
         {
@@ -66,7 +66,7 @@ class UTIL_HttpClient
      */
     public static function post( $url, UTIL_HttpClientParams $params = null )
     {
-        $options = $params ? $params->getOptions() : array();
+        $options = $params ? $params->getOptions() : [];
 
         if ( !empty($options["params"]) )
         {
@@ -83,12 +83,12 @@ class UTIL_HttpClient
         {
             $handler = function_exists("curl_version") ? new CurlHandler() : new StreamHandler();
 
-            self::$client = new Client(array(
-                "request.options" => array(
+            self::$client = new Client([
+                "request.options" => [
                     "exceptions" => false,
-                ),
+                ],
                 "handler" => HandlerStack::create($handler)
-            ));
+            ]);
         }
 
         return self::$client;

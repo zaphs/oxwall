@@ -49,9 +49,9 @@ class OW_ApiRequestHandler extends OW_RequestHandler
      */
     protected function processControllerAction( $action, $controller )
     {
-        $args = array();
+        $args = [];
         $args[] = $_POST;
-        $args[] = empty($this->handlerAttributes[self::ATTRS_KEY_VARLIST]) ? array() : $this->handlerAttributes[self::ATTRS_KEY_VARLIST];
+        $args[] = empty($this->handlerAttributes[self::ATTRS_KEY_VARLIST]) ? [] : $this->handlerAttributes[self::ATTRS_KEY_VARLIST];
         $action->invokeArgs($controller, $args);
         OW::getDocument()->setBody($controller->render());
     }

@@ -71,7 +71,7 @@ class BASE_CMP_LanguageValueEdit extends OW_Component
 
                     if ( $dto !== null )
                     {
-                        $event = new OW_Event('admin.before_save_lang_value', array('dto'=>$dto));
+                        $event = new OW_Event('admin.before_save_lang_value', ['dto' =>$dto]);
                         OW::getEventManager()->trigger($event);
 
                             if ( $dto->getValue() !== $value )
@@ -90,7 +90,7 @@ class BASE_CMP_LanguageValueEdit extends OW_Component
                 }
             }
 
-            exit(json_encode(array('result' => 'success', 'prefix' => $prefix, 'key' => $key, 'value' => $currentLangValue)));
+            exit(json_encode(['result' => 'success', 'prefix' => $prefix, 'key' => $key, 'value' => $currentLangValue]));
 	}
 }
 
@@ -153,9 +153,9 @@ class LanguageValueEditForm extends Form
             })';
 		}
 		
-		$script = UTIL_JsGenerator::composeJsString($jsString, array(
+		$script = UTIL_JsGenerator::composeJsString($jsString, [
 		  'formName' => $this->getName()
-		));
+        ]);
 		
 		OW::getDocument()->addOnloadScript($script);
 

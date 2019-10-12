@@ -109,23 +109,23 @@ class BASE_CMP_WelcomeWidget extends BASE_CLASS_Widget
 
     public static function getSettingList()
     {
-        $settingList = array();
+        $settingList = [];
 
-        $settingList['text'] = array(
+        $settingList['text'] = [
             'presentation' => self::PRESENTATION_CUSTOM,
             'render' => 'BASE_CMP_WelcomeWidget::renderTextField',
             'value' => 'base+welcome_widget_content'
-        );
+        ];
 
         return $settingList;
     }
 
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_ICON => self::ICON_INFO,
             self::SETTING_TITLE => OW::getLanguage()->text('base', 'welcome_widget_title')
-        );
+        ];
     }
 
     public static function getAccess()

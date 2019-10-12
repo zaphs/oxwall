@@ -305,9 +305,9 @@ final class BOL_CommentService
     {
         $commentCountArray = $this->commentDao->findCommentCountForEntityList($entityType, $idList);
 
-        $commentCountAssocArray = array();
+        $commentCountAssocArray = [];
 
-        $resultArray = array();
+        $resultArray = [];
 
         foreach ( $commentCountArray as $value )
         {
@@ -334,7 +334,7 @@ final class BOL_CommentService
     {
         $resultArray = $this->commentDao->findMostCommentedEntityList($entityType, $first, $count);
 
-        $resultList = array();
+        $resultList = [];
 
         foreach ( $resultArray as $item )
         {
@@ -405,47 +405,47 @@ final class BOL_CommentService
     {
         if ( empty($items) )
         {
-            return array();
+            return [];
         }
 
         if ( OW::getUser()->isAuthenticated() )
         {
-            $currentUserInfo = BOL_AvatarService::getInstance()->getDataForUserAvatars(array(OW::getUser()->getId()));
+            $currentUserInfo = BOL_AvatarService::getInstance()->getDataForUserAvatars([OW::getUser()->getId()]);
         }
 
-        $resultArray = array('_static' => array());
-        $creditsParams = array();
+        $resultArray = ['_static' => []];
+        $creditsParams = [];
 
         foreach ( $items as $item )
         {
             if ( !isset($resultArray[$item['entityType']]) )
             {
-                $resultArray[$item['entityType']] = array();
+                $resultArray[$item['entityType']] = [];
             }
 
-            $resultArray[$item['entityType']][$item['entityId']] = array('commentsCount' => 0, 'countOnPage' => $item['countOnPage'], 'commentsList' => array());
-            $creditsParams[$item['pluginKey']] = array('add_comment');
+            $resultArray[$item['entityType']][$item['entityId']] = ['commentsCount' => 0, 'countOnPage' => $item['countOnPage'], 'commentsList' => []];
+            $creditsParams[$item['pluginKey']] = ['add_comment'];
         }
 
         if ( OW::getUser()->isAuthenticated() )
         {
-            $userInfo = BOL_AvatarService::getInstance()->getDataForUserAvatars(array(OW::getUser()->getId()));
+            $userInfo = BOL_AvatarService::getInstance()->getDataForUserAvatars([OW::getUser()->getId()]);
         }
 
         // get comments count
         $result = $this->commentDao->findBatchCommentsCount($items);
-        $entitiesForList = array();
+        $entitiesForList = [];
 
         foreach ( $result as $item )
         {
             $resultArray[$item['entityType']][$item['entityId']]['commentsCount'] = (int) $item['count'];
-            $entitiesForList[] = array('entityType' => $item['entityType'], 'entityId' => $item['entityId'], 'countOnPage' => $resultArray[$item['entityType']][$item['entityId']]['countOnPage']);
+            $entitiesForList[] = ['entityType' => $item['entityType'], 'entityId' => $item['entityId'], 'countOnPage' => $resultArray[$item['entityType']][$item['entityId']]['countOnPage']];
         }
 
         // get comments list
         $result = $this->commentDao->findBatchCommentsList($entitiesForList);
 
-        $batchUserIdList = array();
+        $batchUserIdList = [];
         foreach ( $result as $item )
         {
             $resultArray[$item->entityType][$item->entityId]['commentsList'][] = $item;
@@ -459,7 +459,7 @@ final class BOL_CommentService
             $resultArray['_static']['currentUserInfo'] = $currentUserInfo[OW::getUser()->getId()];
         }
 
-        $eventParams = array('actionList' => $creditsParams);
+        $eventParams = ['actionList' => $creditsParams];
         $resultArray['_static']['credits'] = OW::getEventManager()->call('usercredits.batch_check_balance_for_action_list', $eventParams);
 
         return $resultArray;

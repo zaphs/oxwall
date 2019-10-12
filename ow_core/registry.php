@@ -46,8 +46,8 @@ class OW_Registry
      */
     private function __construct()
     {
-        $this->data = array();
-        $this->arrayData = array();
+        $this->data = [];
+        $this->arrayData = [];
     }
 
     public function set( $key, $value )
@@ -74,7 +74,7 @@ class OW_Registry
     {
         if ( !isset($this->arrayData[$key]) )
         {
-            $this->arrayData[$key] = array();
+            $this->arrayData[$key] = [];
         }
 
         $this->arrayData[$key][] = $value;
@@ -84,7 +84,7 @@ class OW_Registry
     {
         if ( !isset($this->arrayData[$key]) )
         {
-            return array();
+            return [];
         }
 
         return $this->arrayData[$key];

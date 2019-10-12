@@ -61,7 +61,7 @@ class BOL_ComponentService
      */
     protected $componentPlaceCacheDao;
 
-    private $placeDtoCache = array();
+    private $placeDtoCache = [];
 
     protected function  __construct()
     {
@@ -119,10 +119,10 @@ class BOL_ComponentService
     {
         if ( empty($list) )
         {
-            return array();
+            return [];
         }
 
-        $resultArray = array();
+        $resultArray = [];
         foreach ( $list as $key => $item )
         {
             $key = empty($keyField)
@@ -139,10 +139,10 @@ class BOL_ComponentService
     {
         if ( empty($dtoList) )
         {
-            return array();
+            return [];
         }
 
-        $resultList = array();
+        $resultList = [];
         foreach ( $dtoList as $dto )
         {
             $resultList[$dto->componentPlaceUniqName][$dto->name] = $dto->getValue();
@@ -340,8 +340,8 @@ class BOL_ComponentService
 
         $list = $positionDao->findSectionPositionList($placeWidget->placeId, $section);
 
-        $orderList = array();
-        $positionIdList = array();
+        $orderList = [];
+        $positionIdList = [];
 
         foreach ($list as $item)
         {
@@ -350,7 +350,7 @@ class BOL_ComponentService
             $positionIdList[] = $item->id;
         }
 
-        $freezedList = array();
+        $freezedList = [];
         $settingList = $settingsDao->findListByComponentUniqNameList(array_keys($orderList));
 
         foreach ( $settingList as $setting )
@@ -367,7 +367,7 @@ class BOL_ComponentService
         asort($orderList);
         $orderedList = array_keys($orderList);
 
-        $stack = array();
+        $stack = [];
         foreach($orderedList as $key => $uniqName)
         {
             if ($order == $key)
@@ -416,22 +416,22 @@ class BOL_ComponentService
             return;
         }
 
-        $event = new OW_Event('widgets.before_delete', array(
+        $event = new OW_Event('widgets.before_delete', [
             'class' => $widgetClass
-        ));
+        ]);
 
         OW::getEventManager()->trigger($event);
 
         $componentPlaceList = $componentPlaceDao->findListByComponentId($componentDto->id);
 
-        $placeList = array();
-        $uniqNameList = array();
+        $placeList = [];
+        $uniqNameList = [];
         foreach ($componentPlaceList as $item)
         {
-            $event = new OW_Event('widgets.before_place_delete', array(
+            $event = new OW_Event('widgets.before_place_delete', [
                 'class' => $widgetClass,
                 'uniqName' => $item->uniqName
-            ));
+            ]);
 
             OW::getEventManager()->trigger($event);
 

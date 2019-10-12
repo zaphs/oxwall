@@ -83,14 +83,14 @@ class UTIL_HtmlTag
             self::$jevix = new Jevix();
         }
 
-        $tagRules = array();
-        $commonAttrs = array();
+        $tagRules = [];
+        $commonAttrs = [];
 
         if ( !empty($tagList) )
         {
             foreach ( $tagList as $tag )
             {
-                $tagRules[$tag] = array(Jevix::TR_TAG_LIST => true);
+                $tagRules[$tag] = [Jevix::TR_TAG_LIST => true];
             }
         }
 
@@ -118,12 +118,12 @@ class UTIL_HtmlTag
 
                     if ( !isset($tagRules[$tag]) )
                     {
-                        $tagRules[$tag] = array(Jevix::TR_TAG_LIST => true);
+                        $tagRules[$tag] = [Jevix::TR_TAG_LIST => true];
                     }
 
                     if ( !isset($tagRules[$tag][Jevix::TR_PARAM_ALLOWED]) )
                     {
-                        $tagRules[$tag][Jevix::TR_PARAM_ALLOWED] = array();
+                        $tagRules[$tag][Jevix::TR_PARAM_ALLOWED] = [];
                     }
 
                     $tagRules[$tag][Jevix::TR_PARAM_ALLOWED][$param] = true;
@@ -135,24 +135,24 @@ class UTIL_HtmlTag
             }
         }
 
-        $shortTags = array('img', 'br', 'input', 'embed', 'param', 'hr', 'link', 'meta', 'base', 'col');
+        $shortTags = ['img', 'br', 'input', 'embed', 'param', 'hr', 'link', 'meta', 'base', 'col'];
         foreach ( $shortTags as $shortTag )
         {
             if ( !isset($tagRules[$shortTag]) )
             {
-                $tagRules[$shortTag] = array();
+                $tagRules[$shortTag] = [];
             }
 
             $tagRules[$shortTag][Jevix::TR_TAG_SHORT] = true;
         }
 
-        $cutWithContent = array('script', 'embed', 'object', 'style');
+        $cutWithContent = ['script', 'embed', 'object', 'style'];
 
         foreach ( $cutWithContent as $cutTag )
         {
             if ( !isset($tagRules[$cutTag]) )
             {
-                $tagRules[$cutTag] = array();
+                $tagRules[$cutTag] = [];
             }
 
             $tagRules[$cutTag][Jevix::TR_TAG_CUT] = true;
@@ -187,7 +187,7 @@ class UTIL_HtmlTag
         {
             if ( $tagList === null )
             {
-                $tagList = array();
+                $tagList = [];
             }
 
             $tagList[] = 'style';
@@ -205,7 +205,7 @@ class UTIL_HtmlTag
             {
                 if ( in_array('style', $tagList) )
                 {
-                    $tagList = array_diff($tagList, array('style'));
+                    $tagList = array_diff($tagList, ['style']);
                 }
             }
 
@@ -235,9 +235,9 @@ class UTIL_HtmlTag
      */
     public static function stripJs( $text )
     {
-        $tags = array('script');
+        $tags = ['script'];
 
-        $attrs = array(
+        $attrs = [
             'onchange',
             'onclick',
             'ondblclick',
@@ -255,7 +255,8 @@ class UTIL_HtmlTag
             'onreset',
             'onselect',
             'onsubmit',
-            'onunload');
+            'onunload'
+        ];
 
         $jevix = self::getJevix($tags, $attrs, true, false);
         return $jevix->parse($text);
@@ -280,7 +281,7 @@ class UTIL_HtmlTag
      */
     public static function autoLink( $text )
     {
-        $jevix = self::getJevix(array(), array(), true, false);
+        $jevix = self::getJevix([], [], true, false);
         $jevix->isAutoLinkMode = true;
 
         return $jevix->parse($text);
@@ -353,6 +354,6 @@ class UTIL_HtmlTag
         }
 
         return strtr($string,
-            array('\\' => '\\\\', "'" => "\\'", '"' => '\\"', "\r" => '\\r', "\n" => '\\n', '</' => '<\/'));
+            ['\\' => '\\\\', "'" => "\\'", '"' => '\\"', "\r" => '\\r', "\n" => '\\n', '</' => '<\/']);
     }
 }

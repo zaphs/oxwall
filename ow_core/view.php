@@ -36,7 +36,7 @@ class OW_View
      *
      * @var array
      */
-    protected $assignedVars = array();
+    protected $assignedVars = [];
 
     /**
      * Template path
@@ -53,7 +53,7 @@ class OW_View
     /**
      * @var array
      */
-    protected static $devInfo = array();
+    protected static $devInfo = [];
 
     /**
      * @var boolean
@@ -212,7 +212,7 @@ class OW_View
      * @param mixed $data
      * @return mixed
      */
-    protected function triggerEvent( $name, array $params = array(), $data = null )
+    protected function triggerEvent( $name, array $params = [], $data = null )
     {
         return OW::getEventManager()->trigger(new OW_Event($name, $params, $data));
     }

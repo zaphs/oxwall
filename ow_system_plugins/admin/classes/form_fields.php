@@ -88,12 +88,12 @@ class addValueField extends FormElement
         $tagFieldName = 'input_'  . $this->getName() . '_tag_field';
         $this->tag = new TagsInputField($tagFieldName);
         $this->tag->setMinChars(1);
-        $this->value = array();
+        $this->value = [];
     }
 
     public function setValue( $value )
     {
-        $values = array();
+        $values = [];
         
         if ( is_array($value) )
         {
@@ -112,7 +112,7 @@ class addValueField extends FormElement
         {
             $valueList = json_decode($value, true);
 
-            $result = array();
+            $result = [];
             
             if ( empty($valueList) )
             {
@@ -138,7 +138,7 @@ class addValueField extends FormElement
 
     protected function setArrayValue( $value )
     {
-        $values = array();
+        $values = [];
 
         if ( !empty($value) )
         {
@@ -190,7 +190,7 @@ class addValueField extends FormElement
 
             $message = OW::getLanguage()->text('admin', 'possible_values_disable_message');
 
-            $event = new OW_Event('admin.get.possible_values_disable_message', array('name' => $this->getName(), 'id' => $this->getId() ), $message);
+            $event = new OW_Event('admin.get.possible_values_disable_message', ['name' => $this->getName(), 'id' => $this->getId()], $message);
             OW::getEventManager()->trigger($event);
 
             $message = $event->getData();
@@ -209,14 +209,14 @@ class addValueField extends FormElement
                                 </span>
                         </div>';
 
-        $template = UTIL_String::replaceVars($template, array('label' => '', 'value' => 0));
+        $template = UTIL_String::replaceVars($template, ['label' => '', 'value' => 0]);
         
         $addButtonName = $this->getName() . '_add_button';
 
         $jsDir = OW::getPluginManager()->getPlugin("admin")->getStaticJsUrl();
         OW::getDocument()->addScript($jsDir . "questions.js");
         
-        $json = json_encode(array( 'tagFieldId' => $this->tag->getId(), 'dataFieldId' => $this->getId(), 'value' =>  $this->value, 'order' =>  array_keys($this->value), 'template' => $template ));
+        $json = json_encode(['tagFieldId' => $this->tag->getId(), 'dataFieldId' => $this->getId(), 'value' =>  $this->value, 'order' =>  array_keys($this->value), 'template' => $template]);
         
         OW::getDocument()->addOnloadScript("
             if ( !window.addQuestionValues )
@@ -228,11 +228,11 @@ class addValueField extends FormElement
 
         OW::getLanguage()->addKeyForJs('admin', 'questions_edit_delete_value_confirm_message');
  
-        $inputValues = array();
+        $inputValues = [];
                 
         foreach ( $this->value as $key => $val )
         {
-            $inputValues[] = array($key => htmlspecialchars($val));
+            $inputValues[] = [$key => htmlspecialchars($val)];
         }
         
         $html = '<div class="values_list">
@@ -259,7 +259,7 @@ class infiniteValueField extends addValueField
 {
     protected function setArrayValue( $value )
     {
-        $values = array();
+        $values = [];
 
         if ( !empty($value) )
         {
@@ -296,16 +296,16 @@ class infiniteValueField extends addValueField
                                 </span>
                         </div>';
 
-        $template = UTIL_String::replaceVars($template, array('label' => '', 'value' => 0));
+        $template = UTIL_String::replaceVars($template, ['label' => '', 'value' => 0]);
 
         $json = json_encode(
-            array(
+            [
                 'tagFieldId' => $this->tag->getId(),
                 'dataFieldId' => $this->getId(),
                 'value' =>  $this->value,
                 'order' =>  array_keys($this->value),
                 'template' => $template
-            )
+            ]
         );
 
         OW::getDocument()->addOnloadScript("

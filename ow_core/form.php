@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -25,30 +24,30 @@ declare(strict_types=1);
 
 /**
  * Base form class.
- * 
- * @author Sardar Madumarov <madumarov@gmail.com>
+ *
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 class Form
 {
-    const METHOD_POST = 'post';
-    const METHOD_GET = 'get';
+    const METHOD_POST                 = 'post';
+    const METHOD_GET                  = 'get';
     const ENCTYPE_APP_FORM_URLENCODED = 'application/x-www-form-urlencoded';
-    const ENCTYPE_MULTYPART_FORMDATA = 'multipart/form-data';
-    const BIND_SUCCESS = 'success';
-    const BIND_SUBMIT = 'submit';
-    const AJAX_DATA_TYPE_JSON = 'json';
-    const AJAX_DATA_TYPE_SCRIPT = 'script';
-    const AJAX_DATA_TYPE_XML = 'xml';
-    const AJAX_DATA_TYPE_HTML = 'html';
+    const ENCTYPE_MULTYPART_FORMDATA  = 'multipart/form-data';
+    const BIND_SUCCESS                = 'success';
+    const BIND_SUBMIT                 = 'submit';
+    const AJAX_DATA_TYPE_JSON         = 'json';
+    const AJAX_DATA_TYPE_SCRIPT       = 'script';
+    const AJAX_DATA_TYPE_XML          = 'xml';
+    const AJAX_DATA_TYPE_HTML         = 'html';
     /* -------------------------------------------------------------------------------------------------------------- */
     const ELEMENT_CSRF_TOKEN = 'csrf_token';
-    const ELEMENT_FORM_NAME = 'form_name';
+    const ELEMENT_FORM_NAME  = 'form_name';
 
     /**
      * Form element attributes (id, name, etc).
-     * 
+     *
      * @var array
      */
     protected $attributes = [];
@@ -62,20 +61,20 @@ class Form
 
     /**
      * Form submit elements list <Submit/Button>.
-     * 
-     * @var array
+     *
+     * @var FormElement[] $submitElements
      */
     protected $submitElements = [];
 
     /**
      * Form ajax flag.
      *
-     * @var boolean
+     * @var bool
      */
-    protected $ajax;
+    protected $ajax = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $ajaxResetOnSuccess;
 
@@ -97,10 +96,10 @@ class Form
 
     /**
      * Constructor.
-     * 
+     *
      * @param string $name
      */
-    public function __construct( $name )
+    public function __construct(string $name)
     {
         $this->setId(UTIL_HtmlTag::generateAutoId('form'));
         $this->setMethod(self::METHOD_POST);
@@ -124,7 +123,7 @@ class Form
     /**
      * @return string
      */
-    public function getId()
+    public function getId(): ?string
     {
         return $this->attributes['id'] ?? null;
     }
@@ -132,7 +131,7 @@ class Form
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->attributes['name'] ?? null;
     }
@@ -140,7 +139,7 @@ class Form
     /**
      * @return string
      */
-    public function getEmptyElementsErrorMessage()
+    public function getEmptyElementsErrorMessage(): string
     {
         return $this->emptyElementsErrorMessage;
     }
@@ -149,7 +148,7 @@ class Form
      * @param string $message
      * @return Form
      */
-    public function setEmptyElementsErrorMessage( $message )
+    public function setEmptyElementsErrorMessage(string $message): Form
     {
         $this->emptyElementsErrorMessage = $message;
         return $this;
@@ -157,11 +156,11 @@ class Form
 
     /**
      * Sets form `id` attribute.
-     * 
+     *
      * @param string $id
      * @return Form
      */
-    public function setId( $id )
+    public function setId(string $id): Form
     {
         $this->attributes['id'] = trim($id);
         return $this;
@@ -174,10 +173,9 @@ class Form
      * @return Form
      * @throws InvalidArgumentException
      */
-    public function setName( $name )
+    public function setName(string $name): Form
     {
-        if ( !$name )
-        {
+        if (!$name) {
             throw new InvalidArgumentException('Invalid form name!');
         }
 
@@ -193,7 +191,7 @@ class Form
      * @param string $action
      * @return Form
      */
-    public function setAction( $action )
+    public function setAction(string $action): Form
     {
         $this->attributes['action'] = trim($action);
 
@@ -203,7 +201,7 @@ class Form
     /**
      * @return string
      */
-    public function getAction()
+    public function getAction(): ?string
     {
         return $this->attributes['action'] ?? null;
     }
@@ -214,10 +212,9 @@ class Form
      * @param string $method
      * @return Form
      */
-    public function setMethod( $method )
+    public function setMethod(string $method): Form
     {
-        if ( !in_array(trim($method), [self::METHOD_GET, self::METHOD_POST]) )
-        {
+        if (!in_array(trim($method), [self::METHOD_GET, self::METHOD_POST], true)) {
             throw new InvalidArgumentException('Invalid form method type!');
         }
 
@@ -227,9 +224,9 @@ class Form
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMethod()
+    public function getMethod(): ?string
     {
         return $this->attributes['method'] ?? null;
     }
@@ -240,10 +237,9 @@ class Form
      * @param string $enctype
      * @return Form
      */
-    public function setEnctype( $enctype )
+    public function setEnctype(string $enctype): Form
     {
-        if ( !in_array(trim($enctype), [self::ENCTYPE_APP_FORM_URLENCODED, self::ENCTYPE_MULTYPART_FORMDATA]) )
-        {
+        if (!in_array(trim($enctype), [self::ENCTYPE_APP_FORM_URLENCODED, self::ENCTYPE_MULTYPART_FORMDATA], true)) {
             throw new InvalidArgumentException('Invalid form enctype!');
         }
 
@@ -255,7 +251,7 @@ class Form
     /**
      * @return string
      */
-    public function getEnctype()
+    public function getEnctype(): ?string
     {
         return $this->attributes['enctype'] ?? null;
     }
@@ -266,9 +262,9 @@ class Form
      * @param bool $ajax
      * @return Form
      */
-    public function setAjax( $ajax = true )
+    public function setAjax(bool $ajax = true): Form
     {
-        $this->ajax = (bool) $ajax;
+        $this->ajax = $ajax;
 
         return $this;
     }
@@ -276,17 +272,17 @@ class Form
     /**
      * Checks if form is ajax.
      *
-     * @return boolean
+     * @return bool
      */
-    public function isAjax()
+    public function isAjax(): bool
     {
         return $this->ajax;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function getAjaxResetOnSuccess()
+    public function getAjaxResetOnSuccess(): bool
     {
         return $this->ajaxResetOnSuccess;
     }
@@ -295,16 +291,16 @@ class Form
      * @param boolean $resetForm
      * @return Form
      */
-    public function setAjaxResetOnSuccess( $resetForm )
+    public function setAjaxResetOnSuccess(bool $resetForm): Form
     {
-        $this->ajaxResetOnSuccess = (bool) $resetForm;
+        $this->ajaxResetOnSuccess = $resetForm;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getAjaxDataType()
+    public function getAjaxDataType(): string
     {
         return $this->ajaxDataType;
     }
@@ -313,7 +309,7 @@ class Form
      * @param string $ajaxDataType
      * @return Form
      */
-    public function setAjaxDataType( $ajaxDataType )
+    public function setAjaxDataType(string $ajaxDataType): Form
     {
         $this->ajaxDataType = trim($ajaxDataType);
         return $this;
@@ -321,9 +317,9 @@ class Form
 
     /**
      * @param string $eventType
-     * @param callback $function
+     * @param string $function
      */
-    public function bindJsFunction( $eventType, $function )
+    public function bindJsFunction(string $eventType, string $function): void
     {
         $this->bindedFunctions[$eventType][] = $function;
     }
@@ -337,29 +333,19 @@ class Form
      * @throws LogicException
      * @throws InvalidArgumentException
      */
-    public function addElement( $element )
+    public function addElement(FormElement $element): Form
     {
-        if ( !$element instanceof FormElement )
-        {
-            throw new InvalidArgumentException('Provided element is not instance of FormElement class!');
-        }
-
-        if ( $element->getName() === null )
-        {
+        if ($element->getName() === null) {
             throw new LogicException('Form element with empty name was added!');
         }
 
-        if ( array_key_exists($element->getName(), $this->elements) )
-        {
+        if (array_key_exists($element->getName(), $this->elements)) {
             throw new LogicException('Duplicated form element name! Form element with name `' . $element->getName() . '` already exists!');
         }
 
-        if ( $element instanceof Submit )
-        {
+        if ($element instanceof Submit) {
             $this->submitElements[$element->getName()] = $element;
-        }
-        else
-        {
+        } else {
             $this->elements[$element->getName()] = $element;
         }
 
@@ -372,20 +358,18 @@ class Form
      * @param string $name
      * @return FormElement
      */
-    public function getElement( $name )
+    public function getElement(string $name): FormElement
     {
         return empty($this->elements[$name]) ? null : $this->elements[$name];
     }
 
-    public function deleteElement( $elementName )
+    public function deleteElement(string $elementName): void
     {
-        if ( empty($elementName) )
-        {
+        if (empty($elementName)) {
             return;
         }
 
-        if ( array_key_exists($elementName, $this->elements) )
-        {
+        if (array_key_exists($elementName, $this->elements)) {
             unset($this->elements[$elementName]);
         }
     }
@@ -393,9 +377,9 @@ class Form
     /**
      * Returns all form elements.
      *
-     * @return array
+     * @return FormElement[]
      */
-    public function getElements()
+    public function getElements(): array
     {
         return $this->elements;
     }
@@ -407,10 +391,9 @@ class Form
      * @return FormElement
      * @throws InvalidArgumentException
      */
-    public function getSubmitElement( $name )
+    public function getSubmitElement(string $name): FormElement
     {
-        if ( !$name || !isset($this->submitElements[$name]) )
-        {
+        if (!$name || !isset($this->submitElements[$name])) {
             throw new InvalidArgumentException('Cant find element with name `' . $name . '`!');
         }
 
@@ -418,37 +401,29 @@ class Form
     }
 
     /**
-     * Validates added form elements. 
+     * Validates added form elements.
      *
      * @param array $data
-     * @return boolean
+     * @return bool
      * @throws InvalidArgumentException
      */
-    public function isValid( $data )
+    public function isValid(array $data): bool
     {
         $valid = true;
 
-        if ( !is_array($data) )
-        {
-            throw new InvalidArgumentException('Array should be provided for validation!');
-        }
-        
-        if ( $this->getElement(self::ELEMENT_CSRF_TOKEN) != null 
-            && ( !isset($data[self::ELEMENT_CSRF_TOKEN]) || !UTIL_Csrf::isTokenValid($data[self::ELEMENT_CSRF_TOKEN] )) 
-        )
-        {
+        if ($this->getElement(self::ELEMENT_CSRF_TOKEN) != null
+            && (!isset($data[self::ELEMENT_CSRF_TOKEN]) || !UTIL_Csrf::isTokenValid($data[self::ELEMENT_CSRF_TOKEN]))
+        ) {
             $valid = false;
             //TODO refactor - remove message adding from Form class
             OW::getFeedback()->error(OW::getLanguage()->text('base', 'invalid_csrf_token_error_message'));
         }
 
         /* @var FormElement $element */
-        foreach ( $this->elements as $element )
-        {
+        foreach ($this->elements as $element) {
             $element->setValue($data[$element->getName()] ?? null);
 
-            if ( !$element->isValid() )
-            {
+            if (!$element->isValid()) {
                 $valid = false;
             }
         }
@@ -461,13 +436,12 @@ class Form
      *
      * @return array
      */
-    public function getValues()
+    public function getValues(): array
     {
         $values = [];
 
         /* @var FormElement $element */
-        foreach ( $this->elements as $element )
-        {
+        foreach ($this->elements as $element) {
             $values[$element->getName()] = $element->getValue();
         }
 
@@ -476,16 +450,14 @@ class Form
 
     /**
      * Sets form element values.
-     * 
+     *
      * @param array $values
      */
-    public function setValues( array $values )
+    public function setValues(array $values): void
     {
         /* @var FormElement $element */
-        foreach ( $this->elements as $element )
-        {
-            if ( isset($values[$element->getName()]) )
-            {
+        foreach ($this->elements as $element) {
+            if (isset($values[$element->getName()])) {
                 $element->setValue($values[$element->getName()]);
             }
         }
@@ -496,13 +468,12 @@ class Form
      *
      * @return array
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         $errors = [];
 
         /* @var FormElement $value */
-        foreach ( $this->elements as $key => $value )
-        {
+        foreach ($this->elements as $key => $value) {
             $errors[$key] = $value->getErrors();
         }
 
@@ -514,14 +485,12 @@ class Form
      *
      * @return Form
      */
-    public function reset()
+    public function reset(): Form
     {
         /* @var FormElement $element */
-        foreach ( $this->elements as $element )
-        {
+        foreach ($this->elements as $element) {
             //TODO remove temp hardcode to avoid token reset
-            if( $element->getName()  != self::ELEMENT_CSRF_TOKEN )
-            {
+            if ($element->getName() != self::ELEMENT_CSRF_TOKEN) {
                 $element->setValue(null);
             }
         }
@@ -536,23 +505,22 @@ class Form
      * @param array  $params
      * @return string
      */
-    public function render( $formContent, array $params = [])
+    public function render(string $formContent, array $params = []): string
     {
         $formElementJS = '';
 
         /* @var FormElement $element */
-        foreach ( $this->elements as $element )
-        {
+        foreach ($this->elements as $element) {
             $formElementJS .= $element->getElementJs() . PHP_EOL;
             $formElementJS .= 'form.addElement(formElement);' . PHP_EOL;
         }
 
         $formInitParams = [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'reset' => $this->getAjaxResetOnSuccess(),
-            'ajax' => $this->isAjax(),
-            'ajaxDataType' => $this->getAjaxDataType(),
+            'id'                   => $this->getId(),
+            'name'                 => $this->getName(),
+            'reset'                => $this->getAjaxResetOnSuccess(),
+            'ajax'                 => $this->isAjax(),
+            'ajaxDataType'         => $this->getAjaxDataType(),
             'validateErrorMessage' => $this->emptyElementsErrorMessage,
         ];
 
@@ -576,15 +544,12 @@ class Form
                         OW.trigger('base.onFormReady', [form]);
 		";
 
-        foreach ( $this->bindedFunctions as $bindType => $binds )
-        {
-            if ( empty($binds) )
-            {
+        foreach ($this->bindedFunctions as $bindType => $binds) {
+            if (empty($binds)) {
                 continue;
             }
 
-            foreach ( $binds as $function )
-            {
+            foreach ($binds as $function) {
                 $jsString .= "form.bind('" . trim($bindType) . "', " . $function . ');';
             }
         }
@@ -593,16 +558,14 @@ class Form
 
         $hiddenFieldString = '';
 
-        /* @var OW_FormElement $value */
-        foreach ( $this->elements as $value )
-        {
-            if ( $value instanceof HiddenField )
-            {
+        /* @var FormElement $value */
+        foreach ($this->elements as $value) {
+            if ($value instanceof HiddenField) {
                 $hiddenFieldString .= $value->renderInput() . PHP_EOL;
             }
         }
 
         return UTIL_HtmlTag::generateTag('form', array_merge($this->attributes, $params), true,
-                PHP_EOL . $hiddenFieldString . $formContent . PHP_EOL);
+            PHP_EOL . $hiddenFieldString . $formContent . PHP_EOL);
     }
 }

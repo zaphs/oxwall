@@ -56,7 +56,7 @@ class BOL_Language extends OW_Entity
     /**
      * @return string
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }

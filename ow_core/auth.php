@@ -43,7 +43,7 @@ class OW_Auth
     /**
      * @return OW_IAuthenticator
      */
-    public function getAuthenticator()
+    public function getAuthenticator(): OW_IAuthenticator
     {
         return $this->authenticator;
     }
@@ -51,7 +51,7 @@ class OW_Auth
     /**
      * @param OW_IAuthenticator $authenticator
      */
-    public function setAuthenticator( OW_IAuthenticator $authenticator )
+    public function setAuthenticator( OW_IAuthenticator $authenticator ): void
     {
         $this->authenticator = $authenticator;
     }
@@ -62,7 +62,7 @@ class OW_Auth
      * @param OW_AuthAdapter $adapter
      * @return OW_AuthResult
      */
-    public function authenticate( OW_AuthAdapter $adapter )
+    public function authenticate( OW_AuthAdapter $adapter ): OW_AuthResult
     {
         $result = $adapter->authenticate();
 
@@ -82,9 +82,9 @@ class OW_Auth
     /**
      * Checks if current user is authenticated.
      *
-     * @return boolean
+     * @return bool
      */
-    public function isAuthenticated()
+    public function isAuthenticated(): bool
     {
         return $this->authenticator->isAuthenticated();
     }
@@ -93,9 +93,9 @@ class OW_Auth
      * Returns current user id.
      * If user is not authenticated 0 returned.
      *
-     * @return integer
+     * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->authenticator->getUserId();
     }
@@ -103,12 +103,10 @@ class OW_Auth
     /**
      * Logins user by provided user id.
      *
-     * @param integer $userId
+     * @param int $userId
      */
-    public function login( $userId ): void
+    public function login( int $userId ): void
     {
-        $userId = (int) $userId;
-
         if ( $userId < 1 )
         {
             throw new InvalidArgumentException('invalid userId');
@@ -126,7 +124,7 @@ class OW_Auth
     /**
      * Logs out current user.
      */
-    public function logout()
+    public function logout(): void
     {
         if ( !$this->isAuthenticated() )
         {
@@ -144,7 +142,7 @@ class OW_Auth
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->authenticator->getId();
     }

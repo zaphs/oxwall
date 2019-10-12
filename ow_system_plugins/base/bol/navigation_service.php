@@ -250,15 +250,16 @@ class BOL_NavigationService
 
     /**
      *
-     * @param <type> $visibleFor
+     * @param int $visibleFor
+     * @param string $menuType
      * @return BOL_MenuItem
      */
-    public function findFirstLocal( $visibleFor, $menuType )
+    public function findFirstLocal(int $visibleFor, string $menuType ): BOL_MenuItem
     {
         return $this->menuItemDao->findFirstLocal($visibleFor, $menuType);
     }
 
-    public function isDocumentUriUnique( $uri )
+    public function isDocumentUriUnique(string $uri )
     {
         return $this->documentDao->isDocumentUriUnique($uri);
     }

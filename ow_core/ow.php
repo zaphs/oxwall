@@ -135,17 +135,18 @@ final class OW
      *
      * @return OW_Autoload
      */
-    public static function getAutoloader()
+    public static function getAutoloader(): OW_Autoload
     {
         return OW_Autoload::getInstance();
     }
 
+    //TODO should be interface
     /**
      * Returns front controller object.
      *
      * @return OW_Application
      */
-    public static function getApplication()
+    public static function getApplication(): OW_Application
     {
         self::detectContext();
 
@@ -170,7 +171,7 @@ final class OW
      *
      * @return OW_Config
      */
-    public static function getConfig()
+    public static function getConfig(): \OW_Config
     {
         return OW_Config::getInstance();
     }
@@ -180,7 +181,7 @@ final class OW
      *
      * @return OW_Session
      */
-    public static function getSession()
+    public static function getSession(): \OW_Session
     {
         return OW_Session::getInstance();
     }
@@ -190,7 +191,7 @@ final class OW
      *
      * @return OW_User
      */
-    public static function getUser()
+    public static function getUser(): \OW_User
     {
         return OW_User::getInstance();
     }
@@ -201,12 +202,13 @@ final class OW
      */
     private static $dboInstance;
 
+    //TODO should be interface
     /**
      * Returns DB access object with default connection.
      *
      * @return OW_Database
      */
-    public static function getDbo()
+    public static function getDbo(): \OW_Database
     {
         if ( self::$dboInstance === null )
         {
@@ -245,7 +247,7 @@ final class OW
      *
      * 	@return OW_Mailer
      */
-    public static function getMailer()
+    public static function getMailer(): \OW_Mailer
     {
         return OW_Mailer::getInstance();
     }
@@ -255,7 +257,7 @@ final class OW
      *
      * @return OW_HtmlDocument
      */
-    public static function getDocument()
+    public static function getDocument(): \OW_HtmlDocument
     {
         return OW_Response::getInstance()->getDocument();
     }
@@ -265,7 +267,7 @@ final class OW
      *
      * @return OW_Request
      */
-    public static function getRequest()
+    public static function getRequest(): \OW_Request
     {
         return OW_Request::getInstance();
     }
@@ -275,7 +277,7 @@ final class OW
      *
      * @return OW_Response
      */
-    public static function getResponse()
+    public static function getResponse(): \OW_Response
     {
         return OW_Response::getInstance();
     }
@@ -285,7 +287,7 @@ final class OW
      *
      * @return OW_Language
      */
-    public static function getLanguage()
+    public static function getLanguage(): \OW_Language
     {
         return OW_Language::getInstance();
     }
@@ -295,7 +297,7 @@ final class OW
      *
      * @return OW_Router
      */
-    public static function getRouter()
+    public static function getRouter(): \OW_Router
     {
         return OW_Router::getInstance();
     }
@@ -305,7 +307,7 @@ final class OW
      *
      * @return OW_PluginManager
      */
-    public static function getPluginManager()
+    public static function getPluginManager(): \OW_PluginManager
     {
         return OW_PluginManager::getInstance();
     }
@@ -315,7 +317,7 @@ final class OW
      *
      * @return OW_ThemeManager
      */
-    public static function getThemeManager()
+    public static function getThemeManager(): \OW_ThemeManager
     {
         return OW_ThemeManager::getInstance();
     }
@@ -325,7 +327,7 @@ final class OW
      *
      * @return OW_EventManager
      */
-    public static function getEventManager()
+    public static function getEventManager(): \OW_EventManager
     {
         return OW_EventManager::getInstance();
     }
@@ -333,7 +335,7 @@ final class OW
     /**
      * @return OW_Registry
      */
-    public static function getRegistry()
+    public static function getRegistry(): \OW_Registry
     {
         return OW_Registry::getInstance();
     }
@@ -343,7 +345,7 @@ final class OW
      *
      * @return OW_Feedback
      */
-    public static function getFeedback()
+    public static function getFeedback(): \OW_Feedback
     {
         return OW_Feedback::getInstance();
     }
@@ -353,7 +355,7 @@ final class OW
      *
      * @return OW_Navigation
      */
-    public static function getNavigation()
+    public static function getNavigation(): \OW_Navigation
     {
         return OW_Navigation::getInstance();
     }
@@ -362,15 +364,16 @@ final class OW
      * @return OW_RequestHandler
      * @deprecated
      */
-    public static function getDispatcher()
+    public static function getDispatcher(): \OW_RequestHandler
     {
         return OW_RequestHandler::getInstance();
     }
 
+    //TODO should be interface
     /**
      * @return OW_RequestHandler
      */
-    public static function getRequestHandler()
+    public static function getRequestHandler(): ?\OW_RequestHandler
     {
         self::detectContext();
 
@@ -388,7 +391,7 @@ final class OW
      *
      * @return OW_CacheService
      */
-    public static function getCacheService()
+    public static function getCacheService(): \OW_CacheService
     {
         return BOL_DbCacheService::getInstance(); //TODO make configurable
     }
@@ -398,7 +401,7 @@ final class OW
      *
      * @return OW_Storage
      */
-    public static function getStorage()
+    public static function getStorage(): OW_Storage
     {
         if ( self::$storage === null )
         {
@@ -426,7 +429,7 @@ final class OW
         return self::$storage;
     }
 
-    public static function getLogger( $logType = 'ow' )
+    public static function getLogger( $logType = 'ow' ): \OW_Log
     {
         return OW_Log::getInstance($logType);
     }
@@ -434,7 +437,7 @@ final class OW
     /**
      * @return OW_Authorization
      */
-    public static function getAuthorization()
+    public static function getAuthorization(): \OW_Authorization
     {
         return OW_Authorization::getInstance();
     }
@@ -442,7 +445,7 @@ final class OW
     /**
      * @return OW_CacheManager
      */
-    public static function getCacheManager()
+    public static function getCacheManager(): \OW_CacheManager
     {
         return OW_CacheManager::getInstance();
     }
@@ -508,7 +511,7 @@ final class OW
      *
      * @return OW_TextSearchManager
      */
-    public static function getTextSearchManager()
+    public static function getTextSearchManager(): OW_TextSearchManager
     {
         return OW_TextSearchManager::getInstance();
     }

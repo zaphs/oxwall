@@ -170,7 +170,7 @@ class BOL_MenuItemDao extends OW_BaseDao
         return $this->findObjectByExample($example);
     }
 
-    public function findFirstLocal( $visibleFor, $menuType )
+    public function findFirstLocal(int $visibleFor, string $menuType )
     {
 
         return $this->dbo->queryForObject("

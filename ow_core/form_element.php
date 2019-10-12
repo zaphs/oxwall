@@ -769,9 +769,9 @@ class DateField extends FormElement
                 'selected' => 'selected'
             ] : [];
 
-            $attrs['value'] = $i;
+            $attrs['value'] = (string)$i;
 
-            $yearOptionsString .= UTIL_HtmlTag::generateTag('option', $attrs, true, trim($i));
+            $yearOptionsString .= UTIL_HtmlTag::generateTag('option', $attrs, true, $attrs['value']);
         }
 
         for ( $i = 1; $i <= 12; $i++ )
@@ -797,9 +797,9 @@ class DateField extends FormElement
         {
             $attrs = (isset($this->defaultDate['day']) && (string) $i === (string) $this->defaultDate['day']) ? ['selected' => 'selected'] : [];
 
-            $attrs['value'] = $i;
+            $attrs['value'] = (string)$i;
 
-            $dayOptionsString .= UTIL_HtmlTag::generateTag('option', $attrs, true, trim($i));
+            $dayOptionsString .= UTIL_HtmlTag::generateTag('option', $attrs, true, $attrs['value']);
         }
 
         $attributes = [];
@@ -1230,7 +1230,7 @@ class RadioField extends FormElement
 
             $this->setId(UTIL_HtmlTag::generateAutoId('input_' . uniqid(UTIL_String::getRandomString(random_int(8, 13), UTIL_String::RND_STR_ALPHA_NUMERIC))));
 
-            $this->addAttribute('value', $key);
+            $this->addAttribute('value', (string)$key);
 
             $renderedString .= '<li style="width:' . $columnWidth . '%">' . UTIL_HtmlTag::generateTag('input', $this->attributes) . '&nbsp;<label for="' . $this->getId() . '">' . $value . '</label></li>';
 

@@ -29,7 +29,7 @@
  */
 class BASE_CTRL_AjaxLoader extends OW_ActionController
 {
-    public function init()
+    public function init(): void
     {
         if( !OW::getRequest()->isAjax() )
         {

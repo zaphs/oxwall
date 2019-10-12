@@ -33,11 +33,11 @@ class OW_Application
 {
     use OW_Singleton;
     
-    const CONTEXT_MOBILE = BOL_UserService::USER_CONTEXT_MOBILE;
-    const CONTEXT_DESKTOP = BOL_UserService::USER_CONTEXT_DESKTOP;
-    const CONTEXT_API = BOL_UserService::USER_CONTEXT_API;
-    const CONTEXT_CLI = BOL_UserService::USER_CONTEXT_CLI;
-    const CONTEXT_NAME = 'owContext';
+    public const CONTEXT_MOBILE = BOL_UserService::USER_CONTEXT_MOBILE;
+    public const CONTEXT_DESKTOP = BOL_UserService::USER_CONTEXT_DESKTOP;
+    public const CONTEXT_API = BOL_UserService::USER_CONTEXT_API;
+    public const CONTEXT_CLI = BOL_UserService::USER_CONTEXT_CLI;
+    public const CONTEXT_NAME = 'owContext';
 
     /**
      * Current page document key.
@@ -47,7 +47,7 @@ class OW_Application
     protected $documentKey;
 
     /**
-     * @var string
+     * @var int
      */
     protected $context;
 
@@ -62,17 +62,17 @@ class OW_Application
     /**
      * Sets site maintenance mode.
      *
-     * @param boolean $mode
+     * @param bool $mode
      */
-    public function setMaintenanceMode( $mode )
+    public function setMaintenanceMode(bool $mode ): void
     {
-        OW::getConfig()->saveConfig('base', 'maintenance', (bool) $mode);
+        OW::getConfig()->saveConfig('base', 'maintenance', $mode);
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDocumentKey()
+    public function getDocumentKey(): ?string
     {
         return $this->documentKey;
     }
@@ -80,7 +80,7 @@ class OW_Application
     /**
      * @param string $key
      */
-    public function setDocumentKey( $key )
+    public function setDocumentKey( string $key ): void
     {
         $this->documentKey = $key;
     }
@@ -285,9 +285,10 @@ class OW_Application
     }
 
     /**
-     * ---------
+     * @throws Redirect404Exception
+     * @throws SmartyException
      */
-    public function handleRequest()
+    public function handleRequest(): void
     {
         $baseConfigs = OW::getConfig()->getValues('base');
 
@@ -362,7 +363,7 @@ class OW_Application
     /**
      * Method called just before request responding.
      */
-    public function finalize()
+    public function finalize(): void
     {
         $document = OW::getDocument();
 
@@ -383,7 +384,7 @@ class OW_Application
     /**
      * System method. Don't call it!!!
      */
-    public function onBeforeDocumentRender()
+    public function onBeforeDocumentRender(): void
     {
         $document = OW::getDocument();
         $themeManager = OW::getThemeManager();
@@ -467,7 +468,7 @@ class OW_Application
     /**
      * Triggers response object to send rendered page.
      */
-    public function returnResponse()
+    public function returnResponse(): void
     {
         OW::getResponse()->respond();
     }
@@ -479,9 +480,9 @@ class OW_Application
      * @param bool   $switchContextTo
      * @throws Exception
      */
-    public function redirect( $redirectTo = null, $switchContextTo = false )
+    public function redirect( $redirectTo = null, $switchContextTo = false ): void
     {
-        if ( $switchContextTo !== false && in_array($switchContextTo, [self::CONTEXT_DESKTOP, self::CONTEXT_MOBILE]) )
+        if ( $switchContextTo !== false && in_array($switchContextTo, [self::CONTEXT_DESKTOP, self::CONTEXT_MOBILE], true))
         {
             OW::getSession()->set(self::CONTEXT_NAME, $switchContextTo);
         }
@@ -501,31 +502,48 @@ class OW_Application
         UTIL_Url::redirect($redirectTo);
     }
 
-    public function getContext()
+    /**
+     * @return int
+     */
+    public function getContext(): int
     {
         return $this->context;
     }
 
-    public function isMobile()
+    /**
+     * @return bool
+     */
+    public function isMobile(): bool
     {
-        return $this->context == self::CONTEXT_MOBILE;
+        return $this->context === self::CONTEXT_MOBILE;
     }
 
-    public function isDesktop()
+    /**
+     * @return bool
+     */
+    public function isDesktop(): bool
     {
-        return $this->context == self::CONTEXT_DESKTOP;
+        return $this->context === self::CONTEXT_DESKTOP;
     }
 
-    public function isApi()
+    /**
+     * @return bool
+     */
+    public function isApi(): bool
     {
-        return $this->context == self::CONTEXT_API;
+        return $this->context === self::CONTEXT_API;
     }
 
-    public function isCli()
+    /**
+     * @return bool
+     */
+    public function isCli(): bool
     {
-        return $this->context == self::CONTEXT_CLI;
+        return $this->context === self::CONTEXT_CLI;
     }
+
     /* -------------------------------------------------------------------------------------------------------------- */
+
     /**
      * Menu item to activate.
      *
@@ -533,7 +551,7 @@ class OW_Application
      */
     protected $indexMenuItem;
 
-    public function activateMenuItem()
+    public function activateMenuItem(): void
     {
         if ( !OW::getDocument()->getMasterPage() instanceof ADMIN_CLASS_MasterPage )
         {
@@ -547,7 +565,10 @@ class OW_Application
     }
     /* private auxilary methods */
 
-    protected function newDocument()
+    /**
+     * @return OW_HtmlDocument
+     */
+    protected function newDocument(): OW_HtmlDocument
     {
         $language = BOL_LanguageService::getInstance()->getCurrent();
         $document = new OW_HtmlDocument();
@@ -582,7 +603,6 @@ class OW_Application
 
         if ( OW::getUser()->isAuthenticated() )
         {
-            $activityUrl = OW::getRouter()->urlFor('BASE_CTRL_User', 'updateActivity');
             $onloadJs .= "OW.getPing().addCommand('user_activity_update').start(600000);";
         }
 
@@ -592,7 +612,7 @@ class OW_Application
         return $document;
     }
 
-    protected function urlHostRedirect()
+    protected function urlHostRedirect(): void
     {
         if ( !isset($_SERVER['HTTP_HOST']) )
         {
@@ -618,12 +638,16 @@ class OW_Application
      */
     protected $httpsHandlerAttrsList = [];
 
-    public function addHttpsHandlerAttrs( $controller, $action = false )
+    /**
+     * @param string $controller
+     * @param string|bool $action
+     */
+    public function addHttpsHandlerAttrs(string $controller, $action = false ): void
     {
         $this->httpsHandlerAttrsList[] = [OW_RequestHandler::ATTRS_KEY_CTRL => $controller, OW_RequestHandler::ATTRS_KEY_ACTION => $action];
     }
 
-    protected function httpVsHttpsRedirect()
+    protected function httpVsHttpsRedirect(): void
     {
         if ( OW::getRequest()->isAjax() )
         {
@@ -670,9 +694,9 @@ class OW_Application
         }
     }
 
-    protected function handleHttps()
+    protected function handleHttps(): void
     {
-        if ( !OW::getRequest()->isSsl() || substr(OW::getRouter()->getBaseUrl(), 0, 5) == 'https')
+        if (!OW::getRequest()->isSsl() || strpos(OW::getRouter()->getBaseUrl(), 'https') === 0)
         {
             return;
         }
@@ -710,7 +734,7 @@ class OW_Application
         OW::getEventManager()->bind(OW_EventManager::ON_AFTER_DOCUMENT_RENDER, 'base_post_handle_https_static_content');
     }
 
-    protected function userAutoLogin()
+    protected function userAutoLogin(): void
     {
         if ( OW::getSession()->isKeySet('no_autologin') )
         {
@@ -731,7 +755,7 @@ class OW_Application
         }
     }
 
-    protected function addCatchAllRequestsException( $eventName, $key )
+    protected function addCatchAllRequestsException(string $eventName, string $key ): void
     {
         $event = new BASE_CLASS_EventCollector($eventName);
         OW::getEventManager()->trigger($event);
@@ -747,33 +771,40 @@ class OW_Application
         }
     }
 
-    protected function initRequestHandler()
+    protected function initRequestHandler(): void
     {
         OW::getRequestHandler()->setIndexPageAttributes('BASE_CTRL_ComponentPanel');
         OW::getRequestHandler()->setStaticPageAttributes('BASE_CTRL_StaticDocument');
     }
 
-    protected function findAllStaticDocs()
+    /**
+     * @return array
+     */
+    protected function findAllStaticDocs(): array
     {
         return BOL_NavigationService::getInstance()->findAllStaticDocuments();
     }
 
-    protected function findFirstMenuItem( $availableFor )
+    /**
+     * @param int $availableFor
+     * @return BOL_MenuItem
+     */
+    protected function findFirstMenuItem(int $availableFor ): BOL_MenuItem
     {
         return BOL_NavigationService::getInstance()->findFirstLocal($availableFor, OW_Navigation::MAIN);
     }
 
-    protected function getSiteRootRoute()
+    protected function getSiteRootRoute(): OW_Route
     {
         return new OW_Route('base_default_index', '/', 'BASE_CTRL_ComponentPanel', 'index');
     }
 
-    protected function getMasterPage()
+    protected function getMasterPage(): OW_MasterPage
     {
         return new OW_MasterPage();
     }
 
-    protected function detectLanguage()
+    protected function detectLanguage(): void
     {
         $languageId = 0;
 

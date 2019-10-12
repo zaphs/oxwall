@@ -127,7 +127,7 @@ class OW_Response
                 if (mb_strtolower(substr($headerName, 0, 4)) === 'http') {
                     header($headerName . ' ' . $headerValue);
                 } elseif (mb_strtolower($headerName) === 'status') {
-                    header(ucfirst(mb_strtolower($headerName)) . ': ' . $headerValue, null, (int)$headerValue);
+                    header(ucfirst(mb_strtolower($headerName)) . ': ' . $headerValue, true, (int)$headerValue);
                 } else {
                     header($headerName . ':' . $headerValue);
                 }

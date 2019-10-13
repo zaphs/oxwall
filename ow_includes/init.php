@@ -39,8 +39,8 @@ if ( OW_DEBUG_MODE )
     ob_start();
 }
 
-spl_autoload_register(['OW_Autoload', 'autoload']);
-require_once OW_DIR_LIB_VENDOR . "autoload.php";
+//spl_autoload_register(['OW_Autoload', 'autoload']);
+$composer_autoload = require OW_DIR_LIB_VENDOR . 'autoload.php';
 
 // adding standard package pointers
 $autoloader = OW::getAutoloader();
@@ -48,6 +48,8 @@ $autoloader->addPackagePointer('OW', OW_DIR_CORE);
 $autoloader->addPackagePointer('INC', OW_DIR_INC);
 $autoloader->addPackagePointer('UTIL', OW_DIR_UTIL);
 $autoloader->addPackagePointer('BOL', OW_DIR_SYSTEM_PLUGIN . 'base' . DS . 'bol');
+
+$autoloader->addComposerAutoload($composer_autoload);
 
 // Force autoload of classes without package pointer
 $classesToAutoload = [
@@ -70,7 +72,6 @@ $classesToAutoload = [
     'CheckboxField' => OW_DIR_CORE . 'form_element.php',
     'Selectbox' => OW_DIR_CORE . 'form_element.php',
     'CheckboxGroup' => OW_DIR_CORE . 'form_element.php',
-    'RadioField' => OW_DIR_CORE . 'form_element.php',
     'PasswordField' => OW_DIR_CORE . 'form_element.php',
     'Submit' => OW_DIR_CORE . 'form_element.php',
     'Button' => OW_DIR_CORE . 'form_element.php',
@@ -90,7 +91,7 @@ $classesToAutoload = [
 
 OW::getAutoloader()->addClassArray($classesToAutoload);
 
-if ( defined("OW_URL_HOME") )
+if ( defined('OW_URL_HOME') )
 {
     OW::getRouter()->setBaseUrl(OW_URL_HOME);
 }

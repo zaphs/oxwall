@@ -120,7 +120,7 @@ class OW_EventManager
      */
     private function __construct()
     {
-        $this->profiler = UTIL_Profiler::getInstance('event_manager');
+
     }
     /**
      * Singleton instance.
@@ -201,7 +201,7 @@ class OW_EventManager
             // log triggered events for developer mode
             if ( $this->devMode )
             {
-                $startTime = UTIL_Profiler::getInstance()->getTotalTime();
+                $startTime = $this->profiler->getTotalTime();
                 $this->profiler->reset();
                 foreach ( $this->listeners[$event->getName()] as $priority => $data )
                 {
@@ -236,18 +236,14 @@ class OW_EventManager
                 }
             }
         }
-        else
+        elseif ( $this->devMode && !in_array($event->getName(), $this->eventsToSkip) && count($this->eventsLog) < $this->maxItemsInLog )
         {
             // log events with no listeners
-            $startTime = UTIL_Profiler::getInstance()->getTotalTime();
-
-            if ( $this->devMode && !in_array($event->getName(), $this->eventsToSkip) && count($this->eventsLog) < $this->maxItemsInLog )
-            {
-                $this->eventsLog[] = [
-                    'type' => 'trigger', 'start' => $startTime, 'event' => $event, 'listeners' => [],
-                    'exec' => 0
-                ];
-            }
+            $startTime = $this->profiler->getTotalTime();
+            $this->eventsLog[] = [
+                'type' => 'trigger', 'start' => $startTime, 'event' => $event, 'listeners' => [],
+                'exec' => 0
+            ];
         }
 
         return $event;
@@ -271,7 +267,7 @@ class OW_EventManager
             // log triggered events for developer mode
             if ( $this->devMode )
             {
-                $startTime = UTIL_Profiler::getInstance()->getTotalTime();
+                $startTime = $this->profiler->getTotalTime();
                 $this->profiler->reset();
                 $handlers = reset($this->listeners[$eventName]);
                 $result = call_user_func(end($handlers), $event);
@@ -293,11 +289,10 @@ class OW_EventManager
             return $result;
         }
 
-        // log events with no listeners
-        $startTime = UTIL_Profiler::getInstance()->getTotalTime();
-
         if ($this->devMode && !in_array($event->getName(), $this->eventsToSkip) && count($this->eventsLog) < $this->maxItemsInLog )
         {
+            // log events with no listeners
+            $startTime = $this->profiler->getTotalTime();
             $this->eventsLog[] = [
                 'type' => 'call', 'start' => $startTime, 'event' => $event, 'listeners' => [],
                 'exec' => 0
@@ -308,11 +303,14 @@ class OW_EventManager
     }
 
     /**
-     * @param boolean $devMode
+     * @param bool $devMode
      */
-    public function setDevMode( $devMode )
+    public function setDevMode(bool $devMode )
     {
-        $this->devMode = (bool) $devMode;
+        $this->devMode = $devMode;
+        if ($this->devMode) {
+            $this->profiler = UTIL_Profiler::getInstance('event_manager');
+        }
     }
 
     /**

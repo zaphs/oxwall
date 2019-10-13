@@ -57,7 +57,7 @@ abstract class OW_ActionController extends OW_Renderable
     /**
      * @param string $action
      */
-    public function setDefaultAction($action): void
+    public function setDefaultAction($action)
     {
         $this->defaultAction = trim($action);
     }
@@ -68,7 +68,7 @@ abstract class OW_ActionController extends OW_Renderable
      * @param string $action
      * @throws Exception
      */
-    public function redirectToAction(string $action): void
+    public function redirectToAction(string $action)
     {
         $handlerAttrs = OW::getRequestHandler()->getHandlerAttributes();
 
@@ -81,7 +81,7 @@ abstract class OW_ActionController extends OW_Renderable
      * @param string $redirectTo
      * @throws Exception
      */
-    public function redirect(string $redirectTo = null): void
+    public function redirect(string $redirectTo = null)
     {
         OW::getApplication()->redirect($redirectTo);
     }
@@ -89,7 +89,7 @@ abstract class OW_ActionController extends OW_Renderable
     /**
      * Optional method. Called before action.
      */
-    public function init(): void
+    public function init()
     {
 
     }
@@ -99,7 +99,7 @@ abstract class OW_ActionController extends OW_Renderable
      *
      * @param string $key
      */
-    public function setDocumentKey(string $key): void
+    public function setDocumentKey(string $key)
     {
         OW::getApplication()->setDocumentKey($key);
     }
@@ -118,7 +118,7 @@ abstract class OW_ActionController extends OW_Renderable
      * Sets page heading.
      * @param string $heading
      */
-    public function setPageHeading(string $heading): void
+    public function setPageHeading(string $heading)
     {
         OW::getDocument()->setHeading(trim($heading));
     }
@@ -128,7 +128,7 @@ abstract class OW_ActionController extends OW_Renderable
      *
      * @param string $class
      */
-    public function setPageHeadingIconClass(string $class): void
+    public function setPageHeadingIconClass(string $class)
     {
         OW::getDocument()->setHeadingIconClass($class);
     }
@@ -136,7 +136,7 @@ abstract class OW_ActionController extends OW_Renderable
     /**
      * @param string $title
      */
-    public function setPageTitle(string $title): void
+    public function setPageTitle(string $title)
     {
         OW::getDocument()->setTitle(trim($title));
     }
@@ -144,7 +144,7 @@ abstract class OW_ActionController extends OW_Renderable
     /**
      * @param string $desc
      */
-    public function setPageDescription(string $desc): void
+    public function setPageDescription(string $desc)
     {
         OW::getDocument()->setDescription($desc);
     }
@@ -152,7 +152,7 @@ abstract class OW_ActionController extends OW_Renderable
     /**
      * @param array $keywords
      */
-    public function setKeywords(array $keywords): void
+    public function setKeywords(array $keywords)
     {
         OW::getDocument()->setKeywords($keywords);
     }

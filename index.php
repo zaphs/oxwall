@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -25,9 +26,9 @@ define('_OW_', true);
 
 define('DS', DIRECTORY_SEPARATOR);
 
-define('OW_DIR_ROOT', dirname(__FILE__) . DS);
+define('OW_DIR_ROOT', __DIR__ . DS);
 
-require_once(OW_DIR_ROOT . 'ow_includes' . DS . 'init.php');
+require_once OW_DIR_ROOT . 'ow_includes' . DS . 'init.php';
 
 if ( !defined('OW_ERROR_LOG_ENABLE') || (bool) OW_ERROR_LOG_ENABLE )
 {
@@ -37,10 +38,11 @@ if ( !defined('OW_ERROR_LOG_ENABLE') || (bool) OW_ERROR_LOG_ENABLE )
     $errorManager->setLogger($logger);
 }
 
-if ( file_exists(OW_DIR_ROOT . 'ow_install' . DS . 'install.php') )
-{
-    include OW_DIR_ROOT . 'ow_install' . DS . 'install.php';
-}
+//if ( file_exists(OW_DIR_ROOT . 'ow_install' . DS . 'install.php') )
+//{
+//    //TODO refactor this, there is file_exists on every request
+//    include OW_DIR_ROOT . 'ow_install' . DS . 'install.php';
+//}
 
 OW::getSession()->start();
 

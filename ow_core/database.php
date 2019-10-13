@@ -33,7 +33,7 @@ declare(strict_types=1);
 final class OW_Database
 {
     //const DEFAULT_CACHE_LIFETIME = false;
-    const NO_CACHE_ENTRY = 'ow_db_no_cache_entry';
+    private const NO_CACHE_ENTRY = 'ow_db_no_cache_entry';
 
     /**
      * @var array
@@ -201,7 +201,7 @@ final class OW_Database
             $this->connection = new PDO($dsn, $params['username'], $params['password'],
                 [
                     PDO::MYSQL_ATTR_INIT_COMMAND       => 'SET NAMES UTF8MB4;',
-                    PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true
+                    PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
                 ]);
 
             if ( !$this->isMysqlValidVersion() )
@@ -354,6 +354,7 @@ final class OW_Database
         $stmt = $this->execute($sql, $params);
         $result = $stmt->fetchAll(PDO::FETCH_CLASS, $className);
 
+        /** @var OW_Entity $item */
         foreach ( $result as $item )
         {
             $item->generateFieldsHash();
@@ -373,7 +374,7 @@ final class OW_Database
     {
         $date = new DateTime;
         $this->query('SET TIME_ZONE = ?', [
-            $date->format('P')
+            $date->format('P'),
         ]);
     }
 

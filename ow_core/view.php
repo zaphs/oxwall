@@ -47,7 +47,7 @@ class OW_View
     protected $template;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $visible = true;
 
@@ -57,7 +57,7 @@ class OW_View
     protected static $devInfo = [];
 
     /**
-     * @var boolean
+     * @var bool
      */
     private static $collectDevInfo = false;
 
@@ -74,22 +74,22 @@ class OW_View
     /**
      * Sets developer mode
      * 
-     * @param boolean $collect 
+     * @param bool $collect
      */
-    public static function setCollectDevInfo( $collect )
+    public static function setCollectDevInfo(bool $collect )
     {
-        self::$collectDevInfo = (bool) $collect;
+        self::$collectDevInfo = $collect;
     }
 
     /**
      * Sets visibility, invisible items return empty markup on render
      *
-     * @param boolean $visible
+     * @param bool $visible
      * @return OW_View
      */
-    public function setVisible( $visible )
+    public function setVisible(bool $visible )
     {
-        $this->visible = (bool) $visible;
+        $this->visible = $visible;
         
         return $this;
     }
@@ -116,7 +116,7 @@ class OW_View
      * @param string $template
      * @return OW_View
      */
-    public function setTemplate( $template )
+    public function setTemplate(string $template )
     {
         $this->template = $template;
         
@@ -130,7 +130,7 @@ class OW_View
      * @param mixed $value
      * @return OW_View
      */
-    public function assign( $name, $value )
+    public function assign(string $name, $value )
     {
         $this->assignedVars[$name] = $value;
         
@@ -141,7 +141,7 @@ class OW_View
      * @param string $varName
      * @return OW_View
      */
-    public function clearAssign( $varName )
+    public function clearAssign(string $varName )
     {
         if ( isset($this->assignedVars[$varName]) )
         {
@@ -214,7 +214,7 @@ class OW_View
      * @param mixed $data
      * @return mixed
      */
-    protected function triggerEvent( $name, array $params = [], $data = null )
+    protected function triggerEvent(string $name, array $params = [], $data = null )
     {
         return OW::getEventManager()->trigger(new OW_Event($name, $params, $data));
     }

@@ -32,10 +32,10 @@ class UTIL_String
     private static $caps = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
     /**
-     * Replaces upper case chars in string with delimeter + lowercase chars 
+     * Replaces upper case chars in string with delimeter + lowercase chars
      *
      * @param string $string
-     * @param string $divider
+     * @param string $delimiter
      * @return string
      */
     public static function capsToDelimiter( $string, $delimiter = '_' )
@@ -107,15 +107,18 @@ class UTIL_String
 
     public static function removeFirstAndLastSlashes( $string )
     {
-        if ( mb_substr($string, 0, 1) === '/' )
-        {
-            $string = mb_substr($string, 1);
-        }
+//        if (mb_strpos($string, '/') === 0)
+//        {
+//            $string = mb_substr($string, 1);
+//        }
+//
+//        if ( mb_substr($string, -1) === '/' )
+//        {
+//            $string = mb_substr($string, 0, -1);
+//        }
 
-        if ( mb_substr($string, -1) === '/' )
-        {
-            $string = mb_substr($string, 0, -1);
-        }
+        $string = trim($string, '/ ');
+
         return $string;
     }
 

@@ -31,8 +31,8 @@ declare(strict_types=1);
  */
 class OW_ThemeManager
 {
-    const DEFAULT_THEME = 'default';
-    const CURRENT_THEME = 'current';
+    private const DEFAULT_THEME = 'default';
+    private const CURRENT_THEME = 'current';
 
     use OW_Singleton;
     
@@ -62,7 +62,7 @@ class OW_ThemeManager
         $this->themeService = BOL_ThemeService::getInstance();
     }    
 
-    public function initDefaultTheme( $mobile = false )
+    public function initDefaultTheme(bool $mobile = false )
     {
         $defaultTheme = $this->themeService->getThemeObjectByKey(BOL_ThemeService::DEFAULT_THEME, $mobile);
         $this->themeObjects[self::DEFAULT_THEME] = $defaultTheme;

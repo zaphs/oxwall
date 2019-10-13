@@ -314,7 +314,7 @@ class EditLocalPageForm extends Form
         );
 
         $urlTextField = new TextField('url');
-        $urlTextField->addValidator(new LocalPageUniqueValidator($document->getUri()));
+        $urlTextField->addValidator(new EditLocalPageUniqueValidator($document->getUri()));
 
         $this->addElement(
                 $urlTextField->setValue($document->getUri())
@@ -394,7 +394,7 @@ class EditLocalPageForm extends Form
     }
 }
 
-class LocalPageUniqueValidator extends OW_Validator
+class EditLocalPageUniqueValidator extends OW_Validator
 {
     private $uri;
 

@@ -22,22 +22,37 @@
  * which combines Covered Code or portions thereof with code not governed by the terms of the CPAL.
  */
 
+/**
+ * @param      $var
+ * @param bool $exit
+ */
 function printVar( $var, $exit = false )
 {
     UTIL_Debug::varDump($var, $exit);
 }
 
+/**
+ * @param      $var
+ * @param bool $exit
+ */
 function pv( $var, $exit = false )
 {
     UTIL_Debug::varDump($var, $exit);
 }
 
+/**
+ * @param      $var
+ * @param bool $exit
+ */
 function pve( $var, $exit = false )
 {
     UTIL_Debug::varDump($var, $exit);
     exit;
 }
 
+/**
+ * @param null $markKey
+ */
 function profiler_mark( $markKey = null )
 {
     UTIL_Profiler::getInstance()->mark($markKey);

@@ -66,7 +66,7 @@ class OW_Entity
         $vars              = get_object_vars($this);
 
         foreach ($vars as $varName => $varValue) {
-            if ($varName != 'id' && false === strpos($varName, '_fieldsHash')) {
+            if ($varName !== 'id' && $varName !== '_fieldsHash') {
                 $this->_fieldsHash[$varName] = $varValue ? crc32((string)$varValue) : 0;
             }
         }

@@ -85,7 +85,7 @@ class OW_DeveloperTools
         }
 
         // show profiler only for desktop and if it's enabled
-        if ( !OW::getApplication()->isDesktop() || OW::getRequest()->isAjax() || !OW_PROFILER_ENABLE )
+        if (!OW_PROFILER_ENABLE || !OW::getApplication()->isDesktop() || OW::getRequest()->isAjax() )
         {
             return;
         }

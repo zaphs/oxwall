@@ -291,7 +291,7 @@ class OW_Router
                 return $route->getDispatchAttrs();
             }
         }
-        
+
         foreach ( $this->routes as $route )
         {
             if ( $route->match($this->uri) )

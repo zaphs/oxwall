@@ -12,7 +12,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -23,9 +22,9 @@
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.8.3
+ * @since   1.8.3
  */
 class UTIL_Csrf
 {
@@ -33,13 +32,13 @@ class UTIL_Csrf
 
     /**
      * Generates and returns CSRF token
-     * 
+     *
      * @return string
      */
     public static function generateToken()
     {
-        $tokenList = self::getTokenList();
-        $token = base64_encode(time() . UTIL_String::getRandomString(32));
+        $tokenList         = self::getTokenList();
+        $token             = base64_encode(time() . UTIL_String::getRandomString(32));
         $tokenList[$token] = time();
         self::saveTokenList($tokenList);
 
@@ -48,16 +47,17 @@ class UTIL_Csrf
 
     /**
      * Checks if provided token is valid and not expired
-     * 
+     *
      * @param string $token
      * @return bool
      */
-    public static function isTokenValid( $token )
+    public static function isTokenValid($token)
     {
         $tokenList = self::getTokenList();
 
         return !empty($tokenList[$token]);
     }
+
     /* -------------------------------------------------------------------------------------------------------------- */
 
     private static function getTokenList()
@@ -65,7 +65,7 @@ class UTIL_Csrf
         return OW::getSession()->isKeySet(self::SESSION_VAR_NAME) ? OW::getSession()->get(self::SESSION_VAR_NAME) : [];
     }
 
-    private static function saveTokenList( array $list )
+    private static function saveTokenList(array $list)
     {
         OW::getSession()->set(self::SESSION_VAR_NAME, $list);
     }

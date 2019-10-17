@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -24,22 +23,22 @@ declare(strict_types=1);
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_DeveloperTools getInstance()
- * @since 1.8.3
+ * @since   1.8.3
  */
 class OW_DeveloperTools
 {
-    const CACHE_ENTITY_TEMPLATE = 2;
-    const CACHE_ENTITY_THEME = 4;
-    const CACHE_ENTITY_LANGUAGE = 8;
+    const CACHE_ENTITY_TEMPLATE         = 2;
+    const CACHE_ENTITY_THEME            = 4;
+    const CACHE_ENTITY_LANGUAGE         = 8;
     const CACHE_ENTITY_PLUGIN_STRUCTURE = 32;
-    const EVENT_UPDATE_CACHE_ENTITIES = 'base.update_cache_entities';
-    const CONFIG_NAME = 'dev_mode';
+    const EVENT_UPDATE_CACHE_ENTITIES   = 'base.update_cache_entities';
+    const CONFIG_NAME                   = 'dev_mode';
 
     use OW_Singleton;
-    
+
     /**
      * @var BOL_PluginService
      */
@@ -60,8 +59,8 @@ class OW_DeveloperTools
      */
     private function __construct()
     {
-        $this->pluginService = BOL_PluginService::getInstance();
-        $this->themeService = BOL_ThemeService::getInstance();
+        $this->pluginService   = BOL_PluginService::getInstance();
+        $this->themeService    = BOL_ThemeService::getInstance();
         $this->languageService = BOL_LanguageService::getInstance();
     }
 
@@ -70,23 +69,20 @@ class OW_DeveloperTools
      */
     public function init()
     {
-        $configDev = (int) OW::getConfig()->getValue('base', self::CONFIG_NAME);
+        $configDev = (int)OW::getConfig()->getValue('base', self::CONFIG_NAME);
 
-        if ( $configDev > 0 )
-        {
+        if ($configDev > 0) {
             $this->refreshEntitiesCache($configDev);
             OW::getConfig()->saveConfig('base', self::CONFIG_NAME, 0);
             OW::getApplication()->redirect();
         }
 
-        if (defined('OW_DEV_MODE') && OW_DEV_MODE )
-        {
+        if (defined('OW_DEV_MODE') && OW_DEV_MODE) {
             $this->refreshEntitiesCache(OW_DEV_MODE);
         }
 
         // show profiler only for desktop and if it's enabled
-        if (!OW_PROFILER_ENABLE || !OW::getApplication()->isDesktop() || OW::getRequest()->isAjax() )
-        {
+        if (!OW_PROFILER_ENABLE || !OW::getApplication()->isDesktop() || OW::getRequest()->isAjax()) {
             return;
         }
 
@@ -98,30 +94,26 @@ class OW_DeveloperTools
 
     /**
      * Updates all entity types cache
-     * 
+     *
      * @param int $options
      */
-    public function refreshEntitiesCache( $options = 1 )
+    public function refreshEntitiesCache($options = 1)
     {
         $options = ((int)$options == 1 ? PHP_INT_MAX : (int)$options);
 
-        if ( $options & self::CACHE_ENTITY_TEMPLATE )
-        {
+        if ($options & self::CACHE_ENTITY_TEMPLATE) {
             $this->clearTemplatesCache();
         }
 
-        if ( $options & self::CACHE_ENTITY_THEME )
-        {
+        if ($options & self::CACHE_ENTITY_THEME) {
             $this->clearThemeCache();
         }
 
-        if ( $options & self::CACHE_ENTITY_LANGUAGE )
-        {
+        if ($options & self::CACHE_ENTITY_LANGUAGE) {
             $this->clearLanguagesCache();
         }
 
-        if ( $options & self::CACHE_ENTITY_PLUGIN_STRUCTURE )
-        {
+        if ($options & self::CACHE_ENTITY_PLUGIN_STRUCTURE) {
             $this->updateStructureforAllPlugins();
         }
 
@@ -144,8 +136,7 @@ class OW_DeveloperTools
         $this->themeService->updateThemeList();
         $this->themeService->processAllThemes();
 
-        if ( OW::getConfig()->configExists('base', 'cachedEntitiesPostfix') )
-        {
+        if (OW::getConfig()->configExists('base', 'cachedEntitiesPostfix')) {
             OW::getConfig()->saveConfig('base', 'cachedEntitiesPostfix', UTIL_String::getRandomString());
         }
     }
@@ -166,8 +157,7 @@ class OW_DeveloperTools
         $plugins = $this->pluginService->findAllPlugins();
 
         /* @var BOL_Plugin $pluginDto */
-        foreach ( $plugins as $pluginDto )
-        {
+        foreach ($plugins as $pluginDto) {
             $this->pluginService->addPluginDirs($pluginDto);
         }
     }
@@ -180,7 +170,7 @@ class OW_DeveloperTools
      * @param BASE_CLASS_EventCollector $event
      * @throws SmartyException
      */
-    public function onAppendMarkup( BASE_CLASS_EventCollector $event )
+    public function onAppendMarkup(BASE_CLASS_EventCollector $event)
     {
         $viewRenderer = OW_ViewRenderer::getInstance();
         $viewRenderer->assignVar('oxwall', BOL_StorageService::getInstance()->getPlatformXmlInfo());
@@ -191,17 +181,14 @@ class OW_DeveloperTools
         // get current request attributes
         $requestHandlerData = OW::getRequestHandler()->getDispatchAttributes();
 
-        try
-        {
+        try {
             $ctrlPath = OW::getAutoloader()->getClassPath($requestHandlerData['controller']);
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             $ctrlPath = 'not_found';
         }
 
         $requestHandlerData['ctrlPath']  = $ctrlPath;
-        $requestHandlerData['paramsExp'] = var_export(( empty($requestHandlerData['params']) ? [] : $requestHandlerData['params']),
+        $requestHandlerData['paramsExp'] = var_export((empty($requestHandlerData['params']) ? [] : $requestHandlerData['params']),
             true);
 
         $view->assign('requestHandler', $requestHandlerData);
@@ -209,8 +196,7 @@ class OW_DeveloperTools
         // get current request memory usage
         $memoryUsage = 'No info';
 
-        if ( function_exists('memory_get_peak_usage') )
-        {
+        if (function_exists('memory_get_peak_usage')) {
             $memoryUsage = UTIL_File::convertBytesToHumanReadable(memory_get_peak_usage(true));
         }
 
@@ -236,21 +222,17 @@ class OW_DeveloperTools
         $event->add($view->render());
     }
 
-    protected function getSqlInfo( array $sqlData, $totalTime, $queryFilter = null )
+    protected function getSqlInfo(array $sqlData, $totalTime, $queryFilter = null)
     {
-        foreach ( $sqlData as $key => $query )
-        {
-            if ( $queryFilter )
-            {
-                if ( !mb_strstr($query['query'], $queryFilter) )
-                {
+        foreach ($sqlData as $key => $query) {
+            if ($queryFilter) {
+                if (!mb_strstr($query['query'], $queryFilter)) {
                     unset($sqlData[$key]);
                     continue;
                 }
             }
 
-            if (isset($query['params']) && is_array($query['params']) )
-            {
+            if (isset($query['params']) && is_array($query['params'])) {
                 $sqlData[$key]['params'] = var_export($query['params'], true);
             }
         }
@@ -258,20 +240,18 @@ class OW_DeveloperTools
         return ['qet' => $totalTime, 'ql' => $sqlData, 'qc' => count($sqlData)];
     }
 
-    protected function getEventInfo( array $eventsData )
+    protected function getEventInfo(array $eventsData)
     {
         $eventsDataArray = ['bind' => [], 'calls' => []];
 
-        foreach ($eventsData['bind'] as $eventName => $listeners )
-        {
+        foreach ($eventsData['bind'] as $eventName => $listeners) {
             $eventsDataArray['bind'][] = [
                 'name'      => $eventName,
-                'listeners' => $this->getEventListeners($listeners)
+                'listeners' => $this->getEventListeners($listeners),
             ];
         }
 
-        foreach ($eventsData['call'] as $eventItem )
-        {
+        foreach ($eventsData['call'] as $eventItem) {
             $paramsData = var_export($eventItem['event']->getParams(), true);
 
             $eventsDataArray['call'][] = [
@@ -280,7 +260,7 @@ class OW_DeveloperTools
                 'listeners' => $this->getEventListeners($eventItem['listeners']),
                 'params'    => $paramsData,
                 'start'     => sprintf('%.3f', $eventItem['start']),
-                'exec'      => sprintf('%.3f', $eventItem['exec'])
+                'exec'      => sprintf('%.3f', $eventItem['exec']),
             ];
         }
 
@@ -290,32 +270,24 @@ class OW_DeveloperTools
         return $eventsDataArray;
     }
 
-    protected function getEventListeners( array $eventData )
+    protected function getEventListeners(array $eventData)
     {
         $listenersList = [];
 
-        foreach ( $eventData as $priority )
-        {
-            foreach ( $priority as $listener )
-            {
-                if ( is_array($listener) )
-                {
-                    if ( is_object($listener[0]) )
-                    {
+        foreach ($eventData as $priority) {
+            foreach ($priority as $listener) {
+                if (is_array($listener)) {
+                    if (is_object($listener[0])) {
                         $listener = get_class($listener[0]) . " -> {$listener[1]}";
-                    }
-                    else
-                    {
+                    } else {
                         $listener = "{$listener[0]} :: {$listener[1]}";
                     }
-                }
-                else if ( is_string($listener) )
-                {
-                    // nothing to do
-                }
-                else
-                {
-                    $listener = 'ClosureObject';
+                } else {
+                    if (is_string($listener)) {
+                        // nothing to do
+                    } else {
+                        $listener = 'ClosureObject';
+                    }
                 }
 
                 $listenersList[] = $listener;
@@ -325,38 +297,31 @@ class OW_DeveloperTools
         return $listenersList;
     }
 
-    protected function getViewInfo( array $viewData )
+    protected function getViewInfo(array $viewData)
     {
         $viewDataArray = ['mp' => [], 'cmp' => [], 'ctrl' => []];
 
-        foreach ( $viewData as $class => $item )
-        {
-            try
-            {
+        foreach ($viewData as $class => $item) {
+            try {
                 $src = OW::getAutoloader()->getClassPath($class);
-            }
-            catch ( Exception $e )
-            {
+            } catch (Exception $e) {
                 $src = 'not_found';
             }
 
             $addItem = ['class' => $class, 'src' => $src, 'tpl' => $item];
 
-            if ( is_subclass_of($class, OW_MasterPage::class) )
-            {
+            if (is_subclass_of($class, OW_MasterPage::class)) {
                 $viewDataArray['mp'] = $addItem;
-            }
-            else if ( is_subclass_of($class, OW_ActionController::class) )
-            {
-                $viewDataArray['ctrl'] = $addItem;
-            }
-            else if ( is_subclass_of($class, OW_Component::class) )
-            {
-                $viewDataArray['cmp'][] = $addItem;
-            }
-            else
-            {
-                $viewDataArray['view'][] = $addItem;
+            } else {
+                if (is_subclass_of($class, OW_ActionController::class)) {
+                    $viewDataArray['ctrl'] = $addItem;
+                } else {
+                    if (is_subclass_of($class, OW_Component::class)) {
+                        $viewDataArray['cmp'][] = $addItem;
+                    } else {
+                        $viewDataArray['view'][] = $addItem;
+                    }
+                }
             }
         }
 

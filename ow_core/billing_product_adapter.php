@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -26,15 +25,15 @@ declare(strict_types=1);
 /**
  * Billing product adapter interface.
  *
- * @author Egor Bulgakov <egor.bulgakov@gmail.com>
+ * @author  Egor Bulgakov <egor.bulgakov@gmail.com>
  * @package ow.ow_core
- * @since 1.0
+ * @since   1.0
  */
 interface OW_BillingProductAdapter
 {
     /**
      * Returns the key of a product being sold.
-     * Product key is stored as 'entityKey' field in BOL_BillingSale object 
+     * Product key is stored as 'entityKey' field in BOL_BillingSale object
      */
     public function getProductKey();
 
@@ -46,8 +45,8 @@ interface OW_BillingProductAdapter
     /**
      * Method is called to finalize sale.
      * Sets sale status to 'delivered'
-     * 
+     *
      * @param BOL_BillingSale $sale
      */
-    public function deliverSale( BOL_BillingSale $sale );
+    public function deliverSale(BOL_BillingSale $sale);
 }

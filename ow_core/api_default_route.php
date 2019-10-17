@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -27,10 +26,10 @@ declare(strict_types=1);
  * The class is responsible for default strategy of url generation.
  * All URIs (except URIs working with custom routes) are generated and decomposed by default route.
  * DefaultRoute class can be extended and modified to change whole url generation strategy.
- * 
- * @author Sardar Madumarov <madumarov@gmail.com>
+ *
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 class OW_ApiDefaultRoute extends OW_DefaultRoute
 {
@@ -38,13 +37,13 @@ class OW_ApiDefaultRoute extends OW_DefaultRoute
     /**
      * Generates URI using provided params.
      *
-     * @throws InvalidArgumentException
      * @param string $controller
      * @param string $action
-     * @param array $params
+     * @param array  $params
      * @return string
+     * @throws InvalidArgumentException
      */
-    public function generateUri( $controller, $action = null, array $params = [])
+    public function generateUri($controller, $action = null, array $params = [])
     {
         throw new LogicException('Cant generate URI in API context');
     }
@@ -56,7 +55,7 @@ class OW_ApiDefaultRoute extends OW_DefaultRoute
      * @return array
      * @throws Redirect404Exception
      */
-    public function getDispatchAttrs( $uri ): array
+    public function getDispatchAttrs($uri): array
     {
         throw new Redirect404Exception();
     }

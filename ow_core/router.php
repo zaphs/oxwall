@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -25,16 +24,16 @@ declare(strict_types=1);
 
 /**
  * OW_Router is responsible for routing process, i.e. finding which controller and action should receive request.
- * 
- * @author Sardar Madumarov <madumarov@gmail.com>
+ *
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_Router getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_Router
 {
     use OW_Singleton;
-    
+
     /**
      * Current request uri.
      *
@@ -55,7 +54,7 @@ class OW_Router
     private $routes = [];
     /**
      * Default route. Used for default url generation strategy.
-     * 
+     *
      * @var OW_DefaultRoute
      */
     private $defaultRoute;
@@ -83,7 +82,7 @@ class OW_Router
      * @param OW_DefaultRoute $defaultRoute
      * @return OW_Router
      */
-    public function setDefaultRoute( OW_DefaultRoute $defaultRoute )
+    public function setDefaultRoute(OW_DefaultRoute $defaultRoute)
     {
         $this->defaultRoute = $defaultRoute;
         return $this;
@@ -101,7 +100,7 @@ class OW_Router
      * @param string $uri
      * @return OW_Router
      */
-    public function setUri( $uri )
+    public function setUri($uri)
     {
         $this->uri = $uri;
         return $this;
@@ -119,7 +118,7 @@ class OW_Router
      * @param string $baseUrl
      * @return OW_Router
      */
-    public function setBaseUrl( $baseUrl )
+    public function setBaseUrl($baseUrl)
     {
         $this->baseUrl = $baseUrl;
         return $this;
@@ -141,21 +140,16 @@ class OW_Router
      * @param OW_Route $route
      * @return OW_Router
      */
-    public function addRoute( OW_Route $route )
+    public function addRoute(OW_Route $route)
     {
         $routeName = $route->getRouteName();
 
-        if ( isset($this->staticRoutes[$routeName]) || isset($this->routes[$routeName]) )
-        {
+        if (isset($this->staticRoutes[$routeName]) || isset($this->routes[$routeName])) {
             //throw new LogicException( "Can't add route! Route `" . $routeName . "` already exists!");
             trigger_error("Can't add route! Route `" . $routeName . '` already added!', E_USER_WARNING);
-        }
-        elseif ( $route->isStatic() )
-        {
+        } elseif ($route->isStatic()) {
             $this->staticRoutes[$routeName] = $route;
-        }
-        else
-        {
+        } else {
             $this->routes[$routeName] = $route;
         }
 
@@ -169,17 +163,15 @@ class OW_Router
      * @param string $routeName
      * @return OW_Router
      */
-    public function removeRoute( $routeName )
+    public function removeRoute($routeName)
     {
         $routeName = trim($routeName);
 
-        if ( isset($this->staticRoutes[$routeName]) )
-        {
+        if (isset($this->staticRoutes[$routeName])) {
             unset($this->staticRoutes[$routeName]);
         }
 
-        if ( isset($this->routes[$routeName]) )
-        {
+        if (isset($this->routes[$routeName])) {
             unset($this->routes[$routeName]);
         }
 
@@ -192,12 +184,11 @@ class OW_Router
      * @param string $routeName
      * @return OW_Route
      */
-    public function getRoute( $routeName )
+    public function getRoute($routeName)
     {
         $routeName = trim($routeName);
 
-        if ( isset($this->staticRoutes[$routeName]) )
-        {
+        if (isset($this->staticRoutes[$routeName])) {
             return $this->staticRoutes[$routeName];
         }
 
@@ -208,20 +199,18 @@ class OW_Router
      * Generates uri for route using provided params.
      *
      * @param string $routeName
-     * @param array $params
+     * @param array  $params
      * @return string
      */
-    public function uriForRoute( $routeName, array $params = [])
+    public function uriForRoute($routeName, array $params = [])
     {
         $routeName = trim($routeName);
 
-        if ( isset($this->staticRoutes[$routeName]) )
-        {
+        if (isset($this->staticRoutes[$routeName])) {
             return $this->staticRoutes[$routeName]->generateUri($params);
         }
 
-        if ( isset($this->routes[$routeName]) )
-        {
+        if (isset($this->routes[$routeName])) {
             return $this->routes[$routeName]->generateUri($params);
         }
 
@@ -234,10 +223,10 @@ class OW_Router
      * Generates url for route using provided params.
      *
      * @param string $routeName
-     * @param array $params
+     * @param array  $params
      * @return string
      */
-    public function urlForRoute( $routeName, array $params = [])
+    public function urlForRoute($routeName, array $params = [])
     {
         return $this->baseUrl . $this->uriForRoute($routeName, $params);
     }
@@ -245,13 +234,13 @@ class OW_Router
     /**
      * Generates url by default route for provided params.
      *
-     * @throws InvalidArgumentException
      * @param string $controller
      * @param string $action
-     * @param array $params
+     * @param array  $params
      * @return string
+     * @throws InvalidArgumentException
      */
-    public function urlFor( $controller, $action = null, array $params = [])
+    public function urlFor($controller, $action = null, array $params = [])
     {
         //return $this->baseUrl . $this->uriFor($controller, $action, $params);
 
@@ -262,40 +251,36 @@ class OW_Router
     /**
      * Generates uri by default route for provided params.
      *
-     * @throws InvalidArgumentException
      * @param string $controller
      * @param string $action
-     * @param array $params
+     * @param array  $params
      * @return string
+     * @throws InvalidArgumentException
      */
-    public function uriFor( $controller, $action = null, array $params = [])
+    public function uriFor($controller, $action = null, array $params = [])
     {
         return $this->defaultRoute->generateUri($controller, $action, $params);
     }
 
     /**
      * Returns routing result - array with params (module, controller, action).
-     * Tries to match requested URI with all added routes. 
+     * Tries to match requested URI with all added routes.
      * If matches weren't found default route is used.
      *
-     * @throws Redirect404Exception
      * @return array
+     * @throws Redirect404Exception
      */
     public function route()
     {
-        foreach ( $this->staticRoutes as $route )
-        {
-            if ( $route->match($this->uri) )
-            {
+        foreach ($this->staticRoutes as $route) {
+            if ($route->match($this->uri)) {
                 $this->usedRoute = $route;
                 return $route->getDispatchAttrs();
             }
         }
 
-        foreach ( $this->routes as $route )
-        {
-            if ( $route->match($this->uri) )
-            {
+        foreach ($this->routes as $route) {
+            if ($route->match($this->uri)) {
                 $this->usedRoute = $route;
                 return $route->getDispatchAttrs();
             }
@@ -303,10 +288,10 @@ class OW_Router
 
         return $this->defaultRoute->getDispatchAttrs($this->uri);
     }
-    
+
     /**
      * Returns all added routes.
-     * 
+     *
      * @return array
      */
     public function getAddedRoutes()

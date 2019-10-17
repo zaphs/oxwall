@@ -3214,7 +3214,8 @@ class WysiwygTextarea extends InvitationFormElement
             $markup = UTIL_HtmlTag::generateTag('textarea', $this->attributes, true, $this->getInvitation());
         } else {
             $markup =
-                UTIL_HtmlTag::generateTag('textarea', $this->attributes, true, htmlspecialchars((string)BOL_TextFormatService::getInstance()->processWsForInput($this->value, ['buttons' => $this->buttons])));
+                UTIL_HtmlTag::generateTag('textarea', $this->attributes, true,
+                    htmlspecialchars((string)BOL_TextFormatService::getInstance()->processWsForInput($this->value, ['buttons' => $this->buttons])));
         }
 
 

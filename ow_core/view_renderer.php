@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -24,15 +23,15 @@ declare(strict_types=1);
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_ViewRenderer getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_ViewRenderer
 {
     use OW_Singleton;
-    
+
     /**
      * @var OW_Smarty
      */
@@ -51,10 +50,9 @@ class OW_ViewRenderer
      *
      * @param array $vars
      */
-    public function assignVars( $vars )
+    public function assignVars($vars)
     {
-        foreach ( $vars as $key => $value )
-        {
+        foreach ($vars as $key => $value) {
             $this->smarty->assignByRef($key, $vars[$key]);
         }
     }
@@ -63,9 +61,9 @@ class OW_ViewRenderer
      * Assigns value to template var by reference.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      */
-    public function assignVar( $key, $value )
+    public function assignVar($key, $value)
     {
         $this->smarty->assignByRef($key, $value);
     }
@@ -77,7 +75,7 @@ class OW_ViewRenderer
      * @return string
      * @throws SmartyException
      */
-    public function renderTemplate( $template )
+    public function renderTemplate($template)
     {
         return $this->smarty->fetch($template);
     }
@@ -88,7 +86,7 @@ class OW_ViewRenderer
      * @param string $varName
      * @return mixed
      */
-    public function getAssignedVar( $varName )
+    public function getAssignedVar($varName)
     {
         return $this->smarty->getTemplateVars($varName);
     }
@@ -115,7 +113,7 @@ class OW_ViewRenderer
      *
      * @param string $varName
      */
-    public function clearAssignedVar( $varName )
+    public function clearAssignedVar($varName)
     {
         $this->smarty->clearAssign($varName);
     }
@@ -127,10 +125,9 @@ class OW_ViewRenderer
      * @param callback $callback
      * @throws SmartyException
      */
-    public function registerFunction( $name, $callback )
+    public function registerFunction($name, $callback)
     {
-        if ( empty($this->smarty->registered_plugins['function'][$name]) )
-        {
+        if (empty($this->smarty->registered_plugins['function'][$name])) {
             $this->smarty->registerPlugin('function', $name, $callback);
         }
     }
@@ -140,7 +137,7 @@ class OW_ViewRenderer
      *
      * @param string $name
      */
-    public function unregisterFunction( $name )
+    public function unregisterFunction($name)
     {
         $this->smarty->unregisterPlugin('function', $name);
     }
@@ -152,10 +149,9 @@ class OW_ViewRenderer
      * @param callback $callback
      * @throws SmartyException
      */
-    public function registerBlock( $name, $callback )
+    public function registerBlock($name, $callback)
     {
-        if ( empty($this->smarty->registered_plugins['block'][$name]) )
-        {
+        if (empty($this->smarty->registered_plugins['block'][$name])) {
             $this->smarty->registerPlugin('block', $name, $callback);
         }
     }
@@ -165,7 +161,7 @@ class OW_ViewRenderer
      *
      * @param string $name
      */
-    public function unregisterBlock( $name )
+    public function unregisterBlock($name)
     {
         $this->smarty->unregisterPlugin('block', $name);
     }
@@ -177,20 +173,19 @@ class OW_ViewRenderer
      * @param string $callback
      * @throws SmartyException
      */
-    public function registerModifier( $name, $callback )
+    public function registerModifier($name, $callback)
     {
-        if ( empty($this->smarty->registered_plugins['modifier'][$name]) )
-        {
+        if (empty($this->smarty->registered_plugins['modifier'][$name])) {
             $this->smarty->registerPlugin('modifier', $name, $callback);
         }
     }
 
     /**
      * Removes template modifier.
-     * 
-     * @param string $name 
+     *
+     * @param string $name
      */
-    public function unregisterModifier( $name )
+    public function unregisterModifier($name)
     {
         $this->smarty->unregisterPlugin('modifier', $name);
     }

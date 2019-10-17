@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -26,9 +25,9 @@ declare(strict_types=1);
 /**
  * Base plugin object.
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 class OW_Plugin
 {
@@ -61,12 +60,12 @@ class OW_Plugin
      *
      * @param BOL_Plugin $plugin
      */
-    public function __construct( BOL_Plugin $plugin )
+    public function __construct(BOL_Plugin $plugin)
     {
         $this->dirName = trim($plugin->getModule());
-        $this->key = trim($plugin->getKey());
-        $this->active = (bool) $plugin->isActive;
-        $this->dto = $plugin;
+        $this->key     = trim($plugin->getKey());
+        $this->active  = (bool)$plugin->isActive;
+        $this->dto     = $plugin;
     }
 
     /**

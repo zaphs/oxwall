@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -26,15 +25,15 @@ declare(strict_types=1);
 /**
  * Base document class.
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 abstract class OW_Document
 {
     const HTML = 1;
     const AJAX = 2;
-    const XML = 3;
+    const XML  = 3;
     const JSON = 4;
 //	const FEED = 3;
 //	const PDF = 4;
@@ -108,7 +107,7 @@ abstract class OW_Document
     /**
      * @param string $charset
      */
-    public function setCharset( $charset )
+    public function setCharset($charset)
     {
         $this->charset = $charset;
     }
@@ -124,7 +123,7 @@ abstract class OW_Document
     /**
      * @param string $description
      */
-    public function setDescription( $description )
+    public function setDescription($description)
     {
         $description = str_replace(PHP_EOL, '', $description);
         $this->throwEvent('core.set_document_description', ['str' => $description]);
@@ -142,7 +141,7 @@ abstract class OW_Document
     /**
      * @param string $direction
      */
-    public function setDirection( $direction )
+    public function setDirection($direction)
     {
         $this->direction = $direction;
     }
@@ -158,7 +157,7 @@ abstract class OW_Document
     /**
      * @param string $language
      */
-    public function setLanguage( $language )
+    public function setLanguage($language)
     {
         $this->language = $language;
     }
@@ -174,7 +173,7 @@ abstract class OW_Document
     /**
      * @param string $mime
      */
-    public function setMime( $mime )
+    public function setMime($mime)
     {
         $this->mime = $mime;
     }
@@ -190,7 +189,7 @@ abstract class OW_Document
     /**
      * @param string $title
      */
-    public function setTitle( $title )
+    public function setTitle($title)
     {
         $title = str_replace(PHP_EOL, '', $title);
         $this->throwEvent('core.set_document_title', ['str' => $title]);
@@ -208,7 +207,7 @@ abstract class OW_Document
     /**
      * @param string $type
      */
-    public function setType( $type )
+    public function setType($type)
     {
         $this->type = $type;
     }
@@ -224,14 +223,14 @@ abstract class OW_Document
     /**
      * @param string $template
      */
-    public function setTemplate( $template )
+    public function setTemplate($template)
     {
         $this->template = $template;
     }
 
-    protected function throwEvent( $name, $params = [])
+    protected function throwEvent($name, $params = [])
     {
-        
+
     }
 
     abstract function render();

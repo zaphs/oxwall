@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -27,26 +26,26 @@ declare(strict_types=1);
  * Dispatcher handles request after routing process,
  * i.e. creates instance of controller and calls action using provided params.
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_Dispatcher getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_Dispatcher
 {
-    const ATTRS_KEY_CTRL = 'controller';
-    const ATTRS_KEY_ACTION = 'action';
+    const ATTRS_KEY_CTRL    = 'controller';
+    const ATTRS_KEY_ACTION  = 'action';
     const ATTRS_KEY_VARLIST = 'params';
 
-    const CATCH_ALL_REQUEST_KEY_CTRL = 'controller';
-    const CATCH_ALL_REQUEST_KEY_ACTION = 'action';
+    const CATCH_ALL_REQUEST_KEY_CTRL     = 'controller';
+    const CATCH_ALL_REQUEST_KEY_ACTION   = 'action';
     const CATCH_ALL_REQUEST_KEY_REDIRECT = 'redirect';
-    const CATCH_ALL_REQUEST_KEY_JS = 'js';
-    const CATCH_ALL_REQUEST_KEY_ROUTE = 'route';
-    const CATCH_ALL_REQUEST_KEY_PARAMS = 'params';
+    const CATCH_ALL_REQUEST_KEY_JS       = 'js';
+    const CATCH_ALL_REQUEST_KEY_ROUTE    = 'route';
+    const CATCH_ALL_REQUEST_KEY_PARAMS   = 'params';
 
     use OW_Singleton;
-    
+
     /**
      * @var array
      */
@@ -72,7 +71,7 @@ class OW_Dispatcher
      * @param $key
      * @return array
      */
-    public function getCatchAllRequestsAttributes( $key )
+    public function getCatchAllRequestsAttributes($key)
     {
         return !empty($this->catchAllRequestsAttributes[$key]) ? $this->catchAllRequestsAttributes[$key] : null;
     }
@@ -83,7 +82,7 @@ class OW_Dispatcher
      * @param       $key
      * @param array $attributes
      */
-    public function setCatchAllRequestsAttributes( $key, array $attributes )
+    public function setCatchAllRequestsAttributes($key, array $attributes)
     {
         $this->catchAllRequestsAttributes[$key] = $attributes;
 
@@ -96,10 +95,9 @@ class OW_Dispatcher
      * @param string $controller
      * @param string $action
      */
-    public function addCatchAllRequestsExclude( $key, $controller, $action = null )
+    public function addCatchAllRequestsExclude($key, $controller, $action = null)
     {
-        if ( empty($this->catchAllRequestsExcludes[$key]) )
-        {
+        if (empty($this->catchAllRequestsExcludes[$key])) {
             $this->catchAllRequestsExcludes[$key] = [];
         }
 
@@ -118,7 +116,7 @@ class OW_Dispatcher
      * @param string $controller
      * @param string $action
      */
-    public function setIndexPageAttributes( $controller, $action = 'index' )
+    public function setIndexPageAttributes($controller, $action = 'index')
     {
         $this->indexPageAttributes = [self::ATTRS_KEY_CTRL => $controller, self::ATTRS_KEY_ACTION => $action];
     }
@@ -135,7 +133,7 @@ class OW_Dispatcher
      * @param string $controller
      * @param string $action
      */
-    public function setStaticPageAttributes( $controller, $action = 'index' )
+    public function setStaticPageAttributes($controller, $action = 'index')
     {
         $this->staticPageAttributes = [self::ATTRS_KEY_CTRL => $controller, self::ATTRS_KEY_ACTION => $action];
     }
@@ -152,17 +150,16 @@ class OW_Dispatcher
      * @param array $attributes
      * @throws Redirect404Exception
      */
-    public function setDispatchAttributes( array $attributes )
+    public function setDispatchAttributes(array $attributes)
     {
-        if ( empty($attributes[OW_Route::DISPATCH_ATTRS_CTRL]) )
-        {
+        if (empty($attributes[OW_Route::DISPATCH_ATTRS_CTRL])) {
             throw new Redirect404Exception();
         }
 
         $this->dispatchAttributes = [
-            self::ATTRS_KEY_CTRL => trim($attributes[OW_Route::DISPATCH_ATTRS_CTRL]),
-            self::ATTRS_KEY_ACTION => empty($attributes[OW_Route::DISPATCH_ATTRS_ACTION]) ? null : trim($attributes[OW_Route::DISPATCH_ATTRS_ACTION]),
-            self::ATTRS_KEY_VARLIST => empty($attributes[OW_Route::DISPATCH_ATTRS_VARLIST]) ? [] : $attributes[OW_Route::DISPATCH_ATTRS_VARLIST]
+            self::ATTRS_KEY_CTRL    => trim($attributes[OW_Route::DISPATCH_ATTRS_CTRL]),
+            self::ATTRS_KEY_ACTION  => empty($attributes[OW_Route::DISPATCH_ATTRS_ACTION]) ? null : trim($attributes[OW_Route::DISPATCH_ATTRS_ACTION]),
+            self::ATTRS_KEY_VARLIST => empty($attributes[OW_Route::DISPATCH_ATTRS_VARLIST]) ? [] : $attributes[OW_Route::DISPATCH_ATTRS_VARLIST],
         ];
     }
 
@@ -173,14 +170,12 @@ class OW_Dispatcher
     public function dispatch()
     {
         // check if controller class contains package pointer with plugin key
-        if ( empty($this->dispatchAttributes[self::ATTRS_KEY_CTRL]) || !mb_strstr($this->dispatchAttributes[self::ATTRS_KEY_CTRL], '_') )
-        {
+        if (empty($this->dispatchAttributes[self::ATTRS_KEY_CTRL]) || !mb_strstr($this->dispatchAttributes[self::ATTRS_KEY_CTRL], '_')) {
             throw new InvalidArgumentException("Can't dispatch request! Empty or invalid controller class provided!");
         }
 
         // set uri params in request object
-        if ( !empty($this->dispatchAttributes[self::ATTRS_KEY_VARLIST]) )
-        {
+        if (!empty($this->dispatchAttributes[self::ATTRS_KEY_VARLIST])) {
             OW::getRequest()->setUriParams($this->dispatchAttributes[self::ATTRS_KEY_VARLIST]);
         }
 
@@ -188,56 +183,45 @@ class OW_Dispatcher
 
         $catchAllRequests = $this->processCatchAllRequestsAttrs();
 
-        if ( $catchAllRequests !== null )
-        {
+        if ($catchAllRequests !== null) {
             $this->dispatchAttributes = $catchAllRequests;
         }
 
         /* @var  OW_ActionController $controller */
 
-        try
-        {
+        try {
             $controller = OW::getClassInstance($this->dispatchAttributes[self::ATTRS_KEY_CTRL]);
-        }
-        catch ( ReflectionException $e )
-        {
+        } catch (ReflectionException $e) {
             throw new Redirect404Exception();
         }
-        
+
         // check if controller exists and is instance of base action controller class
-        if ( $controller === null || !$controller instanceof OW_ActionController )
-        {
+        if ($controller === null || !$controller instanceof OW_ActionController) {
             throw new LogicException("Can't dispatch request! Please provide valid controller class!");
         }
 
         // redirect to page 404 if plugin is inactive and isn't instance of admin controller class
-        if ( !$plugin->isActive() && !$controller instanceof ADMIN_CTRL_Abstract )
-        {
+        if (!$plugin->isActive() && !$controller instanceof ADMIN_CTRL_Abstract) {
             throw new Redirect404Exception();
         }
 
         // call optional init method
         $controller->init();
 
-        if ( empty($this->dispatchAttributes[self::ATTRS_KEY_ACTION]) )
-        {
+        if (empty($this->dispatchAttributes[self::ATTRS_KEY_ACTION])) {
             $this->dispatchAttributes[self::ATTRS_KEY_ACTION] = $controller->getDefaultAction();
         }
 
-        try
-        {
+        try {
             $action = $reflectionClass->getMethod($this->dispatchAttributes[self::ATTRS_KEY_ACTION]);
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             throw new Redirect404Exception();
         }
 
         $action->invokeArgs($controller, [self::ATTRS_KEY_VARLIST => empty($this->dispatchAttributes[self::ATTRS_KEY_VARLIST]) ? [] : $this->dispatchAttributes[self::ATTRS_KEY_VARLIST]]);
 
         // set default template for controller action if template wasn't set
-        if ( $controller->getTemplate() === null )
-        {
+        if ($controller->getTemplate() === null) {
             $controller->setTemplate($this->getControllerActionDefaultTemplate());
         }
 
@@ -254,7 +238,7 @@ class OW_Dispatcher
         $plugin = OW::getPluginManager()->getPlugin(OW::getAutoloader()->getPluginKey($this->dispatchAttributes[self::ATTRS_KEY_CTRL]));
 
         $templateFilename = OW::getAutoloader()->classToFilename($this->dispatchAttributes[self::ATTRS_KEY_CTRL], false) . '_'
-            . OW::getAutoloader()->classToFilename(ucfirst($this->dispatchAttributes[self::ATTRS_KEY_ACTION]), false) . '.html';
+                            . OW::getAutoloader()->classToFilename(ucfirst($this->dispatchAttributes[self::ATTRS_KEY_ACTION]), false) . '.html';
 
         return $plugin->getCtrlViewDir() . $templateFilename;
     }
@@ -267,8 +251,7 @@ class OW_Dispatcher
      */
     private function processCatchAllRequestsAttrs()
     {
-        if ( empty($this->catchAllRequestsAttributes) )
-        {
+        if (empty($this->catchAllRequestsAttributes)) {
             return null;
         }
 
@@ -276,36 +259,32 @@ class OW_Dispatcher
 
         $lastKey = array_search(end($this->catchAllRequestsAttributes), $this->catchAllRequestsAttributes);
 
-        foreach ( $this->catchAllRequestsExcludes[$lastKey] as $exclude )
-        {
-            if ( $this->dispatchAttributes[self::ATTRS_KEY_CTRL] === $exclude[self::CATCH_ALL_REQUEST_KEY_CTRL] && ( $exclude[self::CATCH_ALL_REQUEST_KEY_ACTION] === null || $this->dispatchAttributes[self::ATTRS_KEY_ACTION] === $exclude[self::CATCH_ALL_REQUEST_KEY_ACTION] ) )
-            {
+        foreach ($this->catchAllRequestsExcludes[$lastKey] as $exclude) {
+            if ($this->dispatchAttributes[self::ATTRS_KEY_CTRL] === $exclude[self::CATCH_ALL_REQUEST_KEY_CTRL] &&
+                ($exclude[self::CATCH_ALL_REQUEST_KEY_ACTION] === null || $this->dispatchAttributes[self::ATTRS_KEY_ACTION] === $exclude[self::CATCH_ALL_REQUEST_KEY_ACTION])) {
                 $catchRequest = false;
                 break;
             }
         }
-        if ( $catchRequest )
-        {
-            if ( isset($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_REDIRECT]) && (bool) $this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_REDIRECT] )
-            {
-                $route = isset($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_ROUTE]) ? trim($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_ROUTE]) : null;
+        if ($catchRequest) {
+            if (isset($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_REDIRECT]) && (bool)$this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_REDIRECT]) {
+                $route =
+                    isset($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_ROUTE]) ? trim($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_ROUTE]) : null;
 
                 $params = $this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_PARAMS] ?? [];
 
                 $redirectUrl = ($route !== null) ?
                     OW::getRouter()->urlForRoute($route, $params) :
-                    OW::getRouter()->urlFor($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_CTRL], $this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_ACTION], $params);
+                    OW::getRouter()
+                      ->urlFor($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_CTRL], $this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_ACTION], $params);
 
                 $redirectUrl = OW::getRequest()->buildUrlQueryString($redirectUrl, ['back_uri' => OW::getRequest()->getRequestUri()]);
 
-                if ( isset($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_JS]) && (bool) $this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_JS] )
-                {
+                if (isset($this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_JS]) && (bool)$this->catchAllRequestsAttributes[$lastKey][self::CATCH_ALL_REQUEST_KEY_JS]) {
                     // TODO resolve hotfix
                     // hotfix for splash screen + members only case
-                    if ( array_key_exists('base.members_only', $this->catchAllRequestsAttributes) )
-                    {
-                        if ( $this->dispatchAttributes[self::CATCH_ALL_REQUEST_KEY_CTRL] === 'BASE_CTRL_User' && $this->dispatchAttributes[self::CATCH_ALL_REQUEST_KEY_ACTION] === 'standardSignIn' )
-                        {
+                    if (array_key_exists('base.members_only', $this->catchAllRequestsAttributes)) {
+                        if ($this->dispatchAttributes[self::CATCH_ALL_REQUEST_KEY_CTRL] === 'BASE_CTRL_User' && $this->dispatchAttributes[self::CATCH_ALL_REQUEST_KEY_ACTION] === 'standardSignIn') {
                             $backUri = $_GET['back_uri'] ?? OW::getRequest()->getRequestUri();
                             OW::getDocument()->addOnloadScript("window.location = '" . OW::getRequest()->buildUrlQueryString($redirectUrl, ['back_uri' => $backUri]) . "'");
                             return null;

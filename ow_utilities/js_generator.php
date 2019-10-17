@@ -26,28 +26,25 @@ class UTIL_JsGenerator
         return new self;
     }
 
-    protected function getJsVarName( $var )
+    protected function getJsVarName($var)
     {
-        if ( is_string($var) )
-        {
+        if (is_string($var)) {
             return $var;
         }
 
-        if ( $this->isProperty($var) )
-        {
+        if ($this->isProperty($var)) {
             return implode('.', $var);
         }
 
-   	if ( count($var) == 1 )
-        {
+        if (count($var) == 1) {
             return $var[0];
         }
 
     }
 
-    private function isProperty( $variable )
+    private function isProperty($variable)
     {
-    	return ( is_array($variable) && ( count($variable) > 1 ) );
+        return (is_array($variable) && (count($variable) > 1));
     }
 
     /**
@@ -55,11 +52,11 @@ class UTIL_JsGenerator
      *
      * @param string|array $variable
      *
-     * @param string $value
+     * @param string       $value
      *
      * @return UTIL_JsGenerator
      */
-    public function newVariable ( $variable, $value = null )
+    public function newVariable($variable, $value = null)
     {
         $end = empty($value) ? '' : ' = ' . json_encode($value) . '';
 
@@ -74,11 +71,11 @@ class UTIL_JsGenerator
      * Add a variable definition.
      *
      * @param string|array $variable
-     * @param mixed $value
+     * @param mixed        $value
      *
      * @return UTIL_JsGenerator
      */
-    public function setVariable ( $variable, $value )
+    public function setVariable($variable, $value)
     {
         $this->operations[] = $this->getJsVarName($variable) . ' = ' . json_encode($value);
 
@@ -95,26 +92,26 @@ class UTIL_JsGenerator
      */
     public function equateVarables($variableTo, $variableFrom)
     {
-    	$this->operations[] = $this->getJsVarName($variableTo) . ' = ' . $this->getJsVarName($variableFrom);
+        $this->operations[] = $this->getJsVarName($variableTo) . ' = ' . $this->getJsVarName($variableFrom);
 
-    	return $this;
+        return $this;
     }
 
     /**
      * Add a function or method call.
      *
      * @param string|array $fnc
-     * @param array $args
+     * @param array        $args
      * @param string|array $resultTo
      *
      * @return UTIL_JsGenerator
      */
-    public function callFunction( $fnc, array $args = [], $resultTo = null )
+    public function callFunction($fnc, array $args = [], $resultTo = null)
     {
         $jsonArgs = array_map('json_encode', $args);
-        $jsFnc = $this->getJsVarName($fnc);
+        $jsFnc    = $this->getJsVarName($fnc);
 
-    	$jsResultTo = empty($resultTo) ? '' : $this->getJsVarName($resultTo) . " = ";
+        $jsResultTo = empty($resultTo) ? '' : $this->getJsVarName($resultTo) . " = ";
 
         $this->operations[] = $jsResultTo . "$jsFnc(" . implode(', ', $jsonArgs) . ')';
 
@@ -125,31 +122,29 @@ class UTIL_JsGenerator
     /**
      * Add Javascript function declaration
      *
-     * @param string $fncContent - function content without {}
-     * @param array $fncArgs - indexed array of parameter names
-     * @param string|array $resultTo - name of variable
+     * @param string       $fncContent - function content without {}
+     * @param array        $fncArgs    - indexed array of parameter names
+     * @param string|array $resultTo   - name of variable
      *
      * @return UTIL_JsGenerator
      */
-    public function newFunction ( $fncContent, array $fncArgs = [], $resultTo = null )
+    public function newFunction($fncContent, array $fncArgs = [], $resultTo = null)
     {
 
         $argsDef = implode(',', $fncArgs);
 
         $resultVariable = false;
-        if ( !empty($resultTo) )
-        {
+        if (!empty($resultTo)) {
             $resultVariable = $this->getJsVarName($resultTo);
         }
 
         $var = '';
 
-        if ( is_string($resultTo) || count($resultTo) == 1 )
-        {
+        if (is_string($resultTo) || count($resultTo) == 1) {
             $var = 'var ';
         }
 
-        $this->operations[] = ( $resultVariable ?  $var . "$resultVariable =" : '' ) . "function($argsDef) { $fncContent }";
+        $this->operations[] = ($resultVariable ? $var . "$resultVariable =" : '') . "function($argsDef) { $fncContent }";
 
         return $this;
     }
@@ -158,23 +153,22 @@ class UTIL_JsGenerator
      * Add Javascript object constraction
      *
      * @param string|array $objectName
-     * @param string $className
-     * @param array $args
+     * @param string       $className
+     * @param array        $args
      *
      * @return UTIL_JsGenerator
      */
-    public function newObject ( $objectName, $constructorName, array $args = [])
+    public function newObject($objectName, $constructorName, array $args = [])
     {
         $jsonArgs = array_map('json_encode', $args);
-        $jsArgs = implode(',', $jsonArgs);
+        $jsArgs   = implode(',', $jsonArgs);
 
         $var = '';
-        
-        if ( is_string($objectName) || count($objectName) == 1 )
-        {
+
+        if (is_string($objectName) || count($objectName) == 1) {
             $var = 'var ';
         }
-        $jsObjectName = $this->getJsVarName($objectName);
+        $jsObjectName       = $this->getJsVarName($objectName);
         $this->operations[] = $var . "$jsObjectName = new $constructorName($jsArgs)";
 
         return $this;
@@ -192,23 +186,21 @@ class UTIL_JsGenerator
     {
         $code = self::composeJsString($code, $assignVars);
 
-    	$code = rtrim($code);
-    	if (substr($code, -1) == ";")
-    	{
-    		$code = substr($code, 0, -1);
-    	}
-    	$this->operations[] = $code;
+        $code = rtrim($code);
+        if (substr($code, -1) == ";") {
+            $code = substr($code, 0, -1);
+        }
+        $this->operations[] = $code;
 
-    	return $this;
+        return $this;
     }
 
     public static function composeJsString($code, $assignVars = [])
     {
         $jsonAssignVars = array_map('json_encode', $assignVars);
-        $vars = [];
-        foreach ($jsonAssignVars as $key => $value)
-        {
-            $vars['{$' . $key .'}'] = $value;
+        $vars           = [];
+        foreach ($jsonAssignVars as $key => $value) {
+            $vars['{$' . $key . '}'] = $value;
         }
 
         return str_replace(array_keys($vars), array_values($vars), $code);
@@ -223,8 +215,7 @@ class UTIL_JsGenerator
     {
         $jsCode = '';
 
-        foreach ( $this->operations as $operation )
-        {
+        foreach ($this->operations as $operation) {
             $jsCode .= $operation . ";\n";
         }
 
@@ -235,15 +226,15 @@ class UTIL_JsGenerator
      *
      * @param string $method
      * @param string $selector
-     * @param array $args
+     * @param array  $args
      * @param string $resultTo
      *
      * @return UTIL_JsGenerator
      */
-    public function jQueryCall( $method, $selector = null, array $args = [], $resultTo = null )
+    public function jQueryCall($method, $selector = null, array $args = [], $resultTo = null)
     {
-        $jsonArgs = array_map('json_encode', $args);
-        $operation = ( empty($selector) ? '$' : '$("' . $selector . '")' ) . '.' . $method;
+        $jsonArgs  = array_map('json_encode', $args);
+        $operation = (empty($selector) ? '$' : '$("' . $selector . '")') . '.' . $method;
 
         $jsResultTo = empty($resultTo) ? '' : "$resultTo = ";
 
@@ -257,15 +248,15 @@ class UTIL_JsGenerator
      * @param string $selector
      * @param string $event
      * @param string $callbackContent
-     * @param array $args
+     * @param array  $args
      * @return UTIL_JsGenerator
      */
-    public function jQueryEvent( $selector, $event, $callbackContent, array $args = [], $data = [])
+    public function jQueryEvent($selector, $event, $callbackContent, array $args = [], $data = [])
     {
         $eventParams = implode(', ', $args);
-        $jsonData = empty($data) ? '' : ' ' . json_encode($data) . ',';
+        $jsonData    = empty($data) ? '' : ' ' . json_encode($data) . ',';
 
-        $operation = <<<EOT
+        $operation          = <<<EOT
 $('$selector').on('$event',$jsonData function($eventParams) {
      $callbackContent
 })
@@ -277,7 +268,7 @@ EOT;
 
     public function __toString()
     {
-    	return $this->generateJs();
+        return $this->generateJs();
     }
 
     /**

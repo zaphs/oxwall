@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -26,9 +25,9 @@ declare(strict_types=1);
 /**
  * Base class for renderable elements. Allows to assign vars and compile HTML using template engine.
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.8.3
+ * @since   1.8.3
  */
 class OW_View
 {
@@ -63,7 +62,7 @@ class OW_View
 
     /**
      * Getter for renderedClasses static property
-     * 
+     *
      * @return array
      */
     public static function getDevInfo()
@@ -73,10 +72,10 @@ class OW_View
 
     /**
      * Sets developer mode
-     * 
+     *
      * @param bool $collect
      */
-    public static function setCollectDevInfo(bool $collect )
+    public static function setCollectDevInfo(bool $collect)
     {
         self::$collectDevInfo = $collect;
     }
@@ -87,10 +86,10 @@ class OW_View
      * @param bool $visible
      * @return OW_View
      */
-    public function setVisible(bool $visible )
+    public function setVisible(bool $visible)
     {
         $this->visible = $visible;
-        
+
         return $this;
     }
 
@@ -116,10 +115,10 @@ class OW_View
      * @param string $template
      * @return OW_View
      */
-    public function setTemplate(string $template )
+    public function setTemplate(string $template)
     {
         $this->template = $template;
-        
+
         return $this;
     }
 
@@ -127,13 +126,13 @@ class OW_View
      * Assigns variable
      *
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      * @return OW_View
      */
-    public function assign(string $name, $value )
+    public function assign(string $name, $value)
     {
         $this->assignedVars[$name] = $value;
-        
+
         return $this;
     }
 
@@ -141,10 +140,9 @@ class OW_View
      * @param string $varName
      * @return OW_View
      */
-    public function clearAssign(string $varName )
+    public function clearAssign(string $varName)
     {
-        if ( isset($this->assignedVars[$varName]) )
-        {
+        if (isset($this->assignedVars[$varName])) {
             unset($this->assignedVars[$varName]);
         }
 
@@ -153,7 +151,7 @@ class OW_View
 
     public function onBeforeRender()
     {
-        
+
     }
 
     /**
@@ -166,15 +164,13 @@ class OW_View
     {
         $this->onBeforeRender();
 
-        if ( !$this->visible )
-        {
+        if (!$this->visible) {
             return '';
         }
 
         $className = get_class($this);
 
-        if ( $this->template === null )
-        {
+        if ($this->template === null) {
             throw new LogicException("No template provided for class `{$className}`");
         }
 
@@ -193,8 +189,7 @@ class OW_View
         $viewRenderer->assignVars($prevVars);
 
         // TODO refactor - dirty data collect for dev tool
-        if ( self::$collectDevInfo )
-        {
+        if (self::$collectDevInfo) {
             self::$devInfo[$className] = $this->template;
         }
 
@@ -203,18 +198,18 @@ class OW_View
 
     protected function onRender()
     {
-        
+
     }
 
     /**
      * Triggers event using base event class
-     * 
+     *
      * @param string $name
-     * @param array $params
-     * @param mixed $data
+     * @param array  $params
+     * @param mixed  $data
      * @return mixed
      */
-    protected function triggerEvent(string $name, array $params = [], $data = null )
+    protected function triggerEvent(string $name, array $params = [], $data = null)
     {
         return OW::getEventManager()->trigger(new OW_Event($name, $params, $data));
     }
@@ -223,7 +218,7 @@ class OW_View
      * @param OW_Event $event
      * @return mixed
      */
-    protected function triggerEventForObject( OW_Event $event )
+    protected function triggerEventForObject(OW_Event $event)
     {
         return OW::getEventManager()->trigger($event);
     }

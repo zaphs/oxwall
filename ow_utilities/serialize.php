@@ -11,7 +11,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -22,15 +21,13 @@
  */
 
 
-
 /**
  * Serialize utility.
  *
- * @author Podyachev Evgeny <joker.OW2@gmail.com>
+ * @author  Podyachev Evgeny <joker.OW2@gmail.com>
  * @package ow_utilities
- * @since 1.8.1
+ * @since   1.8.1
  */
-
 class UTIL_Serialize
 {
     const SERIALIZED_OBJECT_MARK = '#!serialized!#';
@@ -42,7 +39,8 @@ class UTIL_Serialize
      * @return boolean
      */
 
-    public static function isSerializedObject($serialized) {
+    public static function isSerializedObject($serialized)
+    {
         return self::getClassName($serialized) != null;
     }
 
@@ -52,9 +50,9 @@ class UTIL_Serialize
      * @param string $serialized
      * @return string
      */
-    public static function getClassName($serialized) {
-        if ( preg_match('/^'.self::SERIALIZED_OBJECT_MARK.'(.+?)'.self::SERIALIZED_OBJECT_MARK.'.*$/', $serialized, $matches) )
-        {
+    public static function getClassName($serialized)
+    {
+        if (preg_match('/^' . self::SERIALIZED_OBJECT_MARK . '(.+?)' . self::SERIALIZED_OBJECT_MARK . '.*$/', $serialized, $matches)) {
             return $matches[1];
         }
 
@@ -67,9 +65,9 @@ class UTIL_Serialize
      * @param string $serialized
      * @return string
      */
-    public static function getSerializedData($serialized) {
-        if ( preg_match('/^'.self::SERIALIZED_OBJECT_MARK.'.+?'.self::SERIALIZED_OBJECT_MARK.'(.*)$/', $serialized, $matches) )
-        {
+    public static function getSerializedData($serialized)
+    {
+        if (preg_match('/^' . self::SERIALIZED_OBJECT_MARK . '.+?' . self::SERIALIZED_OBJECT_MARK . '(.*)$/', $serialized, $matches)) {
             return $matches[1];
         }
 
@@ -82,25 +80,25 @@ class UTIL_Serialize
      * @param string $serialized
      * @return string
      */
-    public static function serialize(Serializable $object) {
-        return self::SERIALIZED_OBJECT_MARK. get_class($object) . self::SERIALIZED_OBJECT_MARK . $object->serialize();
+    public static function serialize(Serializable $object)
+    {
+        return self::SERIALIZED_OBJECT_MARK . get_class($object) . self::SERIALIZED_OBJECT_MARK . $object->serialize();
     }
 
     /**
      * @param string $serialized
      * @return Serializable
      */
-    public static function unserialize($serialized) {
-        $className = self::getClassName($serialized);
+    public static function unserialize($serialized)
+    {
+        $className      = self::getClassName($serialized);
         $serializedData = self::getSerializedData($serialized);
 
-        if ( $className == null || $serializedData == null )
-        {
+        if ($className == null || $serializedData == null) {
             return null;
         }
 
-        if( !class_exists($className) )
-        {
+        if (!class_exists($className)) {
             return null;
         }
 

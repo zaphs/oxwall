@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -26,22 +25,22 @@ declare(strict_types=1);
 /**
  * Mailer
  *
- * @author Sergey Kambalin <greyexpert@gmail.com>
+ * @author  Sergey Kambalin <greyexpert@gmail.com>
  * @package ow_core
  * @method static OW_Mailer getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_Mailer
 {
     use OW_Singleton;
-    
+
     /**
-     * 
+     *
      * @var BOL_MailService
      */
     private $maliService;
-    
-	/**
+
+    /**
      * Constructor.
      *
      */
@@ -58,29 +57,26 @@ class OW_Mailer
     {
         return $this->maliService->createMail();
     }
-    
-    public function addToQueue( BASE_CLASS_Mail $mail )
+
+    public function addToQueue(BASE_CLASS_Mail $mail)
     {
         $this->maliService->addToQueue($mail);
     }
-    
-    public function addListToQueue( array $list )
+
+    public function addListToQueue(array $list)
     {
         $this->maliService->addListToQueue($list);
     }
-    
-    public function send( BASE_CLASS_Mail $mail )
+
+    public function send(BASE_CLASS_Mail $mail)
     {
-        if ( $this->maliService->getTransfer() == BOL_MailService::TRANSFER_SMTP )
-        {
+        if ($this->maliService->getTransfer() == BOL_MailService::TRANSFER_SMTP) {
             $this->maliService->addToQueue($mail);
-        }
-        else
-        {
-            $this->maliService->send($mail);    
+        } else {
+            $this->maliService->send($mail);
         }
     }
-    
+
     public function getEmailDomain()
     {
         return $this->maliService->getEmailDomain();

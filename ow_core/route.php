@@ -253,7 +253,7 @@ class OW_Route
             $pathArray = array_map('urlencode', $pathArray);
             $tempPath  = implode('/', $pathArray);
 
-            return ( mb_strtoupper($uri) === mb_strtoupper($tempPath));
+            return (mb_strtoupper($uri) === mb_strtoupper($tempPath));
         }
 
         $uriArray = explode('/', $uri);

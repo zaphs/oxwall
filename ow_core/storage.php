@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -24,29 +23,28 @@ declare(strict_types=1);
  */
 
 /**
- * @author Podyachev Evgeny <joker.OW2@gmail.com>
+ * @author  Podyachev Evgeny <joker.OW2@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
-
 interface OW_Storage
 {
     const EVENT_ON_FILE_UPLOAD = 'cloud.on_file_upload';
     const EVENT_ON_FILE_DELETE = 'cloud.on_file_delete';
 
-     /**
+    /**
      * Copy dir to storage
      *
      * @param string $sourcePath
      * @param string $destPath
-     * @param array $fileTypes
-     * @param int $level
+     * @param array  $fileTypes
+     * @param int    $level
      *
      * @return boolean
      */
-    public function copyDir ( $sourcePath, $destPath, array $fileTypes = null, $level = -1 );
+    public function copyDir($sourcePath, $destPath, array $fileTypes = null, $level = -1);
 
-     /**
+    /**
      * Copy file to storage
      *
      * @param string $sourcePath
@@ -54,9 +52,9 @@ interface OW_Storage
      *
      * @return boolean
      */
-    public function copyFile ( $sourcePath, $destPath );
+    public function copyFile($sourcePath, $destPath);
 
-     /**
+    /**
      * Copy file to local file system
      *
      * @param string $destPath
@@ -64,18 +62,18 @@ interface OW_Storage
      *
      * @return boolean
      */
-    public function copyFileToLocalFS ( $destPath, $toFilePath );
+    public function copyFileToLocalFS($destPath, $toFilePath);
 
-     /**
+    /**
      * Return storage file content
      *
      * @param string $destPath
      *
      * @return string
      */
-    public function fileGetContent ( $destPath );
+    public function fileGetContent($destPath);
 
-     /**
+    /**
      * Set storage file content
      *
      * @param string $destPath
@@ -83,81 +81,81 @@ interface OW_Storage
      *
      * @return boolean
      */
-    public function fileSetContent ( $destPath, $content );
+    public function fileSetContent($destPath, $content);
 
-     /**
+    /**
      * Remove storage dir
      *
      * @param string $destPath
      *
      * @return boolean
      */
-    public function removeDir ( $destPath );
+    public function removeDir($destPath);
 
-     /**
+    /**
      * Remove storage file
      *
      * @param string $destPath
      *
      * @return boolean
      */
-    public function removeFile ( $destPath );
+    public function removeFile($destPath);
 
-     /**
+    /**
      * Return file storage file
      *
      * @param string $path
      * @param string $prefix
-     * @param array $fileTypes
+     * @param array  $fileTypes
      *
      * @return array
      */
-    public function getFileNameList ( $path, $prefix = null, array $fileTypes = null );
+    public function getFileNameList($path, $prefix = null, array $fileTypes = null);
 
-     /**
+    /**
      * Return file url
      *
      * @param string $path
      *
      * @return string
      */
-    public function getFileUrl ( $path );
+    public function getFileUrl($path);
 
-     /**
+    /**
      * Checks whether a file or directory exists
      *
      * @param string $path
      *
      * @return boolean
      */
-    public function fileExists ( $path );
+    public function fileExists($path);
 
-     /**
+    /**
      * Tells whether the $path is a regular file
      *
      * @param string $path
      *
      * @return boolean
      */
-    public function isFile ( $path );
+    public function isFile($path);
 
-     /**
+    /**
      * Tells whether the $path is a directory
      *
      * @param string $path
      *
      * @return boolean
      */
-    public function isDir ( $path );
+    public function isDir($path);
 
-     /**
+    /**
      * Create directory
      *
      * @param string $path
      *
      * @return boolean
      */
-    public function mkdir ( $path );
+    public function mkdir($path);
 
     /**
      * Tells whether the filename is writable
@@ -165,9 +163,9 @@ interface OW_Storage
      * @param $filename
      * @return boolean
      */
-    public function isWritable ( $filename );
+    public function isWritable($filename);
 
-     /**
+    /**
      * Rename file
      *
      * @param string $oldPath
@@ -175,7 +173,7 @@ interface OW_Storage
      *
      * @return boolean
      */
-    public function renameFile ( $oldPath, $newPath );
+    public function renameFile($oldPath, $newPath);
 
     /**
      * Rename file
@@ -185,7 +183,7 @@ interface OW_Storage
      *
      * @return boolean
      */
-    public function chmod ( $destPath, $permissions );
+    public function chmod($destPath, $permissions);
 }
 
 

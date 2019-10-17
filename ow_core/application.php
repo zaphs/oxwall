@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -24,20 +23,20 @@ declare(strict_types=1);
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  * @method static OW_Application getInstance()
  */
 class OW_Application
 {
     use OW_Singleton;
-    
-    public const CONTEXT_MOBILE = BOL_UserService::USER_CONTEXT_MOBILE;
+
+    public const CONTEXT_MOBILE  = BOL_UserService::USER_CONTEXT_MOBILE;
     public const CONTEXT_DESKTOP = BOL_UserService::USER_CONTEXT_DESKTOP;
-    public const CONTEXT_API = BOL_UserService::USER_CONTEXT_API;
-    public const CONTEXT_CLI = BOL_UserService::USER_CONTEXT_CLI;
-    public const CONTEXT_NAME = 'owContext';
+    public const CONTEXT_API     = BOL_UserService::USER_CONTEXT_API;
+    public const CONTEXT_CLI     = BOL_UserService::USER_CONTEXT_CLI;
+    public const CONTEXT_NAME    = 'owContext';
 
     /**
      * Current page document key.
@@ -64,7 +63,7 @@ class OW_Application
      *
      * @param bool $mode
      */
-    public function setMaintenanceMode(bool $mode ): void
+    public function setMaintenanceMode(bool $mode): void
     {
         OW::getConfig()->saveConfig('base', 'maintenance', $mode);
     }
@@ -80,7 +79,7 @@ class OW_Application
     /**
      * @param string $key
      */
-    public function setDocumentKey( string $key ): void
+    public function setDocumentKey(string $key): void
     {
         $this->documentKey = $key;
     }
@@ -102,13 +101,11 @@ class OW_Application
         // setting default time zone
         date_default_timezone_set(OW::getConfig()->getValue('base', 'site_timezone'));
 
-        if ( OW::getUser()->isAuthenticated() )
-        {
-            $userId = OW::getUser()->getId();
+        if (OW::getUser()->isAuthenticated()) {
+            $userId   = OW::getUser()->getId();
             $timeZone = BOL_PreferenceService::getInstance()->getPreferenceValue('timeZoneSelect', $userId);
 
-            if ( !empty($timeZone) )
-            {
+            if (!empty($timeZone)) {
                 date_default_timezone_set($timeZone);
             }
         }
@@ -119,8 +116,7 @@ class OW_Application
         $uri = OW::getRequest()->getRequestUri();
 
         // before setting in router need to remove get params
-        if (false !== ($p = strpos($uri, '?')))
-        {
+        if (false !== ($p = strpos($uri, '?'))) {
             $uri = substr($uri, 0, $p);
         }
         $router->setUri($uri);
@@ -137,15 +133,13 @@ class OW_Application
         // try to find static document with current uri
         $document = $navService->findStaticDocument($uri);
 
-        if ( $document !== null )
-        {
+        if ($document !== null) {
             $this->documentKey = $document->getKey();
         }
 
         $backend = OW::getEventManager()->call('base.cache_backend_init');
 
-        if ( $backend !== null )
-        {
+        if ($backend !== null) {
             OW::getCacheManager()->setCacheBackend($backend);
             OW::getCacheManager()->setLifetime(3600);
             OW::getDbo()->setUseCashe(true);
@@ -159,27 +153,24 @@ class OW_Application
         $activeThemeName = OW::getEventManager()->call('base.get_active_theme_name');
         $activeThemeName = $activeThemeName ?: OW::getConfig()->getValue('base', 'selectedTheme');
 
-        if ( $activeThemeName !== BOL_ThemeService::DEFAULT_THEME && OW::getThemeManager()->getThemeService()->themeExists($activeThemeName) )
-        {
+        if ($activeThemeName !== BOL_ThemeService::DEFAULT_THEME && OW::getThemeManager()->getThemeService()->themeExists($activeThemeName)) {
             OW_ThemeManager::getInstance()->setCurrentTheme(BOL_ThemeService::getInstance()->getThemeObjectByKey(trim($activeThemeName),
-                    $this->isMobile()));
+                $this->isMobile()));
         }
 
         // adding static document routes
-        $staticDocs = $this->findAllStaticDocs();
+        $staticDocs              = $this->findAllStaticDocs();
         $staticPageDispatchAttrs = OW::getRequestHandler()->getStaticPageAttributes();
 
         /* @var BOL_Document $value */
-        foreach ( $staticDocs as $value )
-        {
+        foreach ($staticDocs as $value) {
             OW::getRouter()->addRoute(new OW_Route($value->getKey(), $value->getUri(),
                 $staticPageDispatchAttrs['controller'], $staticPageDispatchAttrs['action'],
                 ['documentKey' => [OW_Route::PARAM_OPTION_HIDDEN_VAR => $value->getKey()]]));
 
             // TODO refactor - hotfix for TOS page
-            if ( in_array(UTIL_String::removeFirstAndLastSlashes($value->getUri()),
-                    ['terms-of-use', 'privacy', 'privacy-policy']) )
-            {
+            if (in_array(UTIL_String::removeFirstAndLastSlashes($value->getUri()),
+                ['terms-of-use', 'privacy', 'privacy-policy'])) {
                 OW::getRequestHandler()->addCatchAllRequestsExclude('base.members_only',
                     $staticPageDispatchAttrs['controller'], $staticPageDispatchAttrs['action'],
                     ['documentKey' => $value->getKey()]);
@@ -188,17 +179,13 @@ class OW_Application
 
         //adding index page route
         $availableFor = OW::getUser()->isAuthenticated() ? BOL_NavigationService::VISIBLE_FOR_MEMBER : BOL_NavigationService::VISIBLE_FOR_GUEST;
-        $item = $this->findFirstMenuItem($availableFor);
+        $item         = $this->findFirstMenuItem($availableFor);
 
-        if ( $item !== null )
-        {
-            if ( $item->getRoutePath() )
-            {
-                $route = OW::getRouter()->getRoute($item->getRoutePath());
+        if ($item !== null) {
+            if ($item->getRoutePath()) {
+                $route          = OW::getRouter()->getRoute($item->getRoutePath());
                 $ddispatchAttrs = $route->getDispatchAttrs();
-            }
-            else
-            {
+            } else {
                 $ddispatchAttrs = OW::getRequestHandler()->getStaticPageAttributes();
             }
 
@@ -207,27 +194,21 @@ class OW_Application
                 ['documentKey' => [OW_Route::PARAM_OPTION_HIDDEN_VAR => $item->getDocumentKey()]]));
             $this->indexMenuItem = $item;
             OW::getEventManager()->bind(OW_EventManager::ON_AFTER_REQUEST_HANDLE, [$this, 'activateMenuItem']);
-        }
-        else
-        {
+        } else {
             $router->addRoute(new OW_Route('base_default_index', '/', 'BASE_CTRL_ComponentPanel', 'index'));
         }
 
-        if ( !OW::getRequest()->isAjax() )
-        {
+        if (!OW::getRequest()->isAjax()) {
             OW::getResponse()->setDocument($this->newDocument());
             OW::getDocument()->setMasterPage($this->getMasterPage());
             OW::getResponse()->setHeader(OW_Response::HD_CNT_TYPE,
                 OW::getDocument()->getMime() . '; charset=' . OW::getDocument()->getCharset());
-        }
-        else
-        {
+        } else {
             OW::getResponse()->setDocument(new OW_AjaxDocument());
         }
 
         /* additional actions */
-        if ( OW::getUser()->isAuthenticated() )
-        {
+        if (OW::getUser()->isAuthenticated()) {
             BOL_UserService::getInstance()->updateActivityStamp(OW::getUser()->getId(), $this->getContext());
         }
 
@@ -243,19 +224,20 @@ class OW_Application
         $viewRenderer->assignVar('siteUrl', OW_URL_HOME);
         $viewRenderer->assignVar('isAuthenticated', OW::getUser()->isAuthenticated());
         $viewRenderer->assignVar('bottomPoweredByLink',
-            '<a href="https://developers.oxwall.com/" target="_blank" title="Powered by Oxwall Community Software"><img src="' . $currentThemeImagesDir . 'powered-by-oxwall.png" alt="Oxwall Community Software" /></a>');
+            '<a href="https://developers.oxwall.com/" target="_blank" title="Powered by Oxwall Community Software"><img src="' .
+            $currentThemeImagesDir .
+            'powered-by-oxwall.png" alt="Oxwall Community Software" /></a>');
 
         $spotParams = [
             'platform-version' => OW::getConfig()->getValue('base', 'soft_version'),
             'platform-build'   => OW::getConfig()->getValue('base', 'soft_build'),
-            'theme'            => OW::getConfig()->getValue('base', 'selectedTheme')
+            'theme'            => OW::getConfig()->getValue('base', 'selectedTheme'),
         ];
 
         $viewRenderer->assignVar('adminDashboardIframeUrl',
             OW::getRequest()->buildUrlQueryString('//static.oxwall.org/spotlight/', $spotParams));
 
-        if ( function_exists('ow_service_actions') )
-        {
+        if (function_exists('ow_service_actions')) {
             call_user_func('ow_service_actions');
         }
 
@@ -268,16 +250,11 @@ class OW_Application
      */
     public function route(): void
     {
-        try
-        {
+        try {
             OW::getRequestHandler()->setHandlerAttributes(OW::getRouter()->route());
-        }
-        catch ( RedirectException $e )
-        {
+        } catch (RedirectException $e) {
             $this->redirect($e->getUrl(), $e->getRedirectCode());
-        }
-        catch ( InterceptException $e )
-        {
+        } catch (InterceptException $e) {
             OW::getRequestHandler()->setHandlerAttributes($e->getHandlerAttrs());
         }
 
@@ -293,11 +270,10 @@ class OW_Application
         $baseConfigs = OW::getConfig()->getValues('base');
 
         //members only
-        if ( (int) $baseConfigs['guests_can_view'] === BOL_UserService::PERMISSIONS_GUESTS_CANT_VIEW && !OW::getUser()->isAuthenticated() )
-        {
+        if ((int)$baseConfigs['guests_can_view'] === BOL_UserService::PERMISSIONS_GUESTS_CANT_VIEW && !OW::getUser()->isAuthenticated()) {
             $attributes = [
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_CTRL_User',
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'standardSignIn'
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL   => 'BASE_CTRL_User',
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'standardSignIn',
             ];
 
             OW::getRequestHandler()->setCatchAllRequestsAttributes('base.members_only', $attributes);
@@ -305,14 +281,13 @@ class OW_Application
         }
 
         //splash screen
-        if ( (bool) OW::getConfig()->getValue('base', 'splash_screen') && !isset($_COOKIE['splashScreen']) )
-        {
+        if ((bool)OW::getConfig()->getValue('base', 'splash_screen') && !isset($_COOKIE['splashScreen'])) {
             $attributes = [
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_CTRL_BaseDocument',
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'splashScreen',
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL     => 'BASE_CTRL_BaseDocument',
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION   => 'splashScreen',
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_REDIRECT => true,
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_JS => true,
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ROUTE => 'base_page_splash_screen'
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_JS       => true,
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ROUTE    => 'base_page_splash_screen',
             ];
 
             OW::getRequestHandler()->setCatchAllRequestsAttributes('base.splash_screen', $attributes);
@@ -320,12 +295,11 @@ class OW_Application
         }
 
         // password protected
-        if ( (int) $baseConfigs['guests_can_view'] === BOL_UserService::PERMISSIONS_GUESTS_PASSWORD_VIEW && !OW::getUser()->isAuthenticated() && !isset($_COOKIE['base_password_protection'])
-        )
-        {
+        if ((int)$baseConfigs['guests_can_view'] === BOL_UserService::PERMISSIONS_GUESTS_PASSWORD_VIEW && !OW::getUser()->isAuthenticated() && !isset($_COOKIE['base_password_protection'])
+        ) {
             $attributes = [
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_CTRL_BaseDocument',
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'passwordProtection'
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL   => 'BASE_CTRL_BaseDocument',
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'passwordProtection',
             ];
 
             OW::getRequestHandler()->setCatchAllRequestsAttributes('base.password_protected', $attributes);
@@ -333,28 +307,22 @@ class OW_Application
         }
 
         // maintenance mode
-        if ( (bool) $baseConfigs['maintenance'] && !OW::getUser()->isAdmin() )
-        {
+        if ((bool)$baseConfigs['maintenance'] && !OW::getUser()->isAdmin()) {
             $attributes = [
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_CTRL_BaseDocument',
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'maintenance',
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_REDIRECT => true
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL     => 'BASE_CTRL_BaseDocument',
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION   => 'maintenance',
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_REDIRECT => true,
             ];
 
             OW::getRequestHandler()->setCatchAllRequestsAttributes('base.maintenance_mode', $attributes);
             $this->addCatchAllRequestsException('base.maintenance_mode_exceptions', 'base.maintenance_mode');
         }
 
-        try
-        {
+        try {
             OW::getRequestHandler()->dispatch();
-        }
-        catch ( RedirectException $e )
-        {
+        } catch (RedirectException $e) {
             $this->redirect($e->getUrl(), $e->getRedirectCode());
-        }
-        catch ( InterceptException $e )
-        {
+        } catch (InterceptException $e) {
             OW::getRequestHandler()->setHandlerAttributes($e->getHandlerAttrs());
             $this->handleRequest();
         }
@@ -369,10 +337,8 @@ class OW_Application
 
         $messages = OW::getFeedback()->getFeedback();
 
-        foreach ( $messages as $messageType => $messageList )
-        {
-            foreach ( $messageList as $message )
-            {
+        foreach ($messages as $messageType => $messageList) {
+            foreach ($messageList as $message) {
                 $document->addOnloadScript('OW.message(' . json_encode($message) . ", '" . $messageType . "');");
             }
         }
@@ -386,7 +352,7 @@ class OW_Application
      */
     public function onBeforeDocumentRender(): void
     {
-        $document = OW::getDocument();
+        $document     = OW::getDocument();
         $themeManager = OW::getThemeManager();
 
         $document->addStyleSheet(OW::getPluginManager()->getPlugin('base')->getStaticCssUrl() . 'ow.css' . '?' . OW::getConfig()->getValue('base',
@@ -395,31 +361,24 @@ class OW_Application
                 'cachedEntitiesPostfix'), 'all', -90);
 
         // add custom css if page is not admin TODO replace with another condition
-        if ( !OW::getDocument()->getMasterPage() instanceof ADMIN_CLASS_MasterPage )
-        {
-            if ( $themeManager->getCurrentTheme()->getDto()->getCustomCssFileName() !== null )
-            {
+        if (!OW::getDocument()->getMasterPage() instanceof ADMIN_CLASS_MasterPage) {
+            if ($themeManager->getCurrentTheme()->getDto()->getCustomCssFileName() !== null) {
                 $document->addStyleSheet($themeManager->getThemeService()->getCustomCssFileUrl($themeManager->getCurrentTheme()->getDto()->getKey()));
             }
 
-            if ( $this->getDocumentKey() !== 'base.sign_in' )
-            {
-                $customHeadCode = OW::getConfig()->getValue('base', 'html_head_code');
+            if ($this->getDocumentKey() !== 'base.sign_in') {
+                $customHeadCode   = OW::getConfig()->getValue('base', 'html_head_code');
                 $customAppendCode = OW::getConfig()->getValue('base', 'html_prebody_code');
 
-                if ( !empty($customHeadCode) )
-                {
+                if (!empty($customHeadCode)) {
                     $document->addCustomHeadInfo($customHeadCode);
                 }
 
-                if ( !empty($customAppendCode) )
-                {
+                if (!empty($customAppendCode)) {
                     $document->appendBody($customAppendCode);
                 }
             }
-        }
-        else
-        {
+        } else {
             $document->addStyleSheet(OW::getPluginManager()->getPlugin('admin')->getStaticCssUrl() . 'admin.css' . '?' . OW::getConfig()->getValue('base',
                     'cachedEntitiesPostfix'), 'all', -50);
         }
@@ -429,13 +388,11 @@ class OW_Application
 
         $language = OW::getLanguage();
 
-        if ( $document->getTitle() === null )
-        {
+        if ($document->getTitle() === null) {
             $document->setTitle($language->text('nav', 'page_default_title'));
         }
 
-        if ( $document->getDescription() === null )
-        {
+        if ($document->getDescription() === null) {
             $document->setDescription($language->text('nav', 'page_default_description'));
         }
 
@@ -444,22 +401,18 @@ class OW_Application
           $document->setKeywords($language->text('nav', 'page_default_keywords'));
           } */
 
-        if ( $document->getHeadingIconClass() === null )
-        {
+        if ($document->getHeadingIconClass() === null) {
             $document->setHeadingIconClass('ow_ic_file');
         }
 
-        if ( !empty($this->documentKey) )
-        {
+        if (!empty($this->documentKey)) {
             $document->addBodyClass($this->documentKey);
         }
 
-        if ( $this->getDocumentKey() !== null )
-        {
+        if ($this->getDocumentKey() !== null) {
             $masterPagePath = OW::getThemeManager()->getDocumentMasterPage($this->getDocumentKey());
 
-            if ( $masterPagePath !== null )
-            {
+            if ($masterPagePath !== null) {
                 $document->getMasterPage()->setTemplate($masterPagePath);
             }
         }
@@ -480,22 +433,19 @@ class OW_Application
      * @param bool   $switchContextTo
      * @throws Exception
      */
-    public function redirect( $redirectTo = null, $switchContextTo = false ): void
+    public function redirect($redirectTo = null, $switchContextTo = false): void
     {
-        if ( $switchContextTo !== false && in_array($switchContextTo, [self::CONTEXT_DESKTOP, self::CONTEXT_MOBILE], true))
-        {
+        if ($switchContextTo !== false && in_array($switchContextTo, [self::CONTEXT_DESKTOP, self::CONTEXT_MOBILE], true)) {
             OW::getSession()->set(self::CONTEXT_NAME, $switchContextTo);
         }
 
         // if empty redirect location -> current URI is used
-        if ( $redirectTo === null )
-        {
+        if ($redirectTo === null) {
             $redirectTo = OW::getRequest()->getRequestUri();
         }
 
         // if URI is provided need to add site home URL
-        if (false === strpos($redirectTo, 'http://') && false === strpos($redirectTo, 'https://'))
-        {
+        if (false === strpos($redirectTo, 'http://') && false === strpos($redirectTo, 'https://')) {
             $redirectTo = OW::getRouter()->getBaseUrl() . UTIL_String::removeFirstAndLastSlashes($redirectTo);
         }
 
@@ -553,11 +503,9 @@ class OW_Application
 
     public function activateMenuItem(): void
     {
-        if ( !OW::getDocument()->getMasterPage() instanceof ADMIN_CLASS_MasterPage )
-        {
+        if (!OW::getDocument()->getMasterPage() instanceof ADMIN_CLASS_MasterPage) {
             $request_uri = OW::getRequest()->getRequestUri();
-            if ( $request_uri === '/' || $request_uri === '' )
-            {
+            if ($request_uri === '/' || $request_uri === '') {
                 OW::getNavigation()->activateMenuItem(OW_Navigation::MAIN, $this->indexMenuItem->getPrefix(),
                     $this->indexMenuItem->getKey());
             }
@@ -576,17 +524,13 @@ class OW_Application
         $document->setMime('text/html');
         $document->setLanguage($language->getTag());
 
-        if ( $language->getRtl() )
-        {
+        if ($language->getRtl()) {
             $document->setDirection('rtl');
-        }
-        else
-        {
+        } else {
             $document->setDirection('ltr');
         }
 
-        if ( (bool) OW::getConfig()->getValue('base', 'favicon') )
-        {
+        if ((bool)OW::getConfig()->getValue('base', 'favicon')) {
             $document->setFavicon(OW::getPluginManager()->getPlugin('base')->getUserFilesUrl() . 'favicon.ico');
         }
 
@@ -601,8 +545,7 @@ class OW_Application
 
         $onloadJs = "OW.bindAutoClicks();OW.bindTips($('body'));";
 
-        if ( OW::getUser()->isAuthenticated() )
-        {
+        if (OW::getUser()->isAuthenticated()) {
             $onloadJs .= "OW.getPing().addCommand('user_activity_update').start(600000);";
         }
 
@@ -614,81 +557,72 @@ class OW_Application
 
     protected function urlHostRedirect(): void
     {
-        if ( !isset($_SERVER['HTTP_HOST']) )
-        {
+        if (!isset($_SERVER['HTTP_HOST'])) {
             return;
         }
 
-        $urlArray = parse_url(OW_URL_HOME);
-        $constHost = $urlArray['host'];
+        $urlArray   = parse_url(OW_URL_HOME);
+        $constHost  = $urlArray['host'];
         $serverHost = $_SERVER['HTTP_HOST'];
 
-        if ( mb_strpos($serverHost, ':') !== false )
-        {
+        if (mb_strpos($serverHost, ':') !== false) {
             $serverHost = mb_substr($serverHost, 0, mb_strpos($serverHost, ':'));
         }
 
-        if ( $serverHost !== $constHost )
-        {
+        if ($serverHost !== $constHost) {
             $this->redirect(OW_URL_HOME . OW::getRequest()->getRequestUri());
         }
     }
+
     /**
-     * @var array 
+     * @var array
      */
     protected $httpsHandlerAttrsList = [];
 
     /**
-     * @param string $controller
+     * @param string      $controller
      * @param string|bool $action
      */
-    public function addHttpsHandlerAttrs(string $controller, $action = false ): void
+    public function addHttpsHandlerAttrs(string $controller, $action = false): void
     {
         $this->httpsHandlerAttrsList[] = [OW_RequestHandler::ATTRS_KEY_CTRL => $controller, OW_RequestHandler::ATTRS_KEY_ACTION => $action];
     }
 
     protected function httpVsHttpsRedirect(): void
     {
-        if ( OW::getRequest()->isAjax() )
-        {
+        if (OW::getRequest()->isAjax()) {
             return;
         }
 
         $isSsl = OW::getRequest()->isSsl();
 
-        if ( $isSsl === null )
-        {
+        if ($isSsl === null) {
             return;
         }
 
-        $attrs = OW::getRequestHandler()->getHandlerAttributes();
+        $attrs     = OW::getRequestHandler()->getHandlerAttributes();
         $specAttrs = false;
 
-        foreach ( $this->httpsHandlerAttrsList as $item )
-        {
-            if ( $item[OW_RequestHandler::ATTRS_KEY_CTRL] == $attrs[OW_RequestHandler::ATTRS_KEY_CTRL] && ( empty($item[OW_RequestHandler::ATTRS_KEY_ACTION]) || $item[OW_RequestHandler::ATTRS_KEY_ACTION] == $attrs[OW_RequestHandler::ATTRS_KEY_ACTION] ) )
-            {
+        foreach ($this->httpsHandlerAttrsList as $item) {
+            if ($item[OW_RequestHandler::ATTRS_KEY_CTRL] == $attrs[OW_RequestHandler::ATTRS_KEY_CTRL] &&
+                (empty($item[OW_RequestHandler::ATTRS_KEY_ACTION]) || $item[OW_RequestHandler::ATTRS_KEY_ACTION] == $attrs[OW_RequestHandler::ATTRS_KEY_ACTION])) {
                 $specAttrs = true;
-                if ( !$isSsl )
-                {
+                if (!$isSsl) {
                     $this->redirect(str_replace('http://', 'https://', OW_URL_HOME) . OW::getRequest()->getRequestUri());
                 }
             }
         }
 
-        if ( $specAttrs )
-        {
+        if ($specAttrs) {
             return;
         }
 
         $urlArray = parse_url(OW_URL_HOME);
 
-        if ( !empty($urlArray['scheme']) )
-        {
+        if (!empty($urlArray['scheme'])) {
             $homeUrlSsl = ($urlArray['scheme'] == 'https');
 
-            if ( ($isSsl && !$homeUrlSsl) || (!$isSsl && $homeUrlSsl) )
-            {
+            if (($isSsl && !$homeUrlSsl) || (!$isSsl && $homeUrlSsl)) {
                 $this->redirect(OW_URL_HOME . OW::getRequest()->getRequestUri());
             }
         }
@@ -696,33 +630,29 @@ class OW_Application
 
     protected function handleHttps(): void
     {
-        if (!OW::getRequest()->isSsl() || strpos(OW::getRouter()->getBaseUrl(), 'https') === 0)
-        {
+        if (!OW::getRequest()->isSsl() || strpos(OW::getRouter()->getBaseUrl(), 'https') === 0) {
             return;
         }
 
         function base_post_handle_https_static_content()
         {
-            $markup = OW::getResponse()->getMarkup();
+            $markup  = OW::getResponse()->getMarkup();
             $matches = [];
             preg_match_all("/<a([^>]+?)>(.+?)<\/a>/", $markup, $matches);
-            $search = array_unique($matches[0]);
-            $replace = [];
+            $search            = array_unique($matches[0]);
+            $replace           = [];
             $contentReplaceArr = [];
 
-            for ($i = 0, $iMax = count($search); $i < $iMax; $i++ )
-            {
+            for ($i = 0, $iMax = count($search); $i < $iMax; $i++) {
                 $replace[] = '<#|#|#' . $i . '#|#|#>';
-                if ( mb_strstr($matches[2][$i], 'http:') )
-                {
+                if (mb_strstr($matches[2][$i], 'http:')) {
                     $contentReplaceArr[] = $i;
                 }
             }
 
             $markup = str_replace([$search, 'http:'], [$replace, 'https:'], $markup);
 
-            foreach ($contentReplaceArr as $index )
-            {
+            foreach ($contentReplaceArr as $index) {
                 $search[$index] = str_replace($matches[2][$index], str_replace('http:', 'https:', $matches[2][$index]),
                     $search[$index]);
             }
@@ -731,23 +661,21 @@ class OW_Application
 
             OW::getResponse()->setMarkup($markup);
         }
+
         OW::getEventManager()->bind(OW_EventManager::ON_AFTER_DOCUMENT_RENDER, 'base_post_handle_https_static_content');
     }
 
     protected function userAutoLogin(): void
     {
-        if ( OW::getSession()->isKeySet('no_autologin') )
-        {
+        if (OW::getSession()->isKeySet('no_autologin')) {
             OW::getSession()->delete('no_autologin');
             return;
         }
 
-        if ( !empty($_COOKIE['ow_login']) && !OW::getUser()->isAuthenticated() )
-        {
+        if (!empty($_COOKIE['ow_login']) && !OW::getUser()->isAuthenticated()) {
             $id = BOL_UserService::getInstance()->findUserIdByCookie(trim($_COOKIE['ow_login']));
 
-            if ( $id )
-            {
+            if ($id) {
                 OW_User::getInstance()->login($id);
                 $loginCookie = BOL_UserService::getInstance()->findLoginCookieByUserId($id);
                 setcookie('ow_login', $loginCookie->getCookie(), time() + 86400 * 7, '/', null, false, true);
@@ -755,16 +683,14 @@ class OW_Application
         }
     }
 
-    protected function addCatchAllRequestsException(string $eventName, string $key ): void
+    protected function addCatchAllRequestsException(string $eventName, string $key): void
     {
         $event = new BASE_CLASS_EventCollector($eventName);
         OW::getEventManager()->trigger($event);
         $exceptions = $event->getData();
 
-        foreach ( $exceptions as $item )
-        {
-            if ( is_array($item) && !empty($item['controller']) && !empty($item['action']) )
-            {
+        foreach ($exceptions as $item) {
+            if (is_array($item) && !empty($item['controller']) && !empty($item['action'])) {
                 OW::getRequestHandler()->addCatchAllRequestsExclude($key, trim($item['controller']),
                     trim($item['action']));
             }
@@ -789,7 +715,7 @@ class OW_Application
      * @param int $availableFor
      * @return BOL_MenuItem
      */
-    protected function findFirstMenuItem(int $availableFor ): BOL_MenuItem
+    protected function findFirstMenuItem(int $availableFor): BOL_MenuItem
     {
         return BOL_NavigationService::getInstance()->findFirstLocal($availableFor, OW_Navigation::MAIN);
     }
@@ -808,29 +734,25 @@ class OW_Application
     {
         $languageId = 0;
 
-        if ( !empty($_GET['language_id']) )
-        {
+        if (!empty($_GET['language_id'])) {
             $languageId = (int)$_GET['language_id'];
-        }
-        else if ( !empty($_COOKIE[BOL_LanguageService::LANG_ID_VAR_NAME]) )
-        {
-            $languageId = (int)$_COOKIE[BOL_LanguageService::LANG_ID_VAR_NAME];
+        } else {
+            if (!empty($_COOKIE[BOL_LanguageService::LANG_ID_VAR_NAME])) {
+                $languageId = (int)$_COOKIE[BOL_LanguageService::LANG_ID_VAR_NAME];
+            }
         }
 
-        if( $languageId > 0 )
-        {
+        if ($languageId > 0) {
             OW::getSession()->set(BOL_LanguageService::LANG_ID_VAR_NAME, $languageId);
         }
 
         $session_language_id = OW::getSession()->get(BOL_LanguageService::LANG_ID_VAR_NAME);
-        $languageService = BOL_LanguageService::getInstance();
+        $languageService     = BOL_LanguageService::getInstance();
 
-        if( $session_language_id  )
-        {
+        if ($session_language_id) {
             $dto = $languageService->findById($session_language_id);
 
-            if( $dto !== null && $dto->getStatus() == 'active')
-            {
+            if ($dto !== null && $dto->getStatus() == 'active') {
                 $languageService->setCurrentLanguage($dto);
             }
         }

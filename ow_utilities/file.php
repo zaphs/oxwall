@@ -12,7 +12,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -23,9 +22,9 @@
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_utilities
- * @since 1.0
+ * @since   1.0
  */
 class UTIL_File
 {
@@ -46,27 +45,25 @@ class UTIL_File
     /**
      * Copies whole directory from source to destination folder. The destination folder will be created if it doesn't exist.
      * Array and callable can be passed as filter argument. Array should contain the list of file extensions to be copied.
-     * Callable is more flexible way for filtering, it should contain one parameter (file/dir to be copied) and return bool 
+     * Callable is more flexible way for filtering, it should contain one parameter (file/dir to be copied) and return bool
      * value which indicates if the item should be copied.
-     * 
+     *
      * @param string $sourcePath
      * @param string $destPath
-     * @param mixed $filter
-     * @param int $level
+     * @param mixed  $filter
+     * @param int    $level
      */
-    public static function copyDir( $sourcePath, $destPath, $filter = null, $level = -1 )
+    public static function copyDir($sourcePath, $destPath, $filter = null, $level = -1)
     {
         $sourcePath = self::removeLastDS($sourcePath);
 
         $destPath = self::removeLastDS($destPath);
 
-        if ( !self::checkDir($sourcePath) )
-        {
+        if (!self::checkDir($sourcePath)) {
             return;
         }
 
-        if ( !file_exists($destPath) )
-        {
+        if (!file_exists($destPath)) {
             if (!mkdir($destPath) && !is_dir($destPath)) {
                 throw new RuntimeException(sprintf('Directory "%s" was not created', $destPath));
             }
@@ -75,33 +72,28 @@ class UTIL_File
 
         $handle = opendir($sourcePath);
 
-        if ( $handle !== false )
-        {
-            while ( ($item = readdir($handle)) !== false )
-            {
-                if ( $item === "." || $item === ".." )
-                {
+        if ($handle !== false) {
+            while (($item = readdir($handle)) !== false) {
+                if ($item === "." || $item === "..") {
                     continue;
                 }
 
-                $path = $sourcePath . DS . $item;
+                $path  = $sourcePath . DS . $item;
                 $dPath = $destPath . DS . $item;
 
-                if ( is_callable($filter) && !call_user_func($filter, $path) )
-                {
+                if (is_callable($filter) && !call_user_func($filter, $path)) {
                     continue;
                 }
 
                 $copy = ($filter === null || (is_array($filter) && in_array(self::getExtension($item), $filter)) || is_callable($filter));
 
-                if ( is_file($path) && $copy )
-                {
+                if (is_file($path) && $copy) {
                     copy($path, $dPath);
                     chmod($dPath, 0666);
-                }
-                else if ( $level && is_dir($path) )
-                {
-                    self::copyDir($path, $dPath, $filter, ($level - 1));
+                } else {
+                    if ($level && is_dir($path)) {
+                        self::copyDir($path, $dPath, $filter, ($level - 1));
+                    }
                 }
             }
 
@@ -110,12 +102,12 @@ class UTIL_File
     }
 
     /**
-     * @param string $dirPath
-     * @param array $fileTypes
+     * @param string  $dirPath
+     * @param array   $fileTypes
      * @param integer $level
      * @return array
      */
-    public static function findFiles( $dirPath, array $fileTypes = null, $level = -1 )
+    public static function findFiles($dirPath, array $fileTypes = null, $level = -1)
     {
         $dirPath = self::removeLastDS($dirPath);
 
@@ -123,24 +115,20 @@ class UTIL_File
 
         $handle = opendir($dirPath);
 
-        if ( $handle !== false )
-        {
-            while ( ($item = readdir($handle)) !== false )
-            {
-                if ( $item === '.' || $item === '..' )
-                {
+        if ($handle !== false) {
+            while (($item = readdir($handle)) !== false) {
+                if ($item === '.' || $item === '..') {
                     continue;
                 }
 
                 $path = $dirPath . DS . $item;
 
-                if ( is_file($path) && ( $fileTypes === null || in_array(self::getExtension($item), $fileTypes) ) )
-                {
+                if (is_file($path) && ($fileTypes === null || in_array(self::getExtension($item), $fileTypes))) {
                     $resultList[] = $path;
-                }
-                else if ( $level && is_dir($path) )
-                {
-                    $resultList = array_merge($resultList, self::findFiles($path, $fileTypes, ($level - 1)));
+                } else {
+                    if ($level && is_dir($path)) {
+                        $resultList = array_merge($resultList, self::findFiles($path, $fileTypes, ($level - 1)));
+                    }
                 }
             }
 
@@ -153,48 +141,41 @@ class UTIL_File
     /**
      * Removes directory with content
      *
-     * @param string $dirPath
+     * @param string  $dirPath
      * @param boolean $empty
      */
-    public static function removeDir( $dirPath, $empty = false )
+    public static function removeDir($dirPath, $empty = false)
     {
         $dirPath = self::removeLastDS($dirPath);
 
-        if ( !self::checkDir($dirPath) )
-        {
+        if (!self::checkDir($dirPath)) {
             return;
         }
 
         $handle = opendir($dirPath);
 
-        if ( $handle !== false )
-        {
-            while ( ($item = readdir($handle)) !== false )
-            {
-                if ( $item === '.' || $item === '..' )
-                {
+        if ($handle !== false) {
+            while (($item = readdir($handle)) !== false) {
+                if ($item === '.' || $item === '..') {
                     continue;
                 }
 
                 $path = $dirPath . DS . $item;
 
-                if ( is_file($path) )
-                {
+                if (is_file($path)) {
                     unlink($path);
-                }
-                else if ( is_dir($path) )
-                {
-                    self::removeDir($path);
+                } else {
+                    if (is_dir($path)) {
+                        self::removeDir($path);
+                    }
                 }
             }
 
             closedir($handle);
         }
 
-        if ( $empty === false )
-        {
-            if ( !rmdir($dirPath) )
-            {
+        if ($empty === false) {
+            if (!rmdir($dirPath)) {
                 trigger_error("Cant remove directory `" . $dirPath . "`!", E_USER_WARNING);
             }
         }
@@ -202,15 +183,14 @@ class UTIL_File
 
     /**
      * @param string $filename
-     * @param bool $humanReadable
+     * @param bool   $humanReadable
      * @return int|string
      */
-    public static function getFileSize( $filename, $humanReadable = true )
+    public static function getFileSize($filename, $humanReadable = true)
     {
         $bytes = filesize($filename);
 
-        if ( !$humanReadable )
-        {
+        if (!$humanReadable) {
             return $bytes;
         }
 
@@ -223,7 +203,7 @@ class UTIL_File
      * @param string $filenName
      * @return string
      */
-    public static function getExtension( $filenName )
+    public static function getExtension($filenName)
     {
         return strtolower(substr($filenName, (strrpos($filenName, '.') + 1)));
     }
@@ -234,10 +214,9 @@ class UTIL_File
      * @param string $fileName
      * @return string
      */
-    public static function stripExtension( $fileName )
+    public static function stripExtension($fileName)
     {
-        if ( !strstr($fileName, '.') )
-        {
+        if (!strstr($fileName, '.')) {
             return trim($fileName);
         }
 
@@ -250,29 +229,26 @@ class UTIL_File
      * @param string $path
      * @return string
      */
-    public static function removeLastDS( $path )
+    public static function removeLastDS($path)
     {
         $path = trim($path);
 
-        if ( substr($path, -1) === DS )
-        {
+        if (substr($path, -1) === DS) {
             $path = substr($path, 0, -1);
         }
 
         return $path;
     }
 
-    public static function checkDir( $path )
+    public static function checkDir($path)
     {
-        if ( !file_exists($path) || !is_dir($path) )
-        {
+        if (!file_exists($path) || !is_dir($path)) {
             //trigger_warning("Cant find directory `".$path."`!");
 
             return false;
         }
 
-        if ( !is_readable($path) )
-        {
+        if (!is_readable($path)) {
             //trigger_warning('Cant read directory `'.$path.'`!');
 
             return false;
@@ -286,19 +262,17 @@ class UTIL_File
      * Validates file
      *
      * @param string $fileName
-     * @param array $avalia
+     * @param array  $avalia
      * bleExtensions
      * @return bool
      */
-    public static function validate( $fileName, array $avaliableExtensions = [])
+    public static function validate($fileName, array $avaliableExtensions = [])
     {
-        if ( !( $fileName = trim($fileName) ) )
-        {
+        if (!($fileName = trim($fileName))) {
             return false;
         }
 
-        if ( empty($avaliableExtensions) )
-        {
+        if (empty($avaliableExtensions)) {
             $avaliableExtensions = array_merge(self::$imageExtensions, self::$videoExtensions);
         }
 
@@ -313,7 +287,7 @@ class UTIL_File
      * @param string $fileName
      * @return bool
      */
-    public static function validateImage( $fileName )
+    public static function validateImage($fileName)
     {
         return self::validate($fileName, self::$imageExtensions);
     }
@@ -324,7 +298,7 @@ class UTIL_File
      * @param string $fileName
      * @return bool
      */
-    public static function validateVideo( $fileName )
+    public static function validateVideo($fileName)
     {
         return self::validate($fileName, self::$videoExtensions);
     }
@@ -335,48 +309,66 @@ class UTIL_File
      * @param string $fileName
      * @return string
      */
-    public static function sanitizeName( $fileName )
+    public static function sanitizeName($fileName)
     {
-        if ( !( $fileName = trim($fileName) ) )
-        {
+        if (!($fileName = trim($fileName))) {
             return false;
         }
 
         $specialChars = [
-            "?", "[", "]", "/", "\\", "=", "<", ">", ":", ";", ",", "'", "\"", "&", "$", "#", "*", "(",
-            ")", "|", "~", "`", "!", "{", "}"
+            "?",
+            "[",
+            "]",
+            "/",
+            "\\",
+            "=",
+            "<",
+            ">",
+            ":",
+            ";",
+            ",",
+            "'",
+            "\"",
+            "&",
+            "$",
+            "#",
+            "*",
+            "(",
+            ")",
+            "|",
+            "~",
+            "`",
+            "!",
+            "{",
+            "}",
         ];
-        $fileName = str_replace($specialChars, '', $fileName);
-        $fileName = preg_replace('/[\s-]+/', '-', $fileName);
-        $fileName = trim($fileName, '.-_');
+        $fileName     = str_replace($specialChars, '', $fileName);
+        $fileName     = preg_replace('/[\s-]+/', '-', $fileName);
+        $fileName     = trim($fileName, '.-_');
 
         return $fileName;
     }
 
     /**
      * Checks if uploaded file is valid, if not returns localized error string.
-     * 
+     *
      * @param int $errorCode
      * @return array
      */
-    public static function checkUploadedFile( array $filesItem, $fileSizeLimitInBytes = null )
+    public static function checkUploadedFile(array $filesItem, $fileSizeLimitInBytes = null)
     {
         $language = OW::getLanguage();
 
-        if ( empty($filesItem) || !array_key_exists("tmp_name", $filesItem) || !array_key_exists("size", $filesItem) )
-        {
+        if (empty($filesItem) || !array_key_exists("tmp_name", $filesItem) || !array_key_exists("size", $filesItem)) {
             return ["result" => false, "message" => $language->text("base", "upload_file_fail")];
         }
 
-        if ( $fileSizeLimitInBytes == null )
-        {
+        if ($fileSizeLimitInBytes == null) {
             $fileSizeLimitInBytes = self::getFileUploadServerLimitInBytes();
         }
 
-        if ( $filesItem["error"] != UPLOAD_ERR_OK )
-        {
-            switch ( $filesItem["error"] )
-            {
+        if ($filesItem["error"] != UPLOAD_ERR_OK) {
+            switch ($filesItem["error"]) {
                 case UPLOAD_ERR_INI_SIZE:
                     $errorString = $language->text("base", "upload_file_max_upload_filesize_error",
                         ["limit" => ($fileSizeLimitInBytes / 1024 / 1024) . "MB"]);
@@ -409,17 +401,16 @@ class UTIL_File
             return ["result" => false, "message" => $errorString];
         }
 
-        if ( $filesItem['size'] > $fileSizeLimitInBytes )
-        {
+        if ($filesItem['size'] > $fileSizeLimitInBytes) {
             return [
-                "result" => false, "message" => $language->text("base",
+                "result"  => false,
+                "message" => $language->text("base",
                     "upload_file_max_upload_filesize_error",
-                    ["limit" => ($fileSizeLimitInBytes / 1024 / 1024) . "MB"])
+                    ["limit" => ($fileSizeLimitInBytes / 1024 / 1024) . "MB"]),
             ];
         }
 
-        if ( !is_uploaded_file($filesItem["tmp_name"]) )
-        {
+        if (!is_uploaded_file($filesItem["tmp_name"])) {
             return ["result" => false, "message" => $language->text("base", "upload_file_fail")];
         }
 
@@ -428,31 +419,30 @@ class UTIL_File
 
     /**
      * Returns server file upload limit in bytes
-     * 
+     *
      * @return int
      */
     public static function getFileUploadServerLimitInBytes()
     {
         $uploadMaxFilesize = self::convertHumanReadableToBytes(ini_get("upload_max_filesize"));
-        $postMaxSize = self::convertHumanReadableToBytes(ini_get("post_max_size"));
+        $postMaxSize       = self::convertHumanReadableToBytes(ini_get("post_max_size"));
 
         return $uploadMaxFilesize < $postMaxSize ? $uploadMaxFilesize : $postMaxSize;
     }
 
     /**
      * Converts human readable (10Mb, 20Kb...) in bytes
-     * 
+     *
      * @param string $value
      * @return int
      */
-    public static function convertHumanReadableToBytes( $value )
+    public static function convertHumanReadableToBytes($value)
     {
-        $value = trim($value);
+        $value    = trim($value);
         $lastChar = strtolower($value[strlen($value) - 1]);
-        $value = floatval($value);
+        $value    = floatval($value);
 
-        switch ( $lastChar )
-        {
+        switch ($lastChar) {
             case "g":
                 $value *= 1024;
             case "m":
@@ -466,19 +456,18 @@ class UTIL_File
 
     /**
      * Converts bytes in human readable string
-     * 
+     *
      * @param int $bytes
      * @param int $decimals
      * @return string
      */
-    public static function convertBytesToHumanReadable( $bytes, $decimals = 2 )
+    public static function convertBytesToHumanReadable($bytes, $decimals = 2)
     {
         $size = ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
-        $factor = (int) floor((strlen($bytes) - 1) / 3);
+        $factor = (int)floor((strlen($bytes) - 1) / 3);
 
-        if ( isset($size[$factor]) )
-        {
+        if (isset($size[$factor])) {
             return sprintf("%.{$decimals}f ", $bytes / pow(1024, $factor)) . $size[$factor];
         }
 

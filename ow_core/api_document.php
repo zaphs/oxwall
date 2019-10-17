@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -27,13 +26,13 @@ declare(strict_types=1);
  * Base class for HTML document object,
  * handles rendered output context (html document includes, headers, styles, etc).
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow.ow_core
- * @since 1.0
+ * @since   1.0
  */
 class OW_ApiDocument extends OW_Document
 {
-    public function  __construct()
+    public function __construct()
     {
         $this->type = OW_Document::JSON;
     }
@@ -45,7 +44,7 @@ class OW_ApiDocument extends OW_Document
         return $this->body;
     }
 
-    public function setBody( $body )
+    public function setBody($body)
     {
         $this->body = $body;
     }
@@ -55,8 +54,7 @@ class OW_ApiDocument extends OW_Document
      */
     public function render(): string
     {
-        if( $this->type == OW_Document::JSON )
-        {
+        if ($this->type == OW_Document::JSON) {
             return $this->renderJson();
         }
 
@@ -68,12 +66,12 @@ class OW_ApiDocument extends OW_Document
         OW::getResponse()->setHeader(OW_Response::HD_CNT_TYPE, 'application/json');
 
         $body = $this->getBody();
-        
+
         $apiResponse = [
             'type' => 'success',
-            'data' => empty($body) ? new stdClass() : $body
+            'data' => empty($body) ? new stdClass() : $body,
         ];
-        
+
         return json_encode($apiResponse);
     }
 }

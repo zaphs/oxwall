@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -24,15 +23,15 @@ declare(strict_types=1);
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_Authorization getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_Authorization
 {
     use OW_Singleton;
-    
+
     /**
      * @var BOL_AuthorizationService
      */
@@ -49,19 +48,18 @@ class OW_Authorization
     /**
      * Adds new group.
      *
-     * @param string $name
+     * @param string  $name
      * @param boolean $moderated
      */
-    public function addGroup( $name, $moderated = true )
+    public function addGroup($name, $moderated = true)
     {
-        if ( $this->service->findGroupByName($name) !== null )
-        {
+        if ($this->service->findGroupByName($name) !== null) {
             trigger_error('Cant add group `' . $name . '`! Duplicate entry!', E_NOTICE);
             return;
         }
 
-        $group = new BOL_AuthorizationGroup();
-        $group->name = $name;
+        $group            = new BOL_AuthorizationGroup();
+        $group->name      = $name;
         $group->moderated = $moderated;
 
         $this->service->saveGroup($group);
@@ -70,36 +68,33 @@ class OW_Authorization
     /**
      * Adds new action to group.
      *
-     * @param string $groupName
-     * @param string $actionName
+     * @param string  $groupName
+     * @param string  $actionName
      * @param boolean $availableForGuest
      */
-    public function addAction( $groupName, $actionName, $availableForGuest = false )
+    public function addAction($groupName, $actionName, $availableForGuest = false)
     {
         $group = $this->service->findGroupByName($groupName);
 
-        if ( $group === null )
-        {
+        if ($group === null) {
             trigger_error('Cant add action `' . $actionName . '`! Empty group `' . $groupName . '`!');
             return;
         }
 
-        if ( $this->service->findAction($groupName, $actionName) !== null )
-        {
+        if ($this->service->findAction($groupName, $actionName) !== null) {
             trigger_error('Cant add action `' . $actionName . '` to group `' . $groupName . '`! Duplicate entry!');
             return;
         }
 
-        $action = new BOL_AuthorizationAction();
-        $action->groupId = $group->id;
-        $action->name = $actionName;
+        $action                    = new BOL_AuthorizationAction();
+        $action->groupId           = $group->id;
+        $action->name              = $actionName;
         $action->availableForGuest = $availableForGuest;
 
         $this->service->saveAction($action);
 
         $roles = $this->service->getRoleList();
-        foreach ( $roles as $role )
-        {
+        foreach ($roles as $role) {
             $this->service->grantActionListToRole($role, [$action]);
         }
     }
@@ -109,7 +104,7 @@ class OW_Authorization
      *
      * @param string $groupName
      */
-    public function deleteGroup( $groupName )
+    public function deleteGroup($groupName)
     {
         $this->service->deleteGroup($groupName);
     }
@@ -120,12 +115,11 @@ class OW_Authorization
      * @param string $groupName
      * @param string $actionName
      */
-    public function deleteAction( $groupName, $actionName )
+    public function deleteAction($groupName, $actionName)
     {
         $action = $this->service->findAction($groupName, $actionName);
 
-        if ( $action !== null )
-        {
+        if ($action !== null) {
             $this->service->deleteAction($action->id);
         }
     }
@@ -134,15 +128,14 @@ class OW_Authorization
      * Checks if user authorized for group/action.
      *
      * @param integer $userId
-     * @param string $groupName
-     * @param string $actionName
-     * @param array $extra
+     * @param string  $groupName
+     * @param string  $actionName
+     * @param array   $extra
      * @return boolean
      */
-    public function isUserAuthorized( $userId, $groupName, $actionName = null, $extra = null )
+    public function isUserAuthorized($userId, $groupName, $actionName = null, $extra = null)
     {
-        if ( $extra !== null && !is_array($extra) )
-        {
+        if ($extra !== null && !is_array($extra)) {
             trigger_error('`ownerId` parameter has been deprecated, pass `extra` parameter instead');
         }
 

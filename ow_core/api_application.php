@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -26,10 +25,10 @@ declare(strict_types=1);
 /**
  * Description...
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_ApiApplication getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_ApiApplication extends OW_Application
 {
@@ -54,41 +53,32 @@ class OW_ApiApplication extends OW_Application
 
         $tag = '';
 
-        if ( !empty($_SERVER['HTTP_API_LANGUAGE']) )
-        {
+        if (!empty($_SERVER['HTTP_API_LANGUAGE'])) {
             $tag = $_SERVER['HTTP_API_LANGUAGE'];
-        }
-        else
-        {
-            if( function_exists('apache_request_headers') )
-            {
+        } else {
+            if (function_exists('apache_request_headers')) {
                 $headers = apache_request_headers();
 
-                if ( !empty($headers) && !empty($headers['api-language']) )
-                {
+                if (!empty($headers) && !empty($headers['api-language'])) {
                     $tag = trim($headers['api-language']);
                 }
             }
         }
 
-        if ( $tag )
-        {
+        if ($tag) {
             $languageDto = BOL_LanguageService::getInstance()->findByTag($tag);
 
-            if ($languageDto === null)
-            {
-                $tag = str_replace('_', '-', $tag);
+            if ($languageDto === null) {
+                $tag         = str_replace('_', '-', $tag);
                 $languageDto = BOL_LanguageService::getInstance()->findByTag($tag);
             }
 
-            if ($languageDto === null)
-            {
-                $tag = mb_substr($tag, 0, 2);
+            if ($languageDto === null) {
+                $tag         = mb_substr($tag, 0, 2);
                 $languageDto = BOL_LanguageService::getInstance()->findByTag($tag);
             }
 
-            if ($languageDto !== null && $languageDto->status == 'active')
-            {
+            if ($languageDto !== null && $languageDto->status == 'active') {
                 BOL_LanguageService::getInstance()->setCurrentLanguage($languageDto);
             }
         }
@@ -98,13 +88,11 @@ class OW_ApiApplication extends OW_Application
         // setting default time zone
         date_default_timezone_set(OW::getConfig()->getValue('base', 'site_timezone'));
 
-        if( OW::getUser()->isAuthenticated() )
-        {
-            $userId = OW::getUser()->getId();
+        if (OW::getUser()->isAuthenticated()) {
+            $userId   = OW::getUser()->getId();
             $timeZone = BOL_PreferenceService::getInstance()->getPreferenceValue('timeZoneSelect', $userId);
 
-            if(!empty($timeZone))
-            {
+            if (!empty($timeZone)) {
                 date_default_timezone_set($timeZone);
             }
         }
@@ -121,8 +109,7 @@ class OW_ApiApplication extends OW_Application
         $uri = OW::getRequest()->getRequestUri();
 
         // before setting in router need to remove get params
-        if ( strstr($uri, '?') )
-        {
+        if (strstr($uri, '?')) {
             $uri = substr($uri, 0, strpos($uri, '?'));
         }
         $router->setUri($uri);
@@ -135,8 +122,7 @@ class OW_ApiApplication extends OW_Application
 
         $backend = OW::getEventManager()->call('base.cache_backend_init');
 
-        if ( $backend !== null )
-        {
+        if ($backend !== null) {
             OW::getCacheManager()->setCacheBackend($backend);
             OW::getCacheManager()->setLifetime(3600);
             OW::getDbo()->setUseCashe(true);
@@ -144,8 +130,7 @@ class OW_ApiApplication extends OW_Application
 
         OW::getResponse()->setDocument($this->newDocument());
 
-        if ( OW::getUser()->isAuthenticated() )
-        {
+        if (OW::getUser()->isAuthenticated()) {
             BOL_UserService::getInstance()->updateActivityStamp(OW::getUser()->getId(), $this->getContext());
         }
     }
@@ -156,16 +141,11 @@ class OW_ApiApplication extends OW_Application
      */
     public function route(): void
     {
-        try
-        {
+        try {
             OW::getRequestHandler()->setHandlerAttributes(OW::getRouter()->route());
-        }
-        catch ( RedirectException $e )
-        {
+        } catch (RedirectException $e) {
             $this->redirect($e->getUrl(), $e->getRedirectCode());
-        }
-        catch ( InterceptException $e )
-        {
+        } catch (InterceptException $e) {
             OW::getRequestHandler()->setHandlerAttributes($e->getHandlerAttrs());
         }
     }
@@ -175,49 +155,41 @@ class OW_ApiApplication extends OW_Application
      */
     public function handleRequest(): void
     {
-        try
-        {
+        try {
             OW::getRequestHandler()->dispatch();
-        }
-        catch ( RedirectException $e )
-        {
+        } catch (RedirectException $e) {
             $this->redirect($e->getUrl(), $e->getRedirectCode());
-        }
-        catch ( InterceptException $e )
-        {
+        } catch (InterceptException $e) {
             OW::getRequestHandler()->setHandlerAttributes($e->getHandlerAttrs());
             $this->handleRequest();
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             $errorType = 'exception';
-            
+
             $responseData = [
                 'exception' => get_class($e),
                 'message'   => $e->getMessage(),
-                'code'      => $e->getCode()
+                'code'      => $e->getCode(),
             ];
-            
-            if ( $e instanceof ApiResponseErrorException )
-            {
+
+            if ($e instanceof ApiResponseErrorException) {
                 $responseData['userData'] = $e->data;
                 $errorType                = 'userError';
+            } else {
+                if (defined('OW_DEBUG_MODE') && OW_DEBUG_MODE) {
+                    $responseData['trace'] = $e->getTraceAsString();
+                }
             }
-            else if (defined('OW_DEBUG_MODE') && OW_DEBUG_MODE )
-            {
-                $responseData['trace'] = $e->getTraceAsString();
-            }
-            
+
             $apiResponse = [
                 'type' => $errorType,
-                'data' => $responseData
+                'data' => $responseData,
             ];
-            
+
             //OW::getResponse()->setHeader(OW_Response::HD_CNT_TYPE, "application/json");
             //OW::getDocument()->setBody($apiResponse);
-            
+
             header('Content-Type: application/json');
-            
+
             echo json_encode($apiResponse);
             exit; // TODO remove exit
         }
@@ -323,7 +295,7 @@ class OW_ApiApplication extends OW_Application
      * @param string $redirectTo
      * @param bool   $switchContextTo
      */
-    public function redirect( $redirectTo = null, $switchContextTo = false )
+    public function redirect($redirectTo = null, $switchContextTo = false)
     {
 //        if ( $switchContextTo !== false && in_array($switchContextTo, array(self::CONTEXT_DESKTOP, self::CONTEXT_MOBILE)) )
 //        {
@@ -360,6 +332,7 @@ class OW_ApiApplication extends OW_Application
 //            }
 //        }
     }
+
     /* private auxiliary methods */
 
     protected function newDocument()
@@ -367,16 +340,14 @@ class OW_ApiApplication extends OW_Application
         return new OW_ApiDocument();
     }
 
-    protected function addCatchAllRequestsException( $eventName, $key )
+    protected function addCatchAllRequestsException($eventName, $key)
     {
         $event = new BASE_CLASS_EventCollector($eventName);
         OW::getEventManager()->trigger($event);
         $exceptions = $event->getData();
 
-        foreach ( $exceptions as $item )
-        {
-            if ( is_array($item) && !empty($item['controller']) && !empty($item['action']) )
-            {
+        foreach ($exceptions as $item) {
+            if (is_array($item) && !empty($item['controller']) && !empty($item['action'])) {
                 OW::getRequestHandler()->addCatchAllRequestsExclude($key, trim($item['controller']), trim($item['action']));
             }
         }

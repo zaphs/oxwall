@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -27,9 +26,9 @@ declare(strict_types=1);
  * Master page is a common markup "border" for controller's output.
  * It includes menus, sidebar, header, etc.
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 class OW_MobileMasterPage extends OW_MasterPage
 {
@@ -37,14 +36,14 @@ class OW_MobileMasterPage extends OW_MasterPage
      * List of default master page templates.
      */
     const TEMPLATE_GENERAL = 'mobile_general';
-    const TEMPLATE_BLANK = 'mobile_blank';
+    const TEMPLATE_BLANK   = 'mobile_blank';
 
     /**
      * List of button params
      */
-    const BTN_DATA_ID = 'id';
+    const BTN_DATA_ID    = 'id';
     const BTN_DATA_CLASS = 'class';
-    const BTN_DATA_HREF = 'href';
+    const BTN_DATA_HREF  = 'href';
     const BTN_DATA_EXTRA = 'extraString';
 
     private $buttonData;
@@ -57,29 +56,33 @@ class OW_MobileMasterPage extends OW_MasterPage
         parent::__construct();
         $this->buttonData = [
             'left'  => [
-                self::BTN_DATA_ID    => 'owm_header_left_btn', self::BTN_DATA_CLASS => null, self::BTN_DATA_HREF => 'javascript://',
-                self::BTN_DATA_EXTRA => ''
+                self::BTN_DATA_ID    => 'owm_header_left_btn',
+                self::BTN_DATA_CLASS => null,
+                self::BTN_DATA_HREF  => 'javascript://',
+                self::BTN_DATA_EXTRA => '',
             ],
             'right' => [
-                self::BTN_DATA_ID    => 'owm_header_right_btn', self::BTN_DATA_CLASS => null, self::BTN_DATA_HREF => 'javascript://',
-                self::BTN_DATA_EXTRA => ''
-            ]
+                self::BTN_DATA_ID    => 'owm_header_right_btn',
+                self::BTN_DATA_CLASS => null,
+                self::BTN_DATA_HREF  => 'javascript://',
+                self::BTN_DATA_EXTRA => '',
+            ],
         ];
     }
 
     /**
      * Master page init actions. Template assigning, registering standard cmps, etc.
-     * Default version works for `general` master page. 
+     * Default version works for `general` master page.
      */
     protected function init()
     {
-        
+
     }
 
     /**
      * @param array $data
      */
-    public function setLButtonData( array $data )
+    public function setLButtonData(array $data)
     {
         $this->buttonData['left'] = array_merge($this->buttonData['left'], $data);
     }
@@ -87,7 +90,7 @@ class OW_MobileMasterPage extends OW_MasterPage
     /**
      * @param array $data
      */
-    public function setRButtonData( array $data )
+    public function setRButtonData(array $data)
     {
         $this->buttonData['right'] = array_merge($this->buttonData['right'], $data);
     }
@@ -97,8 +100,7 @@ class OW_MobileMasterPage extends OW_MasterPage
      */
     public function onBeforeRender()
     {
-        if ( $this->getTemplate() === null )
-        {
+        if ($this->getTemplate() === null) {
             $this->setTemplate(OW::getThemeManager()->getMasterPageTemplate(self::TEMPLATE_GENERAL));
         }
 
@@ -110,11 +112,10 @@ class OW_MobileMasterPage extends OW_MasterPage
         parent::onBeforeRender();
     }
 
-    public function setTemplate( $template )
+    public function setTemplate($template)
     {
         //TODO remove dirty hack for backcompat
-        if ( substr(basename($template), 0, strlen(self::TEMPLATE_BLANK)) == self::TEMPLATE_BLANK )
-        {
+        if (substr(basename($template), 0, strlen(self::TEMPLATE_BLANK)) == self::TEMPLATE_BLANK) {
             $this->buttonData = ['left' => [], 'right' => []];
         }
 

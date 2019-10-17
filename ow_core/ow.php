@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -24,31 +23,28 @@ declare(strict_types=1);
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 final class OW
 {
     //TODO requires refactoring
-    public const CONTEXT_MOBILE = OW_Application::CONTEXT_MOBILE;
+    public const CONTEXT_MOBILE  = OW_Application::CONTEXT_MOBILE;
     public const CONTEXT_DESKTOP = OW_Application::CONTEXT_DESKTOP;
-    public const CONTEXT_API = OW_Application::CONTEXT_API;
-    public const CONTEXT_CLI = OW_Application::CONTEXT_CLI;
+    public const CONTEXT_API     = OW_Application::CONTEXT_API;
+    public const CONTEXT_CLI     = OW_Application::CONTEXT_CLI;
 
     private static $context;
 
     private static function detectContext(): void
     {
-        if ( self::$context !== null )
-        {
+        if (self::$context !== null) {
             return;
         }
 
-        if ( defined('OW_USE_CONTEXT') )
-        {
-            switch ( true )
-            {
+        if (defined('OW_USE_CONTEXT')) {
+            switch (true) {
                 case OW_USE_CONTEXT == 1:
                     self::$context = self::CONTEXT_DESKTOP;
                     return;
@@ -70,43 +66,35 @@ final class OW
 
         $context = self::CONTEXT_DESKTOP;
 
-        try
-        {
+        try {
             $isSmart = UTIL_Browser::isSmartphone();
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             return;
         }
 
-        if ( defined('OW_CRON') )
-        {
+        if (defined('OW_CRON')) {
             $context = self::CONTEXT_DESKTOP;
-        }
-        else if ( self::getSession()->isKeySet(OW_Application::CONTEXT_NAME) )
-        {
-            $context = self::getSession()->get(OW_Application::CONTEXT_NAME);
-        }
-        else if ( $isSmart )
-        {
-            $context = self::CONTEXT_MOBILE;
+        } else {
+            if (self::getSession()->isKeySet(OW_Application::CONTEXT_NAME)) {
+                $context = self::getSession()->get(OW_Application::CONTEXT_NAME);
+            } else {
+                if ($isSmart) {
+                    $context = self::CONTEXT_MOBILE;
+                }
+            }
         }
 
-        if ( defined('OW_USE_CONTEXT') )
-        {
-            if ( (OW_USE_CONTEXT & 1 << 1) == 0 && $context == self::CONTEXT_MOBILE )
-            {
+        if (defined('OW_USE_CONTEXT')) {
+            if ((OW_USE_CONTEXT & 1 << 1) == 0 && $context == self::CONTEXT_MOBILE) {
                 $context = self::CONTEXT_DESKTOP;
             }
 
-            if ( (OW_USE_CONTEXT & 1 << 2) == 0 && $context == self::CONTEXT_API )
-            {
+            if ((OW_USE_CONTEXT & 1 << 2) == 0 && $context == self::CONTEXT_API) {
                 $context = self::CONTEXT_DESKTOP;
             }
         }
 
-        if ( (bool) OW::getConfig()->getValue('base', 'disable_mobile_context') && $context == self::CONTEXT_MOBILE )
-        {
+        if ((bool)OW::getConfig()->getValue('base', 'disable_mobile_context') && $context == self::CONTEXT_MOBILE) {
             $context = self::CONTEXT_DESKTOP;
         }
 
@@ -115,15 +103,11 @@ final class OW
         $uri = UTIL_Url::getRealRequestUri(OW::getRouter()->getBaseUrl(), $_SERVER['REQUEST_URI']);
 
 
-        if ( mb_strstr($uri, '/') )
-        {
-            if ( trim(mb_substr($uri, 0, mb_strpos($uri, '/'))) == 'api' )
-            {
+        if (mb_strstr($uri, '/')) {
+            if (trim(mb_substr($uri, 0, mb_strpos($uri, '/'))) == 'api') {
                 $context = self::CONTEXT_API;
             }
-        }
-        elseif ( trim($uri) == 'api' )
-        {
+        } elseif (trim($uri) == 'api') {
             $context = self::CONTEXT_API;
         }
 
@@ -141,6 +125,7 @@ final class OW
     }
 
     //TODO should be interface
+
     /**
      * Returns front controller object.
      *
@@ -150,8 +135,7 @@ final class OW
     {
         self::detectContext();
 
-        switch ( self::$context )
-        {
+        switch (self::$context) {
             case self::CONTEXT_MOBILE:
                 return OW_MobileApplication::getInstance();
 
@@ -195,6 +179,7 @@ final class OW
     {
         return OW_User::getInstance();
     }
+
     /**
      * Database object instance.
      *
@@ -203,6 +188,7 @@ final class OW
     private static $dboInstance;
 
     //TODO should be interface
+
     /**
      * Returns DB access object with default connection.
      *
@@ -210,30 +196,25 @@ final class OW
      */
     public static function getDbo(): \OW_Database
     {
-        if ( self::$dboInstance === null )
-        {
+        if (self::$dboInstance === null) {
             $params = [
-                'host' => OW_DB_HOST,
+                'host'     => OW_DB_HOST,
                 'username' => OW_DB_USER,
                 'password' => OW_DB_PASSWORD,
-                'dbname' => OW_DB_NAME
+                'dbname'   => OW_DB_NAME,
             ];
-            if ( defined('OW_DB_PORT') && (OW_DB_PORT !== null) )
-            {
+            if (defined('OW_DB_PORT') && (OW_DB_PORT !== null)) {
                 $params['port'] = OW_DB_PORT;
             }
-            if ( defined('OW_DB_SOCKET') )
-            {
+            if (defined('OW_DB_SOCKET')) {
                 $params['socket'] = OW_DB_SOCKET;
             }
 
-            if ( OW_DEV_MODE || OW_PROFILER_ENABLE )
-            {
+            if (OW_DEV_MODE || OW_PROFILER_ENABLE) {
                 $params['profilerEnable'] = true;
             }
 
-            if ( OW_DEBUG_MODE )
-            {
+            if (OW_DEBUG_MODE) {
                 $params['debugMode'] = true;
             }
 
@@ -245,7 +226,7 @@ final class OW
     /**
      * Returns system mailer object.
      *
-     * 	@return OW_Mailer
+     * @return OW_Mailer
      */
     public static function getMailer(): \OW_Mailer
     {
@@ -370,6 +351,7 @@ final class OW
     }
 
     //TODO should be interface
+
     /**
      * @return OW_RequestHandler
      */
@@ -377,8 +359,7 @@ final class OW
     {
         self::detectContext();
 
-        switch ( self::$context )
-        {
+        switch (self::$context) {
             case self::CONTEXT_API:
                 return OW_ApiRequestHandler::getInstance();
 
@@ -395,6 +376,7 @@ final class OW
     {
         return BOL_DbCacheService::getInstance(); //TODO make configurable
     }
+
     private static $storage;
 
     /**
@@ -403,14 +385,11 @@ final class OW
      */
     public static function getStorage(): OW_Storage
     {
-        if ( self::$storage === null )
-        {
+        if (self::$storage === null) {
             self::$storage = OW::getEventManager()->call('core.get_storage');
 
-            if ( self::$storage === null )
-            {
-                switch ( true )
-                {
+            if (self::$storage === null) {
+                switch (true) {
                     case defined('OW_USE_AMAZON_S3_CLOUDFILES') && OW_USE_AMAZON_S3_CLOUDFILES :
                         self::$storage = new BASE_CLASS_AmazonCloudStorage();
                         break;
@@ -429,7 +408,7 @@ final class OW
         return self::$storage;
     }
 
-    public static function getLogger( $logType = 'ow' ): \OW_Log
+    public static function getLogger($logType = 'ow'): \OW_Log
     {
         return OW_Log::getInstance($logType);
     }
@@ -456,9 +435,9 @@ final class OW
      * @return mixed|object
      * @throws ReflectionException
      */
-    public static function getClassInstance( $className, $arguments = null )
+    public static function getClassInstance($className, $arguments = null)
     {
-        $args = func_get_args();
+        $args            = func_get_args();
         $constructorArgs = array_splice($args, 1);
 
         return self::getClassInstanceArray($className, $constructorArgs);
@@ -470,11 +449,11 @@ final class OW
      * @return mixed|object
      * @throws ReflectionException
      */
-    public static function getClassInstanceArray( $className, array $arguments = [])
+    public static function getClassInstanceArray($className, array $arguments = [])
     {
         $params = [
             'className' => $className,
-            'arguments' => $arguments
+            'arguments' => $arguments,
         ];
 
         $eventManager = OW::getEventManager();
@@ -484,8 +463,7 @@ final class OW
         $eventManager->trigger($event);
         $instance = $event->getData();
 
-        if ( $instance !== null )
-        {
+        if ($instance !== null) {
             $eventManager->trigger(new OW_Event('core.performance_test', ['key' => 'component_construct.end', 'params' => $params]));
             return $instance;
         }
@@ -495,8 +473,7 @@ final class OW
         $eventManager->trigger($event);
         $instance = $event->getData();
 
-        if ( $instance !== null )
-        {
+        if ($instance !== null) {
             $eventManager->trigger(new OW_Event('core.performance_test', ['key' => 'component_construct.end', 'params' => $params]));
             return $instance;
         }

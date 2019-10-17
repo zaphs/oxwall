@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -26,9 +25,9 @@ declare(strict_types=1);
 /**
  * Web user class
  *
- * @author Nurlan Dzhumakaliev <nurlanj@live.com>
+ * @author  Nurlan Dzhumakaliev <nurlanj@live.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 class OW_User
 {
@@ -36,8 +35,7 @@ class OW_User
 
     public static function getInstance()
     {
-        if ( self::$classInstance === null )
-        {
+        if (self::$classInstance === null) {
             self::$classInstance = new self();
         }
 
@@ -48,15 +46,13 @@ class OW_User
     {
         $this->auth = OW_Auth::getInstance();
 
-        if ( $this->isAuthenticated() )
-        {
+        if ($this->isAuthenticated()) {
             $this->user = BOL_UserService::getInstance()->findUserById($this->auth->getUserId());
-        }
-        else
-        {
+        } else {
             $this->user = null;
         }
     }
+
     /**
      *
      * @var OW_Auth
@@ -73,15 +69,14 @@ class OW_User
      *
      * @param string $groupName
      * @param string $actionName
-     * @param array $extra
+     * @param array  $extra
      * @return boolean
      */
-    public function isAuthorized( $groupName, $actionName = null, $extra = null )
+    public function isAuthorized($groupName, $actionName = null, $extra = null)
     {
-        if ( $extra !== null && !is_array($extra) )
-        {
+        if ($extra !== null && !is_array($extra)) {
             trigger_error("`ownerId` parameter has been deprecated, pass `extra` parameter instead\n"
-                . OW_ErrorManager::getInstance()->debugBacktrace(), E_USER_WARNING);
+                          . OW_ErrorManager::getInstance()->debugBacktrace(), E_USER_WARNING);
         }
 
         return BOL_AuthorizationService::getInstance()->isActionAuthorized($groupName, $actionName, $extra);
@@ -92,12 +87,11 @@ class OW_User
      * @param OW_AuthAdapter $adapter
      * @return OW_AuthResult
      */
-    public function authenticate( OW_AuthAdapter $adapter )
+    public function authenticate(OW_AuthAdapter $adapter)
     {
         $result = $this->auth->authenticate($adapter);
 
-        if ( $this->isAuthenticated() )
-        {
+        if ($this->isAuthenticated()) {
             $this->user = BOL_UserService::getInstance()->findUserById($this->auth->getUserId());
         }
 
@@ -120,7 +114,7 @@ class OW_User
      */
     public function getId()
     {
-        return ( $this->user === null ) ? 0 : $this->user->getId();
+        return ($this->user === null) ? 0 : $this->user->getId();
     }
 
     /**
@@ -129,7 +123,7 @@ class OW_User
      */
     public function getEmail()
     {
-        return ( $this->user === null ) ? '' : $this->user->email;
+        return ($this->user === null) ? '' : $this->user->email;
     }
 
     /**
@@ -146,20 +140,18 @@ class OW_User
         return $this->isAuthorized(BOL_AuthorizationService::ADMIN_GROUP_NAME);
     }
 
-    public function login( $userId )
+    public function login($userId)
     {
         $this->auth->login($userId);
 
-        if ( $this->isAuthenticated() )
-        {
+        if ($this->isAuthenticated()) {
             $this->user = BOL_UserService::getInstance()->findUserById($this->auth->getUserId());
         }
     }
 
     public function logout()
     {
-        if ( $this->isAuthenticated() )
-        {
+        if ($this->isAuthenticated()) {
             $this->auth->logout();
             $this->user = null;
         }

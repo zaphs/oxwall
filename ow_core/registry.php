@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -24,15 +23,15 @@ declare(strict_types=1);
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_Registry getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_Registry
 {
     use OW_Singleton;
-    
+
     /**
      * @var array
      */
@@ -47,44 +46,41 @@ class OW_Registry
      */
     private function __construct()
     {
-        $this->data = [];
+        $this->data      = [];
         $this->arrayData = [];
     }
 
-    public function set( $key, $value )
+    public function set($key, $value)
     {
         $this->data[$key] = $value;
     }
 
-    public function get( $key )
+    public function get($key)
     {
-        if ( !isset($this->data[$key]) )
-        {
+        if (!isset($this->data[$key])) {
             return null;
         }
 
         return $this->data[$key];
     }
 
-    public function setArray( $key, array $value )
+    public function setArray($key, array $value)
     {
         $this->arrayData[$key] = $value;
     }
 
-    public function addToArray( $key, $value )
+    public function addToArray($key, $value)
     {
-        if ( !isset($this->arrayData[$key]) )
-        {
+        if (!isset($this->arrayData[$key])) {
             $this->arrayData[$key] = [];
         }
 
         $this->arrayData[$key][] = $value;
     }
 
-    public function getArray( $key )
+    public function getArray($key)
     {
-        if ( !isset($this->arrayData[$key]) )
-        {
+        if (!isset($this->arrayData[$key])) {
             return [];
         }
 

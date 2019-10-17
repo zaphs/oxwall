@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -26,20 +25,20 @@ declare(strict_types=1);
 /**
  * Base validator class.
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.8.3
+ * @since   1.8.3
  */
 interface OW_IFilter
 {
 
     /**
-     * Filters 
+     * Filters
      *
      * @param mixed $value
      * @return boolean
      */
-    public function filter( $value );
+    public function filter($value);
 
     /**
      * Returns JS code to validate form element data
@@ -50,9 +49,9 @@ interface OW_IFilter
 }
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.8.3
+ * @since   1.8.3
  */
 class TrimFilter implements OW_IFilter
 {
@@ -61,7 +60,7 @@ class TrimFilter implements OW_IFilter
      * @param string $value
      * @return string
      */
-    public function filter( $value )
+    public function filter($value)
     {
         return trim($value);
     }
@@ -76,9 +75,9 @@ class TrimFilter implements OW_IFilter
 }
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.8.3
+ * @since   1.8.3
  */
 class StripTagsFilter implements OW_IFilter
 {
@@ -86,7 +85,7 @@ class StripTagsFilter implements OW_IFilter
      * @param string $value
      * @return string
      */
-    public function filter( $value )
+    public function filter($value)
     {
         return strip_tags($value);
     }

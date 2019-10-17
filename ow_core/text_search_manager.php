@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -25,11 +24,11 @@ declare(strict_types=1);
 
 /**
  * The class is responsible for text search management.
- * 
- * @author Alex Ermashev <alexermashev@gmail.com>
+ *
+ * @author  Alex Ermashev <alexermashev@gmail.com>
  * @package ow.ow_core
  * @method static OW_TextSearchManager getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_TextSearchManager
 {
@@ -44,7 +43,7 @@ class OW_TextSearchManager
     CONST SORT_BY_RELEVANCE = BASE_CLASS_AbstractSearchStorage::SORT_BY_RELEVANCE;
 
     /**
-     * Active entity status 
+     * Active entity status
      */
     CONST ENTITY_STATUS_ACTIVE = BASE_CLASS_AbstractSearchStorage::ENTITY_STATUS_ACTIVE;
 
@@ -56,13 +55,13 @@ class OW_TextSearchManager
     use OW_Singleton;
 
     /**
-     * Default storage instance     
+     * Default storage instance
      * @var BASE_CLASS_AbstractSearchStorage
      */
     private $defaultStorageInstance;
 
     /**
-     * Active storage instance     
+     * Active storage instance
      * @var BASE_CLASS_AbstractSearchStorage|null $activeStorageInstance
      */
     private $activeStorageInstance;
@@ -78,58 +77,55 @@ class OW_TextSearchManager
     /**
      * Add entity
      *
-     * @param string $entityType
+     * @param string  $entityType
      * @param integer $entityId
      * @param string  $text
      * @param integer $timeStamp
-     * @param array $tags
-     * @param string $status
-     * @throws Exception
+     * @param array   $tags
+     * @param string  $status
      * @return void
+     * @throws Exception
      */
-    public function addEntity( $entityType, $entityId, $text, $timeStamp, array $tags = [], $status = null )
+    public function addEntity($entityType, $entityId, $text, $timeStamp, array $tags = [], $status = null)
     {
         $this->defaultStorageInstance->addEntity($entityType, $entityId, $text, $timeStamp, $tags, $status);
 
-        if ( $this->activeStorageInstance )
-        {
+        if ($this->activeStorageInstance) {
             $this->activeStorageInstance->addEntity($entityType, $entityId, $text, $timeStamp, $tags, $status);
         }
     }
 
     /**
      * Set entities status
-     * 
-     * @param string $entityType
+     *
+     * @param string  $entityType
      * @param integer $entityId
-     * @param string $status
-     * @throws Exception
+     * @param string  $status
      * @return void
+     * @throws Exception
      */
-    public function setEntitiesStatus( $entityType, $entityId, $status = self::ENTITY_STATUS_ACTIVE )
+    public function setEntitiesStatus($entityType, $entityId, $status = self::ENTITY_STATUS_ACTIVE)
     {
         $this->defaultStorageInstance->setEntitiesStatus($entityType, $entityId, $status);
 
-        if ( $this->activeStorageInstance )
-        {
+        if ($this->activeStorageInstance) {
             $this->activeStorageInstance->setEntitiesStatus($entityType, $entityId, $status);
         }
     }
 
     /**
      * Set entities status by tags
-     * 
-     * @param array $tags
+     *
+     * @param array  $tags
      * @param string $status
-     * @throws Exception
      * @return void
+     * @throws Exception
      */
-    public function setEntitiesStatusByTags( array $tags, $status = self::ENTITY_STATUS_ACTIVE )
+    public function setEntitiesStatusByTags(array $tags, $status = self::ENTITY_STATUS_ACTIVE)
     {
         $this->defaultStorageInstance->setEntitiesStatusByTags($tags, $status);
 
-        if ( $this->activeStorageInstance )
-        {
+        if ($this->activeStorageInstance) {
             $this->activeStorageInstance->setEntitiesStatusByTags($tags, $status);
         }
     }
@@ -137,17 +133,16 @@ class OW_TextSearchManager
     /**
      * Delete entity
      *
-     * @param string $entityType
+     * @param string  $entityType
      * @param integer $entityId
-     * @throws Exception
      * @return void
+     * @throws Exception
      */
-    public function deleteEntity( $entityType, $entityId )
+    public function deleteEntity($entityType, $entityId)
     {
         $this->defaultStorageInstance->deleteEntity($entityType, $entityId);
 
-        if ( $this->activeStorageInstance )
-        {
+        if ($this->activeStorageInstance) {
             $this->activeStorageInstance->deleteEntity($entityType, $entityId);
         }
     }
@@ -156,15 +151,14 @@ class OW_TextSearchManager
      * Delete all entities
      *
      * @param string $entityType
-     * @throws Exception
      * @return void
+     * @throws Exception
      */
-    public function deleteAllEntities( $entityType = null )
+    public function deleteAllEntities($entityType = null)
     {
         $this->defaultStorageInstance->deleteAllEntities($entityType);
 
-        if ( $this->activeStorageInstance )
-        {
+        if ($this->activeStorageInstance) {
             $this->activeStorageInstance->deleteAllEntities($entityType);
         }
     }
@@ -173,49 +167,46 @@ class OW_TextSearchManager
      * Delete all entities by tags
      *
      * @param array $tags
-     * @throws Exception
      * @return void
+     * @throws Exception
      */
-    public function deleteAllEntitiesByTags( array $tags )
+    public function deleteAllEntitiesByTags(array $tags)
     {
         $this->defaultStorageInstance->deleteAllEntitiesByTags($tags);
 
-        if ( $this->activeStorageInstance )
-        {
+        if ($this->activeStorageInstance) {
             $this->activeStorageInstance->deleteAllEntitiesByTags($tags);
-        }   
+        }
     }
 
     /**
      * Deactivate all entities
      *
      * @param string $entityType
-     * @throws Exception
      * @return void
+     * @throws Exception
      */
-    public function deactivateAllEntities( $entityType = null )
+    public function deactivateAllEntities($entityType = null)
     {
         $this->defaultStorageInstance->deactivateAllEntities($entityType);
 
-        if ( $this->activeStorageInstance )
-        {
+        if ($this->activeStorageInstance) {
             $this->activeStorageInstance->deactivateAllEntities($entityType);
         }
     }
-    
+
     /**
      * Deactivate all entities by tags
      *
      * @param array $tags
-     * @throws Exception
      * @return void
+     * @throws Exception
      */
-    public function deactivateAllEntitiesByTags( array $tags )
+    public function deactivateAllEntitiesByTags(array $tags)
     {
         $this->defaultStorageInstance->deactivateAllEntitiesByTags($tags);
 
-        if ( $this->activeStorageInstance )
-        {
+        if ($this->activeStorageInstance) {
             $this->activeStorageInstance->deactivateAllEntitiesByTags($tags);
         }
     }
@@ -224,15 +215,14 @@ class OW_TextSearchManager
      * Activate all entities
      *
      * @param string $entityType
-     * @throws Exception
      * @return void
+     * @throws Exception
      */
-    public function activateAllEntities( $entityType = null )
+    public function activateAllEntities($entityType = null)
     {
         $this->defaultStorageInstance->activateAllEntities($entityType);
 
-        if ( $this->activeStorageInstance )
-        {
+        if ($this->activeStorageInstance) {
             $this->activeStorageInstance->activateAllEntities($entityType);
         }
     }
@@ -241,15 +231,14 @@ class OW_TextSearchManager
      * Activate all entities by tags
      *
      * @param array $tags
-     * @throws Exception
      * @return void
+     * @throws Exception
      */
-    public function activateAllEntitiesByTags( array $tags )
+    public function activateAllEntitiesByTags(array $tags)
     {
         $this->defaultStorageInstance->activateAllEntitiesByTags($tags);
 
-        if ( $this->activeStorageInstance )
-        {
+        if ($this->activeStorageInstance) {
             $this->activeStorageInstance->activateAllEntitiesByTags($tags);
         }
     }
@@ -257,97 +246,98 @@ class OW_TextSearchManager
     /**
      * Search entities
      *
-     * @param string $text
+     * @param string  $text
      * @param integer $first
      * @param integer $limit
-     * @param array $tags
-     * @param string $sort
+     * @param array   $tags
+     * @param string  $sort
      * @param boolean $sortDesc
      * @param integer $timeStart
      * @param integer $timeEnd
-     * @throws Exception
      * @return array
+     * @throws Exception
      */
-    public function searchEntities( $text, $first, $limit, 
-            array $tags = [], $sort = self::SORT_BY_RELEVANCE, $sortDesc = true, $timeStart = 0, $timeEnd = 0 )
-    {
-        if ( $this->activeStorageInstance )
-        {
-            return $this->activeStorageInstance->
-                    searchEntities($text, $first, $limit, $tags, $sort, $sortDesc, $timeStart, $timeEnd);
+    public function searchEntities(
+        $text,
+        $first,
+        $limit,
+        array $tags = [],
+        $sort = self::SORT_BY_RELEVANCE,
+        $sortDesc = true,
+        $timeStart = 0,
+        $timeEnd = 0
+    ) {
+        if ($this->activeStorageInstance) {
+            return $this->activeStorageInstance->searchEntities($text, $first, $limit, $tags, $sort, $sortDesc, $timeStart, $timeEnd);
         }
 
-        return $this->defaultStorageInstance->
-                    searchEntities($text, $first, $limit, $tags, $sort, $sortDesc, $timeStart, $timeEnd);
+        return $this->defaultStorageInstance->searchEntities($text, $first, $limit, $tags, $sort, $sortDesc, $timeStart, $timeEnd);
     }
 
     /**
      * Search entities count
      *
-     * @param string $text
-     * @param array $tags
+     * @param string  $text
+     * @param array   $tags
      * @param integer $timeStart
      * @param integer $timeEnd
-     * @throws Exception
      * @return integer
+     * @throws Exception
      */
-    public function searchEntitiesCount( $text, array $tags = [], $timeStart = 0, $timeEnd = 0 )
+    public function searchEntitiesCount($text, array $tags = [], $timeStart = 0, $timeEnd = 0)
     {
-        if ( $this->activeStorageInstance )
-        {
-            return $this->activeStorageInstance->
-                    searchEntitiesCount($text, $tags, $timeStart, $timeEnd);
+        if ($this->activeStorageInstance) {
+            return $this->activeStorageInstance->searchEntitiesCount($text, $tags, $timeStart, $timeEnd);
         }
 
-        return $this->defaultStorageInstance->
-                searchEntitiesCount($text, $tags, $timeStart, $timeEnd);
+        return $this->defaultStorageInstance->searchEntitiesCount($text, $tags, $timeStart, $timeEnd);
     }
 
     /**
      * Search entities by tags
      *
-     * @param array $tags
+     * @param array   $tags
      * @param integer $first
-     * @param integer $limit     
-     * @param string $sort
+     * @param integer $limit
+     * @param string  $sort
      * @param boolean $sortDesc
      * @param integer $timeStart
      * @param integer $timeEnd
-     * @throws Exception
      * @return array
+     * @throws Exception
      */
-    public function searchEntitiesByTags( array $tags, $first, $limit, 
-            $sort = self::SORT_BY_DATE, $sortDesc = true, $timeStart = 0, $timeEnd = 0 )
-    {
-        if ( $this->activeStorageInstance )
-        {
-            return $this->activeStorageInstance->
-                    searchEntitiesByTags($tags, $first, $limit, $sort, $sortDesc, $timeStart, $timeEnd);
+    public function searchEntitiesByTags(
+        array $tags,
+        $first,
+        $limit,
+        $sort = self::SORT_BY_DATE,
+        $sortDesc = true,
+        $timeStart = 0,
+        $timeEnd = 0
+    ) {
+        if ($this->activeStorageInstance) {
+            return $this->activeStorageInstance->searchEntitiesByTags($tags, $first, $limit, $sort, $sortDesc, $timeStart, $timeEnd);
         }
 
-        return $this->defaultStorageInstance->
-                    searchEntitiesByTags($tags, $first, $limit, $sort, $sortDesc, $timeStart, $timeEnd);
+        return $this->defaultStorageInstance->searchEntitiesByTags($tags, $first, $limit, $sort, $sortDesc, $timeStart, $timeEnd);
     }
 
     /**
      * Search entities count by tags
      *
-     * @param array $tags
+     * @param array   $tags
      * @param integer $timeStart
      * @param integer $timeEnd
-     * @throws Exception
      * @return integer
+     * @throws Exception
      */
-    public function searchEntitiesCountByTags( array $tags, $timeStart = 0, $timeEnd = 0 )
+    public function searchEntitiesCountByTags(array $tags, $timeStart = 0, $timeEnd = 0)
     {
-        if ( $this->activeStorageInstance )
-        {
-            return $this->activeStorageInstance->
-                    searchEntitiesCountByTags($tags, $timeStart, $timeEnd);
+        if ($this->activeStorageInstance) {
+            return $this->activeStorageInstance->searchEntitiesCountByTags($tags, $timeStart, $timeEnd);
         }
 
-        return $this->defaultStorageInstance->
-                searchEntitiesCountByTags($tags, $timeStart, $timeEnd);
+        return $this->defaultStorageInstance->searchEntitiesCountByTags($tags, $timeStart, $timeEnd);
     }
 
     /**
@@ -355,11 +345,11 @@ class OW_TextSearchManager
      *
      * @param integer $first
      * @param integer $limit
-     * @param string $entityType
-     * @throws Exception
+     * @param string  $entityType
      * @return array
+     * @throws Exception
      */
-    public function getAllEntities( $first, $limit, $entityType = null )
+    public function getAllEntities($first, $limit, $entityType = null)
     {
         return $this->defaultStorageInstance->getAllEntities($first, $limit, $entityType);
     }

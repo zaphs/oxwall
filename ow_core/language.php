@@ -26,15 +26,15 @@ declare(strict_types=1);
 /**
  * Base language class.
  *
- * @author Nurlan Dzhumakaliev <nurlanj@live.com>
+ * @author  Nurlan Dzhumakaliev <nurlanj@live.com>
  * @package ow_core
  * @method static OW_Language getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_Language
 {
     use OW_Singleton;
-    
+
     /**
      * @var OW_EventManager
      */
@@ -47,53 +47,44 @@ class OW_Language
     private function __construct()
     {
 //        $this->eventManager = OW::getEventManager();
-    }    
+    }
 
-    public function text( $prefix, $key, array $vars = null, $defaultValue = null )
+    public function text($prefix, $key, array $vars = null, $defaultValue = null)
     {
-        if ( empty($prefix) || empty($key) )
-        {
+        if (empty($prefix) || empty($key)) {
             return $prefix . '+' . $key;
         }
 
         $text = null;
-        try
-        {
+        try {
             $text = BOL_LanguageService::getInstance()->getText(BOL_LanguageService::getInstance()->getCurrent()->getId(), $prefix, $key, $vars);
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             return $defaultValue ?? $prefix . '+' . $key;
         }
 
-        if ( $text === null )
-        {
+        if ($text === null) {
             return $defaultValue ?? $prefix . '+' . $key;
         }
 
         return $text;
     }
 
-    public function valueExist( $prefix, $key )
+    public function valueExist($prefix, $key)
     {
-        if ( empty($prefix) || empty($key) )
-        {
+        if (empty($prefix) || empty($key)) {
             throw new InvalidArgumentException('Invalid parameter $prefix or $key');
         }
 
-        try
-        {
+        try {
             $text = BOL_LanguageService::getInstance()->getText(BOL_LanguageService::getInstance()->getCurrent()->getId(), $prefix, $key);
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             return false;
         }
 
         return !($text === null);
     }
 
-    public function addKeyForJs( $prefix, $key )
+    public function addKeyForJs($prefix, $key)
     {
         $text = json_encode($this->text($prefix, $key));
 
@@ -105,17 +96,17 @@ class OW_Language
         return BOL_LanguageService::getInstance()->getCurrent()->getId();
     }
 
-    public function importPluginLangs( $path, $key, $refreshCache = false, $addLanguage = false )
+    public function importPluginLangs($path, $key, $refreshCache = false, $addLanguage = false)
     {
         BOL_LanguageService::getInstance()->importPrefixFromZip($path, $key, $refreshCache, $addLanguage);
     }
-    
-    public function importLangsFromZip( $path, $refreshCache = false, $addLanguage = false )
+
+    public function importLangsFromZip($path, $refreshCache = false, $addLanguage = false)
     {
         BOL_LanguageService::getInstance()->importPrefixFromZip($path, uniqid(), $refreshCache, $addLanguage);
     }
 
-    public function importLangsFromDir( $path, $refreshCache = false, $addLanguage = false )
+    public function importLangsFromDir($path, $refreshCache = false, $addLanguage = false)
     {
         BOL_LanguageService::getInstance()->importPrefixFromDir($path, $refreshCache, $addLanguage);
     }

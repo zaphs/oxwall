@@ -12,7 +12,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -23,45 +22,44 @@
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_utilities
- * @since 1.0
+ * @since   1.0
  */
 class UTIL_DateTime
 {
-    public const PARSE_DATE_HOUR = 'hour';
-    public const PARSE_DATE_MINUTE = 'minute';
-    public const PARSE_DATE_SECOND = 'second';
-    public const PARSE_DATE_DAY = 'day';
-    public const PARSE_DATE_MONTH = 'month';
-    public const PARSE_DATE_YEAR = 'year';
-    public const DEFAULT_DATE_FORMAT = 'yyyy/M/d';
+    public const PARSE_DATE_HOUR            = 'hour';
+    public const PARSE_DATE_MINUTE          = 'minute';
+    public const PARSE_DATE_SECOND          = 'second';
+    public const PARSE_DATE_DAY             = 'day';
+    public const PARSE_DATE_MONTH           = 'month';
+    public const PARSE_DATE_YEAR            = 'year';
+    public const DEFAULT_DATE_FORMAT        = 'yyyy/M/d';
     public const MYSQL_DATETIME_DATE_FORMAT = 'yyyy-MM-dd hh:mm:ss';
 
     /**
      * Returns formated date string for provided time stamp.
-     * 
+     *
      * Format:
-     * 		`{month:str} {day:int} '{year:int}, {hours:int}:{minutes:int}[am/pm]`
-     * 		`{month:str} {day:int} '{year:int} | $onlyDate = true
-     * 
+     *        `{month:str} {day:int} '{year:int}, {hours:int}:{minutes:int}[am/pm]`
+     *        `{month:str} {day:int} '{year:int} | $onlyDate = true
+     *
      * Samples:
-     * 		`Jan 17 '09, 11:07[am]`
-     * 		`Oct 25 '09, 08:09[pm]`
-     * 		`Oct 25 '09 | $onlyDate = true
+     *        `Jan 17 '09, 11:07[am]`
+     *        `Oct 25 '09, 08:09[pm]`
+     *        `Oct 25 '09 | $onlyDate = true
      *
      * @param integer $timeStamp
      * @param boolean $onlyDate
      * @return string
      */
-    public static function formatSimpleDate( $timeStamp, $onlyDate = false )
+    public static function formatSimpleDate($timeStamp, $onlyDate = false)
     {
-        $militaryTime = (bool) OW::getConfig()->getValue('base', 'military_time');
+        $militaryTime = (bool)OW::getConfig()->getValue('base', 'military_time');
 
         $language = OW::getLanguage();
 
-        if ( !$timeStamp )
-        {
+        if (!$timeStamp) {
             return '_INVALID_TS_';
         }
 
@@ -69,17 +67,17 @@ class UTIL_DateTime
 
         //$at = $language->text('base', 'date_time_at_label');
 
-        if ( $onlyDate )
-        {
-            return ( date('y', $timeStamp) === date('y', time()) ) ?
+        if ($onlyDate) {
+            return (date('y', $timeStamp) === date('y', time())) ?
                 $month . strftime(' %e', $timeStamp) :
                 $month . strftime(" %e '%y", $timeStamp);
         }
 
-        return ( date('y', $timeStamp) === date('y', time()) ) ?
-            $month . ( $militaryTime ? strftime(' %e, %H:%M', $timeStamp) : strftime(' %e, %I:%M%p', $timeStamp) ) :
-            $month . ( $militaryTime ? strftime(" %e '%y, %H:%M", $timeStamp) : strftime(" %e '%y, %I:%M%p", $timeStamp) );
+        return (date('y', $timeStamp) === date('y', time())) ?
+            $month . ($militaryTime ? strftime(' %e, %H:%M', $timeStamp) : strftime(' %e, %I:%M%p', $timeStamp)) :
+            $month . ($militaryTime ? strftime(" %e '%y, %H:%M", $timeStamp) : strftime(" %e '%y, %I:%M%p", $timeStamp));
     }
+
     /*     * p, $onlyDate = null )
      * Returns formated date string/literal date string for provided time stamp.
      *
@@ -105,38 +103,33 @@ class UTIL_DateTime
      * @return string
      */
 
-    public static function formatDate( $timeStamp, $onlyDate = null )
+    public static function formatDate($timeStamp, $onlyDate = null)
     {
-        if ( !(bool) OW::getConfig()->getValue('base', 'site_use_relative_time') )
-        {
+        if (!(bool)OW::getConfig()->getValue('base', 'site_use_relative_time')) {
             return self::formatSimpleDate($timeStamp, $onlyDate);
         }
 
         $language = OW::getLanguage();
 
-        $militaryTime = (bool) OW::getConfig()->getValue('base', 'military_time');
+        $militaryTime = (bool)OW::getConfig()->getValue('base', 'military_time');
 
-        if ( !$timeStamp )
-        {
+        if (!$timeStamp) {
             return '_INVALID_TS_';
         }
 
         $currentTs = time();
 
-        if ( date('j', $timeStamp) === date('j', $currentTs) &&
+        if (date('j', $timeStamp) === date('j', $currentTs) &&
             date('n', $timeStamp) === date('n', $currentTs) &&
             date('y', $timeStamp) === date('y', $currentTs)
-        )
-        {
-            if ( $onlyDate )
-            {
+        ) {
+            if ($onlyDate) {
                 return $language->text('base', 'date_time_today');
             }
 
             $secondsPast = $currentTs - $timeStamp;
 
-            switch ( true )
-            {
+            switch (true) {
                 case $secondsPast < 60:
                     return $language->text('base', 'date_time_within_one_minute');
 
@@ -152,22 +145,20 @@ class UTIL_DateTime
                 default:
                     return $language->text('base', 'date_time_hours_ago', ['hours' => floor($secondsPast / 3600)]);
             }
-        }
-        else if ( ( date('j', $currentTs) - date('j', $timeStamp) ) === 1 &&
-            date('n', $currentTs) === date('n', $timeStamp) &&
-            date('y', $currentTs) === date('y', $timeStamp)
-        )
-        {
-            if ( $onlyDate )
-            {
-                return $language->text('base', 'date_time_yesterday');
+        } else {
+            if ((date('j', $currentTs) - date('j', $timeStamp)) === 1 &&
+                date('n', $currentTs) === date('n', $timeStamp) &&
+                date('y', $currentTs) === date('y', $timeStamp)
+            ) {
+                if ($onlyDate) {
+                    return $language->text('base', 'date_time_yesterday');
+                }
+
+                return $language->text('base', 'date_time_yesterday') . ', ' . ($militaryTime ? strftime('%H:%M', $timeStamp) : strftime('%I:%M%p', $timeStamp));
             }
-
-            return $language->text('base', 'date_time_yesterday') . ', ' . ( $militaryTime ? strftime('%H:%M', $timeStamp) : strftime('%I:%M%p', $timeStamp) );
         }
 
-        if ( $onlyDate === null )
-        {
+        if ($onlyDate === null) {
             $onlyDate = true;
         }
 
@@ -180,198 +171,184 @@ class UTIL_DateTime
      * @param string the pattern that the date string is following
      * @return DateTime|null|false|array
      */
-    public static function parseDate( $value, $pattern = self::DEFAULT_DATE_FORMAT )
+    public static function parseDate($value, $pattern = self::DEFAULT_DATE_FORMAT)
     {
         $tokens = self::tokenize($pattern);
-        $i = 0;
-        $n = strlen($value);
-        foreach ( $tokens as $token )
-        {
-            switch ( $token )
-            {
+        $i      = 0;
+        $n      = strlen($value);
+        foreach ($tokens as $token) {
+            switch ($token) {
                 case 'yyyy':
-                    {
-                        if ( ($year = self::parseInteger($value, $i, 4, 4)) === false ) {
-                            return null;
-                        }
-                        $i+=4;
-                        break;
+                {
+                    if (($year = self::parseInteger($value, $i, 4, 4)) === false) {
+                        return null;
                     }
+                    $i += 4;
+                    break;
+                }
                 case 'yy':
-                    {
-                        if ( ($year = self::parseInteger($value, $i, 1, 2)) === false ) {
-                            return null;
-                        }
-                        $i+=strlen($year);
-                        break;
+                {
+                    if (($year = self::parseInteger($value, $i, 1, 2)) === false) {
+                        return null;
                     }
+                    $i += strlen($year);
+                    break;
+                }
                 case 'MM':
-                    {
-                        if ( ($month = self::parseInteger($value, $i, 2, 2)) === false ) {
-                            return null;
-                        }
-                        $i+=2;
-                        break;
+                {
+                    if (($month = self::parseInteger($value, $i, 2, 2)) === false) {
+                        return null;
                     }
+                    $i += 2;
+                    break;
+                }
                 case 'M':
-                    {
-                        if ( ($month = self::parseInteger($value, $i, 1, 2)) === false ) {
-                            return null;
-                        }
-                        $i+=strlen($month);
-                        break;
+                {
+                    if (($month = self::parseInteger($value, $i, 1, 2)) === false) {
+                        return null;
                     }
+                    $i += strlen($month);
+                    break;
+                }
                 case 'dd':
-                    {
-                        if ( ($day = self::parseInteger($value, $i, 2, 2)) === false ) {
-                            return null;
-                        }
-                        $i+=2;
-                        break;
+                {
+                    if (($day = self::parseInteger($value, $i, 2, 2)) === false) {
+                        return null;
                     }
+                    $i += 2;
+                    break;
+                }
                 case 'd':
-                    {
-                        if ( ($day = self::parseInteger($value, $i, 1, 2)) === false ) {
-                            return null;
-                        }
-                        $i+=strlen($day);
-                        break;
+                {
+                    if (($day = self::parseInteger($value, $i, 1, 2)) === false) {
+                        return null;
                     }
+                    $i += strlen($day);
+                    break;
+                }
                 case 'h':
                 case 'H':
-                    {
-                        if ( ($hour = self::parseInteger($value, $i, 1, 2)) === false ) {
-                            return null;
-                        }
-                        $i+=strlen($hour);
-                        break;
+                {
+                    if (($hour = self::parseInteger($value, $i, 1, 2)) === false) {
+                        return null;
                     }
+                    $i += strlen($hour);
+                    break;
+                }
                 case 'hh':
                 case 'HH':
-                    {
-                        if ( ($hour = self::parseInteger($value, $i, 2, 2)) === false ) {
-                            return null;
-                        }
-                        $i+=2;
-                        break;
+                {
+                    if (($hour = self::parseInteger($value, $i, 2, 2)) === false) {
+                        return null;
                     }
+                    $i += 2;
+                    break;
+                }
                 case 'm':
-                    {
-                        if ( ($minute = self::parseInteger($value, $i, 1, 2)) === false ) {
-                            return null;
-                        }
-                        $i+=strlen($minute);
-                        break;
+                {
+                    if (($minute = self::parseInteger($value, $i, 1, 2)) === false) {
+                        return null;
                     }
+                    $i += strlen($minute);
+                    break;
+                }
                 case 'mm':
-                    {
-                        if ( ($minute = self::parseInteger($value, $i, 2, 2)) === false ) {
-                            return null;
-                        }
-                        $i+=2;
-                        break;
+                {
+                    if (($minute = self::parseInteger($value, $i, 2, 2)) === false) {
+                        return null;
                     }
+                    $i += 2;
+                    break;
+                }
                 case 's':
-                    {
-                        if ( ($second = self::parseInteger($value, $i, 1, 2)) === false ) {
-                            return null;
-                        }
-                        $i+=strlen($second);
-                        break;
+                {
+                    if (($second = self::parseInteger($value, $i, 1, 2)) === false) {
+                        return null;
                     }
+                    $i += strlen($second);
+                    break;
+                }
                 case 'ss':
-                    {
-                        if ( ($second = self::parseInteger($value, $i, 2, 2)) === false ) {
-                            return null;
-                        }
-                        $i+=2;
-                        break;
+                {
+                    if (($second = self::parseInteger($value, $i, 2, 2)) === false) {
+                        return null;
                     }
+                    $i += 2;
+                    break;
+                }
                 default:
-                    {
-                        $tn = strlen($token);
-                        if ( $i >= $n || substr($value, $i, $tn) !== $token ) {
-                            return null;
-                        }
-                        $i+=$tn;
-                        break;
+                {
+                    $tn = strlen($token);
+                    if ($i >= $n || substr($value, $i, $tn) !== $token) {
+                        return null;
                     }
+                    $i += $tn;
+                    break;
+                }
             }
         }
-        if ( $i < $n )
-        {
+        if ($i < $n) {
             return false;
         }
 
-        if (!isset($year, $month, $day))
-        {
+        if (!isset($year, $month, $day)) {
             return null;
         }
 
-        if ( strlen($year) === 2 )
-        {
-            if ( $year > 70 ) {
+        if (strlen($year) === 2) {
+            if ($year > 70) {
                 $year += 1900;
-            }
-            else {
+            } else {
                 $year += 2000;
             }
         }
 
-        $year = (int) $year;
-        $month = (int) $month;
-        $day = (int) $day;
+        $year  = (int)$year;
+        $month = (int)$month;
+        $day   = (int)$day;
 
-        if ( !isset($hour) && !isset($minute) && !isset($second) )
-        {
+        if (!isset($hour) && !isset($minute) && !isset($second)) {
             $hour = $minute = $second = 0;
-        }
-        else
-        {
-            if ( !isset($hour) )
-            {
+        } else {
+            if (!isset($hour)) {
                 $hour = 0;
             }
 
-            if ( !isset($minute) )
-            {
+            if (!isset($minute)) {
                 $minute = 0;
             }
 
-            if ( !isset($second) )
-            {
+            if (!isset($second)) {
                 $second = 0;
             }
 
-            $hour = (int) $hour;
-            $minute = (int) $minute;
-            $second = (int) $second;
+            $hour   = (int)$hour;
+            $minute = (int)$minute;
+            $second = (int)$second;
         }
 
         return [
             'minute' => $minute,
-            'hour' => $hour,
+            'hour'   => $hour,
             'second' => $second,
-            'day' => $day,
-            'month' => $month,
-            'year' => $year
+            'day'    => $day,
+            'month'  => $month,
+            'year'   => $year,
         ];
     }
 
-    private static function tokenize( $pattern )
+    private static function tokenize($pattern)
     {
-        if ( !($n = strlen($pattern)) ) {
+        if (!($n = strlen($pattern))) {
             return [];
         }
 
         $tokens = [];
-        for ( $c0 = $pattern[0], $start = 0, $i = 1; $i < $n; ++$i )
-        {
-            if ( ($c = $pattern[$i]) !== $c0 )
-            {
+        for ($c0 = $pattern[0], $start = 0, $i = 1; $i < $n; ++$i) {
+            if (($c = $pattern[$i]) !== $c0) {
                 $tokens[] = substr($pattern, $start, $i - $start);
-                $c0 = $c;
-                $start = $i;
+                $c0       = $c;
+                $start    = $i;
             }
         }
 
@@ -380,12 +357,11 @@ class UTIL_DateTime
         return $tokens;
     }
 
-    protected static function parseInteger( $value, $offset, $minLength, $maxLength )
+    protected static function parseInteger($value, $offset, $minLength, $maxLength)
     {
-        for ( $len = $maxLength; $len >= $minLength; --$len )
-        {
+        for ($len = $maxLength; $len >= $minLength; --$len) {
             $v = substr($value, $offset, $len);
-            if ( ctype_digit($v) ) {
+            if (ctype_digit($v)) {
                 return $v;
             }
         }
@@ -393,36 +369,32 @@ class UTIL_DateTime
         return false;
     }
 
-    public static function getAge( $year, $month, $day )
+    public static function getAge($year, $month, $day)
     {
         [$y, $m, $d] = explode(':', date('Y:m:d', time()));
 
         $age = $y - $year;
 
-        if ( $month > $m )
-        {
+        if ($month > $m) {
             $age--;
-        }
-        else if ( ( $month == $m ) && ( $day > $d ) )
-        {
-            $age--;
+        } else {
+            if (($month == $m) && ($day > $d)) {
+                $age--;
+            }
         }
 
         return $age;
     }
 
-    public static function formatBirthdate( $year, $month, $day )
+    public static function formatBirthdate($year, $month, $day)
     {
         $language = OW::getLanguage();
 
         $format = OW::getConfig()->getValue('base', 'date_field_format');
 
-        if ( $format === 'dmy' )
-        {
-            $result = date('d', mktime(0, 0, 0, $month, $day, $year)) . ' ' . $language->text('base', 'date_time_month_short_' . (int)$month) ;
-        }
-        else
-        {
+        if ($format === 'dmy') {
+            $result = date('d', mktime(0, 0, 0, $month, $day, $year)) . ' ' . $language->text('base', 'date_time_month_short_' . (int)$month);
+        } else {
             $result = $language->text('base', 'date_time_month_short_' . (int)$month) . ' ' . date('d', mktime(0, 0, 0, $month, $day, $year));
         }
 
@@ -885,14 +857,12 @@ class UTIL_DateTime
             'US/Mountain',
             'US/Pacific',
             'US/Pacific-New',
-            'US/Samoa'
+            'US/Samoa',
         ];
 
 
-
         $timezones = [];
-        foreach ( $zones as $z )
-        {
+        foreach ($zones as $z) {
             $timezones[$z] = $z;
         }
 

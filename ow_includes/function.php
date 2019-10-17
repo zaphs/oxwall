@@ -12,7 +12,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -26,7 +25,7 @@
  * @param      $var
  * @param bool $exit
  */
-function printVar( $var, $exit = false )
+function printVar($var, $exit = false)
 {
     UTIL_Debug::varDump($var, $exit);
 }
@@ -35,7 +34,7 @@ function printVar( $var, $exit = false )
  * @param      $var
  * @param bool $exit
  */
-function pv( $var, $exit = false )
+function pv($var, $exit = false)
 {
     UTIL_Debug::varDump($var, $exit);
 }
@@ -44,7 +43,7 @@ function pv( $var, $exit = false )
  * @param      $var
  * @param bool $exit
  */
-function pve( $var, $exit = false )
+function pve($var, $exit = false)
 {
     UTIL_Debug::varDump($var, $exit);
     exit;
@@ -53,7 +52,7 @@ function pve( $var, $exit = false )
 /**
  * @param null $markKey
  */
-function profiler_mark( $markKey = null )
+function profiler_mark($markKey = null)
 {
     UTIL_Profiler::getInstance()->mark($markKey);
 }

@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -27,10 +26,10 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_CliApplication getInstance()
- * @since 1.8.2
+ * @since   1.8.2
  */
 class OW_CliApplication extends OW_Application
 {
@@ -43,7 +42,7 @@ class OW_CliApplication extends OW_Application
 
     private function __construct()
     {
-        $this->context = self::CONTEXT_CLI;
+        $this->context        = self::CONTEXT_CLI;
         $this->cliArgsHandler = new CliArgsHandler();
     }
 

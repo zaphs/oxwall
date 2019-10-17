@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -26,9 +25,9 @@ declare(strict_types=1);
 /**
  * Base Data Access Object class.
  *
- * @author Nurlan Dzhumakaliev <nurlanj@live.com>
+ * @author  Nurlan Dzhumakaliev <nurlanj@live.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 abstract class OW_BaseDao
 {
@@ -43,6 +42,7 @@ abstract class OW_BaseDao
      * @return string
      */
     abstract public function getDtoClassName();
+
     /**
      *
      * @var OW_Database
@@ -62,11 +62,11 @@ abstract class OW_BaseDao
      * @param array $tags
      * @return OW_Entity|object|null
      */
-    public function findById( $id, $cacheLifeTime = 0, $tags = [])
+    public function findById($id, $cacheLifeTime = 0, $tags = [])
     {
         $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE `id` = ?';
 
-        return $this->dbo->queryForObject($sql, $this->getDtoClassName(), [(int) $id], $cacheLifeTime, $tags);
+        return $this->dbo->queryForObject($sql, $this->getDtoClassName(), [(int)$id], $cacheLifeTime, $tags);
     }
 
     /**
@@ -77,10 +77,9 @@ abstract class OW_BaseDao
      * @param array $tags
      * @return array
      */
-    public function findByIdList( array $idList, $cacheLifeTime = 0, $tags = [])
+    public function findByIdList(array $idList, $cacheLifeTime = 0, $tags = [])
     {
-        if ( $idList === null || count($idList) === 0 )
-        {
+        if ($idList === null || count($idList) === 0) {
             return [];
         }
         $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE `id` IN(' . $this->dbo->mergeInClause($idList) . ')';
@@ -88,10 +87,9 @@ abstract class OW_BaseDao
         return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), [], $cacheLifeTime, $tags);
     }
 
-    public function findListByExample( OW_Example $example, $cacheLifeTime = 0, $tags = [])
+    public function findListByExample(OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
-        if ( $example === null )
-        {
+        if ($example === null) {
             throw new InvalidArgumentException('argument must not be null');
         }
 
@@ -100,10 +98,9 @@ abstract class OW_BaseDao
         return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), [], $cacheLifeTime, $tags);
     }
 
-    public function countByExample( OW_Example $example, $cacheLifeTime = 0, $tags = [])
+    public function countByExample(OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
-        if ( $example === null )
-        {
+        if ($example === null) {
             throw new InvalidArgumentException('argument must not be null');
         }
 
@@ -112,10 +109,9 @@ abstract class OW_BaseDao
         return $this->dbo->queryForColumn($sql, [], $cacheLifeTime, $tags);
     }
 
-    public function findObjectByExample( OW_Example $example, $cacheLifeTime = 0, $tags = [])
+    public function findObjectByExample(OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
-        if ( $example === null )
-        {
+        if ($example === null) {
             throw new InvalidArgumentException('argument must not be null');
         }
 
@@ -132,7 +128,7 @@ abstract class OW_BaseDao
      * @param array $tags
      * @return array
      */
-    public function findAll( $cacheLifeTime = 0, $tags = [])
+    public function findAll($cacheLifeTime = 0, $tags = [])
     {
         $sql = 'SELECT * FROM ' . $this->getTableName();
 
@@ -156,12 +152,11 @@ abstract class OW_BaseDao
      * @param int $id
      * @return int
      */
-    public function deleteById( $id )
+    public function deleteById($id)
     {
-        $id = (int) $id;
-        if ( $id > 0 )
-        {
-            $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE `id` = ?';
+        $id = (int)$id;
+        if ($id > 0) {
+            $sql    = 'DELETE FROM ' . $this->getTableName() . ' WHERE `id` = ?';
             $result = $this->dbo->delete($sql, [$id]);
             $this->clearCache();
             return $result;
@@ -176,10 +171,9 @@ abstract class OW_BaseDao
      * @param array $idList
      * @return int|null
      */
-    public function deleteByIdList( array $idList )
+    public function deleteByIdList(array $idList)
     {
-        if ( $idList === null || count($idList) === 0 )
-        {
+        if ($idList === null || count($idList) === 0) {
             return null;
         }
         $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE `id` IN(' . $this->dbo->mergeInClause($idList) . ')';
@@ -189,10 +183,9 @@ abstract class OW_BaseDao
         return $this->dbo->delete($sql);
     }
 
-    public function deleteByExample( OW_Example $example )
+    public function deleteByExample(OW_Example $example)
     {
-        if ( $example === null || (string)$example === '')
-        {
+        if ($example === null || (string)$example === '') {
             throw new InvalidArgumentException('example must not be null or empty');
         }
         $sql = 'DELETE FROM ' . $this->getTableName() . $example;
@@ -207,61 +200,52 @@ abstract class OW_BaseDao
      * throws InvalidArgumentException
      *
      * @param OW_Entity $entity
-     * 
+     *
      * @throws InvalidArgumentException
      */
-    public function save( $entity )
+    public function save($entity)
     {
-        if ( $entity === null || !($entity instanceof OW_Entity) )
-        {
+        if ($entity === null || !($entity instanceof OW_Entity)) {
             throw new InvalidArgumentException('Argument must be instance of OW_Entity and cannot be null');
         }
 
-        $entity->id = (int) $entity->id;
+        $entity->id = (int)$entity->id;
 
-        if ( $entity->id > 0 )
-        {
+        if ($entity->id > 0) {
             $this->dbo->updateObject($this->getTableName(), $entity);
-        }
-        else
-        {
+        } else {
             $entity->id = $this->dbo->insertObject($this->getTableName(), $entity);
         }
 
         $this->clearCache();
     }
 
-    public function saveDelayed( $entity )
+    public function saveDelayed($entity)
     {
-        if ( $entity === null || !($entity instanceof OW_Entity) )
-        {
+        if ($entity === null || !($entity instanceof OW_Entity)) {
             throw new InvalidArgumentException('Argument must be instance of OW_Entity and cannot be null');
         }
 
-        $entity->id = (int) $entity->id;
+        $entity->id = (int)$entity->id;
 
-        if ( $entity->id > 0 )
-        {
+        if ($entity->id > 0) {
             $this->dbo->updateObject($this->getTableName(), $entity, 'id', true);
-        }
-        else
-        {
+        } else {
             $entity->id = $this->dbo->insertObject($this->getTableName(), $entity, true);
         }
 
         $this->clearCache();
     }
 
-    public function delete( $entity )
+    public function delete($entity)
     {
         $this->deleteById($entity->id);
         $this->clearCache();
     }
 
-    public function findIdByExample( OW_Example $example, $cacheLifeTime = 0, $tags = [])
+    public function findIdByExample(OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
-        if ( $example === null )
-        {
+        if ($example === null) {
             throw new InvalidArgumentException('argument must not be null');
         }
 
@@ -271,10 +255,9 @@ abstract class OW_BaseDao
         return $this->dbo->queryForColumn($sql, [], $cacheLifeTime, $tags);
     }
 
-    public function findIdListByExample( OW_Example $example, $cacheLifeTime = 0, $tags = [])
+    public function findIdListByExample(OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
-        if ( $example === null )
-        {
+        if ($example === null) {
             throw new InvalidArgumentException('argument must not be null');
         }
 
@@ -287,8 +270,7 @@ abstract class OW_BaseDao
     {
         $tagsToClear = $this->getClearCacheTags();
 
-        if ( $tagsToClear )
-        {
+        if ($tagsToClear) {
             OW::getCacheManager()->clean($tagsToClear);
         }
     }
@@ -300,9 +282,9 @@ abstract class OW_BaseDao
     {
         return [];
     }
-    
+
     protected function tableDataChanged()
     {
-        
+
     }
 }

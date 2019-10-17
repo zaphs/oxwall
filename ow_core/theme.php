@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -26,9 +25,9 @@ declare(strict_types=1);
 /**
  * The class provides ...
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 class OW_Theme
 {
@@ -69,9 +68,9 @@ class OW_Theme
      *
      * @param BOL_Theme $dto
      */
-    public function __construct( BOL_Theme $dto )
+    public function __construct(BOL_Theme $dto)
     {
-        $this->dto = $dto;
+        $this->dto          = $dto;
         $this->themeService = BOL_ThemeService::getInstance();
     }
 
@@ -81,7 +80,7 @@ class OW_Theme
      * @param string $name
      * @return boolean
      */
-    public function hasDecorator( $name )
+    public function hasDecorator($name)
     {
         return array_key_exists($name, $this->decorators);
     }
@@ -92,7 +91,7 @@ class OW_Theme
      * @param string $name
      * @return boolean
      */
-    public function hasMasterPage( $name )
+    public function hasMasterPage($name)
     {
         return array_key_exists($name, $this->masterPages);
     }
@@ -103,10 +102,9 @@ class OW_Theme
      * @param string $name
      * @return string
      */
-    public function getDecorator( $name )
+    public function getDecorator($name)
     {
-        if ( !$this->hasDecorator($name) )
-        {
+        if (!$this->hasDecorator($name)) {
             throw new InvalidArgumentException('There is no decorator `' . $name . '` in theme `' . $this->name . '` !');
         }
 
@@ -119,10 +117,9 @@ class OW_Theme
      * @param string $name
      * @return string
      */
-    public function getMasterPage( $name )
+    public function getMasterPage($name)
     {
-        if ( !$this->hasMasterPage($name) )
-        {
+        if (!$this->hasMasterPage($name)) {
             throw new InvalidArgumentException('There is no master page `' . $name . '` in theme `' . $this->name . '` !');
         }
 
@@ -135,7 +132,7 @@ class OW_Theme
      * @param string $documentKey
      * @return boolean
      */
-    public function hasDocumentMasterPage( $documentKey )
+    public function hasDocumentMasterPage($documentKey)
     {
         return array_key_exists(trim($documentKey), $this->documentMasterPages);
     }
@@ -146,10 +143,9 @@ class OW_Theme
      * @param string $documentKey
      * @return string
      */
-    public function getDocumentMasterPage( $documentKey )
+    public function getDocumentMasterPage($documentKey)
     {
-        if ( !$this->hasDocumentMasterPage($documentKey) )
-        {
+        if (!$this->hasDocumentMasterPage($documentKey)) {
             throw new InvalidArgumentException('Cant find master page for document `' . $documentKey . '` in current theme!');
         }
 
@@ -162,7 +158,7 @@ class OW_Theme
      * @param bool $mobile
      * @return string
      */
-    public function getStaticDir( $mobile = false )
+    public function getStaticDir($mobile = false)
     {
         return $this->themeService->getStaticDir($this->dto->getKey(), $mobile);
     }
@@ -173,7 +169,7 @@ class OW_Theme
      * @param bool $mobile
      * @return string
      */
-    public function getStaticUrl( $mobile = false )
+    public function getStaticUrl($mobile = false)
     {
         return $this->themeService->getStaticUrl($this->dto->getKey(), $mobile);
     }
@@ -184,7 +180,7 @@ class OW_Theme
      * @param bool $mobile
      * @return string
      */
-    public function getStaticImagesDir( $mobile = false )
+    public function getStaticImagesDir($mobile = false)
     {
         return $this->themeService->getStaticImagesDir($this->dto->getKey(), $mobile);
     }
@@ -195,7 +191,7 @@ class OW_Theme
      * @param bool $mobile
      * @return string
      */
-    public function getStaticImagesUrl( $mobile = false )
+    public function getStaticImagesUrl($mobile = false)
     {
         return $this->themeService->getStaticImagesUrl($this->dto->getKey(), $mobile);
     }
@@ -206,7 +202,7 @@ class OW_Theme
      * @param bool $mobile
      * @return string
      */
-    public function getRootDir( $mobile = false )
+    public function getRootDir($mobile = false)
     {
         return $this->themeService->getRootDir($this->dto->getKey(), $mobile);
     }
@@ -227,7 +223,7 @@ class OW_Theme
      * @param bool $mobile
      * @return string
      */
-    public function getMasterPagesDir( $mobile = false )
+    public function getMasterPagesDir($mobile = false)
     {
         return $this->themeService->getMasterPagesDir($this->dto->getKey(), $mobile);
     }
@@ -238,7 +234,7 @@ class OW_Theme
      * @param bool $mobile
      * @return string
      */
-    public function getImagesDir( $mobile = false )
+    public function getImagesDir($mobile = false)
     {
         return $this->themeService->getImagesDir($this->dto->getKey(), $mobile);
     }
@@ -255,7 +251,7 @@ class OW_Theme
      * @param array $decorators
      * @return OW_Theme
      */
-    public function setDecorators( $decorators )
+    public function setDecorators($decorators)
     {
         $this->decorators = $decorators;
         return $this;
@@ -265,7 +261,7 @@ class OW_Theme
      * @param array $masterPages
      * @return OW_Theme
      */
-    public function setMasterPages( $masterPages )
+    public function setMasterPages($masterPages)
     {
         $this->masterPages = $masterPages;
         return $this;
@@ -275,7 +271,7 @@ class OW_Theme
      * @param array $documentMasterPages
      * @return OW_Theme
      */
-    public function setDocumentMasterPages( $documentMasterPages )
+    public function setDocumentMasterPages($documentMasterPages)
     {
         $this->documentMasterPages = $documentMasterPages;
         return $this;

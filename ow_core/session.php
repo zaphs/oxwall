@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -26,21 +25,20 @@ declare(strict_types=1);
 /**
  * Base session class.
  *
- * @author Nurlan Dzhumakaliev <nurlanj@live.com>
+ * @author  Nurlan Dzhumakaliev <nurlanj@live.com>
  * @package ow_core
  * @method static OW_Session getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_Session
 {
     use OW_Singleton;
-    
+
     private static $protectedKeys = ['session.home_url', 'session.user_agent'];
 
     private function __construct()
     {
-        if ( session_id() === '' )
-        {
+        if (session_id() === '') {
             //disable transparent sid support
             ini_set('session.use_trans_sid', '0');
             ini_set('session.use_cookies', '1');
@@ -58,33 +56,28 @@ class OW_Session
         //TODO: maybe session_destroy ?
         session_name($this->getName());
 
-        $cookie = session_get_cookie_params();
+        $cookie             = session_get_cookie_params();
         $cookie['httponly'] = true;
 
         session_set_cookie_params($cookie['lifetime'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly']);
 
         session_start();
 
-        if ( !isset($_SESSION['session.home_url']) )
-        {
+        if (!isset($_SESSION['session.home_url'])) {
             $_SESSION['session.home_url'] = OW_URL_HOME;
-        }
-        else if ( strcmp($_SESSION['session.home_url'], OW_URL_HOME) )
-        {
-            $this->regenerate();
+        } else {
+            if (strcmp($_SESSION['session.home_url'], OW_URL_HOME)) {
+                $this->regenerate();
+            }
         }
 
         $userAgent = OW::getRequest()->getUserAgentName();
 
-        if ( isset($_SESSION['session.user_agent']) )
-        {
-            if ( $_SESSION['session.user_agent'] !== $userAgent )
-            {
+        if (isset($_SESSION['session.user_agent'])) {
+            if ($_SESSION['session.user_agent'] !== $userAgent) {
                 $this->regenerate();
             }
-        }
-        else
-        {
+        } else {
             $_SESSION['session.user_agent'] = $userAgent;
         }
     }
@@ -95,8 +88,7 @@ class OW_Session
 
         $_SESSION = [];
 
-        if ( isset($_COOKIE[$this->getName()]) )
-        {
+        if (isset($_COOKIE[$this->getName()])) {
             $_COOKIE[$this->getName()] = $this->getId();
         }
     }
@@ -110,32 +102,30 @@ class OW_Session
      * @param $key
      * @param $value
      */
-    public function set( $key, $value )
+    public function set($key, $value)
     {
-        if ( in_array($key, self::$protectedKeys) )
-        {
+        if (in_array($key, self::$protectedKeys)) {
             throw new RuntimeException('Attempt to set protected key');
         }
 
         $_SESSION[$key] = $value;
     }
 
-    public function get( $key )
+    public function get($key)
     {
-        if ( !isset($_SESSION[$key]) )
-        {
+        if (!isset($_SESSION[$key])) {
             return null;
         }
 
         return $_SESSION[$key];
     }
 
-    public function isKeySet( $key )
+    public function isKeySet($key)
     {
         return isset($_SESSION[$key]);
     }
 
-    public function delete( $key )
+    public function delete($key)
     {
         unset($_SESSION[$key]);
     }

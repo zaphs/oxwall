@@ -13,7 +13,6 @@ declare(strict_types=1);
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -25,9 +24,9 @@ declare(strict_types=1);
 /**
  * Exceptions.
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package core
- * @since 1.0
+ * @since   1.0
  */
 
 /**
@@ -54,11 +53,11 @@ class RedirectException extends Exception
      * @param string $url
      * @param null   $code
      */
-    public function __construct( $url, $code = null )
+    public function __construct($url, $code = null)
     {
         parent::__construct();
-        $this->url = $url;
-        $this->redirectCode = ( empty($code) ? 301 : (int) $code );
+        $this->url          = $url;
+        $this->redirectCode = (empty($code) ? 301 : (int)$code);
     }
 
     /**
@@ -88,7 +87,7 @@ class RedirectException extends Exception
     /**
      * @param mixed $data
      */
-    public function setData( $data )
+    public function setData($data)
     {
         $this->data = $data;
     }
@@ -98,7 +97,7 @@ class InterceptException extends Exception
 {
     private $handlerAttrs;
 
-    public function __construct( $attrs )
+    public function __construct($attrs)
     {
         $this->handlerAttrs = $attrs;
         parent::__construct(json_encode($attrs));
@@ -117,15 +116,14 @@ class AuthorizationException extends InterceptException
      * Constructor.
      * @param null $message
      */
-    public function __construct( $message = null )
+    public function __construct($message = null)
     {
-        $route = OW::getRouter()->getRoute('base_page_auth_failed');
-        $params = $route === null ? ['controller' => 'BASE_CTRL_BaseDocument', 'action' => 'authorizationFailed'] : $route->getDispatchAttrs();
+        $route                                               = OW::getRouter()->getRoute('base_page_auth_failed');
+        $params                                              = $route === null ? ['controller' => 'BASE_CTRL_BaseDocument', 'action' => 'authorizationFailed'] : $route->getDispatchAttrs();
         $params[OW_Route::DISPATCH_ATTRS_VARLIST]['message'] = $message;
         parent::__construct($params);
     }
 }
-
 
 
 /**
@@ -140,7 +138,7 @@ class Redirect404Exception extends InterceptException
      */
     public function __construct(?string $message = '')
     {
-        $route = OW::getRouter()->getRoute('base_page_404');
+        $route  = OW::getRouter()->getRoute('base_page_404');
         $params = $route === null ? ['controller' => 'BASE_CTRL_BaseDocument', 'action' => 'page404'] : $route->getDispatchAttrs();
         parent::__construct($params);
     }
@@ -171,10 +169,10 @@ class Redirect403Exception extends InterceptException
      * Constructor.
      * @param null $message
      */
-    public function __construct( $message = null )
+    public function __construct($message = null)
     {
-        $route = OW::getRouter()->getRoute('base_page_403');
-        $params = $route === null ? ['controller' => 'BASE_CTRL_BaseDocument', 'action' => 'page403'] : $route->getDispatchAttrs();
+        $route                                               = OW::getRouter()->getRoute('base_page_403');
+        $params                                              = $route === null ? ['controller' => 'BASE_CTRL_BaseDocument', 'action' => 'page403'] : $route->getDispatchAttrs();
         $params[OW_Route::DISPATCH_ATTRS_VARLIST]['message'] = $message;
         parent::__construct($params);
     }
@@ -191,7 +189,7 @@ class RedirectConfirmPageException extends RedirectException
      * @param $message
      * @throws Exception
      */
-    public function __construct( $message )
+    public function __construct($message)
     {
         parent::__construct(OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlForRoute('base_page_confirm'), ['back_uri' => urlencode(OW::getRequest()->getRequestUri())]));
         OW::getSession()->set('baseConfirmPageMessage', $message);
@@ -209,7 +207,7 @@ class RedirectAlertPageException extends RedirectException
      * @param $message
      * @throws Exception
      */
-    public function __construct( $message )
+    public function __construct($message)
     {
         parent::__construct(OW::getRouter()->urlForRoute('base_page_alert'));
         OW::getSession()->set('baseAlertPageMessage', $message);
@@ -234,11 +232,11 @@ class AuthenticateException extends RedirectException
 class ApiResponseErrorException extends Exception
 {
     public $data = [];
-    
+
     public function __construct($data = [], $code = 0)
     {
         parent::__construct('', $code);
-        
+
         $this->data = $data;
     }
 }
@@ -246,15 +244,15 @@ class ApiResponseErrorException extends Exception
 class ApiAccessException extends ApiResponseErrorException
 {
     const TYPE_NOT_AUTHENTICATED = 'not_authenticated';
-    const TYPE_SUSPENDED = 'suspended';
-    const TYPE_NOT_APPROVED = 'not_approved';
-    const TYPE_NOT_VERIFIED = 'not_verified';
+    const TYPE_SUSPENDED         = 'suspended';
+    const TYPE_NOT_APPROVED      = 'not_approved';
+    const TYPE_NOT_VERIFIED      = 'not_verified';
 
-    public function __construct( $type, $userData = [])
+    public function __construct($type, $userData = [])
     {
         parent::__construct([
             'type' => $type,
-            'data' => $userData
+            'data' => $userData,
         ]);
     }
 }

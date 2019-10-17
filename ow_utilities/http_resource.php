@@ -1,6 +1,6 @@
 <?php
 
-require_once  OW_DIR_LIB . 'oembed' . DS. 'oembed.php';
+require_once OW_DIR_LIB . 'oembed' . DS . 'oembed.php';
 
 class UTIL_HttpResource
 {
@@ -10,13 +10,13 @@ class UTIL_HttpResource
      * @param string $url
      * @return string
      */
-    public static function getContents( $url, $timeout = 20 )
+    public static function getContents($url, $timeout = 20)
     {
-        $context = stream_context_create( [
-            'http'=> [
+        $context = stream_context_create([
+            'http' => [
                 'timeout' => $timeout,
-                'header' => "User-Agent: Oxwall Content Fetcher\r\n"
-            ]
+                'header'  => "User-Agent: Oxwall Content Fetcher\r\n",
+            ],
         ]);
 
         return file_get_contents($url, false, $context);
@@ -27,7 +27,7 @@ class UTIL_HttpResource
      * @param string $url
      * @return array
      */
-    public static function getOEmbed( $url )
+    public static function getOEmbed($url)
     {
         return OEmbed::parse($url);
     }

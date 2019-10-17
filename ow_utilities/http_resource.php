@@ -8,7 +8,7 @@ class UTIL_HttpResource
     /**
      *
      * @param string $url
-     * @return OW_HttpResource
+     * @return string
      */
     public static function getContents( $url, $timeout = 20 )
     {

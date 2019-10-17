@@ -30,7 +30,7 @@ define('_OW_', true);
 
 define('DS', DIRECTORY_SEPARATOR);
 
-define('OW_DIR_ROOT', dirname(__FILE__));
+define('OW_DIR_ROOT', __DIR__);
 
 require_once 'ow_includes/config.php';
 require_once 'ow_libraries/securimage/securimage.php';
@@ -55,9 +55,9 @@ $img->text_angle_maximum = 5;
 $img->use_transparent_text = true;
 $img->text_transparency_percentage = 30; // 100 = completely transparent
 $img->num_lines = 7;
-$img->line_color = new Securimage_Color("#7B92AA");
-$img->signature_color = new Securimage_Color("#7B92AA");
-$img->text_color = new Securimage_Color("#7B92AA");
+$img->line_color = new Securimage_Color('#7B92AA');
+$img->signature_color = new Securimage_Color('#7B92AA');
+$img->text_color = new Securimage_Color('#7B92AA');
 $img->use_wordlist = true;
 
 $img->show();

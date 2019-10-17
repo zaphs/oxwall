@@ -98,6 +98,7 @@ class Form
      * Constructor.
      *
      * @param string $name
+     * @throws Exception
      */
     public function __construct(string $name)
     {

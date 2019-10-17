@@ -44,7 +44,7 @@ class UTIL_File
     public static $videoExtensions = ['avi', 'mpeg', 'wmv', 'flv', 'mov', 'mp4'];
 
     /**
-     * Copies whole directory from source to destination folder. The destionation folder will be created if it doesn't exist.
+     * Copies whole directory from source to destination folder. The destination folder will be created if it doesn't exist.
      * Array and callable can be passed as filter argument. Array should contain the list of file extensions to be copied.
      * Callable is more flexible way for filtering, it should contain one parameter (file/dir to be copied) and return bool 
      * value which indicates if the item should be copied.
@@ -67,7 +67,9 @@ class UTIL_File
 
         if ( !file_exists($destPath) )
         {
-            mkdir($destPath);
+            if (!mkdir($destPath) && !is_dir($destPath)) {
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $destPath));
+            }
             chmod($destPath, 0777);
         }
 

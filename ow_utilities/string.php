@@ -32,7 +32,7 @@ class UTIL_String
     private static $caps = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
     /**
-     * Replaces upper case chars in string with delimeter + lowercase chars
+     * Replaces upper case chars in string with delimiter + lowercase chars
      *
      * @param string $string
      * @param string $delimiter
@@ -178,28 +178,28 @@ class UTIL_String
      */
     public static function getRandomString( $length = 8, $strength = self::RND_STR_ALPHA_WITH_CAPS_NUMERIC )
     {
-        $chars1 = "1234";
-        $chars2 = "56789";
+        $chars1 = '1234';
+        $chars2 = '56789';
 
         if ( $strength > 1 )
         {
-            $chars1 .= "aeiouy";
-            $chars2 .= "bdghjklmnpqrstvwxz";
+            $chars1 .= 'aeiouy';
+            $chars2 .= 'bdghjklmnpqrstvwxz';
         }
 
         if ( $strength > 2 )
         {
-            $chars1 .= "AEIOUY";
-            $chars2 .= "BDGHJKLMNPQRSTVWXZ";
+            $chars1 .= 'AEIOUY';
+            $chars2 .= 'BDGHJKLMNPQRSTVWXZ';
         }
 
         if ( $strength > 3 )
         {
-            $chars1 .= "@#";
-            $chars2 .= "$%";
+            $chars1 .= '@#';
+            $chars2 .= '$%';
         }
 
-        $rndString = "";
+        $rndString = '';
         $alt = time() % 2;
         $chars1Length = strlen($chars1);
         $chars2Length = strlen($chars2);
@@ -244,8 +244,9 @@ class UTIL_String
         $string_array = explode(' ', $string);
         foreach ( $string_array as $id => $word )
         {
-            if ( mb_strpos($word, '-') != 0 )
+            if ( mb_strpos($word, '-') !== 0 ) {
                 continue;
+            }
 
             if ( mb_strlen($word) > $split_length )
             {
@@ -259,7 +260,7 @@ class UTIL_String
 
     /**
      * @param string $xmlString
-     * @return array
+     * @return array|bool
      */
     public static function xmlToArray( $xmlString )
     {

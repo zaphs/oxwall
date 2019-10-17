@@ -51,7 +51,7 @@ class OW_RemoteAuthAdapter extends OW_AuthAdapter
      *
      * @return OW_AuthResult
      */
-    public function authenticate()
+    public function authenticate(): OW_AuthResult
     {
         $entity = $this->remoteAuthService->findByRemoteTypeAndId($this->type, $this->remoteId);
         

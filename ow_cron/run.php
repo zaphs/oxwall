@@ -30,11 +30,11 @@ define('_OW_', true);
 
 define('DS', DIRECTORY_SEPARATOR);
 
-define('OW_DIR_ROOT', substr(dirname(__FILE__), 0, - strlen('ow_cron')));
+define('OW_DIR_ROOT', substr(__DIR__, 0, - strlen('ow_cron')));
 
 define('OW_CRON', true);
 
-require_once(OW_DIR_ROOT . 'ow_includes' . DS . 'init.php');
+require_once OW_DIR_ROOT . 'ow_includes' . DS . 'init.php';
 
 // set error log file
 if ( !defined('OW_ERROR_LOG_ENABLE') || (bool) OW_ERROR_LOG_ENABLE )
@@ -90,7 +90,7 @@ $plugins = BOL_PluginService::getInstance()->findActivePlugins();
 
 foreach ( $plugins as $plugin )
 {
-    /* @var $plugin BOL_Plugin */
+    /* @var BOL_Plugin $plugin */
     $pluginRootDir = OW::getPluginManager()->getPlugin($plugin->getKey())->getRootDir();
     if ( file_exists($pluginRootDir . 'cron.php') )
     {
@@ -103,7 +103,7 @@ foreach ( $plugins as $plugin )
 
         foreach ( BOL_CronService::getInstance()->findJobList() as $runJob )
         {
-            /* @var $runJob BOL_CronJob */
+            /* @var BOL_CronJob $runJob */
             $runJobs[$runJob->methodName] = $runJob->runStamp;
         }
 
@@ -112,7 +112,7 @@ foreach ( $plugins as $plugin )
         foreach ( $jobs as $job => $interval )
         {
             $methodName = $className . '::' . $job;
-            $runStamp = ( isset($runJobs[$methodName]) ) ? $runJobs[$methodName] : 0;
+            $runStamp = $runJobs[$methodName] ?? 0;
             $currentStamp = time();
             if ( ( $currentStamp - $runStamp ) > ( $interval * 60 ) )
             {

@@ -25,9 +25,9 @@ define('_OW_', true);
 
 define('DS', DIRECTORY_SEPARATOR);
 
-define('OW_DIR_ROOT', dirname(__FILE__) . DS);
+define('OW_DIR_ROOT', __DIR__ . DS);
 
-require_once(OW_DIR_ROOT . 'ow_includes' . DS . 'init.php');
+require_once OW_DIR_ROOT . 'ow_includes' . DS . 'init.php';
 $session = OW_Session::getInstance();
 $session->start();
 $errorDetails = '';

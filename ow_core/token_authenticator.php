@@ -62,9 +62,9 @@ class OW_TokenAuthenticator implements OW_IAuthenticator
     /**
      * Checks if current user is authenticated.
      *
-     * @return boolean
+     * @return bool
      */
-    public function isAuthenticated()
+    public function isAuthenticated(): bool
     {
         return $this->userId !== 0;
     }
@@ -73,9 +73,9 @@ class OW_TokenAuthenticator implements OW_IAuthenticator
      * Returns current user id.
      * If user is not authenticated 0 returned.
      *
-     * @return integer
+     * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }

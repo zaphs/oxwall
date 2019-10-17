@@ -565,6 +565,7 @@ class TextField extends InvitationFormElement
      * Constructor.
      *
      * @param string $name
+     * @throws Exception
      */
     public function __construct($name)
     {
@@ -579,7 +580,7 @@ class TextField extends InvitationFormElement
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -705,7 +706,7 @@ class DateField extends FormElement
         $this->dateFormat = $format;
     }
 
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -830,7 +831,7 @@ class Textarea extends InvitationFormElement
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -875,11 +876,11 @@ class HiddenField extends FormElement
     }
 
     /**
-     * @param null $params
+     * @param array|null $params
      * @return string
      * @see FormElement::renderInput()
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -926,7 +927,7 @@ class Submit extends FormElement
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -990,6 +991,7 @@ class PasswordField extends TextField
      * Constructor.
      *
      * @param string $name
+     * @throws Exception
      */
     public function __construct($name)
     {
@@ -1004,7 +1006,7 @@ class PasswordField extends TextField
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -1143,7 +1145,7 @@ class RadioField extends FormElement
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -1340,7 +1342,7 @@ class CheckboxGroup extends FormElement
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -1398,6 +1400,7 @@ class Selectbox extends InvitationFormElement
      * Constructor.
      *
      * @param string $name
+     * @throws Exception
      */
     public function __construct($name)
     {
@@ -1472,7 +1475,7 @@ class Selectbox extends InvitationFormElement
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -1551,7 +1554,7 @@ class CheckboxField extends FormElement
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -1628,7 +1631,7 @@ class Multiselect extends FormElement
         $this->options[$value] = $label;
     }
 
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -1708,7 +1711,7 @@ class FileField extends FormElement
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -1751,7 +1754,7 @@ class SuggestField extends FormElement
         return $this;
     }
 
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -1870,7 +1873,7 @@ class MultiFileField extends FormElement
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -1919,7 +1922,7 @@ class TagsField extends FormElement
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -2045,7 +2048,7 @@ class CaptchaField extends FormElement
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -2170,7 +2173,7 @@ class AgeRange extends FormElement implements DateRangeInterface
         return (int)date('Y') - (int)$this->maxAge;
     }
 
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -2382,7 +2385,7 @@ class Range extends FormElement
         return $this;
     }
 
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -2520,7 +2523,7 @@ class DateRange extends FormElement implements DateRangeInterface
         return $this;
     }
 
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -2556,7 +2559,7 @@ class BillingGatewaySelectionField extends FormElement
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -2778,7 +2781,7 @@ class YearRange extends FormElement implements DateRangeInterface
         return $this->minYear;
     }
 
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
         parent::renderInput($params);
 
@@ -2874,6 +2877,7 @@ class MobileWysiwygTextarea extends Textarea
      * @param string $name
      * @param string $pluginKey
      * @param array  $buttons
+     * @throws Exception
      */
     public function __construct($name, $pluginKey = 'blog', array $buttons = [])
     {
@@ -2914,7 +2918,7 @@ class MobileWysiwygTextarea extends Textarea
      * @see FormElement::renderInput()
      *
      */
-    public function renderInput($params = null)
+    public function renderInput(array $params = null)
     {
 
         if (OW::getRegistry()->get('baseWsInit') === null) {
@@ -3023,6 +3027,7 @@ class WysiwygTextarea extends InvitationFormElement
      * @param string     $name
      * @param array|null $buttons
      * @param bool       $init
+     * @throws Exception
      */
     public function __construct($name, array $buttons = null, $init = true)
     {

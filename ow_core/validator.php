@@ -775,6 +775,10 @@ class IntValidator extends OW_Validator
         $this->min = (int) $min;
     }
 
+    /**
+     * @param mixed $value
+     * @return bool
+     */
     public function isValid( $value )
     {
         // doesn't check empty values
@@ -964,6 +968,10 @@ class FloatValidator extends OW_Validator
         $this->min = (float) $min;
     }
 
+    /**
+     * @param mixed $value
+     * @return bool
+     */
     public function isValid( $value )
     {
         // doesn't check empty values
@@ -1169,6 +1177,10 @@ class DateValidator extends OW_Validator
         $this->minYear = $value;
     }
 
+    /**
+     * @param mixed $value
+     * @return bool
+     */
     public function isValid( $value )
     {
         // doesn't check empty values
@@ -1260,6 +1272,10 @@ class CaptchaValidator extends OW_Validator
         $this->setErrorMessage($errorMessage);
     }
 
+    /**
+     * @param mixed $value
+     * @return bool
+     */
     public function isValid( $value )
     {
         // doesn't check empty values

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -25,10 +25,10 @@
 /**
  * Description...
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_ApiApplication getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_ApiApplication extends OW_Application
 {
@@ -41,52 +41,44 @@ class OW_ApiApplication extends OW_Application
 
     /**
      * Application init actions.
+     * @throws Exception
      */
-    public function init()
+    public function init(): void
     {
         require_once OW_DIR_SYSTEM_PLUGIN . 'base' . DS . 'classes' . DS . 'json_err_output.php';
         OW_ErrorManager::getInstance()->setErrorOutput(new BASE_CLASS_JsonErrOutput());
 
-        $authToken = empty($_SERVER["HTTP_API_AUTH_TOKEN"]) ? null : $_SERVER["HTTP_API_AUTH_TOKEN"];
+        $authToken = empty($_SERVER['HTTP_API_AUTH_TOKEN']) ? null : $_SERVER['HTTP_API_AUTH_TOKEN'];
         OW_Auth::getInstance()->setAuthenticator(new OW_TokenAuthenticator($authToken));
 
         $tag = '';
 
-        if ( !empty($_SERVER["HTTP_API_LANGUAGE"]) )
-        {
-            $tag = $_SERVER["HTTP_API_LANGUAGE"];
-        }
-        else
-        {
-            if( function_exists('apache_request_headers') )
-            {
+        if (!empty($_SERVER['HTTP_API_LANGUAGE'])) {
+            $tag = $_SERVER['HTTP_API_LANGUAGE'];
+        } else {
+            if (function_exists('apache_request_headers')) {
                 $headers = apache_request_headers();
 
-                if ( !empty($headers) && !empty($headers['api-language']) )
-                {
+                if (!empty($headers) && !empty($headers['api-language'])) {
                     $tag = trim($headers['api-language']);
                 }
             }
         }
 
-        if ( $tag )
-        {
+        if ($tag) {
             $languageDto = BOL_LanguageService::getInstance()->findByTag($tag);
 
-            if ( empty($languageDto) )
-            {
-                $tag = str_replace('_', '-', $tag);
+            if ($languageDto === null) {
+                $tag         = str_replace('_', '-', $tag);
                 $languageDto = BOL_LanguageService::getInstance()->findByTag($tag);
             }
 
-            if ( empty($languageDto) )
-            {
-                $tag = mb_substr($tag, 0, 2);
+            if ($languageDto === null) {
+                $tag         = mb_substr($tag, 0, 2);
                 $languageDto = BOL_LanguageService::getInstance()->findByTag($tag);
             }
 
-            if ( !empty($languageDto) && $languageDto->status == "active" )
-            {
+            if ($languageDto !== null && $languageDto->status == 'active') {
                 BOL_LanguageService::getInstance()->setCurrentLanguage($languageDto);
             }
         }
@@ -96,13 +88,11 @@ class OW_ApiApplication extends OW_Application
         // setting default time zone
         date_default_timezone_set(OW::getConfig()->getValue('base', 'site_timezone'));
 
-        if( OW::getUser()->isAuthenticated() )
-        {
-            $userId = OW::getUser()->getId();
+        if (OW::getUser()->isAuthenticated()) {
+            $userId   = OW::getUser()->getId();
             $timeZone = BOL_PreferenceService::getInstance()->getPreferenceValue('timeZoneSelect', $userId);
 
-            if(!empty($timeZone))
-            {
+            if (!empty($timeZone)) {
                 date_default_timezone_set($timeZone);
             }
         }
@@ -119,8 +109,7 @@ class OW_ApiApplication extends OW_Application
         $uri = OW::getRequest()->getRequestUri();
 
         // before setting in router need to remove get params
-        if ( strstr($uri, '?') )
-        {
+        if (strstr($uri, '?')) {
             $uri = substr($uri, 0, strpos($uri, '?'));
         }
         $router->setUri($uri);
@@ -131,90 +120,76 @@ class OW_ApiApplication extends OW_Application
         $event = new OW_Event(OW_EventManager::ON_PLUGINS_INIT);
         OW::getEventManager()->trigger($event);
 
-        $beckend = OW::getEventManager()->call('base.cache_backend_init');
+        $backend = OW::getEventManager()->call('base.cache_backend_init');
 
-        if ( $beckend !== null )
-        {
-            OW::getCacheManager()->setCacheBackend($beckend);
+        if ($backend !== null) {
+            OW::getCacheManager()->setCacheBackend($backend);
             OW::getCacheManager()->setLifetime(3600);
             OW::getDbo()->setUseCashe(true);
         }
 
         OW::getResponse()->setDocument($this->newDocument());
 
-        if ( OW::getUser()->isAuthenticated() )
-        {
+        if (OW::getUser()->isAuthenticated()) {
             BOL_UserService::getInstance()->updateActivityStamp(OW::getUser()->getId(), $this->getContext());
         }
     }
 
     /**
      * Finds controller and action for current request.
+     * @throws Redirect404Exception
      */
-    public function route()
+    public function route(): void
     {
-        try
-        {
+        try {
             OW::getRequestHandler()->setHandlerAttributes(OW::getRouter()->route());
-        }
-        catch ( RedirectException $e )
-        {
+        } catch (RedirectException $e) {
             $this->redirect($e->getUrl(), $e->getRedirectCode());
-        }
-        catch ( InterceptException $e )
-        {
+        } catch (InterceptException $e) {
             OW::getRequestHandler()->setHandlerAttributes($e->getHandlerAttrs());
         }
     }
 
     /**
-     * ---------
+     * @throws Redirect404Exception
      */
-    public function handleRequest()
+    public function handleRequest(): void
     {
-        try
-        {
+        try {
             OW::getRequestHandler()->dispatch();
-        }
-        catch ( RedirectException $e )
-        {
+        } catch (RedirectException $e) {
             $this->redirect($e->getUrl(), $e->getRedirectCode());
-        }
-        catch ( InterceptException $e )
-        {
+        } catch (InterceptException $e) {
             OW::getRequestHandler()->setHandlerAttributes($e->getHandlerAttrs());
             $this->handleRequest();
-        }
-        catch ( Exception $e )
-        {
-            $errorType = "exception";
-            
-            $responseData = array(
-                "exception" => get_class($e),
-                "message" => $e->getMessage(),
-                "code" => $e->getCode()
-            );
-            
-            if ( $e instanceof ApiResponseErrorException )
-            {
-                $responseData["userData"] = $e->data;
-                $errorType = "userError";
+        } catch (Exception $e) {
+            $errorType = 'exception';
+
+            $responseData = [
+                'exception' => get_class($e),
+                'message'   => $e->getMessage(),
+                'code'      => $e->getCode(),
+            ];
+
+            if ($e instanceof ApiResponseErrorException) {
+                $responseData['userData'] = $e->data;
+                $errorType                = 'userError';
+            } else {
+                if (defined('OW_DEBUG_MODE') && OW_DEBUG_MODE) {
+                    $responseData['trace'] = $e->getTraceAsString();
+                }
             }
-            else if ( defined("OW_DEBUG_MODE") && OW_DEBUG_MODE )
-            {
-                $responseData["trace"] = $e->getTraceAsString();
-            }
-            
-            $apiResponse = array(
-                "type" => $errorType,
-                "data" => $responseData
-            );
-            
+
+            $apiResponse = [
+                'type' => $errorType,
+                'data' => $responseData,
+            ];
+
             //OW::getResponse()->setHeader(OW_Response::HD_CNT_TYPE, "application/json");
             //OW::getDocument()->setBody($apiResponse);
-            
+
             header('Content-Type: application/json');
-            
+
             echo json_encode($apiResponse);
             exit; // TODO remove exit
         }
@@ -227,9 +202,9 @@ class OW_ApiApplication extends OW_Application
     {
 //        $document = OW::getDocument();
 //
-//        $meassages = OW::getFeedback()->getFeedback();
+//        $messages = OW::getFeedback()->getFeedback();
 //
-//        foreach ( $meassages as $messageType => $messageList )
+//        foreach ( $messages as $messageType => $messageList )
 //        {
 //            foreach ( $messageList as $message )
 //            {
@@ -315,19 +290,12 @@ class OW_ApiApplication extends OW_Application
     }
 
     /**
-     * Triggers response object to send rendered page.
-     */
-    public function returnResponse()
-    {
-        OW::getResponse()->respond();
-    }
-
-    /**
      * Makes header redirect to provided URL or URI.
      *
      * @param string $redirectTo
+     * @param bool   $switchContextTo
      */
-    public function redirect( $redirectTo = null, $switchContextTo = false )
+    public function redirect($redirectTo = null, $switchContextTo = false)
     {
 //        if ( $switchContextTo !== false && in_array($switchContextTo, array(self::CONTEXT_DESKTOP, self::CONTEXT_MOBILE)) )
 //        {
@@ -364,64 +332,22 @@ class OW_ApiApplication extends OW_Application
 //            }
 //        }
     }
-    /* private auxilary methods */
+
+    /* private auxiliary methods */
 
     protected function newDocument()
     {
-        $document = new OW_ApiDocument();
-
-        return $document;
-
-//        $language = BOL_LanguageService::getInstance()->getCurrent();
-//        $document = new OW_HtmlDocument();
-//        $document->setCharset('UTF-8');
-//        $document->setMime('text/html');
-//        $document->setLanguage($language->getTag());
-//
-//        if ( $language->getRtl() )
-//        {
-//            $document->setDirection('rtl');
-//        }
-//        else
-//        {
-//            $document->setDirection('ltr');
-//        }
-//
-//        if ( (bool) OW::getConfig()->getValue('base', 'favicon') )
-//        {
-//            $document->setFavicon(OW::getPluginManager()->getPlugin('base')->getUserFilesUrl() . 'favicon.ico');
-//        }
-//
-//        $document->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'jquery.min.js', 'text/javascript', (-100));
-//        $document->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'jquery-migrate.min.js', 'text/javascript', (-100));
-//
-//        //$document->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'json2.js', 'text/javascript', (-99));
-//        $document->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'ow.js?' . OW::getConfig()->getValue('base', 'cachedEntitiesPostfix'), 'text/javascript', (-50));
-//
-//        $onloadJs = "OW.bindAutoClicks();OW.bindTips($('body'));";
-//
-//        if ( OW::getUser()->isAuthenticated() )
-//        {
-//            $activityUrl = OW::getRouter()->urlFor('BASE_CTRL_User', 'updateActivity');
-//            $onloadJs .= "OW.getPing().addCommand('user_activity_update').start(600000);";
-//        }
-//
-//        $document->addOnloadScript($onloadJs);
-//        OW::getEventManager()->bind(OW_EventManager::ON_AFTER_REQUEST_HANDLE, array($this, 'onBeforeDocumentRender'));
-
-        return $document;
+        return new OW_ApiDocument();
     }
 
-    protected function addCatchAllRequestsException( $eventName, $key )
+    protected function addCatchAllRequestsException($eventName, $key)
     {
         $event = new BASE_CLASS_EventCollector($eventName);
         OW::getEventManager()->trigger($event);
         $exceptions = $event->getData();
 
-        foreach ( $exceptions as $item )
-        {
-            if ( is_array($item) && !empty($item['controller']) && !empty($item['action']) )
-            {
+        foreach ($exceptions as $item) {
+            if (is_array($item) && !empty($item['controller']) && !empty($item['action'])) {
                 OW::getRequestHandler()->addCatchAllRequestsExclude($key, trim($item['controller']), trim($item['action']));
             }
         }

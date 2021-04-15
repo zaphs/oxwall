@@ -206,16 +206,16 @@ class BOL_EmailVerifyService
             $emailVerifiedData->createStamp = time();
             $emailVerifiedData->type = $type;
 
-            BOL_EmailVerifyService::getInstance()->batchReplace(array($emailVerifiedData));
+            BOL_EmailVerifyService::getInstance()->batchReplace([$emailVerifiedData]);
         }
 
-        $vars = array(
+        $vars = [
             'code' => $emailVerifiedData->hash,
-        );
+        ];
 
         if ( OW::getApplication()->getContext() != OW_Application::CONTEXT_API )
         {
-            $vars['url'] = OW::getRouter()->urlForRoute('base_email_verify_code_check', array('code' => $emailVerifiedData->hash));
+            $vars['url'] = OW::getRouter()->urlForRoute('base_email_verify_code_check', ['code' => $emailVerifiedData->hash]);
             $vars['verification_page_url'] = OW::getRouter()->urlForRoute('base_email_verify_code_form');
         }
 
@@ -241,9 +241,9 @@ class BOL_EmailVerifyService
 
     public function sendUserVerificationMail( BOL_User $user, $feedback = true )
     {
-        $vars = array(
+        $vars = [
             'username' => BOL_UserService::getInstance()->getDisplayName($user->id),
-        );
+        ];
 
         $language = OW::getLanguage();
 
@@ -251,13 +251,13 @@ class BOL_EmailVerifyService
         $template_html = $language->text('base', 'email_verify_template_html', $vars);
         $template_text = $language->text('base', 'email_verify_template_text', $vars);
 
-        $params = array(
+        $params = [
             'user' => $user,
             'subject' => $subject,
             'body_html' => $template_html,
             'body_text' => $template_text,
             'feedback' => $feedback
-        );
+        ];
 
         $this->sendVerificationMail(self::TYPE_USER_EMAIL, $params);
     }
@@ -272,12 +272,12 @@ class BOL_EmailVerifyService
         $template_html = $language->text('base', 'site_email_verify_template_html');
         $template_text = $language->text('base', 'site_email_verify_template_text');
 
-        $params = array(
+        $params = [
             'subject' => $subject,
             'body_html' => $template_html,
             'body_text' => $template_text,
             'feedback' => $feedback
-        );
+        ];
 
         $this->sendVerificationMail(self::TYPE_SITE_EMAIL, $params);
     }

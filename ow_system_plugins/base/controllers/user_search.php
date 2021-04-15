@@ -63,13 +63,13 @@ class BASE_CTRL_UserSearch extends OW_ActionController
         $this->addForm($displayNameSearchForm);
 
         // set meta info
-        $params = array(
+        $params = [
             "sectionKey" => "base.users",
             "entityKey" => "userSearch",
             "title" => "base+meta_title_user_search",
             "description" => "base+meta_desc_user_search",
             "keywords" => "base+meta_keywords_user_search"
-        );
+        ];
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }
@@ -108,14 +108,14 @@ class BASE_CTRL_UserSearch extends OW_ActionController
         $searchUrl = OW::getRouter()->urlForRoute('users-search');
         $this->assign('searchUrl', $searchUrl);
 
-        $params = array(
+        $params = [
             "sectionKey" => "base.users",
             "entityKey" => "userLists",
             "title" => "base+meta_title_user_list",
             "description" => "base+meta_desc_user_list",
             "keywords" => "base+meta_keywords_user_list",
-            "vars" => array( "user_list" => $language->text("base", "search_results") )
-        );
+            "vars" => ["user_list" => $language->text("base", "search_results")]
+        ];
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }
@@ -156,12 +156,12 @@ class MainSearchForm extends BASE_CLASS_UserQuestionForm
 
         if ( $questionData === null )
         {
-            $questionData = array();
+            $questionData = [];
         }
 
         $accounts = $this->getAccountTypes();
 
-        $accountList = array();
+        $accountList = [];
         $accountList[BOL_QuestionService::ALL_ACCOUNT_TYPES] = OW::getLanguage()->text('base', 'questions_account_type_' . BOL_QuestionService::ALL_ACCOUNT_TYPES);
 
         foreach ( $accounts as $key => $account )
@@ -194,8 +194,8 @@ class MainSearchForm extends BASE_CLASS_UserQuestionForm
 
         $questions = $questionService->findSearchQuestionsForAccountType($this->accountType);
 
-        $mainSearchQuestion = array();
-        $questionNameList = array();
+        $mainSearchQuestion = [];
+        $questionNameList = [];
 
         foreach ( $questions as $key => $question )
         {
@@ -245,7 +245,7 @@ class MainSearchForm extends BASE_CLASS_UserQuestionForm
 
                 BOL_AuthorizationService::getInstance()->trackAction('base', 'search_users');
 
-                $this->controller->redirect(OW::getRouter()->urlForRoute("users-search-result", array()));
+                $this->controller->redirect(OW::getRouter()->urlForRoute("users-search-result", []));
             }
             $this->controller->redirect(OW::getRouter()->urlForRoute("users-search"));
         }
@@ -295,13 +295,13 @@ class DisplayNameSearchForm extends BASE_CLASS_UserQuestionForm
 
         $question = $questionService->findQuestionByName($questionName);
 
-        $questionPropertyList = array();
+        $questionPropertyList = [];
         foreach ( $question as $property => $value )
         {
             $questionPropertyList[$property] = $value;
         }
 
-        $this->addQuestions(array($questionName => $questionPropertyList), array(), array());
+        $this->addQuestions([$questionName => $questionPropertyList], [], []);
 
         $controller->assign('displayNameQuestion', $questionPropertyList);
     }
@@ -329,7 +329,7 @@ class DisplayNameSearchForm extends BASE_CLASS_UserQuestionForm
 
             BOL_AuthorizationService::getInstance()->trackAction('base', 'search_users');
 
-            $this->controller->redirect(OW::getRouter()->urlForRoute("users-search-result", array()));
+            $this->controller->redirect(OW::getRouter()->urlForRoute("users-search-result", []));
         }
     }
 }

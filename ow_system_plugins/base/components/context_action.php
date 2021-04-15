@@ -36,7 +36,7 @@ class BASE_CMP_ContextAction extends OW_Component
 
     private $position;
 
-    private $actions = array();
+    private $actions = [];
 
     public function __construct( $position = self::POSITION_RIGHT )
     {
@@ -136,14 +136,14 @@ class BASE_CMP_ContextAction extends OW_Component
 
                 if ( !empty($action['subactions']) )
                 {
-                    usort($action['subactions'], array($this, 'sortActionsCallback'));
+                    usort($action['subactions'], [$this, 'sortActionsCallback']);
                 }
             }
 
             $this->setVisible($visible);
         }
 
-        usort($this->actions, array($this, 'sortParentActionsCallback'));
+        usort($this->actions, [$this, 'sortParentActionsCallback']);
 
         $this->assign('actions', $this->actions);
 
@@ -169,7 +169,7 @@ class BASE_ContextAction
 
     private $parentKey;
 
-    private $attributes = array();
+    private $attributes = [];
 
     public function __construct() { }
 

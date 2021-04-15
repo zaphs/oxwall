@@ -82,4 +82,4 @@ class BOL_MassMailingIgnoreUserService
         $this->massMailingDao->save($object);
     }
 }
-?>
+

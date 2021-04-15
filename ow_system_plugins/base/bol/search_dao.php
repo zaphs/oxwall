@@ -85,6 +85,6 @@ class BOL_SearchDao extends OW_BaseDao
         $expirationTime = 60 * 60 * 24; // 1 day
         $query = "SELECT id FROM " . $this->getTableName() . " WHERE (" . $this->dbo->escapeString(time()) . " - timeStamp) > " . $this->dbo->escapeString($expirationTime) . " LIMIT :count";
 
-        return $this->dbo->queryForColumnList($query, array('count' => $limit));
+        return $this->dbo->queryForColumnList($query, ['count' => $limit]);
     }
 }

@@ -15,23 +15,23 @@ class BASE_CMP_ConsoleList extends OW_Component
 
     public function initJs()
     {
-        $js = UTIL_JsGenerator::composeJsString('$.extend(OW.Console.getItem({$key}), OW_ConsoleList).construct({$params});', array(
+        $js = UTIL_JsGenerator::composeJsString('$.extend(OW.Console.getItem({$key}), OW_ConsoleList).construct({$params});', [
             'key' => $this->itemKey,
-            'params' => array(
+            'params' => [
                 'rsp' => $this->listRsp,
                 'key' => $this->itemKey
-            )
-        ));
+            ]
+        ]);
 
         OW::getDocument()->addOnloadScript($js);
     }
 
     public function setViewAll( $label, $url )
     {
-        $this->viewAll = array(
+        $this->viewAll = [
             'label' => $label,
             'url' => $url
-        );
+        ];
     }
 
     public function onBeforeRender()

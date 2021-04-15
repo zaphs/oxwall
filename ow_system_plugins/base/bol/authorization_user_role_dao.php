@@ -84,7 +84,7 @@ class BOL_AuthorizationUserRoleDao extends OW_BaseDao
     {
         $sql = 'SELECT `roleId` FROM ' . $this->getTableName() . ' WHERE `userId`=?';
 
-        return $this->dbo->queryForColumnList($sql, array($userId));
+        return $this->dbo->queryForColumnList($sql, [$userId]);
     }
 
     public function countByRoleId( $id )
@@ -107,17 +107,17 @@ class BOL_AuthorizationUserRoleDao extends OW_BaseDao
 			WHERE `ur`.`roleId` = :toDelete
     	";
 
-        $list = $this->dbo->queryForList($query, array(':toDelete' => $roleId, ':default' => $defaulRoleId));
+        $list = $this->dbo->queryForList($query, [':toDelete' => $roleId, ':default' => $defaulRoleId]);
 
         if ( $list === false )
         {
             return false;
         }
 
-        $idList = array(
-            'toDelete' => array(),
-            'toUpdate' => array(),
-        );
+        $idList = [
+            'toDelete' => [],
+            'toUpdate' => [],
+        ];
 
         foreach ( $list as $row )
         {
@@ -146,7 +146,7 @@ class BOL_AuthorizationUserRoleDao extends OW_BaseDao
         {
             $query = "UPDATE {$this->getTableName()} SET `roleId`=? WHERE `id` IN({$this->dbo->mergeInClause($idList['toUpdate'])})";
 
-            $this->dbo->query($query, array($defaulRoleId));
+            $this->dbo->query($query, [$defaulRoleId]);
         }
     }
 
@@ -168,19 +168,19 @@ class BOL_AuthorizationUserRoleDao extends OW_BaseDao
         $ex->andFieldEqual('roleId', $roleId);
         $this->deleteByExample($ex);
     }
-    private $cachedItems = array();
+    private $cachedItems = [];
 
     public function getRoleListOfUsers( array $idList, $displayLabel )
     {
         if ( count($idList) < 1 )
         {
-            return array();
+            return [];
         }
 
         $idList = array_map('intval', $idList);
 
-        $idsToRequire = array();
-        $result = array();
+        $idsToRequire = [];
+        $result = [];
         $var = null;
 
         foreach ( $idList as $id )
@@ -198,7 +198,7 @@ class BOL_AuthorizationUserRoleDao extends OW_BaseDao
             }
         }
 
-        $items = array();
+        $items = [];
         
         if ( !empty($idsToRequire) )
         {

@@ -80,7 +80,7 @@ class BOL_ComponentSettingDao extends OW_BaseDao
         return OW_DB_PREFIX . 'base_component_setting';
     }
 
-    public function findSettingList( $componentPlaceUniqName, array $settingNames = array() )
+    public function findSettingList( $componentPlaceUniqName, array $settingNames = [])
     {
         $example = new OW_Example();
         $example->andFieldEqual('componentPlaceUniqName', $componentPlaceUniqName);
@@ -96,7 +96,7 @@ class BOL_ComponentSettingDao extends OW_BaseDao
     {
         if ( empty($componentPlaceUniqNameList) )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();

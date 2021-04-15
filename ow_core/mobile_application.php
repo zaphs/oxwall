@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -23,10 +23,10 @@
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_MobileApplication getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_MobileApplication extends OW_Application
 {
@@ -48,69 +48,60 @@ class OW_MobileApplication extends OW_Application
         $baseConfigs = OW::getConfig()->getValues('base');
 
         //members only
-        if ( (int) $baseConfigs['guests_can_view'] === BOL_UserService::PERMISSIONS_GUESTS_CANT_VIEW && !OW::getUser()->isAuthenticated() )
-        {
-            $attributes = array(
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_MCTRL_User',
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'standardSignIn'
-            );
+        if ((int)$baseConfigs['guests_can_view'] === BOL_UserService::PERMISSIONS_GUESTS_CANT_VIEW && !OW::getUser()->isAuthenticated()) {
+            $attributes = [
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL   => 'BASE_MCTRL_User',
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'standardSignIn',
+            ];
 
             OW::getRequestHandler()->setCatchAllRequestsAttributes('base.members_only', $attributes);
             $this->addCatchAllRequestsException('base.members_only_exceptions', 'base.members_only');
         }
 
         //splash screen
-        if ( (bool) OW::getConfig()->getValue('base', 'splash_screen') && !isset($_COOKIE['splashScreen']) )
-        {
-            $attributes = array(
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_MCTRL_BaseDocument',
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'splashScreen',
+        if ((bool)OW::getConfig()->getValue('base', 'splash_screen') && !isset($_COOKIE['splashScreen'])) {
+            $attributes = [
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL     => 'BASE_MCTRL_BaseDocument',
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION   => 'splashScreen',
                 OW_RequestHandler::CATCH_ALL_REQUEST_KEY_REDIRECT => true,
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_JS => true,
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ROUTE => 'base_page_splash_screen'
-            );
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_JS       => true,
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ROUTE    => 'base_page_splash_screen',
+            ];
 
             OW::getRequestHandler()->setCatchAllRequestsAttributes('base.splash_screen', $attributes);
             $this->addCatchAllRequestsException('base.splash_screen_exceptions', 'base.splash_screen');
         }
 
         // password protected
-        if ( (int) $baseConfigs['guests_can_view'] === BOL_UserService::PERMISSIONS_GUESTS_PASSWORD_VIEW && !OW::getUser()->isAuthenticated() && !isset($_COOKIE['base_password_protection'])
-        )
-        {
-            $attributes = array(
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_MCTRL_BaseDocument',
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'passwordProtection'
-            );
+        if ((int)$baseConfigs['guests_can_view'] === BOL_UserService::PERMISSIONS_GUESTS_PASSWORD_VIEW && !OW::getUser()->isAuthenticated() && !isset($_COOKIE['base_password_protection'])
+        ) {
+            $attributes = [
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL   => 'BASE_MCTRL_BaseDocument',
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'passwordProtection',
+            ];
 
             OW::getRequestHandler()->setCatchAllRequestsAttributes('base.password_protected', $attributes);
             $this->addCatchAllRequestsException('base.password_protected_exceptions', 'base.password_protected');
         }
 
         // maintenance mode
-        if ( (bool) $baseConfigs['maintenance'] && !OW::getUser()->isAdmin() )
-        {
-            $attributes = array(
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL => 'BASE_MCTRL_BaseDocument',
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION => 'maintenance',
-                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_REDIRECT => true
-            );
+        if ((bool)$baseConfigs['maintenance'] && !OW::getUser()->isAdmin()) {
+            $attributes = [
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_CTRL     => 'BASE_MCTRL_BaseDocument',
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_ACTION   => 'maintenance',
+                OW_RequestHandler::CATCH_ALL_REQUEST_KEY_REDIRECT => true,
+            ];
 
             OW::getRequestHandler()->setCatchAllRequestsAttributes('base.maintenance_mode', $attributes);
             $this->addCatchAllRequestsException('base.maintenance_mode_exceptions', 'base.maintenance_mode');
         }
 
 
-        try
-        {
+        try {
             OW::getRequestHandler()->dispatch();
-        }
-        catch ( RedirectException $e )
-        {
+        } catch (RedirectException $e) {
             $this->redirect($e->getUrl(), $e->getRedirectCode());
-        }
-        catch ( InterceptException $e )
-        {
+        } catch (InterceptException $e) {
             OW::getRequestHandler()->setHandlerAttributes($e->getHandlerAttrs());
             $this->handleRequest();
         }
@@ -123,13 +114,11 @@ class OW_MobileApplication extends OW_Application
     {
         $document = OW::getDocument();
 
-        $meassages = OW::getFeedback()->getFeedback();
+        $messages = OW::getFeedback()->getFeedback();
 
-        foreach ( $meassages as $messageType => $messageList )
-        {
-            foreach ( $messageList as $message )
-            {
-                $document->addOnloadScript("OWM.message(" . json_encode($message) . ", '" . $messageType . "');");
+        foreach ($messages as $messageType => $messageList) {
+            foreach ($messageList as $message) {
+                $document->addOnloadScript('OWM.message(' . json_encode($message) . ", '" . $messageType . "');");
             }
         }
 
@@ -147,28 +136,24 @@ class OW_MobileApplication extends OW_Application
         $document->addStyleSheet(OW::getPluginManager()->getPlugin('base')->getStaticCssUrl() . 'mobile.css' . '?' . OW::getConfig()->getValue('base',
                 'cachedEntitiesPostfix'), 'all', -100);
         $document->addStyleSheet(OW::getThemeManager()->getCssFileUrl(true) . '?' . OW::getConfig()->getValue('base',
-                'cachedEntitiesPostfix'), 'all', (-90));
+                'cachedEntitiesPostfix'), 'all', -90);
 
-        if ( OW::getThemeManager()->getCurrentTheme()->getDto()->getCustomCssFileName() !== null )
-        {
+        if (OW::getThemeManager()->getCurrentTheme()->getDto()->getCustomCssFileName() !== null) {
             $document->addStyleSheet(OW::getThemeManager()->getThemeService()->getCustomCssFileUrl(OW::getThemeManager()->getCurrentTheme()->getDto()->getKey(),
-                    true));
+                true));
         }
 
         $language = OW::getLanguage();
 
-        if ( $document->getTitle() === null )
-        {
+        if ($document->getTitle() === null) {
             $document->setTitle($language->text('mobile', 'page_default_title'));
         }
 
-        if ( $document->getDescription() === null )
-        {
+        if ($document->getDescription() === null) {
             $document->setDescription($language->text('mobile', 'page_default_description'));
         }
 
-        if ( $document->getHeading() === null )
-        {
+        if ($document->getHeading() === null) {
             $document->setHeading($language->text('mobile', 'page_default_heading'));
         }
 
@@ -177,7 +162,7 @@ class OW_MobileApplication extends OW_Application
 
     public function activateMenuItem()
     {
-        
+
     }
 
     protected function newDocument()
@@ -189,25 +174,21 @@ class OW_MobileApplication extends OW_Application
         $document->setMime('text/html');
         $document->setLanguage($language->getTag());
 
-        if ( $language->getRtl() )
-        {
+        if ($language->getRtl()) {
             $document->setDirection('rtl');
-        }
-        else
-        {
+        } else {
             $document->setDirection('ltr');
         }
 
-        if ( (bool) OW::getConfig()->getValue('base', 'favicon') )
-        {
+        if ((bool)OW::getConfig()->getValue('base', 'favicon')) {
             $document->setFavicon(OW::getPluginManager()->getPlugin('base')->getUserFilesUrl() . 'favicon.ico');
         }
 
         $document->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'jquery.min.js',
-            'text/javascript', (-100));
+            'text/javascript', -100);
         $document->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'mobile.js?' . OW::getConfig()->getValue('base',
-                'cachedEntitiesPostfix'), 'text/javascript', (-50));
-        OW::getEventManager()->bind(OW_EventManager::ON_AFTER_REQUEST_HANDLE, array($this, 'onBeforeDocumentRender'));
+                'cachedEntitiesPostfix'), 'text/javascript', -50);
+        OW::getEventManager()->bind(OW_EventManager::ON_AFTER_REQUEST_HANDLE, [$this, 'onBeforeDocumentRender']);
 
         return $document;
     }
@@ -222,7 +203,7 @@ class OW_MobileApplication extends OW_Application
         return BOL_NavigationService::getInstance()->findAllMobileStaticDocuments();
     }
 
-    protected function findFirstMenuItem( $availableFor )
+    protected function findFirstMenuItem($availableFor)
     {
         return BOL_NavigationService::getInstance()->findFirstLocal($availableFor, OW_Navigation::MOBILE_TOP);
     }

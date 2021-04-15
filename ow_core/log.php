@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -23,16 +23,16 @@
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 class OW_Log
 {
-    const TYPE = 'type';
-    const KEY = 'key';
+    const TYPE       = 'type';
+    const KEY        = 'key';
     const TIME_STAMP = 'timeStamp';
-    const MESSAGE = 'message';
+    const MESSAGE    = 'message';
 
     /**
      * Class instances.
@@ -47,20 +47,19 @@ class OW_Log
      * @param string $type
      * @return OW_Log
      */
-    public static function getInstance( $type )
+    public static function getInstance($type)
     {
-        if ( self::$classInstances === null )
-        {
-            self::$classInstances = array();
+        if (self::$classInstances === null) {
+            self::$classInstances = [];
         }
 
-        if ( empty(self::$classInstances[$type]) )
-        {
+        if (empty(self::$classInstances[$type])) {
             self::$classInstances[$type] = new self($type);
         }
 
         return self::$classInstances[$type];
     }
+
     /**
      * Log type.
      *
@@ -72,7 +71,7 @@ class OW_Log
      *
      * @var array
      */
-    private $entries = array();
+    private $entries = [];
     /**
      * @var OW_LogWriter
      */
@@ -82,14 +81,13 @@ class OW_Log
      * Constructor.
      *
      * @param string $type
-     * @param OW_LogWriter $logWriter
      */
-    private function __construct( $type )
+    private function __construct($type)
     {
-        $this->type = $type;
+        $this->type      = $type;
         $this->logWriter = new BASE_CLASS_DbLogWriter();
-        OW::getEventManager()->bind('core.exit', array($this, 'writeLog'));
-        OW::getEventManager()->bind('core.emergency_exit', array($this, 'writeLog'));
+        OW::getEventManager()->bind('core.exit', [$this, 'writeLog']);
+        OW::getEventManager()->bind('core.emergency_exit', [$this, 'writeLog']);
     }
 
     /**
@@ -98,14 +96,14 @@ class OW_Log
      * @param string $message
      * @param string $key
      */
-    public function addEntry( $message, $key = null )
+    public function addEntry($message, $key = null)
     {
-        $this->entries[] = array(self::TYPE => $this->type, self::KEY => $key, self::MESSAGE => $message, self::TIME_STAMP => time());        
+        $this->entries[] = [self::TYPE => $this->type, self::KEY => $key, self::MESSAGE => $message, self::TIME_STAMP => time()];
     }
 
     /**
      * Returns all log entries.
-     * 
+     *
      * @return array
      */
     public function getEntries()
@@ -118,20 +116,19 @@ class OW_Log
      *
      * @param OW_LogWriter $logWriter
      */
-    public function setLogWriter( OW_LogWriter $logWriter )
+    public function setLogWriter(OW_LogWriter $logWriter)
     {
         $this->logWriter = $logWriter;
     }
 
     /**
-     * 
+     *
      */
     public function writeLog()
     {
-        if ( $this->logWriter !== null && !empty($this->entries))
-        {
+        if ($this->logWriter !== null && !empty($this->entries)) {
             $this->logWriter->processEntries($this->entries);
-            $this->entries = array();
+            $this->entries = [];
         }
     }
 }

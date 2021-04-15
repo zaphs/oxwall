@@ -12,7 +12,7 @@ class ADMIN_CTRL_Settings extends ADMIN_CTRL_Abstract
     {
         $language = OW::getLanguage();
 
-        $menuItems = array();
+        $menuItems = [];
 
         $item = new BASE_MenuItem();
         $item->setLabel($language->text('admin', 'menu_item_basics'));
@@ -180,7 +180,7 @@ class ADMIN_CTRL_Settings extends ADMIN_CTRL_Abstract
                     $config->saveConfig('base', 'tf_resource_list', json_encode(array_map('trim', $res)));
                 }
 
-                $extList = array();
+                $extList = [];
 
                 if ( !empty($data['attch_ext_list']) )
                 {
@@ -222,7 +222,7 @@ class ADMIN_CTRL_Settings extends ADMIN_CTRL_Abstract
 
         $avatarService = BOL_AvatarService::getInstance();
 
-        if ( isset($_GET['del-avatar']) && in_array($_GET['del-avatar'], array(1, 2)) )
+        if ( isset($_GET['del-avatar']) && in_array($_GET['del-avatar'], [1, 2]) )
         {
             $del = $avatarService->deleteCustomDefaultAvatar((int) $_GET['del-avatar']);
             if ( $del )
@@ -539,7 +539,7 @@ class ADMIN_CTRL_Settings extends ADMIN_CTRL_Abstract
                     }
                 }
 
-                $responce = json_encode(array('result' => $result, 'type' => $type, 'message' => $message));
+                $responce = json_encode(['result' => $result, 'type' => $type, 'message' => $message]);
 
                 break;
         }
@@ -601,9 +601,9 @@ class ConfigSaveForm extends Form
 
         $dateFormatValue = OW::getConfig()->getValue('base', 'date_field_format');
 
-        $dateFormatArray = array(BOL_QuestionService::DATE_FIELD_FORMAT_MONTH_DAY_YEAR, BOL_QuestionService::DATE_FIELD_FORMAT_DAY_MONTH_YEAR);
+        $dateFormatArray = [BOL_QuestionService::DATE_FIELD_FORMAT_MONTH_DAY_YEAR, BOL_QuestionService::DATE_FIELD_FORMAT_DAY_MONTH_YEAR];
 
-        $options = array();
+        $options = [];
 
         foreach ( $dateFormatArray as $key )
         {
@@ -700,7 +700,7 @@ class ConfigSaveForm extends Form
 //        $config->saveConfig('base', 'tf_allow_pic_upload', $values['tf-allow-pic-upload']);
 //        $config->saveConfig('base', 'tf_max_pic_size', $values['tf-max-image-size']);
 
-        return array('result' => true);
+        return ['result' => true];
     }
 
 }
@@ -727,7 +727,7 @@ class UserSettingsForm extends Form
         $avatarSize = new TextField('avatarSize');
         $avatarSize->setRequired(true);
         $validator = new IntValidator(40, 150);
-        $validator->setErrorMessage($language->text('admin', 'user_settings_avatar_size_error', array('max' => 150)));
+        $validator->setErrorMessage($language->text('admin', 'user_settings_avatar_size_error', ['max' => 150]));
         $avatarSize->addValidator($validator);
         $this->addElement($avatarSize->setLabel($language->text('admin', 'user_settings_avatar_size_label')));
 
@@ -735,7 +735,7 @@ class UserSettingsForm extends Form
         $bigAvatarSize = new TextField('bigAvatarSize');
         $bigAvatarSize->setRequired(true);
         $validator = new IntValidator(150, 250);
-        $validator->setErrorMessage($language->text('admin', 'user_settings_big_avatar_size_error', array('max' => 250)));
+        $validator->setErrorMessage($language->text('admin', 'user_settings_big_avatar_size_error', ['max' => 250]));
         $bigAvatarSize->addValidator($validator);
         $this->addElement($bigAvatarSize->setLabel($language->text('admin', 'user_settings_big_avatar_size_label')));
         
@@ -762,10 +762,10 @@ class UserSettingsForm extends Form
         $displayNameField = new Selectbox('displayName');
         $displayNameField->setRequired(true);
 
-        $questions = array(
+        $questions = [
             'username' => $language->text('base', 'questions_question_username_label'),
             'realname' => $language->text('base', 'questions_question_realname_label')
-        );
+        ];
 
         $displayNameField->setHasInvitation(false);
         $displayNameField->setOptions($questions);
@@ -781,11 +781,11 @@ class UserSettingsForm extends Form
 
         $joinConfigField = new Selectbox('join_display_photo_upload');
 
-        $options = array(
+        $options = [
             BOL_UserService::CONFIG_JOIN_DISPLAY_PHOTO_UPLOAD => $language->text('base', 'config_join_display_photo_upload_display_label'),
             BOL_UserService::CONFIG_JOIN_DISPLAY_AND_SET_REQUIRED_PHOTO_UPLOAD => $language->text('base', 'config_join_display_photo_upload_display_and_require_label'),
             BOL_UserService::CONFIG_JOIN_NOT_DISPLAY_PHOTO_UPLOAD => $language->text('base', 'config_join_display_photo_upload_not_display_label')
-        );
+        ];
 
         $joinConfigField->addOptions($options);
         $joinConfigField->setHasInvitation(false);
@@ -807,17 +807,17 @@ class UserSettingsForm extends Form
         $this->addElement($userApprove);
 
         $whoCanJoin = new RadioField('who_can_join');
-        $whoCanJoin->addOptions(array('1' => $language->text('admin', 'permissions_index_anyone_can_join'), '2' => $language->text('admin', 'permissions_index_by_invitation_only_can_join')));
+        $whoCanJoin->addOptions(['1' => $language->text('admin', 'permissions_index_anyone_can_join'), '2' => $language->text('admin', 'permissions_index_by_invitation_only_can_join')]);
         $whoCanJoin->setLabel($language->text('admin', 'permissions_index_who_can_join'));
         $this->addElement($whoCanJoin);
 
         $whoCanInvite = new RadioField('who_can_invite');
-        $whoCanInvite->addOptions(array('1' => $language->text('admin', 'permissions_index_all_users_can_invate'), '2' => $language->text('admin', 'permissions_index_admin_only_can_invate')));
+        $whoCanInvite->addOptions(['1' => $language->text('admin', 'permissions_index_all_users_can_invate'), '2' => $language->text('admin', 'permissions_index_admin_only_can_invate')]);
         $whoCanInvite->setLabel($language->text('admin', 'permissions_index_who_can_invite'));
         $this->addElement($whoCanInvite);
 
         $guestsCanView = new RadioField('guests_can_view');
-        $guestsCanView->addOptions(array('1' => $language->text('admin', 'permissions_index_yes'), '2' => $language->text('admin', 'permissions_index_no'), '3' => $language->text('admin', 'permissions_index_with_password')));
+        $guestsCanView->addOptions(['1' => $language->text('admin', 'permissions_index_yes'), '2' => $language->text('admin', 'permissions_index_no'), '3' => $language->text('admin', 'permissions_index_with_password')]);
         $guestsCanView->setLabel($language->text('admin', 'permissions_index_guests_can_view_site'));
         $guestsCanView->setDescription($language->text('admin', 'permissions_idex_if_not_yes_will_override_settings'));
         $this->addElement($guestsCanView);
@@ -901,9 +901,9 @@ class UserSettingsForm extends Form
             $mail->addRecipientEmail($adminEmail);
             $mail->setSender($senderMail);
             $mail->setSenderSuffix(false);
-            $mail->setSubject(OW::getLanguage()->text( 'admin', 'site_password_letter_subject', array()));
-            $mail->setTextContent( OW::getLanguage()->text( 'admin', 'site_password_letter_template_text', array('password' => $values['password'])));
-            $mail->setHtmlContent( OW::getLanguage()->text( 'admin', 'site_password_letter_template_html', array('password' => $values['password'])));
+            $mail->setSubject(OW::getLanguage()->text( 'admin', 'site_password_letter_subject', []));
+            $mail->setTextContent( OW::getLanguage()->text( 'admin', 'site_password_letter_template_text', ['password' => $values['password']]));
+            $mail->setHtmlContent( OW::getLanguage()->text( 'admin', 'site_password_letter_template_html', ['password' => $values['password']]));
             try
             {
                 OW::getMailer()->send($mail);
@@ -931,7 +931,7 @@ class UserSettingsForm extends Form
             ? $config->saveConfig('base', 'user_view_presentation', 'tabs')
             : $config->saveConfig('base', 'user_view_presentation', 'table');
 
-        return array('result' => true);
+        return ['result' => true];
     }
 }
 
@@ -949,19 +949,19 @@ class FileExtensionValidator extends OW_Validator
      *
      * @var array
      */
-    protected $disallowedExtensions = array(
+    protected $disallowedExtensions = [
         'php*',
         'phtml'
-    );
+    ];
 
     /**
      * Class constructor
      */
     public function __construct()
     {
-        $this->errorMessage = OW::getLanguage()->text('admin', 'wrong_file_extension', array(
+        $this->errorMessage = OW::getLanguage()->text('admin', 'wrong_file_extension', [
             'extensions' => implode(',', $this->disallowedExtensions)
-        ));
+        ]);
     }
 
     public function isValid( $value )
@@ -1045,6 +1045,6 @@ class MailSettingsForm extends Form
         $config->saveConfig('base', 'mail_smtp_port', $values['mailSmtpPort']);
         $config->saveConfig('base', 'mail_smtp_connection_prefix', $values['mailSmtpConnectionPrefix']);
 
-        return array('result' => true);
+        return ['result' => true];
     }
 }

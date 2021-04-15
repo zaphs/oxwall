@@ -83,21 +83,21 @@ class BASE_CTRL_Preference extends OW_ActionController
         $sectionList = BOL_PreferenceService::getInstance()->findAllSections();
         $preferenceList = BOL_PreferenceService::getInstance()->findAllPreference();
 
-        $preferenceNameList = array();
+        $preferenceNameList = [];
         foreach( $preferenceList as $preference )
         {
             $preferenceNameList[$preference->key] = $preference->key;
         }
 
-        $preferenceValuesList = BOL_PreferenceService::getInstance()->getPreferenceValueListByUserIdList($preferenceNameList, array($userId));
+        $preferenceValuesList = BOL_PreferenceService::getInstance()->getPreferenceValueListByUserIdList($preferenceNameList, [$userId]);
 
-        $formElementEvent = new BASE_CLASS_EventCollector( BOL_PreferenceService::PREFERENCE_ADD_FORM_ELEMENT_EVENT, array( 'values' => $preferenceValuesList[$userId] ) );
+        $formElementEvent = new BASE_CLASS_EventCollector( BOL_PreferenceService::PREFERENCE_ADD_FORM_ELEMENT_EVENT, ['values' => $preferenceValuesList[$userId]]);
         OW::getEventManager()->trigger($formElementEvent);
         $data = $formElementEvent->getData();
         
-        $formElements = empty($data) ? array() : call_user_func_array('array_merge', $data);
+        $formElements = empty($data) ? [] : call_user_func_array('array_merge', $data);
 
-        $formElementList = array();
+        $formElementList = [];
 
         foreach( $formElements as $formElement )
         {
@@ -106,7 +106,7 @@ class BASE_CTRL_Preference extends OW_ActionController
             $formElementList[$formElement->getName()] = $formElement;
         }
         
-        $resultList = array();
+        $resultList = [];
 
         foreach( $sectionList as $section )
         {
@@ -144,12 +144,12 @@ class BASE_CTRL_Preference extends OW_ActionController
 
         $this->addForm($preferenceForm);
 
-        $data = array();
+        $data = [];
         $sectionLabelEvent = new BASE_CLASS_EventCollector( BOL_PreferenceService::PREFERENCE_SECTION_LABEL_EVENT );
         OW::getEventManager()->trigger($sectionLabelEvent);
         $data = $sectionLabelEvent->getData();
         
-        $sectionLabels = empty($data) ? array() : call_user_func_array('array_merge', $data);
+        $sectionLabels = empty($data) ? [] : call_user_func_array('array_merge', $data);
 
         $this->assign('preferenceList', $resultList);
         $this->assign('sectionLabels', $sectionLabels);

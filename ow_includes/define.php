@@ -12,7 +12,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -27,21 +26,18 @@ define('OW_DIR_PLUGIN_USERFILES', OW_DIR_USERFILES . 'plugins' . DS);
 define('OW_DIR_THEME_USERFILES', OW_DIR_USERFILES . 'themes' . DS);
 define('OW_DIR_LOG', OW_DIR_ROOT . 'ow_log' . DS);
 
-if ( defined('OW_URL_STATIC') )
-{
+if (defined('OW_URL_STATIC')) {
     define('OW_URL_STATIC_THEMES', OW_URL_STATIC . 'themes/');
     define('OW_URL_STATIC_PLUGINS', OW_URL_STATIC . 'plugins/');
 }
 
-if ( defined('OW_URL_USERFILES') )
-{
+if (defined('OW_URL_USERFILES')) {
     define('OW_URL_PLUGIN_USERFILES', OW_URL_USERFILES . 'plugins/');
     define('OW_URL_THEME_USERFILES', OW_URL_USERFILES . 'themes/');
 }
 
-define("OW_DIR_LIB_VENDOR", OW_DIR_LIB . "vendor" . DS);
+define('OW_DIR_LIB_VENDOR', OW_DIR_LIB . 'vendor' . DS);
 
-if ( !defined("OW_SQL_LIMIT_USERS_COUNT") )
-{
-    define("OW_SQL_LIMIT_USERS_COUNT", 10000);
+if (!defined('OW_SQL_LIMIT_USERS_COUNT')) {
+    define('OW_SQL_LIMIT_USERS_COUNT', 10000);
 }

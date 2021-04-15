@@ -26,9 +26,11 @@ $plugin = OW::getPluginManager()->getPlugin('admin');
 OW::getRouter()->addRoute(new OW_Route('admin_default', 'admin', 'ADMIN_CTRL_Base', 'dashboard'));
 
 OW::getRouter()->addRoute(new OW_Route('admin_dashboard', 'admin', 'ADMIN_CTRL_Base', 'dashboard'));
-OW::getRouter()->addRoute(new OW_Route('admin_dashboard_customize', 'admin/dashboard/customize', 'ADMIN_CTRL_Base', 'dashboard', array(
-    'mode' => array(OW_Route::PARAM_OPTION_HIDDEN_VAR => 'customize'
-))));
+OW::getRouter()->addRoute(new OW_Route('admin_dashboard_customize', 'admin/dashboard/customize', 'ADMIN_CTRL_Base', 'dashboard', [
+    'mode' => [
+        OW_Route::PARAM_OPTION_HIDDEN_VAR => 'customize'
+    ]
+]));
 
 OW::getRouter()->addRoute(new OW_Route('admin_finance', 'admin/finance', 'ADMIN_CTRL_Finance', 'index'));
 OW::getRouter()->addRoute(new OW_Route('admin_settings_language', 'admin/settings/languages', 'ADMIN_CTRL_Languages', 'index'));
@@ -76,7 +78,7 @@ $router->addRoute(new OW_Route('admin_plugins_add', 'admin/plugins/add-new', 'AD
 $router->addRoute(new OW_Route('admin_delete_roles', 'admin/users/delete-roles', 'ADMIN_CTRL_Users', 'deleteRoles'));
 $router->addRoute(new OW_Route('admin.roles.reorder', 'admin/users/ajax-reorder', 'ADMIN_CTRL_Users', 'ajaxReorder'));
 $router->addRoute(new OW_Route('admin.roles.edit-role', 'admin/users/ajax-edit-role', 'ADMIN_CTRL_Users', 'ajaxEditRole'));
-$router->addRoute(new OW_Route('admin_users_browse', 'admin/users/:list', 'ADMIN_CTRL_Users', 'index', array('list' => array('default' => ''))));
+$router->addRoute(new OW_Route('admin_users_browse', 'admin/users/:list', 'ADMIN_CTRL_Users', 'index', ['list' => ['default' => '']]));
 
 $router->addRoute(new OW_Route('admin_settings_main', 'admin/settings', 'ADMIN_CTRL_Settings', 'index'));
 $router->addRoute(new OW_Route('admin_settings_user', 'admin/settings/user', 'ADMIN_CTRL_Settings', 'user'));
@@ -121,12 +123,12 @@ function admin_add_auth_labels( BASE_CLASS_EventCollector $event )
 {
     $language = OW::getLanguage();
     $event->add(
-        array(
-            'admin' => array(
+        [
+            'admin' => [
                 'label' => $language->text('admin', 'auth_group_label'),
-                'actions' => array()
-            )
-        )
+                'actions' => []
+            ]
+        ]
     );
 }
 OW::getEventManager()->bind('admin.add_auth_labels', 'admin_add_auth_labels');

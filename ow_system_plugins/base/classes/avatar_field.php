@@ -57,9 +57,9 @@ class BASE_CLASS_AvatarField extends FormElement
         if ( $this->value )
         {
             // hide the input
-            $this->attributes = array_merge($this->attributes, array(
+            $this->attributes = array_merge($this->attributes, [
                 'style' => 'display:none'
-            ));
+            ]);
         }
 
         $markup = '<div class="ow_avatar_field">';
@@ -83,10 +83,10 @@ class BASE_CLASS_AvatarField extends FormElement
 
     public function getElementJs()
     {
-        $params = array(
+        $params = [
             'ajaxResponder' => OW::getRouter()->urlFor('BASE_CTRL_Avatar', 'ajaxResponder'),
             'changeUserAvatar' => $this->changeUserAvatar
-        );
+        ];
         $jsString = "var formElement = new OwAvatarField(" . json_encode($this->getId()) . ", " . json_encode($this->getName()) . ", ".json_encode($params).");";
 
         $jsString .= $this->generateValidatorAndFilterJsCode("formElement");

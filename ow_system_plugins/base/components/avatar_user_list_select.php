@@ -51,7 +51,7 @@ class BASE_CMP_AvatarUserListSelect extends OW_Component
      *
      * @param array $idList
      */
-    public function __construct( array $idList, $langs = array() )
+    public function __construct( array $idList, $langs = [])
     {
         parent::__construct();
 
@@ -118,15 +118,15 @@ class BASE_CMP_AvatarUserListSelect extends OW_Component
         $usernames = BOL_UserService::getInstance()->getUserNamesForList($this->idList);
         $orderdList = BOL_UserService::getInstance()->getRecentlyActiveOrderedIdList($this->idList);
 
-        $this->idList = array();
+        $this->idList = [];
 
         foreach( $orderdList as $list )
         {
            $this->idList[] =  $list['id'];
         }
 
-        $arrayToAssign = array();
-        $jsArray = array();
+        $arrayToAssign = [];
+        $jsArray = [];
 
         foreach ( $this->idList as $id )
         {
@@ -137,17 +137,17 @@ class BASE_CMP_AvatarUserListSelect extends OW_Component
                 $avatars[$id]['url'] = 'javascript://';
             }
 
-            $arrayToAssign[$id] = array(
+            $arrayToAssign[$id] = [
                 'id' => $id,
                 'title' => empty($displayNames[$id]) ? '_DISPLAY_NAME_' : $displayNames[$id],
                 'linkId' => $linkId,
                 'username' => $usernames[$id]
-            );
+            ];
 
-            $jsArray[$id] = array(
+            $jsArray[$id] = [
                 'linkId' => $linkId,
                 'userId' => $id
-            );
+            ];
         }
 
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'avatar_user_select.js');
@@ -159,12 +159,12 @@ class BASE_CMP_AvatarUserListSelect extends OW_Component
 
         $this->assign('users', $arrayToAssign);
 
-        $langs = array(
+        $langs = [
             'countLabel' => $this->countLabel,
             'startCountLabel' => (!empty($this->countLabel) ? str_replace('#count#', '0', $this->countLabel) : null ),
             'buttonLabel' => $this->buttonLabel,
             'startButtonLabel' => str_replace('#count#', '0', $this->buttonLabel)
-        );
+        ];
         $this->assign('langs', $langs);
     }
 }

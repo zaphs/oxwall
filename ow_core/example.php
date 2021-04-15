@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -23,11 +23,11 @@
  */
 
 /**
- * 
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ *
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 class OW_Example
 {
@@ -61,32 +61,32 @@ class OW_Example
      */
     public function __construct()
     {
-        $this->dbo = OW::getDbo();
+        $this->dbo            = OW::getDbo();
         $this->criteriaString = '';
     }
 
     /**
      * Adds limit clause to query string.
      *
+     * @param         $first
      * @param integer $count
-     * @param integer $offset
      * @return OW_Example
      */
-    public function setLimitClause( $first, $count )
+    public function setLimitClause($first, $count)
     {
-        $this->limitClauseString = 'LIMIT ' . abs( (int) $first ) . ', ' . abs( (int) $count );
+        $this->limitClauseString = 'LIMIT ' . abs((int)$first) . ', ' . abs((int)$count);
 
         return $this;
     }
 
     /**
      * Adds order clause to query string
-     * @example $obj->setOrder( '`myField`' ) | $obj->setOrder( '`myField` DESC' )
-     *
      * @param string $orderString
      * @return OW_Example
+     * @example $obj->setOrder( '`myField`' ) | $obj->setOrder( '`myField` DESC' )
+     *
      */
-    public function setOrder( $orderString )
+    public function setOrder($orderString)
     {
         $this->orderClauseString = 'ORDER BY ' . $this->dbo->escapeString($orderString);
         return $this;
@@ -96,35 +96,33 @@ class OW_Example
      * Adds field equal clause to query.
      *
      * @param string $field
-     * @param mixed $value
+     * @param mixed  $value
      * @return OW_Example
      */
-    public function andFieldEqual( $field, $value )
+    public function andFieldEqual($field, $value)
     {
-        if ( is_bool($value) )
-        {
-            $value = intval($value);
+        if (is_bool($value)) {
+            $value = (int)$value;
         }
 
-        $this->criteriaString .= " AND `" . $this->dbo->escapeString($field) . "` = " . (is_string($value) ? "'" . $this->dbo->escapeString($value) . "'" : $value);
+        $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . '` = ' . (is_string($value) ? "'" . $this->dbo->escapeString($value) . "'" : $value);
         return $this;
     }
 
     /**
      * Adds field like clause to query.
      *
-     * @param string $field
-     * @param string $value
+     * @param string          $field
+     * @param string|int|bool $value
      * @return OW_Example
      */
-    public function andFieldLike( $field, $value )
+    public function andFieldLike($field, $value)
     {
-        if ( is_bool($value) )
-        {
-            $value = intval($value);
+        if (is_bool($value)) {
+            $value = (int)$value;
         }
 
-        $this->criteriaString .= " AND `" . $this->dbo->escapeString($field) . "` LIKE '" . $this->dbo->escapeString($value) . "'";
+        $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . "` LIKE '" . $this->dbo->escapeString($value) . "'";
 
         return $this;
     }
@@ -133,18 +131,17 @@ class OW_Example
      * Adds field between clause to query.
      *
      * @param string $field
-     * @param mixed $value1
-     * @param mixed $value2
+     * @param mixed  $value1
+     * @param mixed  $value2
      * @return OW_Example
      */
-    public function andFieldBetween( $field, $value1, $value2 )
+    public function andFieldBetween($field, $value1, $value2)
     {
-        if ( !is_numeric($value1) || !is_numeric($value2) )
-        {
-            throw new InvalidArgumentException("Not numeric params were provided! Numbers are expected!");
+        if (!is_numeric($value1) || !is_numeric($value2)) {
+            throw new InvalidArgumentException('Not numeric params were provided! Numbers are expected!');
         }
 
-        $this->criteriaString .= " AND `" . $this->dbo->escapeString($field) . "` BETWEEN " . $value1 . " AND " . $value2;
+        $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . '` BETWEEN ' . $value1 . ' AND ' . $value2;
         return $this;
     }
 
@@ -152,17 +149,16 @@ class OW_Example
      * Adds field not equal clause to query.
      *
      * @param string $field
-     * @param mixed $value
+     * @param mixed  $value
      * @return OW_Example
      */
-    public function andFieldNotEqual( $field, $value )
+    public function andFieldNotEqual($field, $value)
     {
-        if ( is_bool($value) )
-        {
-            $value = intval($value);
+        if (is_bool($value)) {
+            $value = (int)$value;
         }
-        
-        $this->criteriaString .= " AND `" . $this->dbo->escapeString($field) . "` != " . (is_string($value) ? "'" . $this->dbo->escapeString($value) . "'" : $value);
+
+        $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . '` != ' . (is_string($value) ? "'" . $this->dbo->escapeString($value) . "'" : $value);
         return $this;
     }
 
@@ -170,17 +166,16 @@ class OW_Example
      * Adds field greater than clause to query.
      *
      * @param string $field
-     * @param mixed $value
+     * @param mixed  $value
      * @return OW_Example
      */
-    public function andFieldGreaterThan( $field, $value )
+    public function andFieldGreaterThan($field, $value)
     {
-        if ( !is_numeric($value) )
-        {
-            throw new InvalidArgumentException("Not numeric param was provided! Number is expected!");
+        if (!is_numeric($value)) {
+            throw new InvalidArgumentException('Not numeric param was provided! Number is expected!');
         }
 
-        $this->criteriaString .= " AND `" . $this->dbo->escapeString($field) . "` > " . $value;
+        $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . '` > ' . $value;
         return $this;
     }
 
@@ -188,17 +183,16 @@ class OW_Example
      * Adds field greater than or equal clause to query.
      *
      * @param string $field
-     * @param mixed $value
+     * @param mixed  $value
      * @return OW_Example
      */
-    public function andFieldGreaterThenOrEqual( $field, $value )
+    public function andFieldGreaterThenOrEqual($field, $value)
     {
-        if ( !is_numeric($value) )
-        {
-            throw new InvalidArgumentException("Not numeric param was provided! Number is expected!");
+        if (!is_numeric($value)) {
+            throw new InvalidArgumentException('Not numeric param was provided! Number is expected!');
         }
 
-        $this->criteriaString .= " AND `" . $this->dbo->escapeString($field) . "` >= " . $value;
+        $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . '` >= ' . $value;
         return $this;
     }
 
@@ -206,17 +200,16 @@ class OW_Example
      * Adds field less clause to query.
      *
      * @param string $field
-     * @param mixed $value
+     * @param mixed  $value
      * @return OW_Example
      */
-    public function andFieldLessThan( $field, $value )
+    public function andFieldLessThan($field, $value)
     {
-        if ( !is_numeric($value) )
-        {
-            throw new InvalidArgumentException("Not numeric param was provided! Number is expected!");
+        if (!is_numeric($value)) {
+            throw new InvalidArgumentException('Not numeric param was provided! Number is expected!');
         }
 
-        $this->criteriaString .= " AND `" . $this->dbo->escapeString($field) . "` < " . $value;
+        $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . '` < ' . $value;
         return $this;
     }
 
@@ -224,17 +217,16 @@ class OW_Example
      * Adds field less or equal clause to query.
      *
      * @param string $field
-     * @param mixed $value
+     * @param mixed  $value
      * @return OW_Example
      */
-    public function andFieldLessOrEqual( $field, $value )
+    public function andFieldLessOrEqual($field, $value)
     {
-        if ( !is_numeric($value) )
-        {
-            throw new InvalidArgumentException("Not numeric param was provided! Number is expected!");
+        if (!is_numeric($value)) {
+            throw new InvalidArgumentException('Not numeric param was provided! Number is expected!');
         }
 
-        $this->criteriaString .= " AND `" . $this->dbo->escapeString($field) . "` <= " . $value;
+        $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . '` <= ' . $value;
         return $this;
     }
 
@@ -242,12 +234,11 @@ class OW_Example
      * Adds field is null clause to query.
      *
      * @param string $field
-     * @param mixed $value
      * @return OW_Example
      */
-    public function andFieldIsNull( $field )
+    public function andFieldIsNull($field)
     {
-        $this->criteriaString .= " AND `" . $this->dbo->escapeString($field) . "` IS NULL";
+        $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . '` IS NULL';
         return $this;
     }
 
@@ -255,50 +246,48 @@ class OW_Example
      * Adds field is not null clause to query.
      *
      * @param string $field
-     * @param mixed $value
      * @return OW_Example
      */
-    public function andFieldIsNotNull( $field )
+    public function andFieldIsNotNull($field)
     {
-        $this->criteriaString .= " AND `" . $this->dbo->escapeString($field) . "` IS NOT NULL";
+        $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . '` IS NOT NULL';
         return $this;
     }
 
     /**
      * @param string $field
-     * @param array $valueList
+     * @param array  $valueList
      * @return OW_Example
      */
-    public function andFieldInArray( $field, array $valueList )
+    public function andFieldInArray($field, array $valueList)
     {
-        $result = $this->dbo->mergeInClause($valueList);
+        $result               = $this->dbo->mergeInClause($valueList);
         $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . '` IN(' . $result . ')';
         return $this;
     }
 
     /**
      * @param string $field
-     * @param array $valueList
+     * @param array  $valueList
      * @return OW_Example
      */
-    public function andFieldNotInArray( $field, array $valueList )
+    public function andFieldNotInArray($field, array $valueList)
     {
-        $result = $this->dbo->mergeInClause($valueList);
+        $result               = $this->dbo->mergeInClause($valueList);
         $this->criteriaString .= ' AND `' . $this->dbo->escapeString($field) . '` NOT IN(' . $result . ')';
         return $this;
     }
 
     /**
-     * @param array $fields
+     * @param array  $fields
      * @param string $value
      * @return OW_Example
      */
-    public function andFieldMatchAgainst( array $fields, $value )
+    public function andFieldMatchAgainst(array $fields, $value)
     {
         $fieldsString = '';
 
-        foreach ( $fields as $field )
-        {
+        foreach ($fields as $field) {
             $fieldsString = '`' . $this->dbo->escapeString($field) . '`,';
         }
 
@@ -316,20 +305,14 @@ class OW_Example
      */
     public function __toString()
     {
-        if ( $this->criteriaString !== null )
-        {
+        if ($this->criteriaString !== null) {
             $criteriaString = trim($this->criteriaString);
-            if ( mb_strlen($criteriaString) > 2 )
-            {
+            if (mb_strlen($criteriaString) > 2) {
                 $criteriaString = ' WHERE ' . mb_substr($criteriaString, 3);
-            }
-            else
-            {
+            } else {
                 $criteriaString = '';
             }
-        }
-        else
-        {
+        } else {
             $criteriaString = '';
         }
 

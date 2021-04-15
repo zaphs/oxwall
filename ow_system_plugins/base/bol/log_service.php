@@ -72,7 +72,7 @@ final class BOL_LogService
      */
     public function addEntries( array $entries )
     {
-        $objectList = array();
+        $objectList = [];
 
         if ( !empty($entries) )
         {

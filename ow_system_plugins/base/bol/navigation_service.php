@@ -169,11 +169,11 @@ class BOL_NavigationService
     {
         $items = $this->menuItemDao->findMenuItemsForMenuTypes($menuTypes);
 
-        $resultArray = array();
+        $resultArray = [];
 
         foreach ( $menuTypes as $type )
         {
-            $resultArray[$type] = array();
+            $resultArray[$type] = [];
         }
 
         /* @var $item BOL_MenuItem */
@@ -221,7 +221,7 @@ class BOL_NavigationService
     /**
      * Returns max sort order for menu type.
      * 
-     * @param strign $menuType
+     * @param string $menuType
      * @return integer
      */
     public function findMaxSortOrderForMenuType( $menuType )
@@ -250,15 +250,16 @@ class BOL_NavigationService
 
     /**
      *
-     * @param <type> $visibleFor
+     * @param int $visibleFor
+     * @param string $menuType
      * @return BOL_MenuItem
      */
-    public function findFirstLocal( $visibleFor, $menuType )
+    public function findFirstLocal(int $visibleFor, string $menuType ): BOL_MenuItem
     {
         return $this->menuItemDao->findFirstLocal($visibleFor, $menuType);
     }
 
-    public function isDocumentUriUnique( $uri )
+    public function isDocumentUriUnique(string $uri )
     {
         return $this->documentDao->isDocumentUriUnique($uri);
     }
@@ -270,7 +271,7 @@ class BOL_NavigationService
      */
     public function getMenuItems( array $menuItems )
     {
-        $resultArray = array();
+        $resultArray = [];
 
         foreach ( $menuItems as $value )
         {

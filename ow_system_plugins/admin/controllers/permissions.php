@@ -58,17 +58,17 @@ class ADMIN_CTRL_Permissions extends ADMIN_CTRL_Abstract
         $form->addElement($userApprove);
 
         $whoCanJoin = new RadioField('who_can_join');
-        $whoCanJoin->addOptions(array('1' => $language->text('admin', 'permissions_index_anyone_can_join'), '2' => $language->text('admin', 'permissions_index_by_invitation_only_can_join')));
+        $whoCanJoin->addOptions(['1' => $language->text('admin', 'permissions_index_anyone_can_join'), '2' => $language->text('admin', 'permissions_index_by_invitation_only_can_join')]);
         $whoCanJoin->setLabel($language->text('admin', 'permissions_index_who_can_join'));
         $form->addElement($whoCanJoin);
 
         $whoCanInvite = new RadioField('who_can_invite');
-        $whoCanInvite->addOptions(array('1' => $language->text('admin', 'permissions_index_all_users_can_invate'), '2' => $language->text('admin', 'permissions_index_admin_only_can_invate')));
+        $whoCanInvite->addOptions(['1' => $language->text('admin', 'permissions_index_all_users_can_invate'), '2' => $language->text('admin', 'permissions_index_admin_only_can_invate')]);
         $whoCanInvite->setLabel($language->text('admin', 'permissions_index_who_can_invite'));
         $form->addElement($whoCanInvite);
 
         $guestsCanView = new RadioField('guests_can_view');
-        $guestsCanView->addOptions(array('1' => $language->text('admin', 'permissions_index_yes'), '2' => $language->text('admin', 'permissions_index_no'), '3' => $language->text('admin', 'permissions_index_with_password')));
+        $guestsCanView->addOptions(['1' => $language->text('admin', 'permissions_index_yes'), '2' => $language->text('admin', 'permissions_index_no'), '3' => $language->text('admin', 'permissions_index_with_password')]);
         $guestsCanView->setLabel($language->text('admin', 'permissions_index_guests_can_view_site'));
         $guestsCanView->setDescription($language->text('admin', 'permissions_idex_if_not_yes_will_override_settings'));
         $form->addElement($guestsCanView);
@@ -119,7 +119,7 @@ class ADMIN_CTRL_Permissions extends ADMIN_CTRL_Abstract
                     $mail->setSender($senderMail);
                     $mail->setSenderSuffix(false);
                     $mail->setSubject(OW::getLanguage()->text( 'admin', 'site_password'));
-                    $mail->setTextContent( OW::getLanguage()->text( 'admin', 'admin_password', array('password' => $data['password'])));
+                    $mail->setTextContent( OW::getLanguage()->text( 'admin', 'admin_password', ['password' => $data['password']]));
                     try
                     {
                         OW::getMailer()->send($mail);
@@ -158,13 +158,13 @@ class ADMIN_CTRL_Permissions extends ADMIN_CTRL_Abstract
         $groups = $service->getGroupList();
         $permissions = $service->getPermissionList();
 
-        $groupActionList = array();
+        $groupActionList = [];
 
         foreach ( $groups as $group )
         {
             /* @var $group BOL_AuthorizationGroup */
             $groupActionList[$group->id]['name'] = $group->name;
-            $groupActionList[$group->id]['actions'] = array();
+            $groupActionList[$group->id]['actions'] = [];
         }
 
         foreach ( $actions as $action )
@@ -181,14 +181,14 @@ class ADMIN_CTRL_Permissions extends ADMIN_CTRL_Abstract
             }
         }
 
-        $perms = array();
+        $perms = [];
         foreach ( $permissions as $permission )
         {
             /* @var $permission BOL_AuthorizationPermission */
             $perms[$permission->actionId][$permission->roleId] = true;
         }
 
-        $tplRoles = array();
+        $tplRoles = [];
         foreach ( $roles as $role )
         {
             $tplRoles[$role->sortOrder] = $role;
@@ -207,7 +207,7 @@ class ADMIN_CTRL_Permissions extends ADMIN_CTRL_Abstract
         OW::getEventManager()->trigger($event);
         $data = $event->getData();
 
-        $dataLabels = empty($data) ? array() : call_user_func_array('array_merge', $data);
+        $dataLabels = empty($data) ? [] : call_user_func_array('array_merge', $data);
         $this->assign('labels', $dataLabels);
     }
 
@@ -219,13 +219,13 @@ class ADMIN_CTRL_Permissions extends ADMIN_CTRL_Abstract
         $moderators = $service->getModeratorList();
         $this->assign('moderators', $moderators);
 
-        $users = array();
-        $deleteModerUrls = array();
+        $users = [];
+        $deleteModerUrls = [];
 
         foreach ( $moderators as $moderator )
         {
             $users[] = $moderator->userId;
-            $deleteModerUrls[$moderator->userId] = OW::getRouter()->urlFor(__CLASS__, 'deleteModerator', array('id' => $moderator->id));
+            $deleteModerUrls[$moderator->userId] = OW::getRouter()->urlFor(__CLASS__, 'deleteModerator', ['id' => $moderator->id]);
         }
 
         $this->assign('users', $users);
@@ -247,7 +247,7 @@ class ADMIN_CTRL_Permissions extends ADMIN_CTRL_Abstract
 
         $permissions = $service->getModeratorPermissionList();
 
-        $perms = array();
+        $perms = [];
         foreach ( $permissions as $permission )
         {
             $perms[$permission->moderatorId][$permission->groupId] = true;
@@ -268,8 +268,8 @@ class ADMIN_CTRL_Permissions extends ADMIN_CTRL_Abstract
         OW::getEventManager()->trigger($event);
         $data = $event->getData();
 
-        $dataLabels = empty($data) ? array() : call_user_func_array('array_merge', $data);
-        $groupLabels = array();
+        $dataLabels = empty($data) ? [] : call_user_func_array('array_merge', $data);
+        $groupLabels = [];
 
         /* @var $group BOL_AuthorizationGroup */
         foreach ( $groups as $group )
@@ -286,7 +286,7 @@ class ADMIN_CTRL_Permissions extends ADMIN_CTRL_Abstract
     {
         if ( OW::getRequest()->isPost() && !empty($_POST['perm']) )
         {
-            $perms = array();
+            $perms = [];
             foreach ( $_POST['perm'] as $perm )
             {
                 $moderatorGroupPair = explode(':', $perm);
@@ -321,7 +321,7 @@ class ADMIN_CTRL_Permissions extends ADMIN_CTRL_Abstract
                 }
                 else
                 {
-                    OW::getFeedback()->warning(OW::getLanguage()->text('admin', 'permissions_feedback_user_is_already_moderator', array('username' => $username)));
+                    OW::getFeedback()->warning(OW::getLanguage()->text('admin', 'permissions_feedback_user_is_already_moderator', ['username' => $username]));
                 }
             }
         }
@@ -356,7 +356,7 @@ class ADMIN_CTRL_Permissions extends ADMIN_CTRL_Abstract
     {
         if ( OW::getRequest()->isPost() )
         {
-            $perms = array();
+            $perms = [];
             foreach ( $_POST['perm'] as $perm )
             {
                 $actionRolePair = explode(':', $perm);

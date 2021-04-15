@@ -98,14 +98,14 @@ class BOL_ComponentEntityPositionDao extends OW_BaseDao
 
         return $this->dbo->queryForObjectList($query,
             $this->getDtoClassName(),
-            array('placeId' => $placeId, 'entityId' => $entityId));
+            ['placeId' => $placeId, 'entityId' => $entityId]);
     }
 
     public function findAllPositionIdList( $placeId, $entityId )
     {
         $positionDtoList = $this->findAllPositionList($placeId, $entityId);
 
-        $idList = array();
+        $idList = [];
         foreach ( $positionDtoList as $item )
         {
             $idList[] = $item->id;
@@ -131,7 +131,7 @@ class BOL_ComponentEntityPositionDao extends OW_BaseDao
         ';
 
         return $this->dbo->queryForColumnList($query,
-            array('placeId' => $placeId, 'entityId' => $entityId, 'section' => $section));
+            ['placeId' => $placeId, 'entityId' => $entityId, 'section' => $section]);
     }
 
     public function deleteAllByUniqName( $uniqName )
@@ -142,7 +142,7 @@ class BOL_ComponentEntityPositionDao extends OW_BaseDao
         return $this->deleteByExample($example);
     }
 
-    public function deleteByUniqNameList( $entityId, $uniqNameList = array() )
+    public function deleteByUniqNameList( $entityId, $uniqNameList = [])
     {
         $entityId = (int) $entityId;
         if ( !$entityId )

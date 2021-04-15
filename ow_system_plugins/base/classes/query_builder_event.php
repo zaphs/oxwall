@@ -46,16 +46,16 @@ class BASE_CLASS_QueryBuilderEvent extends OW_Event
     const OPTION_TYPE = "type";
     const OPTION_METHOD = "method";
     
-    public function __construct( $name, array $options = array() ) 
+    public function __construct( $name, array $options = [])
     {
         parent::__construct($name, $options);
         
-        $this->data = array(
-            "join" => array(),
-            "where" => array(),
-            "order" => array(),
-            "params" => array()
-        );
+        $this->data = [
+            "join" => [],
+            "where" => [],
+            "order" => [],
+            "params" => []
+        ];
     }
     
     public function addJoin( $join )

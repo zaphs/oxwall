@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -24,16 +24,16 @@
 
 /**
  * The class is responsible for plugin management.
- * 
- * @author Sardar Madumarov <madumarov@gmail.com>
+ *
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow.ow_core
  * @method static OW_PluginManager getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_PluginManager
 {
     use OW_Singleton;
-    
+
     /**
      * @var BOL_PluginService
      */
@@ -42,7 +42,7 @@ class OW_PluginManager
     /**
      * @var array
      */
-    private $cachedObjects = array();
+    private $cachedObjects = [];
 
     /**
      * Constructor.
@@ -58,17 +58,15 @@ class OW_PluginManager
      * @param string $key
      * @return OW_Plugin
      */
-    public function getPlugin( $key )
+    public function getPlugin($key)
     {
         $plugin = $this->pluginService->findPluginByKey($key);
 
-        if ( $plugin === null || !$plugin->isActive() )
-        {
+        if ($plugin === null || !$plugin->isActive()) {
             throw new InvalidArgumentException("There is no active plugin with key `{$key}`!");
         }
 
-        if ( !array_key_exists($plugin->getKey(), $this->cachedObjects) )
-        {
+        if (!array_key_exists($plugin->getKey(), $this->cachedObjects)) {
             $this->cachedObjects[$plugin->getKey()] = new OW_Plugin($plugin);
         }
 
@@ -83,21 +81,17 @@ class OW_PluginManager
         $plugins = $this->pluginService->findActivePlugins();
 
         usort($plugins,
-            function( BOL_Plugin $a, BOL_Plugin $b )
-        {
-            if ( $a->getId() == $b->getId() )
-            {
-                return 0;
-            }
+            static function (BOL_Plugin $a, BOL_Plugin $b) {
+                if ($a->getId() == $b->getId()) {
+                    return 0;
+                }
 
-            return ($a->getId() > $b->getId()) ? 1 : -1;
-        });
+                return ($a->getId() > $b->getId()) ? 1 : -1;
+            });
 
-        /* @var $value BOL_Plugin */
-        foreach ( $plugins as $plugin )
-        {
-            if ( !array_key_exists($plugin->getKey(), $this->cachedObjects) )
-            {
+        /* @var BOL_Plugin $plugin */
+        foreach ($plugins as $plugin) {
+            if (!array_key_exists($plugin->getKey(), $this->cachedObjects)) {
                 $this->cachedObjects[$plugin->getKey()] = new OW_Plugin($plugin);
             }
 
@@ -107,74 +101,76 @@ class OW_PluginManager
 
     /**
      * Includes init script for provided plugin
+     * @param OW_Plugin $pluginObject
      */
-    public function initPlugin( OW_Plugin $pluginObject )
+    public function initPlugin(OW_Plugin $pluginObject): void
     {
         $this->addPackagePointers($pluginObject->getDto());
 
         $initDirPath = $pluginObject->getRootDir();
 
-        if ( OW::getApplication()->getContext() == OW::CONTEXT_MOBILE )
-        {
+        if (OW::getApplication()->getContext() === OW::CONTEXT_MOBILE) {
             $initDirPath = $pluginObject->getMobileDir();
-        }
-        if ( OW::getApplication()->getContext() == OW::CONTEXT_CLI )
-        {
+        } elseif (OW::getApplication()->getContext() === OW::CONTEXT_CLI) {
             $initDirPath = $pluginObject->getCliDir();
-        }
-        else if ( OW::getApplication()->getContext() == OW::CONTEXT_API )
-        {
+        } elseif (OW::getApplication()->getContext() === OW::CONTEXT_API) {
             $initDirPath = $pluginObject->getApiDir();
         }
 
-        OW::getEventManager()->trigger(new OW_Event("core.performance_test",
-            array("key" => "plugin_init.start", "pluginKey" => $pluginObject->getKey())));
+        OW::getEventManager()->trigger(
+            new OW_Event('core.performance_test', [
+                'key'       => 'plugin_init.start',
+                'pluginKey' => $pluginObject->getKey(),
+            ]));
 
         $this->pluginService->includeScript($initDirPath . BOL_PluginService::SCRIPT_INIT);
 
-        OW::getEventManager()->trigger(new OW_Event("core.performance_test",
-            array("key" => "plugin_init.end", "pluginKey" => $pluginObject->getKey())));
+        OW::getEventManager()->trigger(
+            new OW_Event('core.performance_test',
+                [
+                    'key'       => 'plugin_init.end',
+                    'pluginKey' => $pluginObject->getKey(),
+                ]));
     }
 
     /**
      * Adds platform predefined package pointers
-     * 
+     *
      * @param BOL_Plugin $pluginDto
      */
-    public function addPackagePointers( BOL_Plugin $pluginDto )
+    public function addPackagePointers(BOL_Plugin $pluginDto)
     {
-        $plugin = new OW_Plugin($pluginDto);
+        $plugin     = new OW_Plugin($pluginDto);
         $upperedKey = mb_strtoupper($plugin->getKey());
         $autoloader = OW::getAutoloader();
 
-        $predefinedPointers = array(
-            "CMP" => $plugin->getCmpDir(),
-            "CTRL" => $plugin->getCtrlDir(),
-            "BOL" => $plugin->getBolDir(),
-            "CLASS" => $plugin->getClassesDir(),
-            "MCMP" => $plugin->getMobileCmpDir(),
-            "MCTRL" => $plugin->getMobileCtrlDir(),
-            "MBOL" => $plugin->getMobileBolDir(),
-            "MCLASS" => $plugin->getMobileClassesDir(),
-            "ACTRL" => $plugin->getApiCtrlDir(),
-            "ABOL" => $plugin->getApiBolDir(),
-            "ACLASS" => $plugin->getApiClassesDir()
-        );
+        $predefinedPointers = [
+            'CMP'    => $plugin->getCmpDir(),
+            'CTRL'   => $plugin->getCtrlDir(),
+            'BOL'    => $plugin->getBolDir(),
+            'CLASS'  => $plugin->getClassesDir(),
+            'MCMP'   => $plugin->getMobileCmpDir(),
+            'MCTRL'  => $plugin->getMobileCtrlDir(),
+            'MBOL'   => $plugin->getMobileBolDir(),
+            'MCLASS' => $plugin->getMobileClassesDir(),
+            'ACTRL'  => $plugin->getApiCtrlDir(),
+            'ABOL'   => $plugin->getApiBolDir(),
+            'ACLASS' => $plugin->getApiClassesDir(),
+        ];
 
-        foreach ( $predefinedPointers as $pointer => $dirPath )
-        {
-            $autoloader->addPackagePointer($upperedKey . "_" . $pointer, $dirPath);
+        foreach ($predefinedPointers as $pointer => $dirPath) {
+            $autoloader->addPackagePointer($upperedKey . '_' . $pointer, $dirPath);
         }
     }
 
     /**
      * Update active plugins list for manager.
-     * 
+     *
      * @deprecated since version 1.7.4
      */
     public function readPluginsList()
     {
-        
+
     }
 
     /**
@@ -184,15 +180,13 @@ class OW_PluginManager
      * @return string
      * @throws InvalidArgumentException
      */
-    public function getPluginKey( $moduleName )
+    public function getPluginKey($moduleName)
     {
         $plugins = $this->pluginService->findActivePlugins();
 
-        /* @var $plugin BOL_Plugin */
-        foreach ( $plugins as $plugin )
-        {
-            if ( $plugin->getModule() == $moduleName )
-            {
+        /* @var BOL_Plugin $plugin */
+        foreach ($plugins as $plugin) {
+            if ($plugin->getModule() == $moduleName) {
                 return $plugin->getKey();
             }
         }
@@ -207,13 +201,12 @@ class OW_PluginManager
      * @return string
      * @throws InvalidArgumentException
      */
-    public function getModuleName( $pluginKey )
+    public function getModuleName($pluginKey)
     {
         $plugin = $this->pluginService->findPluginByKey($pluginKey);
 
-        if ( $plugin == null )
-        {
-            throw new InvalidArgumentException("There is no active plugin with key `{$key}`");
+        if ($plugin == null) {
+            throw new InvalidArgumentException("There is no active plugin with key `{$pluginKey}`");
         }
 
         return $plugin->getModule();
@@ -225,7 +218,7 @@ class OW_PluginManager
      * @param string $pluginKey
      * @return boolean
      */
-    public function isPluginActive( $pluginKey )
+    public function isPluginActive($pluginKey)
     {
         $plugin = $this->pluginService->findPluginByKey($pluginKey);
 
@@ -238,12 +231,11 @@ class OW_PluginManager
      * @param string $pluginKey
      * @param string $routeName
      */
-    public function addPluginSettingsRouteName( $pluginKey, $routeName )
+    public function addPluginSettingsRouteName($pluginKey, $routeName)
     {
         $plugin = $this->pluginService->findPluginByKey(trim($pluginKey));
 
-        if ( $plugin !== null )
-        {
+        if ($plugin !== null) {
             $plugin->setAdminSettingsRoute($routeName);
             $this->pluginService->savePlugin($plugin);
         }
@@ -255,12 +247,11 @@ class OW_PluginManager
      * @param string $key
      * @param string $routName
      */
-    public function addUninstallRouteName( $key, $routName )
+    public function addUninstallRouteName($key, $routName)
     {
         $plugin = $this->pluginService->findPluginByKey(trim($key));
 
-        if ( $plugin !== null )
-        {
+        if ($plugin !== null) {
             $plugin->setUninstallRoute($routName);
             $this->pluginService->savePlugin($plugin);
         }
@@ -269,10 +260,9 @@ class OW_PluginManager
     /**
      * @param string $filePath
      */
-    private function includeFile( $filePath )
+    private function includeFile($filePath)
     {
-        if ( file_exists($filePath) )
-        {
+        if (file_exists($filePath)) {
             include_once $filePath;
         }
     }

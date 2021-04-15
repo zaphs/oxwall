@@ -41,8 +41,8 @@ class BASE_CLASS_CacheBackendMysql implements OW_ICacheBackend
     public function __construct( OW_Database $dbo )
     {
         $this->dbo = $dbo;
-        $result = $this->dbo->queryForList("SELECT `key`, `content` FROM `" . $this->getCacheTableName() . "` WHERE `expireTimestamp` >= :ct AND `instantLoad` = 1", array('ct' => time()));
-        $this->loadedItems = array();
+        $result = $this->dbo->queryForList("SELECT `key`, `content` FROM `" . $this->getCacheTableName() . "` WHERE `expireTimestamp` >= :ct AND `instantLoad` = 1", ['ct' => time()]);
+        $this->loadedItems = [];
 
         foreach ( $result as $item )
         {
@@ -78,7 +78,7 @@ class BASE_CLASS_CacheBackendMysql implements OW_ICacheBackend
                 break;
 
             case OW_CacheManager::CLEAN_OLD:
-                $this->dbo->query("DELETE FROM `" . $this->getCacheTableName() . "` WHERE `expireTimestamp` < :ctime", array('ctime' => time()));
+                $this->dbo->query("DELETE FROM `" . $this->getCacheTableName() . "` WHERE `expireTimestamp` < :ctime", ['ctime' => time()]);
                 break;
         }
 
@@ -92,7 +92,7 @@ class BASE_CLASS_CacheBackendMysql implements OW_ICacheBackend
             return $this->loadedItems[$key];
         }
 
-        $result = $this->dbo->queryForColumn("SELECT `content` FROM `" . $this->getCacheTableName() . "` WHERE `key` = :key AND `expireTimestamp` >= :ts", array('key' => $key, 'ts' => time()));
+        $result = $this->dbo->queryForColumn("SELECT `content` FROM `" . $this->getCacheTableName() . "` WHERE `key` = :key AND `expireTimestamp` >= :ts", ['key' => $key, 'ts' => time()]);
 
         if ( $result )
         {
@@ -109,7 +109,7 @@ class BASE_CLASS_CacheBackendMysql implements OW_ICacheBackend
             return;
         }
 
-        $result = $this->dbo->queryForColumn("SELECT `id` FROM `" . $this->getCacheTableName() . "` WHERE `key` = :key", array('key' => $key));
+        $result = $this->dbo->queryForColumn("SELECT `id` FROM `" . $this->getCacheTableName() . "` WHERE `key` = :key", ['key' => $key]);
 
         if ( $result )
         {
@@ -120,11 +120,11 @@ class BASE_CLASS_CacheBackendMysql implements OW_ICacheBackend
             return;
         }
 
-        $this->dbo->query("DELETE FROM `" . $this->getTagsTableName() . "` WHERE `cacheId` = :cacheId", array('cacheId' => $result));
-        $this->dbo->query("DELETE FROM `" . $this->getCacheTableName() . "` WHERE `id` = :id", array('id' => $result));
+        $this->dbo->query("DELETE FROM `" . $this->getTagsTableName() . "` WHERE `cacheId` = :cacheId", ['cacheId' => $result]);
+        $this->dbo->query("DELETE FROM `" . $this->getCacheTableName() . "` WHERE `id` = :id", ['id' => $result]);
     }
 
-    public function save( $data, $key, array $tags = array(), $lifeTime )
+    public function save( $data, $key, array $tags = [], $lifeTime )
     {
         if ( empty($key) || empty($data) || empty($lifeTime) )
         {
@@ -144,29 +144,29 @@ class BASE_CLASS_CacheBackendMysql implements OW_ICacheBackend
 
         $expTime = time() + $lifeTime;
 
-        $oldEntryId = $this->dbo->queryForColumn("SELECT `id` FROM `" . $this->getCacheTableName() . "` WHERE `key` = :key", array('key' => $key));
+        $oldEntryId = $this->dbo->queryForColumn("SELECT `id` FROM `" . $this->getCacheTableName() . "` WHERE `key` = :key", ['key' => $key]);
 
         if ( $oldEntryId !== null )
         {
-            $this->dbo->query("DELETE FROM `" . $this->getCacheTableName() . "` WHERE `id` = :id", array('id' => $oldEntryId));
-            $this->dbo->query("DELETE FROM `" . $this->getTagsTableName() . "` WHERE `cacheId` = :cacheId", array('cacheId' => $oldEntryId));
+            $this->dbo->query("DELETE FROM `" . $this->getCacheTableName() . "` WHERE `id` = :id", ['id' => $oldEntryId]);
+            $this->dbo->query("DELETE FROM `" . $this->getTagsTableName() . "` WHERE `cacheId` = :cacheId", ['cacheId' => $oldEntryId]);
         }
 
-        $this->dbo->query("INSERT INTO `" . $this->getCacheTableName() . "` (`key`, `content`, `expireTimestamp`, `instantLoad`) VALUES (:key, :content, :ts, :il)", array('key' => $key, 'content' => $data, 'ts' => $expTime, 'il' => $instantLoad));
+        $this->dbo->query("INSERT INTO `" . $this->getCacheTableName() . "` (`key`, `content`, `expireTimestamp`, `instantLoad`) VALUES (:key, :content, :ts, :il)", ['key' => $key, 'content' => $data, 'ts' => $expTime, 'il' => $instantLoad]);
 
         if ( $tags )
         {
             $cacheId = $this->dbo->getInsertId();
             foreach ( $tags as $tag )
             {
-                $this->dbo->query("INSERT INTO `" . $this->getTagsTableName() . "` (`tag`, `cacheId`) VALUES (:tag, :cacheId)", array('tag' => $tag, 'cacheId' => $cacheId));
+                $this->dbo->query("INSERT INTO `" . $this->getTagsTableName() . "` (`tag`, `cacheId`) VALUES (:tag, :cacheId)", ['tag' => $tag, 'cacheId' => $cacheId]);
             }
         }
     }
 
     public function test( $key )
     {
-        return $this->dbo->queryForColumn("SELECT `id` FROM `" . $this->getCacheTableName() . "` WHERE `key` = :key AND `expireTimestamp` >= :ts", array('key' => $key, 'ts' => time())) ? true : false;
+        return $this->dbo->queryForColumn("SELECT `id` FROM `" . $this->getCacheTableName() . "` WHERE `key` = :key AND `expireTimestamp` >= :ts", ['key' => $key, 'ts' => time()]) ? true : false;
     }
 
     private function getCacheTableName()

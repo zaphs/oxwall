@@ -37,7 +37,7 @@ class BASE_MCMP_InsertLink extends OW_MobileComponent
      * @param array $params
      *      string linkText
      */
-    public function __construct( array $params = array() )
+    public function __construct( array $params = [])
     {
         parent::__construct();
 
@@ -47,9 +47,9 @@ class BASE_MCMP_InsertLink extends OW_MobileComponent
 
         // add a form
         $form = new InsertLinkForm();
-        $form->setValues(array(
-           'title' => $title  
-        ));
+        $form->setValues([
+           'title' => $title
+        ]);
 
         $this->addForm($form);       
     }
@@ -87,7 +87,7 @@ class InsertLinkForm extends Form
 
         $sValidator = new StringValidator(self::MIN_TITLE_LENGTH, self::MAX_TITLE_LENGTH);
         $sValidator->setErrorMessage(OW::getLanguage()->
-                text('base', 'chars_limit_exceeded', array('limit' => self::MAX_TITLE_LENGTH)));
+                text('base', 'chars_limit_exceeded', ['limit' => self::MAX_TITLE_LENGTH]));
 
         $titleField->addValidator($sValidator);
         $this->addElement($titleField);
@@ -97,7 +97,7 @@ class InsertLinkForm extends Form
         $linkField->setRequired(true)->setHasInvitation(true)->setInvitation(OW::getLanguage()->text('base', 'ws_link_url_label'));
         $sValidator = new StringValidator(self::MIN_LINK_LENGTH, self::MAX_LINK_LENGTH);
         $sValidator->setErrorMessage(OW::getLanguage()->
-                text('base', 'chars_limit_exceeded', array('limit' => self::MAX_LINK_LENGTH)));
+                text('base', 'chars_limit_exceeded', ['limit' => self::MAX_LINK_LENGTH]));
 
         $linkField->addValidator($sValidator);
         $linkField->addValidator(new UrlValidator());

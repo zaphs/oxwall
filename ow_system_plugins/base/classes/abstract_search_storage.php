@@ -73,7 +73,7 @@ abstract class BASE_CLASS_AbstractSearchStorage
      * @throws Exception
      * @return void
      */
-    abstract public function addEntity( $entityType, $entityId, $text, $timeStamp, array $tags = array(), $status = null );
+    abstract public function addEntity( $entityType, $entityId, $text, $timeStamp, array $tags = [], $status = null );
 
     /**
      * Set entities status
@@ -170,7 +170,7 @@ abstract class BASE_CLASS_AbstractSearchStorage
      * @throws Exception
      * @return integer
      */
-    abstract public function searchEntitiesCount( $text, array $tags = array(), $timeStart = 0, $timeEnd = 0);
+    abstract public function searchEntitiesCount( $text, array $tags = [], $timeStart = 0, $timeEnd = 0);
 
     /**
      * Search entities
@@ -187,7 +187,7 @@ abstract class BASE_CLASS_AbstractSearchStorage
      * @return array
      */
     abstract public function searchEntities( $text, $first, $limit, 
-            array $tags = array(), $sort = self::SORT_BY_RELEVANCE, $sortDesc = true, $timeStart = 0, $timeEnd = 0 );
+            array $tags = [], $sort = self::SORT_BY_RELEVANCE, $sortDesc = true, $timeStart = 0, $timeEnd = 0 );
 
     /**
      * Search entities count by tags

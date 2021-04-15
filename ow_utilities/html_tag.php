@@ -12,7 +12,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -23,9 +22,9 @@
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_utilities
- * @since 1.0
+ * @since   1.0
  */
 class UTIL_HtmlTag
 {
@@ -33,24 +32,22 @@ class UTIL_HtmlTag
     /**
      * Generates and returns HTML tag code.
      *
-     * @param string $tag
-     * @param array $attrs
+     * @param string  $tag
+     * @param array   $attrs
      * @param boolean $pair
-     * @param string $content
+     * @param string  $content
      * @return string
      */
-    public static function generateTag( $tag, $attrs = null, $pair = false, $content = null )
+    public static function generateTag($tag, $attrs = null, $pair = false, $content = null)
     {
         $attrString = '';
-        if ( $attrs !== null && !empty($attrs) )
-        {
-            foreach ( $attrs as $key => $value )
-            {
+        if ($attrs !== null && !empty($attrs)) {
+            foreach ($attrs as $key => $value) {
                 $attrString .= ' ' . $key . '="' . self::escapeHtmlAttr($value) . '"';
             }
         }
 
-        return $pair ? '<' . $tag . $attrString . '>' . ( $content === null ? '' : $content ) . '</' . $tag . '>' : '<' . $tag . $attrString . ' />';
+        return $pair ? '<' . $tag . $attrString . '>' . ($content === null ? '' : $content) . '</' . $tag . '>' : '<' . $tag . $attrString . ' />';
     }
 
     /**
@@ -59,12 +56,13 @@ class UTIL_HtmlTag
      * @param string $prefix
      * @return string
      */
-    public static function generateAutoId( $prefix = null )
+    public static function generateAutoId($prefix = null)
     {
-        $prefix = ( $prefix === null ) ? 'auto_id' : trim($prefix);
+        $prefix = ($prefix === null) ? 'auto_id' : trim($prefix);
 
         return $prefix . '_' . UTIL_String::getRandomString(8, UTIL_String::RND_STR_ALPHA_NUMERIC);
     }
+
     /**
      * @var Jevix
      */
@@ -73,96 +71,83 @@ class UTIL_HtmlTag
     /**
      * @return Jevix
      */
-    private static function getJevix( $tagList = null, $attrList = null, $blackListMode = false,
-        $mediaSrcValidate = true )
-    {
-        if ( self::$jevix === null )
-        {
+    private static function getJevix(
+        $tagList = null,
+        $attrList = null,
+        $blackListMode = false,
+        $mediaSrcValidate = true
+    ) {
+        if (self::$jevix === null) {
             require_once OW_DIR_LIB . 'jevix' . DS . 'jevix.class.php';
 
             self::$jevix = new Jevix();
         }
 
-        $tagRules = array();
-        $commonAttrs = array();
+        $tagRules    = [];
+        $commonAttrs = [];
 
-        if ( !empty($tagList) )
-        {
-            foreach ( $tagList as $tag )
-            {
-                $tagRules[$tag] = array(Jevix::TR_TAG_LIST => true);
+        if (!empty($tagList)) {
+            foreach ($tagList as $tag) {
+                $tagRules[$tag] = [Jevix::TR_TAG_LIST => true];
             }
         }
 
-        if ( $attrList !== null )
-        {
-            foreach ( $attrList as $attr )
-            {
-                if ( strstr($attr, '.') )
-                {
+        if ($attrList !== null) {
+            foreach ($attrList as $attr) {
+                if (strstr($attr, '.')) {
                     $parts = explode('.', $attr);
 
-                    $tag = trim($parts[0]);
+                    $tag   = trim($parts[0]);
                     $param = trim($parts[1]);
 
-                    if ( !strlen($tag) || !strlen($attr) )
-                    {
+                    if (!strlen($tag) || !strlen($attr)) {
                         continue;
                     }
 
-                    if ( $tag === '*' )
-                    {
+                    if ($tag === '*') {
                         $commonAttrs[] = $param;
                         continue;
                     }
 
-                    if ( !isset($tagRules[$tag]) )
-                    {
-                        $tagRules[$tag] = array(Jevix::TR_TAG_LIST => true);
+                    if (!isset($tagRules[$tag])) {
+                        $tagRules[$tag] = [Jevix::TR_TAG_LIST => true];
                     }
 
-                    if ( !isset($tagRules[$tag][Jevix::TR_PARAM_ALLOWED]) )
-                    {
-                        $tagRules[$tag][Jevix::TR_PARAM_ALLOWED] = array();
+                    if (!isset($tagRules[$tag][Jevix::TR_PARAM_ALLOWED])) {
+                        $tagRules[$tag][Jevix::TR_PARAM_ALLOWED] = [];
                     }
 
                     $tagRules[$tag][Jevix::TR_PARAM_ALLOWED][$param] = true;
-                }
-                else
-                {
+                } else {
                     $commonAttrs[] = trim($attr);
                 }
             }
         }
 
-        $shortTags = array('img', 'br', 'input', 'embed', 'param', 'hr', 'link', 'meta', 'base', 'col');
-        foreach ( $shortTags as $shortTag )
-        {
-            if ( !isset($tagRules[$shortTag]) )
-            {
-                $tagRules[$shortTag] = array();
+        $shortTags = ['img', 'br', 'input', 'embed', 'param', 'hr', 'link', 'meta', 'base', 'col'];
+        foreach ($shortTags as $shortTag) {
+            if (!isset($tagRules[$shortTag])) {
+                $tagRules[$shortTag] = [];
             }
 
             $tagRules[$shortTag][Jevix::TR_TAG_SHORT] = true;
         }
 
-        $cutWithContent = array('script', 'embed', 'object', 'style');
+        $cutWithContent = ['script', 'embed', 'object', 'style'];
 
-        foreach ( $cutWithContent as $cutTag )
-        {
-            if ( !isset($tagRules[$cutTag]) )
-            {
-                $tagRules[$cutTag] = array();
+        foreach ($cutWithContent as $cutTag) {
+            if (!isset($tagRules[$cutTag])) {
+                $tagRules[$cutTag] = [];
             }
 
             $tagRules[$cutTag][Jevix::TR_TAG_CUT] = true;
         }
 
-        self::$jevix->blackListMode = $blackListMode;
+        self::$jevix->blackListMode       = $blackListMode;
         self::$jevix->commonTagParamRules = $commonAttrs;
-        self::$jevix->tagsRules = $tagRules;
-        self::$jevix->mediaSrcValidate = $mediaSrcValidate;
-        self::$jevix->mediaValidSrc = BOL_TextFormatService::getInstance()->getMediaResourceList();
+        self::$jevix->tagsRules           = $tagRules;
+        self::$jevix->mediaSrcValidate    = $mediaSrcValidate;
+        self::$jevix->mediaValidSrc       = BOL_TextFormatService::getInstance()->getMediaResourceList();
 
         return self::$jevix;
     }
@@ -170,24 +155,26 @@ class UTIL_HtmlTag
     /**
      * Removes all restricted HTML tags and attributes. Works with white and black lists.
      *
-     * @param string $text
-     * @param array $tagList
-     * @param array $attributeList
+     * @param string  $text
+     * @param array   $tagList
+     * @param array   $attributeList
      * @param boolean $nlToBr
      * @param boolean $blackListMode
      * @param boolean $autoLink
      *
      * @return string
      */
-    public static function stripTags( $text, array $tagList = null, array $attributeList = null, $blackListMode = false,
-        $mediaSrcValidate = true )
-    {
+    public static function stripTags(
+        $text,
+        array $tagList = null,
+        array $attributeList = null,
+        $blackListMode = false,
+        $mediaSrcValidate = true
+    ) {
         // style remove fix
-        if ( $blackListMode )
-        {
-            if ( $tagList === null )
-            {
-                $tagList = array();
+        if ($blackListMode) {
+            if ($tagList === null) {
+                $tagList = [];
             }
 
             $tagList[] = 'style';
@@ -198,14 +185,10 @@ class UTIL_HtmlTag
 //            }
 //            
 //            $attributeList[] = '*.style';
-        }
-        else
-        {
-            if ( is_array($tagList) )
-            {
-                if ( in_array('style', $tagList) )
-                {
-                    $tagList = array_diff($tagList, array('style'));
+        } else {
+            if (is_array($tagList)) {
+                if (in_array('style', $tagList)) {
+                    $tagList = array_diff($tagList, ['style']);
                 }
             }
 
@@ -230,14 +213,13 @@ class UTIL_HtmlTag
      * Removes <script> tags and JS event handlers.
      *
      * @param string $text
-
      * @return string
      */
-    public static function stripJs( $text )
+    public static function stripJs($text)
     {
-        $tags = array('script');
+        $tags = ['script'];
 
-        $attrs = array(
+        $attrs = [
             'onchange',
             'onclick',
             'ondblclick',
@@ -255,7 +237,8 @@ class UTIL_HtmlTag
             'onreset',
             'onselect',
             'onsubmit',
-            'onunload');
+            'onunload',
+        ];
 
         $jevix = self::getJevix($tags, $attrs, true, false);
         return $jevix->parse($text);
@@ -266,7 +249,7 @@ class UTIL_HtmlTag
      * @param string $text
      * @return string
      */
-    public static function sanitize( $text )
+    public static function sanitize($text)
     {
         $jevix = self::getJevix(null, null, true, false);
         return $jevix->parse($text);
@@ -278,9 +261,9 @@ class UTIL_HtmlTag
      * @param string $text
      * @return string
      */
-    public static function autoLink( $text )
+    public static function autoLink($text)
     {
-        $jevix = self::getJevix(array(), array(), true, false);
+        $jevix                 = self::getJevix([], [], true, false);
         $jevix->isAutoLinkMode = true;
 
         return $jevix->parse($text);
@@ -294,10 +277,9 @@ class UTIL_HtmlTag
      * @param string $string
      * @return string
      */
-    public static function escapeUrl( $string = null )
+    public static function escapeUrl($string = null)
     {
-        if ( !$string )
-        {
+        if (!$string) {
             return;
         }
 
@@ -311,10 +293,9 @@ class UTIL_HtmlTag
      * @param string $string
      * @return string
      */
-    public static function escapeHtml( $string = null )
+    public static function escapeHtml($string = null)
     {
-        if ( !$string )
-        {
+        if (!$string) {
             return;
         }
 
@@ -329,10 +310,9 @@ class UTIL_HtmlTag
      * @param string $string
      * @return string
      */
-    public static function escapeHtmlAttr( $string = null )
+    public static function escapeHtmlAttr($string = null)
     {
-        if ( trim($string) === '' )
-        {
+        if (trim($string) === '') {
             return;
         }
 
@@ -341,18 +321,17 @@ class UTIL_HtmlTag
 
     /**
      * Escapes chars to make sure that string doesn't contain valid JS code
-     * 
+     *
      * @param string $string
      * @return string
      */
-    public static function escapeJs( $string = null )
+    public static function escapeJs($string = null)
     {
-        if ( !$string )
-        {
+        if (!$string) {
             return;
         }
 
         return strtr($string,
-            array('\\' => '\\\\', "'" => "\\'", '"' => '\\"', "\r" => '\\r', "\n" => '\\n', '</' => '<\/'));
+            ['\\' => '\\\\', "'" => "\\'", '"' => '\\"', "\r" => '\\r', "\n" => '\\n', '</' => '<\/']);
     }
 }

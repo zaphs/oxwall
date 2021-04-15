@@ -77,7 +77,7 @@ class BASE_CTRL_SuspendedUser extends OW_ActionController
             throw new Redirect403Exception();
         }
 
-        $response = array();
+        $response = [];
 
         if ( empty($_GET['userId']) || empty($_GET['command']) )
         {

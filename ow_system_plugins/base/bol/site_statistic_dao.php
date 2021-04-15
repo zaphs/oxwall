@@ -197,7 +197,7 @@ class BOL_SiteStatisticDao extends OW_BaseDao
      */
     protected function getMonths($count)
     {
-        $categories = array();
+        $categories = [];
 
         for ($i = $count - 1; $i > 0; $i--)
         {
@@ -217,7 +217,7 @@ class BOL_SiteStatisticDao extends OW_BaseDao
      */
     protected function getDays($count)
     {
-        $categories = array();
+        $categories = [];
 
         for ($i = $count - 1; $i > 0; $i--)
         {
@@ -236,7 +236,7 @@ class BOL_SiteStatisticDao extends OW_BaseDao
      */
     protected function getHours()
     {
-        return array_pad(array(), 24, 0);
+        return array_pad([], 24, 0);
     }
 
     /**
@@ -252,7 +252,7 @@ class BOL_SiteStatisticDao extends OW_BaseDao
     protected function getStatistics(array $categories, array $entityTypes, $timeStart, $timeEnd, $reportType)
     {
         // fill the array with empty values
-        $report = array();
+        $report = [];
         foreach ($entityTypes as $type)
         {
             $report[$type] = $categories;

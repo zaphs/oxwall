@@ -37,7 +37,7 @@ class BASE_MCTRL_BaseDocument extends OW_MobileActionController
         $this->setPageHeading(OW::getLanguage()->text('base', 'base_document_404_heading'));
         $this->setPageTitle(OW::getLanguage()->text('base', 'base_document_404_title'));
         $this->setDocumentKey('base_page404');
-        $this->assign('message', OW::getLanguage()->text('mobile', 'page_is_not_available', array('url' => OW::getRouter()->urlForRoute('base.desktop_version'))));
+        $this->assign('message', OW::getLanguage()->text('mobile', 'page_is_not_available', ['url' => OW::getRouter()->urlForRoute('base.desktop_version')]));
     }
 
     public function page403( array $params )
@@ -132,7 +132,7 @@ class BASE_MCTRL_BaseDocument extends OW_MobileActionController
         }
 
         OW::getDocument()->getMasterPage()->setTemplate(OW::getThemeManager()->getMasterPageTemplate(OW_MobileMasterPage::TEMPLATE_BLANK));
-        $this->assign('submit_url', OW::getRequest()->buildUrlQueryString(null, array('agree' => 1)));
+        $this->assign('submit_url', OW::getRequest()->buildUrlQueryString(null, ['agree' => 1]));
 
         $leaveUrl = OW::getConfig()->getValue('base', 'splash_leave_url');
 
@@ -183,7 +183,7 @@ class BASE_MCTRL_BaseDocument extends OW_MobileActionController
 
     public function notAvailable()
     {
-        $this->assign('message', OW::getLanguage()->text('mobile', 'page_is_not_available', array('url' => OW::getRouter()->urlForRoute('base.desktop_version'))));
+        $this->assign('message', OW::getLanguage()->text('mobile', 'page_is_not_available', ['url' => OW::getRouter()->urlForRoute('base.desktop_version')]));
     }
 
     public function authorizationFailed( array $params )

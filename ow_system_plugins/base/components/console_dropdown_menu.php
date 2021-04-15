@@ -2,7 +2,7 @@
 
 class BASE_CMP_ConsoleDropdownMenu extends OW_Renderable
 {
-    protected $items = array();
+    protected $items = [];
 
     /**
      *

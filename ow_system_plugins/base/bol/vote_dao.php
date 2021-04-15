@@ -116,7 +116,7 @@ class BOL_VoteDao extends OW_BaseDao
     {
         if ( empty($entityIdList) )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();
@@ -145,7 +145,7 @@ class BOL_VoteDao extends OW_BaseDao
 			FROM `" . $this->getTableName() . "`
 			WHERE `" . self::ENTITY_ID . "` = :entityId AND `" . self::ENTITY_TYPE . "` = :entityType";
 
-        return $this->dbo->queryForRow($query, array('entityId' => $entityId, 'entityType' => $entityType));
+        return $this->dbo->queryForRow($query, ['entityId' => $entityId, 'entityType' => $entityType]);
     }
 
     /**
@@ -164,7 +164,7 @@ class BOL_VoteDao extends OW_BaseDao
 	    FROM `" . $this->getTableName() . "`
 	    WHERE `" . self::ENTITY_ID . "` IN (" . $this->dbo->mergeInClause($entityIdList) . ") AND `" . self::ENTITY_TYPE . "` = :entityType
 	    GROUP BY `" . self::ENTITY_ID . "`";
-        return $this->dbo->queryForList($query, array('entityType' => $entityType));
+        return $this->dbo->queryForList($query, ['entityType' => $entityType]);
     }
 
     public function findMostVotedEntityList( $entityType, $first, $count )
@@ -176,14 +176,14 @@ class BOL_VoteDao extends OW_BaseDao
                         ORDER BY `sum` DESC
                         LIMIT :first, :count";
 
-        return $this->dbo->queryForList($query, array('entityType' => $entityType, 'first' => $first, 'count' => $count));
+        return $this->dbo->queryForList($query, ['entityType' => $entityType, 'first' => $first, 'count' => $count]);
     }
 
     public function findMostVotedEntityCount( $entityType )
     {
         $query = "SELECT COUNT(DISTINCT `" . self::ENTITY_ID . "`) from `" . $this->getTableName() . "` WHERE `" . self::ENTITY_TYPE . "` = :entityType AND `" . self::ACTIVE . "` = 1";
 
-        return (int) $this->dbo->queryForColumn($query, array('entityType' => $entityType));
+        return (int) $this->dbo->queryForColumn($query, ['entityType' => $entityType]);
     }
 
     public function updateEntityStatus( $entityType, $entityId, $status )
@@ -191,7 +191,7 @@ class BOL_VoteDao extends OW_BaseDao
         $query = "UPDATE `" . $this->getTableName() . "` SET `" . self::ACTIVE . "` = :status
                 WHERE `" . self::ENTITY_TYPE . "` = :entityType AND `" . self::ENTITY_ID . "` = :entityId";
 
-        $this->dbo->query($query, array('status' => $status, 'entityType' => $entityType, 'entityId' => $entityId));
+        $this->dbo->query($query, ['status' => $status, 'entityType' => $entityType, 'entityId' => $entityId]);
     }
 
     /**
@@ -236,7 +236,7 @@ class BOL_VoteDao extends OW_BaseDao
     {
         if ( empty($idList) || empty($entityType) )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();

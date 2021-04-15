@@ -66,7 +66,7 @@ class BASE_CMP_Rate extends OW_Component
         $this->addComponent('totalScore', new BASE_CMP_TotalScore($entityId, $entityType, $maxRate));
         $this->assign('cmpId', $cmpId);
 
-        $jsParamsArray = array(
+        $jsParamsArray = [
             'cmpId' => $cmpId,
             'userRate' => $userRate,
             'entityId' => $entityId,
@@ -74,7 +74,7 @@ class BASE_CMP_Rate extends OW_Component
             'itemsCount' => $maxRate,
             'respondUrl' => OW::getRouter()->urlFor('BASE_CTRL_Rate', 'updateRate'),
             'ownerId' => $ownerId
-        );
+        ];
 
         OW::getDocument()->addOnloadScript("var rate$cmpId = new OwRate(" . json_encode($jsParamsArray) . "); rate$cmpId.init();");
     }

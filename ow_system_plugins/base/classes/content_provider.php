@@ -35,7 +35,7 @@ class BASE_CLASS_ContentProvider
     
     public function onCollectTypes( BASE_CLASS_EventCollector $event )
     {
-        $event->add(array(
+        $event->add([
             "pluginKey" => "base",
             "authorizationGroup" => "base",
             "group" => "profiles",
@@ -44,9 +44,9 @@ class BASE_CLASS_ContentProvider
             "groupLabel" => OW::getLanguage()->text("base", "content_profiles_label"),
             "entityLabel" => OW::getLanguage()->text("base", "content_profile_label"),
             "displayFormat" => "empty"
-        ));
+        ]);
         
-        $event->add(array(
+        $event->add([
             "pluginKey" => "base",
             "authorizationGroup" => "base",
             "group" => "comments",
@@ -54,10 +54,10 @@ class BASE_CLASS_ContentProvider
             
             "groupLabel" => OW::getLanguage()->text("base", "content_comments_label"),
             "entityLabel" => OW::getLanguage()->text("base", "content_comment_label"),
-            "moderation" => array(BOL_ContentService::MODERATION_TOOL_FLAG)
-        ));
+            "moderation" => [BOL_ContentService::MODERATION_TOOL_FLAG]
+        ]);
         
-        $event->add(array(
+        $event->add([
             "pluginKey" => "base",
             "authorizationGroup" => "base",
             "group" => "avatars",
@@ -65,7 +65,7 @@ class BASE_CLASS_ContentProvider
             
             "groupLabel" => OW::getLanguage()->text("base", "content_avatars_label"),
             "entityLabel" => OW::getLanguage()->text("base", "content_avatar_label")
-        ));
+        ]);
     }
     
     public function onGetInfo( OW_Event $event )
@@ -101,7 +101,7 @@ class BASE_CLASS_ContentProvider
     
     private function getAvatarInfo( $entityIds )
     {
-        $out = array();
+        $out = [];
         
         if ( empty($entityIds) )
         {
@@ -117,7 +117,7 @@ class BASE_CLASS_ContentProvider
         
         foreach ( $avatarList as $avatar )
         {
-            $info = array();
+            $info = [];
 
             $info["id"] = $avatar->id;
             $info["userId"] = $avatar->userId;
@@ -125,10 +125,12 @@ class BASE_CLASS_ContentProvider
             $info["status"] = $avatar->status;
             
             $fullSize = BOL_AvatarService::getInstance()->getAvatarUrl($avatar->userId, 3, $avatar->hash, true, false);
-            $info["image"] = array( "thumbnail" => BOL_AvatarService::getInstance()->getAvatarUrl($avatar->userId, 1, $avatar->hash, true, false),
-                                    "preview" => BOL_AvatarService::getInstance()->getAvatarUrl($avatar->userId, 2, $avatar->hash, true, false),
-                                    "view" => $fullSize,
-                                    "fullsize" => $fullSize );
+            $info["image"] = [
+                "thumbnail" => BOL_AvatarService::getInstance()->getAvatarUrl($avatar->userId, 1, $avatar->hash, true, false),
+                "preview"   => BOL_AvatarService::getInstance()->getAvatarUrl($avatar->userId, 2, $avatar->hash, true, false),
+                "view"      => $fullSize,
+                "fullsize"  => $fullSize
+            ];
             
             $out[$avatar->id] = $info;
         }
@@ -142,7 +144,7 @@ class BASE_CLASS_ContentProvider
         {
             $user = BOL_UserService::getInstance()->findUserById($userId);
             
-            $info = array();
+            $info = [];
 
             $info["id"] = $user->id;
             $info["userId"] = $user->id;
@@ -159,13 +161,13 @@ class BASE_CLASS_ContentProvider
     
     private function getCommentInfo( $commentIds )
     {
-        $out = array();
+        $out = [];
 
         $comments = BOL_CommentService::getInstance()->findCommentListByIds($commentIds);
         
         foreach ( $comments as $comment )
         {
-            $info = array();
+            $info = [];
 
             $info["id"] = $comment->id;
             $info["userId"] = $comment->userId;
@@ -173,7 +175,7 @@ class BASE_CLASS_ContentProvider
             $info["text"] = $comment->message;
             $info["timeStamp"] = $comment->createStamp;
 
-            $info["image"] = array();
+            $info["image"] = [];
 
             $attachment = empty($comment->attachment)
                     ? null
@@ -205,9 +207,9 @@ class BASE_CLASS_ContentProvider
                         ? '<a href="' . $contentInfo["url"] . '">' . $label . '</a>' 
                         : $label;
 
-                $info["label"] = OW::getLanguage()->text("base", "comment_content_label", array(
+                $info["label"] = OW::getLanguage()->text("base", "comment_content_label", [
                     "content" => $contentEmbed
-                ));
+                ]);
             }
                         
             $out[$comment->id] = $info;
@@ -287,12 +289,12 @@ class BASE_CLASS_ContentProvider
                 $avatar->status = $info['status'];
                 BOL_AvatarService::getInstance()->updateAvatar($avatar);
                 
-                $params = array(
+                $params = [
                     'avatarId' => $avatar->id, 
                     'userId' => $avatar->userId, 
                     'trackAction' => false,
                     'isModerable' => true
-                );
+                ];
         
                 $event = new OW_Event('base.after_avatar_update', $params);
                 OW::getEventManager()->trigger($event);
@@ -355,16 +357,18 @@ class BASE_CLASS_ContentProvider
         $contentInfo = BOL_ContentService::getInstance()->getContent($params["entityType"], $params["entityId"]);
         $label = strtolower($contentInfo["label"]);
         
-        OW::getEventManager()->trigger(new OW_Event(BOL_ContentService::EVENT_AFTER_ADD, array(
+        OW::getEventManager()->trigger(new OW_Event(BOL_ContentService::EVENT_AFTER_ADD, [
             "entityType" => self::ENTITY_TYPE_COMMENT,
             "entityId" => $params["commentId"]
-        ), array(
-            "string" => array("key" => "base+comment_added_string", "vars" => array(
+        ], [
+            "string" => [
+                "key" => "base+comment_added_string", "vars" => [
                 "content" => $contentInfo["url"] 
                     ? '<a href="' . $contentInfo["url"] . '">' . $label . '</a>' 
                     : $label
-            ))
-        )));
+                ]
+            ]
+        ]));
     }
     
     public function onUserJoin( OW_Event $event )
@@ -372,12 +376,12 @@ class BASE_CLASS_ContentProvider
         $params = $event->getParams();
         $userId = $params["userId"];
         
-        OW::getEventManager()->trigger(new OW_Event(BOL_ContentService::EVENT_AFTER_ADD, array(
+        OW::getEventManager()->trigger(new OW_Event(BOL_ContentService::EVENT_AFTER_ADD, [
             "entityType" => self::ENTITY_TYPE_PROFILE,
             "entityId" => $userId
-        ), array(
-            "string" => array('key' => 'base+feed_user_join')
-        )));
+        ], [
+            "string" => ['key' => 'base+feed_user_join']
+        ]));
     }
     
     public function afterUserEdit( OW_Event $event )
@@ -396,14 +400,14 @@ class BASE_CLASS_ContentProvider
 
         if ( $isModerate ) {
             $url = new BASE_CLASS_LanguageParamsUrl();
-            $url->setRoute('base_edit_user_datails', array( 'userId' => $userId ));
+            $url->setRoute('base_edit_user_datails', ['userId' => $userId]);
 
-            OW::getEventManager()->trigger(new OW_Event(BOL_ContentService::EVENT_AFTER_CHANGE, array(
+            OW::getEventManager()->trigger(new OW_Event(BOL_ContentService::EVENT_AFTER_CHANGE, [
                 "entityType" => self::ENTITY_TYPE_PROFILE,
                 "entityId" => $userId
-            ), array(
-                "string" => array('key' => 'base+moderation_user_update', "vars" => array('profileUrl' => UTIL_Serialize::serialize($url)))
-            )));
+            ], [
+                "string" => ['key' => 'base+moderation_user_update', "vars" => ['profileUrl' => UTIL_Serialize::serialize($url)]]
+            ]));
         }
     }
     
@@ -412,10 +416,10 @@ class BASE_CLASS_ContentProvider
         $params = $event->getParams();
         $userId = $params["userId"];
         
-        OW::getEventManager()->trigger(new OW_Event(BOL_ContentService::EVENT_BEFORE_DELETE, array(
+        OW::getEventManager()->trigger(new OW_Event(BOL_ContentService::EVENT_BEFORE_DELETE, [
             "entityType" => self::ENTITY_TYPE_PROFILE,
             "entityId" => $userId
-        )));
+        ]));
     }
     
     public function onUserApprove( OW_Event $event )
@@ -423,10 +427,10 @@ class BASE_CLASS_ContentProvider
         $params = $event->getParams();
         $userId = $params["userId"];
         
-        OW::getEventManager()->trigger(new OW_Event("moderation.approve", array(
+        OW::getEventManager()->trigger(new OW_Event("moderation.approve", [
             "entityType" => self::ENTITY_TYPE_PROFILE,
             "entityId" => $userId
-        )));
+        ]));
     }
     
     
@@ -440,12 +444,12 @@ class BASE_CLASS_ContentProvider
             return;
         }
         
-        OW::getEventManager()->trigger(new OW_Event(BOL_ContentService::EVENT_AFTER_CHANGE, array(
+        OW::getEventManager()->trigger(new OW_Event(BOL_ContentService::EVENT_AFTER_CHANGE, [
             "entityType" => self::ENTITY_TYPE_AVATAR,
             "entityId" => $avatarId
-        ), array(
-            "string" => array("key" => "base+avatar_update_string")
-        )));
+        ], [
+            "string" => ["key" => "base+avatar_update_string"]
+        ]));
     }
     
     public function onAvatarDelete( OW_Event $event )
@@ -453,28 +457,28 @@ class BASE_CLASS_ContentProvider
         $params = $event->getParams();
         $avatarId = $params["avatarId"];
         
-        OW::getEventManager()->trigger(new OW_Event(BOL_ContentService::EVENT_BEFORE_DELETE, array(
+        OW::getEventManager()->trigger(new OW_Event(BOL_ContentService::EVENT_BEFORE_DELETE, [
             "entityType" => self::ENTITY_TYPE_AVATAR,
             "entityId" => $avatarId
-        ), array()));
+        ], []));
     }
     
     
     public function init()
     {
-        OW::getEventManager()->bind('base.after_avatar_update', array($this, "onAvatarChange"), 10000);
-        OW::getEventManager()->bind('base.before_user_avatar_delete', array($this, "onAvatarDelete"));
+        OW::getEventManager()->bind('base.after_avatar_update', [$this, "onAvatarChange"], 10000);
+        OW::getEventManager()->bind('base.before_user_avatar_delete', [$this, "onAvatarDelete"]);
         
-        OW::getEventManager()->bind(OW_EventManager::ON_USER_APPROVE, array($this, "onUserApprove"));
-        OW::getEventManager()->bind(OW_EventManager::ON_USER_EDIT, array($this, "afterUserEdit"));
+        OW::getEventManager()->bind(OW_EventManager::ON_USER_APPROVE, [$this, "onUserApprove"]);
+        OW::getEventManager()->bind(OW_EventManager::ON_USER_EDIT, [$this, "afterUserEdit"]);
         
-        OW::getEventManager()->bind(OW_EventManager::ON_USER_REGISTER, array($this, "onUserJoin"));
-        OW::getEventManager()->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, "onUserDeleted"));
-        OW::getEventManager()->bind("base_add_comment", array($this, "onCommentAdd"));
+        OW::getEventManager()->bind(OW_EventManager::ON_USER_REGISTER, [$this, "onUserJoin"]);
+        OW::getEventManager()->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, "onUserDeleted"]);
+        OW::getEventManager()->bind("base_add_comment", [$this, "onCommentAdd"]);
         
-        OW::getEventManager()->bind(BOL_ContentService::EVENT_COLLECT_TYPES, array($this, "onCollectTypes"));
-        OW::getEventManager()->bind(BOL_ContentService::EVENT_GET_INFO, array($this, "onGetInfo"));
-        OW::getEventManager()->bind(BOL_ContentService::EVENT_UPDATE_INFO, array($this, "onUpdateInfo"));
-        OW::getEventManager()->bind(BOL_ContentService::EVENT_DELETE, array($this, "onDelete"));
+        OW::getEventManager()->bind(BOL_ContentService::EVENT_COLLECT_TYPES, [$this, "onCollectTypes"]);
+        OW::getEventManager()->bind(BOL_ContentService::EVENT_GET_INFO, [$this, "onGetInfo"]);
+        OW::getEventManager()->bind(BOL_ContentService::EVENT_UPDATE_INFO, [$this, "onUpdateInfo"]);
+        OW::getEventManager()->bind(BOL_ContentService::EVENT_DELETE, [$this, "onDelete"]);
     }
 }

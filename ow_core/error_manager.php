@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -26,9 +26,9 @@
  * The class replaces standard PHP error/exception handlers with custom ones,
  * allowing better error management.
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 final class OW_ErrorManager
 {
@@ -42,17 +42,18 @@ final class OW_ErrorManager
     /**
      * Returns an instance of class (singleton pattern implementation).
      *
+     * @param bool $debugMode
      * @return OW_ErrorManager
      */
-    public static function getInstance( $debugMode = true )
+    public static function getInstance($debugMode = true)
     {
-        if ( self::$classInstance === null )
-        {
+        if (self::$classInstance === null) {
             self::$classInstance = new self($debugMode);
         }
 
         return self::$classInstance;
     }
+
     /**
      * @var boolean
      */
@@ -69,20 +70,21 @@ final class OW_ErrorManager
     private $errorOutput;
 
     /**
-     * @var OW_Log 
+     * @var OW_Log
      */
     private $logger;
 
     /**
      * Constructor.
+     * @param $debugMode
      */
-    private function __construct( $debugMode )
+    private function __construct($debugMode)
     {
-        $this->debugMode = (bool) $debugMode;
+        $this->debugMode = (bool)$debugMode;
 
         // set custom error and exception interceptors
-        set_error_handler(array($this, 'errorHandler'));
-        set_exception_handler(array($this, 'exceptionHandler'));
+        set_error_handler([$this, 'errorHandler']);
+        set_exception_handler([$this, 'exceptionHandler']);
 
         // set error reporting level
         error_reporting(-1);
@@ -99,9 +101,9 @@ final class OW_ErrorManager
     /**
      * @param boolean $debugMode
      */
-    public function setDebugMode( $debugMode )
+    public function setDebugMode($debugMode)
     {
-        $this->debugMode = (bool) $debugMode;
+        $this->debugMode = (bool)$debugMode;
     }
 
     /**
@@ -115,7 +117,7 @@ final class OW_ErrorManager
     /**
      * @param string $errorPageUrl
      */
-    public function setErrorPageUrl( $errorPageUrl )
+    public function setErrorPageUrl($errorPageUrl)
     {
         $this->errorPageUrl = $errorPageUrl;
     }
@@ -128,7 +130,7 @@ final class OW_ErrorManager
         return $this->logger;
     }
 
-    public function setLogger( OW_Log $logger )
+    public function setLogger(OW_Log $logger)
     {
         $this->logger = $logger;
     }
@@ -144,7 +146,7 @@ final class OW_ErrorManager
     /**
      * @param BASE_CLASS_ErrOutput $errorOutput
      */
-    public function setErrorOutput( BASE_CLASS_ErrOutput $errorOutput )
+    public function setErrorOutput(BASE_CLASS_ErrOutput $errorOutput)
     {
         $this->errorOutput = $errorOutput;
     }
@@ -153,43 +155,38 @@ final class OW_ErrorManager
      * Custom error handler.
      *
      * @param integer $errno
-     * @param string $errString
-     * @param string $errFile
+     * @param string  $errString
+     * @param string  $errFile
      * @param integer $errLine
      * @return boolean
      */
-    public function errorHandler( $errno, $errString, $errFile, $errLine )
+    public function errorHandler($errno, $errString, $errFile, $errLine)
     {
         // ignore if line is prefixed by `@`
-        if ( error_reporting() === 0 )
-        {
+        if (error_reporting() === 0) {
             return true;
         }
 
-        $data = array(
+        $data = [
             'message' => $errString,
-            'file' => $errFile,
-            'line' => $errLine
-        );
+            'file'    => $errFile,
+            'line'    => $errLine,
+        ];
 
         //temp fix
-        $e_depricated = defined('E_DEPRECATED') ? E_DEPRECATED : 0;
+        $e_deprecated = defined('E_DEPRECATED') ? E_DEPRECATED : 0;
 
-        switch ( $errno )
-        {
+        switch ($errno) {
             case E_NOTICE:
             case E_USER_NOTICE:
             case E_STRICT:
-            case $e_depricated:
+            case $e_deprecated:
 
                 $data['type'] = 'Notice';
 
-                if ( $this->debugMode )
-                {
+                if ($this->debugMode) {
                     $this->handleShow($data);
-                }
-                else
-                {
+                } else {
                     $this->handleIgnore($data);
                 }
                 break;
@@ -200,12 +197,9 @@ final class OW_ErrorManager
             case E_CORE_WARNING:
                 $data['type'] = 'Warning';
 
-                if ( $this->debugMode )
-                {
+                if ($this->debugMode) {
                     $this->handleShow($data);
-                }
-                else
-                {
+                } else {
                     $this->handleIgnore($data);
                 }
                 break;
@@ -213,12 +207,9 @@ final class OW_ErrorManager
             default:
                 $data['type'] = 'Error';
 
-                if ( $this->debugMode )
-                {
+                if ($this->debugMode) {
                     $this->handleDie($data);
-                }
-                else
-                {
+                } else {
                     $this->handleRedirect($data);
                 }
                 break;
@@ -232,34 +223,31 @@ final class OW_ErrorManager
      *
      * @param Exception $e
      */
-    public function exceptionHandler( $e )
+    public function exceptionHandler($e)
     {
-        $data = array(
+        $data = [
             'message' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'trace' => $e->getTraceAsString(),
-            'type' => 'Exception',
-            'class' => get_class($e)
-        );
+            'file'    => $e->getFile(),
+            'line'    => $e->getLine(),
+            'trace'   => $e->getTraceAsString(),
+            'type'    => 'Exception',
+            'class'   => get_class($e),
+        ];
 
-        if ( $this->debugMode )
-        {
+        if ($this->debugMode) {
             $this->handleDie($data);
-        }
-        else
-        {
+        } else {
             $this->handleRedirect($data);
         }
     }
 
-    private function handleShow( $data )
+    private function handleShow($data)
     {
         $this->errorOutput->printString($data);
         $this->handleLog($data);
     }
 
-    private function handleDie( $data )
+    private function handleDie($data)
     {
         $this->errorOutput->printString($data);
         $this->handleLog($data);
@@ -268,48 +256,44 @@ final class OW_ErrorManager
         exit;
     }
 
-    private function handleRedirect( $data )
+    private function handleRedirect($data)
     {
         $this->handleLog($data);
         OW::getEventManager()->trigger(new OW_Event('core.emergency_exit', $data));
 
-        header("HTTP/1.1 500 Internal Server Error");
+        header('HTTP/1.1 500 Internal Server Error');
         header('Location: ' . OW_URL_HOME . 'e500.php');
     }
 
-    private function handleIgnore( $data )
+    private function handleIgnore($data)
     {
         $this->handleLog($data);
-        return;
     }
 
-    private function handleLog( $data )
+    private function handleLog($data)
     {
-        if ( $this->logger === null )
-        {
+        if ($this->logger === null) {
             return;
         }
 
-        $trace = !empty($data['trace']) ? ' Trace: [' . str_replace(PHP_EOL, ' | ', $data['trace']) . ']' : "";
+        $trace   = !empty($data['trace']) ? ' Trace: [' . str_replace(PHP_EOL, ' | ', $data['trace']) . ']' : '';
         $message = 'Message: ' . $data['message'] . ' File: ' . $data['file'] . ' Line:' . $data['line'] . $trace;
         $this->logger->addEntry($message, $data['type']);
     }
 
-    public function debugBacktrace( )
+    public function debugBacktrace()
     {
         $stack = '';
-        $i = 1;
+        $i     = 1;
         $trace = debug_backtrace();
         unset($trace[0]);
 
-        foreach ( $trace as $node )
-        {
-            $stack .=  "#$i " . (isset($node['file']) ? $node['file'] : '') . (isset($node['line']) ? "(" . $node['line'] . "): " : '');
-            if ( isset($node['class']) )
-            {
-                $stack .= $node['class'] . "->";
+        foreach ($trace as $node) {
+            $stack .= "#$i " . ($node['file'] ?? '') . (isset($node['line']) ? '(' . $node['line'] . '): ' : '');
+            if (isset($node['class'])) {
+                $stack .= $node['class'] . '->';
             }
-            $stack .= $node['function'] . "()" . PHP_EOL;
+            $stack .= $node['function'] . '()' . PHP_EOL;
             $i++;
         }
 

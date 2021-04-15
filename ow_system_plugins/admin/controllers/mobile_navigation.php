@@ -54,7 +54,7 @@ class ADMIN_CTRL_MobileNavigation extends ADMIN_CTRL_Abstract
         $data = json_decode($_POST['data'], true);
         $shared = json_decode($_POST['shared'], true);
         
-        $response = call_user_func(array($this, $command), $data, $shared);
+        $response = call_user_func([$this, $command], $data, $shared);
 
         echo json_encode($response);
         exit;
@@ -70,16 +70,16 @@ class ADMIN_CTRL_MobileNavigation extends ADMIN_CTRL_Abstract
         $template = OW::getPluginManager()->getPlugin("admin")->getCtrlViewDir() . "mobile_drag_and_drop.html";
         $this->setTemplate($template);
         
-        $panels = array(
+        $panels = [
             "top" => BOL_MobileNavigationService::MENU_TYPE_TOP,
             "bottom" => BOL_MobileNavigationService::MENU_TYPE_BOTTOM,
             "hidden" => BOL_MobileNavigationService::MENU_TYPE_HIDDEN,
-        );
+        ];
         
         foreach ( $panels as $panel => $menuType )
         {
             $menuItems = $navigationService->findMenuItems($menuType);
-            $items = array();
+            $items = [];
             
             foreach ( $menuItems as $item )
             {
@@ -87,29 +87,29 @@ class ADMIN_CTRL_MobileNavigation extends ADMIN_CTRL_Abstract
                 
                 $settings = BOL_MobileNavigationService::getInstance()->getItemSettingsByPrefixAndKey($item["prefix"], $item["key"]);
                 
-                $items[] = array(
+                $items[] = [
                     "key" => $item["prefix"] . ':' . $item["key"],
                     "title" => $settings[BOL_MobileNavigationService::SETTING_LABEL],
                     "custom" => $item["prefix"] == BOL_MobileNavigationService::MENU_PREFIX
-                );
+                ];
             }
             
-            $dnd->setupPanel($panel, array(
+            $dnd->setupPanel($panel, [
                 "key" => $menuType,
                 "items" => $items
-            ));
+            ]);
         }
         
-        $dnd->setupPanel("new", array(
-            "items" => array(
-                array("key" => "new-item", "title" => OW::getLanguage()->text("mobile", "admin_nav_new_item_label"))
-            )
-        ));
+        $dnd->setupPanel("new", [
+            "items" => [
+                ["key" => "new-item", "title" => OW::getLanguage()->text("mobile", "admin_nav_new_item_label")]
+            ]
+        ]);
         
         $dnd->setPrefix(BOL_MobileNavigationService::MENU_PREFIX);
-        $dnd->setSharedData(array(
+        $dnd->setSharedData([
             "menuPrefix" => BOL_MobileNavigationService::MENU_PREFIX
-        ));
+        ]);
         
         $template = OW::getPluginManager()->getPlugin("admin")->getCmpViewDir() . "mobile_navigation.html";
         $dnd->setTemplate($template);
@@ -120,9 +120,9 @@ class ADMIN_CTRL_MobileNavigation extends ADMIN_CTRL_Abstract
         $mobileNavigationService = BOL_MobileNavigationService::getInstance();
         $navigationService = BOL_NavigationService::getInstance();
         
-        $response = array();
+        $response = [];
         
-        $response["items"] = array();
+        $response["items"] = [];
         
         foreach ( $data["panels"] as $menu => $items )
         {
@@ -149,11 +149,11 @@ class ADMIN_CTRL_MobileNavigation extends ADMIN_CTRL_Abstract
                 
                 $settings = BOL_MobileNavigationService::getInstance()->getItemSettingsByPrefixAndKey($menuItem->prefix, $menuItem->key);
                 
-                $response["items"][$item] = array(
+                $response["items"][$item] = [
                     "key" => $menuItem->getPrefix() . ':' . $menuItem->getKey(),
                     "title" => $settings[BOL_MobileNavigationService::SETTING_LABEL],
                     "custom" => $menuItem->getPrefix() == BOL_MobileNavigationService::MENU_PREFIX
-                );
+                ];
             }
         }
         
@@ -183,7 +183,7 @@ class ADMIN_CTRL_MobileNavigation extends ADMIN_CTRL_Abstract
         
         $form = new ADMIN_CLASS_MobileNavigationItemSettingsForm($menuItem, $menuItem->getPrefix() == BOL_MobileNavigationService::MENU_PREFIX, false);
                 
-        $out = array();
+        $out = [];
         
         if ( $form->isValid($_POST) )
         {

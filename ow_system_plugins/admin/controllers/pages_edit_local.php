@@ -73,7 +73,7 @@ class ADMIN_CTRL_PagesEditLocal extends ADMIN_CTRL_Abstract
             $data = $form->getValues();
 //--
             $visibleFor = 0;
-            $arr = !empty($data['visible-for']) ? $data['visible-for'] : array();
+            $arr = !empty($data['visible-for']) ? $data['visible-for'] : [];
             foreach ( $arr as $val )
             {
                 $visibleFor += $val;
@@ -314,7 +314,7 @@ class EditLocalPageForm extends Form
         );
 
         $urlTextField = new TextField('url');
-        $urlTextField->addValidator(new LocalPageUniqueValidator($document->getUri()));
+        $urlTextField->addValidator(new EditLocalPageUniqueValidator($document->getUri()));
 
         $this->addElement(
                 $urlTextField->setValue($document->getUri())
@@ -326,12 +326,12 @@ class EditLocalPageForm extends Form
 
         $visibleFor = $menu->getVisibleFor();
 
-        $options = array(
+        $options = [
             '1' => OW::getLanguage()->text('admin', 'pages_edit_visible_for_guests'),
             '2' => OW::getLanguage()->text('admin', 'pages_edit_visible_for_members')
-        );
+        ];
 
-        $values = array();
+        $values = [];
 
         foreach ( $options as $value => $option )
         {
@@ -370,10 +370,10 @@ class EditLocalPageForm extends Form
         $contentTextArea = new Textarea('content');
 
         $contentTextArea->setDescription(
-            OW::getLanguage()->text('admin', 'pages_page_field_content_desc', array(
+            OW::getLanguage()->text('admin', 'pages_page_field_content_desc', [
                 'src' => OW::getThemeManager()->getCurrentTheme()->getStaticImagesUrl() . 'question.png',
                 'url' => '#'
-                )
+                ]
             )
         );
 
@@ -394,7 +394,7 @@ class EditLocalPageForm extends Form
     }
 }
 
-class LocalPageUniqueValidator extends OW_Validator
+class EditLocalPageUniqueValidator extends OW_Validator
 {
     private $uri;
 

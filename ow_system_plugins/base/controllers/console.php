@@ -16,11 +16,11 @@ class BASE_CTRL_Console extends OW_ActionController
         $event = new BASE_CLASS_ConsoleListEvent('console.load_list', $request, $request['data']);
         OW::getEventManager()->trigger($event);
 
-        $responce = array();
+        $responce = [];
         $responce['items'] = $event->getList();
 
         $responce['data'] = $event->getData();
-        $responce['markup'] = array();
+        $responce['markup'] = [];
 
         /* @var $document OW_AjaxDocument */
         $document = OW::getDocument();

@@ -29,7 +29,7 @@
  */
 class BASE_CMP_JoinButton extends OW_Component
 {
-    public function __construct( $params = array() )
+    public function __construct( $params = [])
     {
         parent::__construct();
 

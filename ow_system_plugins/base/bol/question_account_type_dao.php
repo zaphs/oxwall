@@ -109,14 +109,14 @@ class BOL_QuestionAccountTypeDao extends OW_BaseDao
                     
             WHERE `qta`.`accountType` = :accountType ';
 
-        return $this->dbo->queryForColumn($sql, array('accountType' => $accountType));
+        return $this->dbo->queryForColumn($sql, ['accountType' => $accountType]);
     }
 
     public function findAccountTypeByNameList( array $accountTypeNameList )
     {
         if ( $accountTypeNameList === null || !is_array($accountTypeNameList) || count($accountTypeNameList) === 0 )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();
@@ -159,7 +159,7 @@ class BOL_QuestionAccountTypeDao extends OW_BaseDao
                 . " INNER JOIN " . BOL_QuestionAccountTypeDao::getInstance()->getTableName() . " `accountType` ON ( accountType.name = u.accountType ) "
                 . " WHERE  u.accountType = :account AND r.roleId = :role ";
         
-        $this->dbo->query($sql, array('account' => $accountType->name, 'role' => $accountType->roleId));
+        $this->dbo->query($sql, ['account' => $accountType->name, 'role' => $accountType->roleId]);
     }
     
     public function addRoleByAccountType( BOL_QuestionAccountType $accountType )
@@ -174,7 +174,7 @@ class BOL_QuestionAccountTypeDao extends OW_BaseDao
                 . " INNER JOIN " . BOL_QuestionAccountTypeDao::getInstance()->getTableName() . " `accountType` ON ( accountType.name = u.accountType ) "
                 . " WHERE  u.accountType = :account ";
         
-        $this->dbo->query( $sql, array( 'account' => $accountType->name, 'role' => $accountType->roleId ) );
+        $this->dbo->query( $sql, ['account' => $accountType->name, 'role' => $accountType->roleId]);
     }
 
     public function findAccountTypeById( $id )

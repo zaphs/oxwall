@@ -15,24 +15,24 @@ class TextSearchManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteEntities()
     {
-        $entities = array(
-            array(
+        $entities = [
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post title',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post body',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         // add and delete test entities
         foreach ($entities as $entitiy)
@@ -54,32 +54,32 @@ class TextSearchManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeactivateAllEntities()
     {
-        $entities = array(
-            array(
+        $entities = [
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 2,
                 'text' => 'forum post',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 3,
                 'text' => 'forum post',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         // add test entities
         foreach ($entities as $entitiy)
@@ -103,32 +103,32 @@ class TextSearchManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testActivateAllEntities()
     {
-        $entities = array(
-            array(
+        $entities = [
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post title',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post body',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_topic',
                 'entity_id' => 1,
                 'text' => 'forum topic title',
-                'tags' => array(
+                'tags' => [
                     'forum_topic'
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         // add test entities
         foreach ($entities as $entitiy)
@@ -158,35 +158,35 @@ class TextSearchManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchEntities()
     {
-        $entities = array(
-            array(
+        $entities = [
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post title',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                ),
+                ],
                 'active' => false
-            ),
-            array(
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post body',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                ),
+                ],
                 'active' => false
-            ),
-            array(
+            ],
+            [
                 'entity_type' => 'forum_topic',
                 'entity_id' => 1,
                 'text' => 'forum topic title',
-                'tags' => array(
+                'tags' => [
                     'forum_topic'
-                ),
+                ],
                 'active' => true
-            )
-        );
+            ]
+        ];
 
         // add test entities
         foreach ($entities as $entitiy)
@@ -225,56 +225,56 @@ class TextSearchManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchEntitiesByTags()
     {
-        $entities = array(
-            array(
+        $entities = [
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post title',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post body',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 2,
                 'text' => 'forum post title',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 2,
                 'text' => 'forum post body',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_topic',
                 'entity_id' => 1,
                 'text' => 'forum topic title',
-                'tags' => array(
+                'tags' => [
                     'forum_topic'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_category',
                 'entity_id' => 1,
                 'text' => 'forum category title',
-                'tags' => array(
+                'tags' => [
                     'forum_category'
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         // add test entities
         foreach ($entities as $entitiy)
@@ -284,9 +284,9 @@ class TextSearchManagerTest extends PHPUnit_Framework_TestCase
         }
 
         // search entities by tags
-        $entities = OW::getTextSearchManager()->searchEntities('forum', 0, 100, array(
+        $entities = OW::getTextSearchManager()->searchEntities('forum', 0, 100, [
             'forum_post'
-        ));
+        ]);
 
         // did we get only forum posts?
         $this->assertInternalType('array', $entities);
@@ -303,24 +303,24 @@ class TextSearchManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testSetEntitiesStatus()
     {
-        $entities = array(
-            array(
+        $entities = [
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post title',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post body',
-                'tags' => array(
+                'tags' => [
                     'forum_post'
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         // add and inactivate test entities 
         foreach ($entities as $entitiy)
@@ -351,32 +351,32 @@ class TextSearchManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testSetEntitiesStatusByTags()
     {
-        $entities = array(
-            array(
+        $entities = [
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post title #1',
-                'tags' => array(
+                'tags' => [
                     'tag_1'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 2,
                 'text' => 'forum post title #2',
-                'tags' => array(
+                'tags' => [
                     'tag_2'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 3,
                 'text' => 'forum post title #3',
-                'tags' => array(
+                'tags' => [
                     'tag_3'
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         // add and inactivate test entities 
         foreach ($entities as $entitiy)
@@ -385,11 +385,11 @@ class TextSearchManagerTest extends PHPUnit_Framework_TestCase
                     addEntity($entitiy['entity_type'], $entitiy['entity_id'], $entitiy['text'],  time(), $entitiy['tags']);
 
             // inactivate entities
-            OW::getTextSearchManager()->setEntitiesStatusByTags(array(
+            OW::getTextSearchManager()->setEntitiesStatusByTags([
                 'tag_1',
                 'tag_2',
                 'tag_3'
-            ), BASE_CLASS_AbstractSearchStorage::ENTITY_STATUS_NOT_ACTIVE);
+            ], BASE_CLASS_AbstractSearchStorage::ENTITY_STATUS_NOT_ACTIVE);
         }
 
         // get all entities
@@ -413,40 +413,40 @@ class TextSearchManagerTest extends PHPUnit_Framework_TestCase
         $daySeconds = 86400;
         $yesterday  = time() - $daySeconds;
 
-        $testEntities = array(
-            array(
+        $testEntities = [
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post title #1',
-                'tags' => array(
-                ),
+                'tags' => [
+                ],
                 'timestamp' => $yesterday
-            ),
-            array(
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 2,
                 'text' => 'forum post title #2',
-                'tags' => array(
-                ),
+                'tags' => [
+                ],
                 'timestamp' => time()
-            ),
-            array(
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 3,
                 'text' => 'forum post title #3',
-                'tags' => array(
-                ),
+                'tags' => [
+                ],
                 'timestamp' => $yesterday
-            ),
-            array(
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 4,
                 'text' => 'forum post title #4',
-                'tags' => array(
-                ),
+                'tags' => [
+                ],
                 'timestamp' => $yesterday - $daySeconds //before yesterday
-            )
-        );
+            ]
+        ];
 
         // add test entities 
         foreach ($testEntities as $entitiy)
@@ -457,10 +457,10 @@ class TextSearchManagerTest extends PHPUnit_Framework_TestCase
 
         // search only entities that added yesterday
         $this->assertEquals(2, OW::getTextSearchManager()->
-                searchEntitiesCount('forum post', array(), $yesterday, $yesterday));
+                searchEntitiesCount('forum post', [], $yesterday, $yesterday));
 
         $searchEntities = OW::getTextSearchManager()->
-                searchEntities('forum post', 0, 100, array(), BASE_CLASS_AbstractSearchStorage::SORT_BY_DATE, true, $yesterday, $yesterday);
+                searchEntities('forum post', 0, 100, [], BASE_CLASS_AbstractSearchStorage::SORT_BY_DATE, true, $yesterday, $yesterday);
 
         $this->assertInternalType('array', $searchEntities);
         $this->assertEquals(2, count($searchEntities));
@@ -471,40 +471,40 @@ class TextSearchManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteAllEntitiesByTags()
     {
-        $testEntities = array(
-            array(
+        $testEntities = [
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 1,
                 'text' => 'forum post title #1',
-                'tags' => array(
+                'tags' => [
                     'tag_1'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 2,
                 'text' => 'forum post title #2',
-                'tags' => array(
+                'tags' => [
                     'tag_2'
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 3,
                 'text' => 'forum post title #3',
-                'tags' => array(
+                'tags' => [
                     'tag_3'
-                )
-            ),
-            array(
+                ]
+            ],
+            [
                 'entity_type' => 'forum_post',
                 'entity_id' => 4,
                 'text' => 'forum post title #4',
-                'tags' => array(
+                'tags' => [
                     'tag_3'
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         // add test entities 
         foreach ($testEntities as $entitiy)
@@ -514,7 +514,7 @@ class TextSearchManagerTest extends PHPUnit_Framework_TestCase
         }
 
         // delete entities by tags
-        OW::getTextSearchManager()->deleteAllEntitiesByTags(array('tag_3', 'tag_2'));
+        OW::getTextSearchManager()->deleteAllEntitiesByTags(['tag_3', 'tag_2']);
 
         // we should find only a one entity
         $searchEntities = OW::getTextSearchManager()->searchEntities('forum post', 0, 100);

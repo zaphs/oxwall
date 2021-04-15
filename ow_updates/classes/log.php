@@ -67,7 +67,7 @@ class UPDATE_Log
      *
      * @var array
      */
-    private $entries = array();
+    private $entries = [];
 
     /**
      * Constructor.
@@ -88,7 +88,7 @@ class UPDATE_Log
      */
     public function addEntry( $message, $key = null )
     {
-        $this->entries[] = array(self::TYPE => $this->type, self::KEY => $key, self::MESSAGE => $message, self::TIME_STAMP => time());        
+        $this->entries[] = [self::TYPE => $this->type, self::KEY => $key, self::MESSAGE => $message, self::TIME_STAMP => time()];
     }
 
     /**

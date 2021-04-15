@@ -53,7 +53,7 @@ class BASE_MCMP_ConsoleProfilePage extends OW_MobileComponent
 
         $this->assign('username', $userService->getDisplayName($userId));
         $this->assign('url', $userService->getUserUrl($userId));
-        $avatars = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($userId));
+        $avatars = BOL_AvatarService::getInstance()->getDataForUserAvatars([$userId]);
         $this->assign('avatarUrl', $avatars[$userId]['src']);
 
         $script = '$(".owm_sidebar_profile_logout").click(function(){

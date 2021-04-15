@@ -103,4 +103,3 @@ class BOL_QuestionConfigDao extends OW_BaseDao
     }
 }
 
-?>

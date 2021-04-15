@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -23,27 +23,27 @@
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_ThemeManager getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_ThemeManager
 {
-    const DEFAULT_THEME = 'default';
-    const CURRENT_THEME = 'current';
+    private const DEFAULT_THEME = 'default';
+    private const CURRENT_THEME = 'current';
 
     use OW_Singleton;
-    
+
     /**
      * @var BOL_ThemeService
      */
     private $themeService;
 
     /**
-     * @var type
+     * @var OW_Theme[] $themeObjects
      */
-    private $themeObjects = array();
+    private $themeObjects = [];
 
     /**
      * Registered decorators.
@@ -57,16 +57,16 @@ class OW_ThemeManager
      */
     private function __construct()
     {
-        $this->decorators = array();
+        $this->decorators   = [];
         $this->themeService = BOL_ThemeService::getInstance();
-    }    
+    }
 
-    public function initDefaultTheme( $mobile = false )
+    public function initDefaultTheme(bool $mobile = false)
     {
-        $defaultTheme = $this->themeService->getThemeObjectByKey(BOL_ThemeService::DEFAULT_THEME, $mobile);
-        $this->themeObjects[self::DEFAULT_THEME] = $defaultTheme;
+        $defaultTheme                                          = $this->themeService->getThemeObjectByKey(BOL_ThemeService::DEFAULT_THEME, $mobile);
+        $this->themeObjects[self::DEFAULT_THEME]               = $defaultTheme;
         $this->themeObjects[$defaultTheme->getDto()->getKey()] = $defaultTheme;
-        $this->themeObjects[self::CURRENT_THEME] = $defaultTheme;
+        $this->themeObjects[self::CURRENT_THEME]               = $defaultTheme;
     }
 
     /**
@@ -88,8 +88,7 @@ class OW_ThemeManager
     {
         $selectedTheme = OW::getConfig()->getValue('base', 'selectedTheme');
 
-        if ( empty($this->themeObjects[$selectedTheme]) )
-        {
+        if (empty($this->themeObjects[$selectedTheme])) {
             $this->themeObjects[$selectedTheme] = $this->themeService->getThemeObjectByKey(OW::getConfig()->getValue('base', 'selectedTheme'));
         }
 
@@ -111,13 +110,12 @@ class OW_ThemeManager
      *
      * @param OW_Theme $theme
      */
-    public function setCurrentTheme( OW_Theme $theme )
+    public function setCurrentTheme(OW_Theme $theme)
     {
-        if ( $theme === null )
-        {
+        if ($theme === null) {
             return;
         }
-        $this->themeObjects[self::CURRENT_THEME] = $theme;
+        $this->themeObjects[self::CURRENT_THEME]        = $theme;
         $this->themeObjects[$theme->getDto()->getKey()] = $theme;
     }
 
@@ -134,15 +132,14 @@ class OW_ThemeManager
      * throws InvalidArgumentException
      *
      * @param string $decoratorName
-     * @param string $decoratorDir
+     * @param        $pluginKey
      */
-    public function addDecorator( $decoratorName, $pluginKey )
+    public function addDecorator($decoratorName, $pluginKey)
     {
-        $decoratorName = trim(mb_strtolower($decoratorName));
+        $decoratorName = mb_strtolower(trim($decoratorName));
 
-        if ( array_key_exists($decoratorName, $this->decorators) )
-        {
-            throw new LogicException("Can't add decorator! Decorator `" . $decoratorName . "` already exists!");
+        if (array_key_exists($decoratorName, $this->decorators)) {
+            throw new LogicException("Can't add decorator! Decorator `" . $decoratorName . '` already exists!');
         }
 
         $this->decorators[trim($decoratorName)] = OW::getPluginManager()->getPlugin($pluginKey)->getDecoratorDir() . $decoratorName . '.html';
@@ -153,7 +150,7 @@ class OW_ThemeManager
      * @param string $name
      * @param string $path
      */
-    public function addDecoratorPath( $name, $path )
+    public function addDecoratorPath($name, $path)
     {
         $this->decorators[trim($name)] = $path;
     }
@@ -165,17 +162,15 @@ class OW_ThemeManager
      * @return string
      * @throws InvalidArgumentException
      */
-    public function getDecorator( $decoratorName )
+    public function getDecorator($decoratorName)
     {
-        $decoratorName = trim(mb_strtolower($decoratorName));
+        $decoratorName = mb_strtolower(trim($decoratorName));
 
-        if ( !array_key_exists($decoratorName, $this->decorators) )
-        {
+        if (!array_key_exists($decoratorName, $this->decorators)) {
             throw new InvalidArgumentException(" Can't find decorator `'.$decoratorName.'` !");
         }
 
-        if ( $this->themeObjects[self::CURRENT_THEME]->hasDecorator($decoratorName) )
-        {
+        if ($this->themeObjects[self::CURRENT_THEME]->hasDecorator($decoratorName)) {
             return $this->themeObjects[self::CURRENT_THEME]->getDecorator($decoratorName);
         }
 
@@ -188,7 +183,7 @@ class OW_ThemeManager
     }
 
     /**
-     * Returns all decoarators list.
+     * Returns all decorators list.
      *
      * @return array
      */
@@ -200,20 +195,18 @@ class OW_ThemeManager
     /**
      * Returns master page template path.
      *
-     * @param string $templateName
+     * @param $masterPage
      * @return string
      */
-    public function getMasterPageTemplate( $masterPage )
+    public function getMasterPageTemplate($masterPage)
     {
-        $masterPage = trim(mb_strtolower($masterPage));
+        $masterPage = mb_strtolower(trim($masterPage));
 
-        if ( $this->themeObjects[self::CURRENT_THEME]->hasMasterPage($masterPage) )
-        {
+        if ($this->themeObjects[self::CURRENT_THEME]->hasMasterPage($masterPage)) {
             return $this->themeObjects[self::CURRENT_THEME]->getMasterPage($masterPage);
         }
 
-        if ( $this->themeObjects[self::DEFAULT_THEME]->hasMasterPage($masterPage) )
-        {
+        if ($this->themeObjects[self::DEFAULT_THEME]->hasMasterPage($masterPage)) {
             return $this->themeObjects[self::DEFAULT_THEME]->getMasterPage($masterPage);
         }
 
@@ -226,21 +219,19 @@ class OW_ThemeManager
      * @param string $documentKey
      * @return string
      */
-    public function getDocumentMasterPage( $documentKey )
+    public function getDocumentMasterPage($documentKey)
     {
         $masterPage = null;
 
-        if ( $this->themeObjects[self::DEFAULT_THEME]->hasDocumentMasterPage($documentKey) )
-        {
+        if ($this->themeObjects[self::DEFAULT_THEME]->hasDocumentMasterPage($documentKey)) {
             $masterPage = $this->themeObjects[self::DEFAULT_THEME]->getDocumentMasterPage($documentKey);
         }
 
-        if ( $this->themeObjects[self::CURRENT_THEME]->hasDocumentMasterPage($documentKey) )
-        {
+        if ($this->themeObjects[self::CURRENT_THEME]->hasDocumentMasterPage($documentKey)) {
             $masterPage = $this->themeObjects[self::CURRENT_THEME]->getDocumentMasterPage($documentKey);
         }
 
-        return ( $masterPage === null ? null : $this->getMasterPageTemplate($masterPage) );
+        return ($masterPage === null ? null : $this->getMasterPageTemplate($masterPage));
     }
 
     /**
@@ -257,25 +248,24 @@ class OW_ThemeManager
      * Renders decorator and returns result markup.
      *
      * @param string $name
-     * @param array $params
+     * @param array  $params
      * @return string
+     * @throws SmartyException
      */
-    public function processDecorator( $name, array $params )
+    public function processDecorator($name, array $params)
     {
         $viewRenderer = OW_ViewRenderer::getInstance();
-        $prevVars = $viewRenderer->getAllAssignedVars();
+        $prevVars     = $viewRenderer->getAllAssignedVars();
         $viewRenderer->clearAssignedVars();
 
-        if ( isset($params['data']) && is_array($params['data']) )
-        {
-            foreach ( $params['data'] as $key => $value )
-            {
+        if (isset($params['data']) && is_array($params['data'])) {
+            foreach ($params['data'] as $key => $value) {
                 $params[$key] = $value;
             }
         }
 
         $params['decoratorName'] = $name;
-        $event = new BASE_CLASS_PropertyEvent('base.before_decorator', $params);
+        $event                   = new BASE_CLASS_PropertyEvent('base.before_decorator', $params);
         OW::getEventManager()->trigger($event);
         $params = $event->getProperties();
         $viewRenderer->assignVar('data', $params);
@@ -290,51 +280,48 @@ class OW_ThemeManager
      * Renders block decorator and returns result markup.
      *
      * @param string $name
-     * @param array $params
+     * @param array  $params
+     * @param string $content
      * @return string
+     * @throws SmartyException
      */
-    public function processBlockDecorator( $name, array $params, $content = '' )
+    public function processBlockDecorator($name, array $params, $content = '')
     {
         $viewRenderer = OW_ViewRenderer::getInstance();
-        $prevVars = $viewRenderer->getAllAssignedVars();
+        $prevVars     = $viewRenderer->getAllAssignedVars();
         $viewRenderer->clearAssignedVars();
 
         // TODO remove hardcode
-        switch ( $name )
-        {
+        switch ($name) {
             case 'box':
-                if ( !empty($params['langLabel']) )
-                {
-                    $tmpArr = explode('+', $params['langLabel']);
+                if (!empty($params['langLabel'])) {
+                    $tmpArr          = explode('+', $params['langLabel']);
                     $params['label'] = OW::getLanguage()->text($tmpArr[0], $tmpArr[1]);
                 }
 
-                if ( isset($params['href']) )
-                {
-                    $params['label'] = '<a href="' . $params['href'] . '"' . (isset($params['extraString']) ? ' ' . $params['extraString'] : '' ) . '>' . $params['label'] . '</a>';
+                if (isset($params['href'])) {
+                    $params['label'] = '<a href="' . $params['href'] . '"' . (isset($params['extraString']) ? ' ' . $params['extraString'] : '') . '>' . $params['label'] . '</a>';
                 }
 
-                if ( !isset($params['capEnabled']) )
-                {
-                    $params['capEnabled'] = ( isset($params['label']) || isset($params['capContent']) || isset($params['capAddClass']) );
+                if (!isset($params['capEnabled'])) {
+                    $params['capEnabled'] = (isset($params['label']) || isset($params['capContent']) || isset($params['capAddClass']));
                 }
 
-                if ( empty($params['iconClass']) )
-                {
+                if (empty($params['iconClass'])) {
                     $params['iconClass'] = 'ow_ic_file';
                 }
 
-                $params['type'] = empty($params['type']) ? '' : '_' . trim($params['type']);
+                $params['type']        = empty($params['type']) ? '' : '_' . trim($params['type']);
                 $params['capAddClass'] = $params['type'] . (empty($params['capAddClass']) ? '' : ' ' . $params['capAddClass']);
-                $params['addClass'] = $params['type'] . (empty($params['addClass']) ? '' : ' ' . $params['addClass']) . ( $params['capEnabled'] ? '' : ' ow_no_cap' );
-                $params['capContent'] = empty($params['capContent']) ? '' : $params['capContent'];
-                $params['style'] = empty($params['style']) ? '' : $params['style'];
+                $params['addClass']    = $params['type'] . (empty($params['addClass']) ? '' : ' ' . $params['addClass']) . ($params['capEnabled'] ? '' : ' ow_no_cap');
+                $params['capContent']  = empty($params['capContent']) ? '' : $params['capContent'];
+                $params['style']       = empty($params['style']) ? '' : $params['style'];
                 break;
         }
 
-        $params['content'] = $content;
+        $params['content']       = $content;
         $params['decoratorName'] = $name;
-        $event = new BASE_CLASS_PropertyEvent('base.before_decorator', $params);
+        $event                   = new BASE_CLASS_PropertyEvent('base.before_decorator', $params);
         OW::getEventManager()->trigger($event);
         $params = $event->getProperties();
         $viewRenderer->assignVar('data', $params);
@@ -349,11 +336,11 @@ class OW_ThemeManager
     /**
      * Returns theme css file url.
      *
-     * @param string $cssFileName
+     * @param bool $mobile
      * @return string
      */
-    public function getCssFileUrl( $mobile = false )
+    public function getCssFileUrl($mobile = false)
     {
-        return $this->themeObjects[self::CURRENT_THEME]->getStaticUrl() . ( $mobile ? 'mobile/' : '' ) . BOL_ThemeService::CSS_FILE_NAME;
+        return $this->themeObjects[self::CURRENT_THEME]->getStaticUrl() . ($mobile ? 'mobile/' : '') . BOL_ThemeService::CSS_FILE_NAME;
     }
 }

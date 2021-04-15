@@ -26,15 +26,15 @@ class BASE_CMP_ModerationToolsWidget extends BASE_CLASS_Widget
         $event = new BASE_CLASS_EventCollector(self::EVENT_COLLECT_CONTENTS);
         OW::getEventManager()->trigger($event);
 
-        $tplContents = array();
+        $tplContents = [];
         $activeTab = null;
         foreach ( $event->getData() as $content )
         {
-            $tplContent = array_merge(array(
+            $tplContent = array_merge([
                 "name" => null,
                 "content" => null,
                 "active" => false
-            ), $content);
+            ], $content);
             
             $activeTab = $tplContent["active"] ? $tplContent["name"] : $activeTab;
             $tplContents[$tplContent["name"]] = $tplContent;
@@ -59,11 +59,11 @@ class BASE_CMP_ModerationToolsWidget extends BASE_CLASS_Widget
 
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_TITLE => OW::getLanguage()->text('base', 'moderation_panel'),
             self::SETTING_SHOW_TITLE => true,
             self::SETTING_WRAP_IN_BOX => true,
             self::SETTING_ICON => self::ICON_EDIT
-        );
+        ];
     }
 }

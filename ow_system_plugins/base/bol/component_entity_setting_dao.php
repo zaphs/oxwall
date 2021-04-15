@@ -88,7 +88,7 @@ class BOL_ComponentEntitySettingDao extends OW_BaseDao
         return $this->findListByExample($example);
     }
 
-    public function findSettingList( $componentPlaceUniqName, $entityId, $settingNames = array() )
+    public function findSettingList( $componentPlaceUniqName, $entityId, $settingNames = [])
     {
         $example = new OW_Example();
         $example->andFieldEqual('componentPlaceUniqName', $componentPlaceUniqName);
@@ -154,7 +154,7 @@ class BOL_ComponentEntitySettingDao extends OW_BaseDao
         return $this->deleteByExample($example);
     }
 
-    public function deleteByUniqNameList( $entityId, $uniqNameList = array() )
+    public function deleteByUniqNameList( $entityId, $uniqNameList = [])
     {
         $entityId = (int) $entityId;
         if ( !$entityId )

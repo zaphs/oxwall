@@ -98,7 +98,7 @@ class ADMIN_CTRL_Storage extends ADMIN_CTRL_StorageAbstract
             return;
         }
 
-        $this->assign("text", $language->text("admin", "license_request_text", array("type" => $type, "title" => $data["title"])));
+        $this->assign("text", $language->text("admin", "license_request_text", ["type" => $type, "title" => $data["title"]]));
 
         $form = new Form("license-key");
         $licenseKey = new TextField("key");
@@ -176,11 +176,11 @@ class ADMIN_CTRL_Storage extends ADMIN_CTRL_StorageAbstract
             return;
         }
 //TODO check if the result is false | null
-        $params = array(
+        $params = [
             "oldVersion" => OW::getConfig()->getValue("base", "soft_version"),
             "newVersion" => $newPlatformInfo["version"],
             "info" => $newPlatformInfo["info"]
-        );
+        ];
         $this->assign("text", OW::getLanguage()->text("admin", "manage_plugins_core_update_request_text", $params));
         $this->assign("redirectUrl", OW::getRouter()->urlFor(__CLASS__, "platformUpdate"));
         $this->assign("returnUrl", OW::getRouter()->urlForRoute("admin_default"));
@@ -189,7 +189,7 @@ class ADMIN_CTRL_Storage extends ADMIN_CTRL_StorageAbstract
         if ( !empty($newPlatformInfo["minPhpVersion"]) && version_compare(PHP_VERSION, trim($newPlatformInfo["minPhpVersion"])) < 0 )
         {
             $this->assign("phpVersionInvalidText", OW::getLanguage()->text("admin", "plugin_update_platform_invalid_php_version_msg",
-                array("version" => trim($newPlatformInfo["minPhpVersion"]))));
+                ["version" => trim($newPlatformInfo["minPhpVersion"])]));
         }
     }
 
@@ -331,11 +331,12 @@ class ADMIN_CTRL_Storage extends ADMIN_CTRL_StorageAbstract
             {
                 $data = $form->getValues();
 
-                $ftpAttrs = array(
+                $ftpAttrs = [
                     "host" => trim($data["host"]),
                     "login" => trim($data["login"]),
                     "password" => trim($data["password"]),
-                    "port" => (int) $data["port"]);
+                    "port" => (int) $data["port"]
+                ];
 
                 OW::getSession()->set("ftpAttrs", $ftpAttrs);
                 $this->redirectToBackUri($_GET);

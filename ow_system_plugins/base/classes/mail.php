@@ -31,8 +31,8 @@
  */
 class BASE_CLASS_Mail
 {
-    private $state = array(
-        'recipientEmailList' => array(),
+    private $state = [
+        'recipientEmailList' => [],
         'sender' => null,
         'subject' => null,
         'textContent' => null,
@@ -41,7 +41,7 @@ class BASE_CLASS_Mail
         'priority' => self::PRIORITY_NORMAL,
         'replyTo' => null,
         'senderSuffix' => null
-    );
+    ];
 
     const PRIORITY_HIDE = 1;
     const PRIORITY_NORMAL = 3;
@@ -85,7 +85,7 @@ class BASE_CLASS_Mail
             throw new InvalidArgumentException('Invalid argument `$email`');
         }
 
-        $this->state['replyTo'] = array($email, $name);
+        $this->state['replyTo'] = [$email, $name];
 
         return $this;
     }
@@ -103,7 +103,7 @@ class BASE_CLASS_Mail
             throw new InvalidArgumentException('Invalid argument `$email`');
         }
 
-        $this->state['sender'] = array( $email, $name );
+        $this->state['sender'] = [$email, $name];
 
         return $this;
     }

@@ -12,7 +12,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -24,10 +23,10 @@
 
 /**
  * Profiler utility.
- * 
- * @author Sardar Madumarov <madumarov@gmail.com>
+ *
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_utilities
- * @since 1.0
+ * @since   1.0
  */
 class UTIL_Profiler
 {
@@ -58,7 +57,7 @@ class UTIL_Profiler
 
     /**
      * Returns profiler result array
-     * 
+     *
      * @return array
      */
     public function getResult()
@@ -82,7 +81,7 @@ class UTIL_Profiler
      *
      * @param string
      */
-    private function __construct( $key )
+    private function __construct($key)
     {
         $this->key = $key;
         $this->reset();
@@ -94,15 +93,13 @@ class UTIL_Profiler
      * @param string $key #Profiler object identifier#
      * @return UTIL_Profiler
      */
-    public static function getInstance( $key = '_ow_' )
+    public static function getInstance($key = '_ow_')
     {
-        if ( self::$classInstances === null )
-        {
-            self::$classInstances = array();
+        if (self::$classInstances === null) {
+            self::$classInstances = [];
         }
 
-        if ( !isset(self::$classInstances[$key]) )
-        {
+        if (!isset(self::$classInstances[$key])) {
             self::$classInstances[$key] = new self($key);
         }
 
@@ -114,9 +111,9 @@ class UTIL_Profiler
      *
      * @param string $key
      */
-    public function mark( $key = null )
+    public function mark($key = null)
     {
-        $this->checkPoints[( $key === null ? 'chk' . $this->chkCounter++ : $key)] = microtime(true);
+        $this->checkPoints[($key === null ? 'chk' . $this->chkCounter++ : $key)] = microtime(true);
     }
 
     /**
@@ -124,10 +121,9 @@ class UTIL_Profiler
      */
     private function stop()
     {
-        $this->result['marks'] = array();
+        $this->result['marks'] = [];
 
-        foreach ( $this->checkPoints as $key => $value )
-        {
+        foreach ($this->checkPoints as $key => $value) {
             $this->result['marks'][$key] = sprintf('%.3f', $value - $this->checkPoints['start']);
         }
 
@@ -142,9 +138,9 @@ class UTIL_Profiler
      */
     public function reset()
     {
-        $this->checkPoints = array();
+        $this->checkPoints          = [];
         $this->checkPoints['start'] = microtime(true);
-        $this->result = array();
-        $this->chkCounter = 0;
+        $this->result               = [];
+        $this->chkCounter           = 0;
     }
 }

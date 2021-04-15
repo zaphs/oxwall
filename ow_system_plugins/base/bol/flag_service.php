@@ -122,9 +122,9 @@ class BOL_FlagService
         
         foreach ( $contentGroups as &$group )
         {
-            $group["url"] = OW::getRouter()->urlForRoute("base.moderation_flags", array(
+            $group["url"] = OW::getRouter()->urlForRoute("base.moderation_flags", [
                 "group" => $group["name"]
-            ));
+            ]);
             
             $group["count"] = 0;
             foreach ( $group["entityTypes"] as $entityType )
@@ -142,7 +142,7 @@ class BOL_FlagService
         $entityTypes = array_keys($contentTypes);
         $counts = $this->findCountForEntityTypeList($entityTypes);
         
-        $out = array();
+        $out = [];
         
         foreach ( $counts as $entityType => $count )
         {
@@ -178,8 +178,8 @@ class BOL_FlagService
     
     /**
      * 
-     * @param type $type
-     * @param type $entityId
+     * @param string $type
+     * @param int $entityId
      */
     public function deleteByTypeAndEntityId( $type, $entityId )
     {

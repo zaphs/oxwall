@@ -136,20 +136,20 @@ class BOL_EntityTagDao extends OW_BaseDao
         $query = "UPDATE `" . $this->getTableName() . "` SET `" . self::ACTIVE . "` = :status
                 WHERE `" . self::ENTITY_TYPE . "` = :entityType AND `" . self::ENTITY_ID . "` = :entityId";
 
-        $this->dbo->query($query, array('status' => $status, 'entityType' => $entityType, 'entityId' => $entityId));
+        $this->dbo->query($query, ['status' => $status, 'entityType' => $entityType, 'entityId' => $entityId]);
     }
 
     public function findEntityListByTag( $entityType, $tag, $first, $count )
     {
-        $queryParts = BOL_ContentService::getInstance()->getQueryFilter(array(
+        $queryParts = BOL_ContentService::getInstance()->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_CONTENT => 't',
             'base_entity_tag' => 'et'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_CONTENT_ID => 'id'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::OPTION_METHOD => __METHOD__,
             BASE_CLASS_QueryBuilderEvent::OPTION_TYPE => $entityType
-        ));
+        ]);
 
         $query = "SELECT `et`.`" . self::ENTITY_ID . "` AS `id` from `" . BOL_TagDao::getInstance()->getTableName() . "` AS `t` 
                 INNER JOIN `" . $this->getTableName() . "` AS `et` ON(`et`.`" . self::TAG_ID . "`=`t`.`id`)
@@ -159,20 +159,20 @@ class BOL_EntityTagDao extends OW_BaseDao
                 ORDER BY `et`.`entityId` DESC
                 LIMIT :first, :count";
 
-        return $this->dbo->queryForColumnList($query, array('tag' => $tag, 'entityType' => $entityType, 'first' => (int) $first, 'count' => (int) $count));
+        return $this->dbo->queryForColumnList($query, ['tag' => $tag, 'entityType' => $entityType, 'first' => (int) $first, 'count' => (int) $count]);
     }
 
     public function findEntityCountByTag( $entityType, $tag )
     {
-        $queryParts = BOL_ContentService::getInstance()->getQueryFilter(array(
+        $queryParts = BOL_ContentService::getInstance()->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_CONTENT => 't',
             'base_entity_tag' => 'et'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_CONTENT_ID => 'id'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::OPTION_METHOD => __METHOD__,
             BASE_CLASS_QueryBuilderEvent::OPTION_TYPE => $entityType
-        ));
+        ]);
 
         $query = "SELECT COUNT(*) from `" . BOL_TagDao::getInstance()->getTableName() . "` AS `t` 
                 INNER JOIN `" . $this->getTableName() . "` AS `et` ON(`et`.`" . self::TAG_ID . "`=`t`.`id`)
@@ -180,7 +180,7 @@ class BOL_EntityTagDao extends OW_BaseDao
                 where `t`.`" . BOL_TagDao::LABEL . "` = :tag AND `et`.`" . self::ENTITY_TYPE . "` = :entityType AND `et`.`" . self::ACTIVE . "` = 1
                 AND " . $queryParts['where'] . " ";
 
-        return (int) $this->dbo->queryForColumn($query, array('tag' => $tag, 'entityType' => $entityType));
+        return (int) $this->dbo->queryForColumn($query, ['tag' => $tag, 'entityType' => $entityType]);
     }
 
     public function deleteByEntityType( $entityType )
@@ -195,7 +195,7 @@ class BOL_EntityTagDao extends OW_BaseDao
     {
         if ( empty($idList) )
         {
-            return array();
+            return [];
         }
 
         $sql = 'SELECT `' . self::ENTITY_ID . '`

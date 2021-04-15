@@ -51,7 +51,7 @@ class BASE_CTRL_Edit extends OW_ActionController
         }
 
         $preference->key = self::PREFERENCE_LIST_OF_CHANGES;
-        $preference->defaultValue = json_encode(array());
+        $preference->defaultValue = json_encode([]);
         $preference->sectionName = 'general';
         $preference->sortOrder = 100;
 
@@ -115,7 +115,7 @@ class BASE_CTRL_Edit extends OW_ActionController
             // get available account types from DB
             $accountTypes = BOL_QuestionService::getInstance()->findAllAccountTypes();
 
-            $accounts = array();
+            $accounts = [];
 
             if (count($accountTypes) > 1) {
                 /* @var $value BOL_QuestionAccount */
@@ -202,7 +202,7 @@ class BASE_CTRL_Edit extends OW_ActionController
             if (!$isEditedUserModerator) {
                 // add delete button
                 $script = UTIL_JsGenerator::newInstance()->jQueryEvent('input.delete_user_by_moderator', 'click', 'OW.Users.deleteUser(e.data.userId, e.data.callbackUrl, false);'
-                    , array('e'), array('userId' => $userId, 'callbackUrl' => OW::getRouter()->urlForRoute('base_member_dashboard')));
+                    , ['e'], ['userId' => $userId, 'callbackUrl' => OW::getRouter()->urlForRoute('base_member_dashboard')]);
                 OW::getDocument()->addOnloadScript($script);
             }
         }
@@ -213,8 +213,8 @@ class BASE_CTRL_Edit extends OW_ActionController
         $questions = $this->questionService->findEditQuestionsForAccountType($accountType);
 
         $section = null;
-        $questionArray = array();
-        $questionNameList = array();
+        $questionArray = [];
+        $questionNameList = [];
 
         foreach ($questions as $sort => $question) {
             if ($section !== $question['sectionName']) {
@@ -227,11 +227,11 @@ class BASE_CTRL_Edit extends OW_ActionController
 
         $this->assign('questionArray', $questionArray);
 
-        $questionData = $this->questionService->getQuestionData(array($editUserId), $questionNameList);
+        $questionData = $this->questionService->getQuestionData([$editUserId], $questionNameList);
 
         $questionValues = $this->questionService->findQuestionsValuesByQuestionNameList($questionNameList);
         // add question to form
-        $editForm->addQuestions($questions, $questionValues, !empty($questionData[$editUserId]) ? $questionData[$editUserId] : array());
+        $editForm->addQuestions($questions, $questionValues, !empty($questionData[$editUserId]) ? $questionData[$editUserId] : []);
 
         // process form
         if (OW::getRequest()->isPost()) {
@@ -257,9 +257,10 @@ class BASE_CTRL_Edit extends OW_ActionController
 
         //include js
         $onLoadJs = " window.edit = new OW_BaseFieldValidators( " .
-            json_encode(array(
+            json_encode([
                 'formName' => $editForm->getName(),
-                'responderUrl' => OW::getRouter()->urlFor("BASE_CTRL_Edit", "ajaxResponder"))) . ",
+                'responderUrl' => OW::getRouter()->urlFor("BASE_CTRL_Edit", "ajaxResponder")
+            ]) . ",
                                                         " . UTIL_Validator::EMAIL_PATTERN . ", " . UTIL_Validator::USER_NAME_PATTERN . ", " . $editUserId . " ); ";
 
         $this->assign('isAdmin', OW::getUser()->isAdmin());
@@ -288,7 +289,7 @@ class BASE_CTRL_Edit extends OW_ActionController
             $editSynchronizeHook = OW::getRegistry()->getArray(self::EDIT_SYNCHRONIZE_HOOK);
 
             if (!empty($editSynchronizeHook)) {
-                $content = array();
+                $content = [];
 
                 foreach ($editSynchronizeHook as $function) {
                     $result = call_user_func($function);
@@ -359,13 +360,13 @@ class BASE_CTRL_Edit extends OW_ActionController
                     if ( !$adminMode )
                     {
                         $isNeedToModerate = $this->questionService->isNeedToModerate($changesList);
-                        $event = new OW_Event(OW_EventManager::ON_USER_EDIT, array('userId' => $userId, 'method' => 'native', 'moderate' => $isNeedToModerate));
+                        $event = new OW_Event(OW_EventManager::ON_USER_EDIT, ['userId' => $userId, 'method' => 'native', 'moderate' => $isNeedToModerate]);
                         OW::getEventManager()->trigger($event);
 
                         // saving changed fields
                         if ( BOL_UserService::getInstance()->isApproved($userId) )
                         {
-                            $changesList = array();
+                            $changesList = [];
                         }
 
                         BOL_PreferenceService::getInstance()->savePreferenceValue(self::PREFERENCE_LIST_OF_CHANGES, json_encode($changesList), $userId);
@@ -376,10 +377,10 @@ class BASE_CTRL_Edit extends OW_ActionController
                     }
                     else
                     {
-                        $event = new OW_Event(OW_EventManager::ON_USER_EDIT_BY_ADMIN, array('userId' => $userId));
+                        $event = new OW_Event(OW_EventManager::ON_USER_EDIT_BY_ADMIN, ['userId' => $userId]);
                         OW::getEventManager()->trigger($event);
 
-                        BOL_PreferenceService::getInstance()->savePreferenceValue(self::PREFERENCE_LIST_OF_CHANGES, json_encode(array()), $userId);
+                        BOL_PreferenceService::getInstance()->savePreferenceValue(self::PREFERENCE_LIST_OF_CHANGES, json_encode([]), $userId);
 
                         if ( !BOL_UserService::getInstance()->isApproved($userId) )
                         {
@@ -387,7 +388,7 @@ class BASE_CTRL_Edit extends OW_ActionController
                         }
 
                         OW::getFeedback()->info($language->text('base', 'edit_successfull_edit'));
-                        $this->redirect(OW::getRouter()->urlForRoute('base_user_profile', array('username' => BOL_UserService::getInstance()->getUserName($userId))));
+                        $this->redirect(OW::getRouter()->urlForRoute('base_user_profile', ['username' => BOL_UserService::getInstance()->getUserName($userId)]));
                     }
                 }
                 else
@@ -428,13 +429,13 @@ class BASE_CTRL_Edit extends OW_ActionController
 
             if ( empty($user) )
             {
-                echo json_encode(array('result' => false));
+                echo json_encode(['result' => false]);
                 exit;
             }
 
             if ( !OW::getUser()->isAdmin() && ( !OW::getUser()->isAuthenticated() || OW::getUser()->getId() != $userId ) )
             {
-                echo json_encode(array('result' => false));
+                echo json_encode(['result' => false]);
                 exit;
             }
 
@@ -452,7 +453,7 @@ class BASE_CTRL_Edit extends OW_ActionController
                 $validator = new editEmailValidator($editedUserId);
                 $result = $validator->isValid($email);
 
-                echo json_encode(array('result' => $result));
+                echo json_encode(['result' => $result]);
 
                 break;
 
@@ -467,7 +468,7 @@ class BASE_CTRL_Edit extends OW_ActionController
                     $result = $this->userService->isValidPassword(OW::getUser()->getId(), $password);
                 }
 
-                echo json_encode(array('result' => $result));
+                echo json_encode(['result' => $result]);
 
                 break;
 
@@ -477,7 +478,7 @@ class BASE_CTRL_Edit extends OW_ActionController
                 $validator = new editUserNameValidator($editedUserId);
                 $result = $validator->isValid($username);
 
-                echo json_encode(array('result' => $result));
+                echo json_encode(['result' => $result]);
 
                 break;
 

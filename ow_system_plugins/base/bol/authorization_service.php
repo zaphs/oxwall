@@ -95,11 +95,11 @@ class BOL_AuthorizationService
 
         return self::$classInstance;
     }
-    private $groupCache = array();
-    private $moderatorCache = array();
-    private $moderatorPermissionCache = array();
-    private $actionCache = array();
-    private $permissionCache = array();
+    private $groupCache = [];
+    private $moderatorCache = [];
+    private $moderatorPermissionCache = [];
+    private $actionCache = [];
+    private $permissionCache = [];
     private $guestRoleId;
     private $userRolesCache;
     private $superModeratorUserId;
@@ -137,7 +137,7 @@ class BOL_AuthorizationService
 
     public function findNonGuestRoleList()
     {
-        $result = array();
+        $result = [];
 
         /* @var $roleItem BOL_AuthorizationRole */
         foreach ( $this->roleDaoCache as $roleItem )
@@ -308,12 +308,12 @@ class BOL_AuthorizationService
         }
 
         // layer check
-        $eventParams = array(
+        $eventParams = [
             'userId' => $userId,
             'groupName' => $groupName,
             'actionName' => $actionName,
             'extra' => $extra
-        );
+        ];
 
         try
         {
@@ -328,7 +328,7 @@ class BOL_AuthorizationService
 
         if ( !empty($data) )
         {
-            usort($data, array($this, 'sortLayersByPriorityAsc'));
+            usort($data, [$this, 'sortLayersByPriorityAsc']);
 
             foreach ( $data as $layer )
             {
@@ -360,10 +360,10 @@ class BOL_AuthorizationService
             $userId = OW::getUser()->isAuthenticated() ? OW::getUser()->getId() : 0;
         }
 
-        $isAuthorized = array(
+        $isAuthorized = [
             'status' => $this->isActionAuthorizedForUser($userId, $groupName, $actionName),
             'authorizedBy' => 'base'
-        );
+        ];
 
         if ( $isAuthorized['status'] )
         {
@@ -373,12 +373,12 @@ class BOL_AuthorizationService
         try
         {
             // layer check
-            $eventParams = array(
+            $eventParams = [
                 'userId' => $userId,
                 'groupName' => $groupName,
                 'actionName' => $actionName,
                 'extra' => $extra
-            );
+            ];
             $event = new BASE_CLASS_EventCollector('authorization.layer_check', $eventParams);
             OW::getEventManager()->trigger($event);
             $data = $event->getData();
@@ -390,13 +390,13 @@ class BOL_AuthorizationService
 
         if ( !empty($data) )
         {
-            usort($data, array($this, 'sortLayersByPriorityAsc'));
+            usort($data, [$this, 'sortLayersByPriorityAsc']);
 
             foreach ( $data as $layer )
             {
                 if ( $layer['permission'] === true )
                 {
-                    return array('status' => true, 'authorizedBy' => $layer['pluginKey']);
+                    return ['status' => true, 'authorizedBy' => $layer['pluginKey']];
                 }
             }
         }
@@ -435,15 +435,15 @@ class BOL_AuthorizationService
 
         if ( $isAuthorized['status'] )
         {
-            return array('status' => self::STATUS_AVAILABLE, 'msg' => null, 'authorizedBy' => $isAuthorized['authorizedBy']);
+            return ['status' => self::STATUS_AVAILABLE, 'msg' => null, 'authorizedBy' => $isAuthorized['authorizedBy']];
         }
 
         $lang = OW::getLanguage();
 
-        $error = array(
+        $error = [
             'status' => self::STATUS_DISABLED,
             'msg' => $lang->text('base', 'authorization_failed_feedback')
-        );
+        ];
 
         if ( !$userId && !$this->isActionAuthorizedForGuest($groupName, $actionName) )
         {
@@ -453,12 +453,12 @@ class BOL_AuthorizationService
         try
         {
             // layer check
-            $eventParams = array(
+            $eventParams = [
                 'userId' => $userId,
                 'groupName' => $groupName,
                 'actionName' => $actionName,
                 'extra' => $extra
-            );
+            ];
             $event = new BASE_CLASS_EventCollector('authorization.layer_check_collect_error', $eventParams);
             OW::getEventManager()->trigger($event);
             $data = $event->getData();
@@ -473,9 +473,9 @@ class BOL_AuthorizationService
             return $error;
         }
 
-        usort($data, array($this, 'sortLayersByPriorityAsc'));
+        usort($data, [$this, 'sortLayersByPriorityAsc']);
 
-        $links = array();
+        $links = [];
         foreach ( $data as $option )
         {
             if ( !empty($option['label']) )
@@ -489,14 +489,14 @@ class BOL_AuthorizationService
         {
             $actionLabel = $this->getActionLabel($groupName, $actionName);
 
-            $error = array(
+            $error = [
                 'status' => self::STATUS_PROMOTED,
                 'msg' => $lang->text(
                     'base',
                     'authorization_action_promotion',
-                    array('alternatives' => implode(' '.$lang->text('base', 'or').' ', $links), 'action' => mb_strtolower($actionLabel))
+                    ['alternatives' => implode(' ' . $lang->text('base', 'or') . ' ', $links), 'action' => mb_strtolower($actionLabel)]
                 )
-            );
+            ];
         }
 
         return $error;
@@ -512,11 +512,11 @@ class BOL_AuthorizationService
         $userId = !empty($userId) ? $userId : (OW::getUser()->isAuthenticated() ? OW::getUser()->getId() : 0);
 
         $params = is_array( $extra ) && !empty($extra)
-            ? array('userId' => $userId) + $extra
-            : array('userId' => $userId);
+            ? ['userId' => $userId] + $extra
+            : ['userId' => $userId];
 
         $isAuthorized = $this->isActionAuthorizedBy($groupName, $actionName, $params);
-        $defaults = array('status' => false, 'msg' => null, 'trackedBy' => null);
+        $defaults = ['status' => false, 'msg' => null, 'trackedBy' => null];
 
         if ( $isAuthorized['status'] && $isAuthorized['authorizedBy'] == 'base' )
         {
@@ -524,12 +524,12 @@ class BOL_AuthorizationService
         }
 
         // layer check
-        $eventParams = array(
+        $eventParams = [
             'userId' => $userId,
             'groupName' => $groupName,
             'actionName' => $actionName,
             'extra' => $extra
-        );
+        ];
 
         $event = new BASE_CLASS_EventCollector('authorization.layer_check_track_action', $eventParams);
         OW::getEventManager()->trigger($event);
@@ -540,20 +540,20 @@ class BOL_AuthorizationService
             return $defaults;
         }
 
-        usort($data, array($this, 'sortLayersByPriorityAsc'));
+        usort($data, [$this, 'sortLayersByPriorityAsc']);
 
         foreach ( $data as $layer )
         {
             if ( !empty($layer['msg']) )
             {
-                return array('status' => true, 'msg' => $layer['msg'], 'trackedBy' => $layer['pluginKey']);
+                return ['status' => true, 'msg' => $layer['msg'], 'trackedBy' => $layer['pluginKey']];
             }
         }
 
         return $defaults;
     }
 
-    public function isActionAuthorizedForUser( $userId, $groupName, $actionName = null )
+    public function isActionAuthorizedForUser( $userId, $groupName, $actionName = null, $extra = null )
     {
         $userId = (int) $userId;
 
@@ -567,7 +567,7 @@ class BOL_AuthorizationService
         }
 
         // contains user's role ids
-        $roles = array();
+        $roles = [];
 
         if ( $userId > 0 || OW::getUser()->isAuthenticated() )
         {
@@ -628,12 +628,12 @@ class BOL_AuthorizationService
      * Generate caches
      */
     public function generateCaches() {
-        $this->groupCache = array();
-        $this->moderatorCache = array();
-        $this->moderatorPermissionCache = array();
-        $this->actionCache = array();
-        $this->permissionCache = array();
-        $this->userRolesCache = array();
+        $this->groupCache = [];
+        $this->moderatorCache = [];
+        $this->moderatorPermissionCache = [];
+        $this->actionCache = [];
+        $this->permissionCache = [];
+        $this->userRolesCache = [];
 
         $this->groupDaoCache = $this->groupDao->findAll();
         foreach ( $this->groupDaoCache as $group )
@@ -671,7 +671,7 @@ class BOL_AuthorizationService
             $this->actionCache[$action->name][$action->groupId] = $action->id;
         }
 
-        $this->userRolesCache = array();
+        $this->userRolesCache = [];
         if ( OW::getUser()->isAuthenticated() )
         {
             $this->userRolesCache[OW::getUser()->getId()] = $this->userRoleDao->getRoleIdList(OW::getUser()->getId());
@@ -700,7 +700,7 @@ class BOL_AuthorizationService
         }
 
         // contains user's role ids
-        $roles = array( $this->guestRoleId );
+        $roles = [$this->guestRoleId];
 
         if ( isset($this->actionCache[$actionName][$groupId]) )
         {
@@ -756,7 +756,7 @@ class BOL_AuthorizationService
     {
         if ( $groupId === null || $groupId < 1 )
         {
-            return array();
+            return [];
         }
 
         return $this->actionDao->findActionListByGroupId($groupId);
@@ -931,7 +931,7 @@ class BOL_AuthorizationService
     {
         $adminGroupId = $this->getAdminGroupId();
         $moderPerms = $this->moderatorPermissionDao->findListByGroupId($adminGroupId);
-        $adminIds = array();
+        $adminIds = [];
         foreach ( $moderPerms as $perm )
         {
             /* @var $perm BOL_AuthorizationModeratorPermission */
@@ -950,7 +950,7 @@ class BOL_AuthorizationService
     {
         $userIds = array_unique($userIds);
         $roles = $this->userRoleDao->getRoleListOfUsers($userIds, $displayLabel);
-        $keyRoles = array();
+        $keyRoles = [];
         foreach ( $roles as $key => &$role )
         {
             $keyRoles[$role['userId']] = &$role;
@@ -972,7 +972,7 @@ class BOL_AuthorizationService
         OW::getEventManager()->trigger($event);
         $data = $event->getData();
 
-        $dataLabels = empty($data) ? array() : call_user_func_array('array_merge', $data);
+        $dataLabels = empty($data) ? [] : call_user_func_array('array_merge', $data);
 
         return !empty($dataLabels[$groupName]['actions'][$actionName]) ? $dataLabels[$groupName]['actions'][$actionName] : null;
     }
@@ -1012,7 +1012,7 @@ class BOL_AuthorizationService
         $this->userRoleDao->deleteUserRole($userRole->userId, $userRole->roleId);
         $this->userRoleDao->save($userRole);
 
-        $event = new OW_Event('base.after_save_user_role', array('userId' => $userId, 'roleId' => $roleId));
+        $event = new OW_Event('base.after_save_user_role', ['userId' => $userId, 'roleId' => $roleId]);
         OW::getEventManager()->trigger($event);
     }
 
@@ -1040,7 +1040,7 @@ class BOL_AuthorizationService
         /** @var BOL_AuthorizationRole $role */
         $role = $this->roleDao->findById($id);
 
-        $eventBefore = new OW_Event(self::ON_BEFORE_ROLE_DELETE, array('roleId' => $role->getId()));
+        $eventBefore = new OW_Event(self::ON_BEFORE_ROLE_DELETE, ['roleId' => $role->getId()]);
         OW::getEventManager()->trigger($eventBefore);
 
         $languageService = BOL_LanguageService::getInstance();
@@ -1058,7 +1058,7 @@ class BOL_AuthorizationService
 
         //TODO delete from Permission
 
-        $eventAfter = new OW_Event(self::ON_AFTER_ROLE_DELETE, array('roleId' => $role->getId()));
+        $eventAfter = new OW_Event(self::ON_AFTER_ROLE_DELETE, ['roleId' => $role->getId()]);
         OW::getEventManager()->trigger($eventAfter);
     }
 
@@ -1122,7 +1122,7 @@ class BOL_AuthorizationService
             $this->userRoleDao->deleteUserRole($userId, $roleId);
         }
 
-        $event = new OW_Event('base.after_delete_user_role', array('userId' => $userId, 'roleId' => $roleId));
+        $event = new OW_Event('base.after_delete_user_role', ['userId' => $userId, 'roleId' => $roleId]);
         OW::getEventManager()->trigger($event);
     }
 
@@ -1253,7 +1253,7 @@ class BOL_AuthorizationService
         $roles = $this->getRoleList();
         foreach ( $roles as $role )
         {
-            $this->grantActionListToRole($role, array($action));
+            $this->grantActionListToRole($role, [$action]);
         }
     }
 

@@ -35,53 +35,54 @@ class BASE_CMP_UserListWidget extends BASE_CMP_UsersWidget
         $language = OW::getLanguage();
         $userService = BOL_UserService::getInstance();
 
-        $toolbar = array(
-            'latest' => array(
+        $toolbar = [
+            'latest' => [
                 'label' => OW::getLanguage()->text('base', 'view_all'),
-                'href' => OW::getRouter()->urlForRoute('base_user_lists', array('list' => 'latest'))
-            ),
-            'online' => array(
+                'href' => OW::getRouter()->urlForRoute('base_user_lists', ['list' => 'latest'])
+            ],
+            'online' => [
                 'label' => OW::getLanguage()->text('base', 'view_all'),
-                'href' => OW::getRouter()->urlForRoute('base_user_lists', array('list' => 'online'))
-            ),
-            'featured' => array(
+                'href' => OW::getRouter()->urlForRoute('base_user_lists', ['list' => 'online'])
+            ],
+            'featured' => [
                 'label' => OW::getLanguage()->text('base', 'view_all'),
-                'href' => OW::getRouter()->urlForRoute('base_user_lists', array('list' => 'featured'))
-            )
-        );
+                'href' => OW::getRouter()->urlForRoute('base_user_lists', ['list' => 'featured'])
+            ]
+        ];
 
         $latestUsersCount = $userService->count();
 
         if ( $latestUsersCount > $count )
         {
-            $this->setSettingValue(self::SETTING_TOOLBAR, array($toolbar['latest']));
+            $this->setSettingValue(self::SETTING_TOOLBAR, [$toolbar['latest']]);
         }
 
-        $resultList = array(
-            'latest' => array(
+        $resultList = [
+            'latest' => [
                 'menu-label' => $language->text('base', 'user_list_menu_item_latest'),
                 'menu_active' => true,
                 'userIds' => $this->getIdList($userService->findList(0, $count)),
-                'toolbar' => ( $latestUsersCount > $count ? array($toolbar['latest']) : false ),
-            ),
-            'online' => array(
+                'toolbar' => ( $latestUsersCount > $count ? [$toolbar['latest']] : false ),
+            ],
+            'online' => [
                 'menu-label' => $language->text('base', 'user_list_menu_item_online'),
                 'userIds' => $this->getIdList($userService->findOnlineList(0, $count)),
-                'toolbar' => ( $userService->countOnline() > $count ? array($toolbar['online']) : false ),
-            ));
+                'toolbar' => ( $userService->countOnline() > $count ? [$toolbar['online']] : false ),
+            ]
+        ];
 
         $featuredIdLIst = $this->getIdList($userService->findFeaturedList(0, $count));
 
         if ( !empty($featuredIdLIst) )
         {
-            $resultList['featured'] = array(
-                    'menu-label' => $language->text('base', 'user_list_menu_item_featured'),
-                    'userIds' => $featuredIdLIst,
-                    'toolbar' => ( $userService->countFeatured() > $count ? array($toolbar['featured']) : false ),
-                );
+            $resultList['featured'] = [
+                'menu-label' => $language->text('base', 'user_list_menu_item_featured'),
+                'userIds' => $featuredIdLIst,
+                'toolbar' => ( $userService->countFeatured() > $count ? [$toolbar['featured']] : false ),
+            ];
         }
 
-        $event = new OW_Event('base.userList.onToolbarReady', array(), $resultList);
+        $event = new OW_Event('base.userList.onToolbarReady', [], $resultList);
         OW::getEventManager()->trigger($event);
 
         return $event->getData();
@@ -89,22 +90,22 @@ class BASE_CMP_UserListWidget extends BASE_CMP_UsersWidget
 
     public static function getSettingList()
     {
-        $settingList = array();
-        $settingList['count'] = array(
+        $settingList = [];
+        $settingList['count'] = [
             'presentation' => 'number',
             'label' => OW::getLanguage()->text('base', 'user_list_widget_settings_count'),
             'value' => '9'
-        );
+        ];
 
         return $settingList;
     }
 
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_TITLE => OW::getLanguage()->text('base', 'user_list_widget_settings_title'),
             self::SETTING_ICON => self::ICON_USER
-        );
+        ];
     }
 
     public static function getAccess()

@@ -94,7 +94,7 @@ class ADMIN_CTRL_PagesEditExternal extends ADMIN_CTRL_Abstract
             $data = $form->getValues();
 
             $visibleFor = 0;
-            $arr = !empty($data['visible-for']) ? $data['visible-for'] : array();
+            $arr = !empty($data['visible-for']) ? $data['visible-for'] : [];
             foreach ( $arr as $val )
             {
                 $visibleFor += $val;
@@ -183,12 +183,12 @@ class EditExternalPageForm extends Form
 
         $visibleFor = $menu->getVisibleFor();
 
-        $options = array(
+        $options = [
             '1' => OW::getLanguage()->text('admin', 'pages_edit_visible_for_guests'),
             '2' => OW::getLanguage()->text('admin', 'pages_edit_visible_for_members')
-        );
+        ];
 
-        $values = array();
+        $values = [];
 
         foreach ( $options as $value => $option )
         {

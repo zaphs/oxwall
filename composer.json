@@ -1,11 +1,31 @@
 {
-    "config": {
-        "vendor-dir": "ow_libraries/vendor"
+  "config": {
+    "vendor-dir": "ow_libraries/vendor",
+    "optimize-autoloader": true,
+    "classmap-authoritative": true
+  },
+  "require": {
+    "php": "^7.2",
+    "ext-pdo_mysql": "*",
+    "ext-pdo": "*",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-gd": "*",
+    "ext-simplexml": "*",
+    "ext-zip": "*",
+    "guzzlehttp/guzzle": "~6.2",
+    "smarty/smarty": "~3.1",
+    "phpmailer/phpmailer": "~5.2",
+    "symfony/console": "~3.1",
+    "slim/slim": "^3.9",
+    "illuminate/database": "^5.7"
+  },
+  "autoload": {
+    "psr-0": {
+      "": ["./"]
     },
-    "require": {
-        "guzzlehttp/guzzle": "~6.2",
-        "smarty/smarty": "~3.1",
-        "phpmailer/phpmailer": "~5.2",
-        "symfony/console": "~3.1"
+    "psr-4": {
+      "OW\\": "./"
     }
+  }
 }

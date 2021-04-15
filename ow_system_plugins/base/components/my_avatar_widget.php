@@ -42,17 +42,17 @@ class BASE_CMP_MyAvatarWidget extends BASE_CLASS_Widget
         $avatarService = BOL_AvatarService::getInstance();
         $userId = OW::getUser()->getId();
 
-        $avatars = BOL_AvatarService::getInstance()->getDataForUserAvatars(array($userId));
+        $avatars = BOL_AvatarService::getInstance()->getDataForUserAvatars([$userId]);
         $this->assign('avatar', $avatars[$userId]);
 
-        $event = new BASE_CLASS_EventCollector('base.on_avatar_toolbar_collect', array(
+        $event = new BASE_CLASS_EventCollector('base.on_avatar_toolbar_collect', [
             'userId' => $userId
-        ));
+        ]);
 
         OW::getEventManager()->trigger($event);
 
         $toolbarItems = $event->getData();
-        $tplToolbarItems = array();
+        $tplToolbarItems = [];
         foreach ( $toolbarItems as $item )
         {
             if ( empty($item['title']) || empty($item['url']) || empty($item['iconClass']) )
@@ -82,12 +82,12 @@ class BASE_CMP_MyAvatarWidget extends BASE_CLASS_Widget
 
     public static function getStandardSettingValueList()
     {
-        return array(
-            self::SETTING_AVALIABLE_SECTIONS => array(BOL_ComponentService::SECTION_SIDEBAR),
+        return [
+            self::SETTING_AVALIABLE_SECTIONS => [BOL_ComponentService::SECTION_SIDEBAR],
             self::SETTING_TITLE => OW::getLanguage()->text('base', 'my_avatar_widget'),
             self::SETTING_SHOW_TITLE => true,
             self::SETTING_WRAP_IN_BOX => true,
             self::SETTING_ICON => 'ow_ic_user'
-        );
+        ];
     }
 }

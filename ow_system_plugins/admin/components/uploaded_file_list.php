@@ -34,18 +34,18 @@ class ADMIN_CMP_UploadedFileList extends OW_Component
         parent::onBeforeRender();
 
         $hasSideBar = OW::getThemeManager()->getCurrentTheme()->getDto()->getSidebarPosition() != 'none';
-        $photoParams = array(
+        $photoParams = [
             'classicMode' => false
-        );
+        ];
         $photoParams[] = ($photoParams['classicMode'] ? ($hasSideBar ? 4 : 5) : 4);
 
-        $photoDefault = array(
+        $photoDefault = [
             'getPhotoURL' => OW::getRouter()->urlFor('ADMIN_CTRL_Theme', 'ajaxResponder'),
             'listType' => null,
             'rateUserId' => OW::getUser()->getId(),
             'urlHome' => OW_URL_HOME,
             'level' => 4
-        );
+        ];
 
         $document = OW::getDocument();
         $plugin = OW::getPluginManager()->getPlugin('base');
@@ -87,14 +87,14 @@ class ADMIN_CMP_UploadedFileList extends OW_Component
         );
         $document->addOnloadScript(';window.browsePhoto.init();');
 
-        $contDefault = array(
+        $contDefault = [
             'downloadAccept' => (bool)OW::getConfig()->getValue('photo', 'download_accept'),
             'downloadUrl' => OW_URL_HOME . 'photo/download-photo/:id',
             'actionUrl' => $photoDefault['getPhotoURL'],
-            'contextOptions' => array(
-                array('action' => 'deleteImage', 'name' => OW::getLanguage()->text('admin', 'delete_image')),
-            )
-        );
+            'contextOptions' => [
+                ['action' => 'deleteImage', 'name' => OW::getLanguage()->text('admin', 'delete_image')],
+            ]
+        ];
 
         $document->addScriptDeclarationBeforeIncludes(
             ';window.photoContextActionParams = ' . json_encode($contDefault)

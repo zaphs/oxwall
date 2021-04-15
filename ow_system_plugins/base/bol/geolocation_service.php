@@ -84,7 +84,7 @@ class BOL_GeolocationService
             return;
         }
 
-        $countries = array();
+        $countries = [];
 
         /* @var $country BOL_GeolocationCountry */
         foreach ( $codes as $code )
@@ -103,7 +103,7 @@ class BOL_GeolocationService
         }
 
         $countryList = $this->countryDao->findAll();
-        $countries = array();
+        $countries = [];
 
         /* @var $country BOL_GeolocationCountry */
         foreach ( $countryList as $country )

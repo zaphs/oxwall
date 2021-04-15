@@ -68,7 +68,7 @@ class ADMIN_CLASS_AddAccountTypeForm extends Form {
             $defaultRole = BOL_AuthorizationService::getInstance()->getDefaultRole();
         }
 
-        $options = array();
+        $options = [];
 
         foreach ($roleList as $role) {
             $options[$role->id] = BOL_AuthorizationService::getInstance()->getRoleLabel($role->name);
@@ -84,7 +84,7 @@ class ADMIN_CLASS_AddAccountTypeForm extends Form {
             $accountTypes = BOL_QuestionService::getInstance()->findAllAccountTypes();
 
             if (count($accountTypes) > 1) {
-                $options = array();
+                $options = [];
                 $i = 1;
 
                 foreach ($accountTypes as $dto) {
@@ -121,9 +121,9 @@ class ADMIN_CLASS_AddAccountTypeForm extends Form {
             }); ';
         }
 
-        $script = UTIL_JsGenerator::composeJsString($jsString, array(
+        $script = UTIL_JsGenerator::composeJsString($jsString, [
                     'formName' => $this->getName()
-        ));
+        ]);
 
         OW::getDocument()->addOnloadScript($script);
 
@@ -143,14 +143,14 @@ class ADMIN_CLASS_AddAccountTypeForm extends Form {
 
     protected function saveOrUpdateAccountType($accountTypeName, $roleId, $order) 
     {
-        $result = array(
+        $result = [
             'add' => false,
             'update' => false,
             'reorder' => false,
-            'orderList' => array(),
-        );
+            'orderList' => [],
+        ];
 
-        $list = array();
+        $list = [];
         
         $accountType = BOL_QuestionService::getInstance()->findAccountTypeByName($accountTypeName);
 
@@ -224,13 +224,13 @@ class ADMIN_CLASS_AddAccountTypeForm extends Form {
                 $result['reorder'] = true;
                 $result['orderList'] = $list;
                         
-                $event = new OW_Event(BOL_QuestionService::EVENT_ON_ACCOUNT_TYPE_REORDER, array('dto' => $accountType, 'id' => $accountType->id, 'orderList' => $list));
+                $event = new OW_Event(BOL_QuestionService::EVENT_ON_ACCOUNT_TYPE_REORDER, ['dto' => $accountType, 'id' => $accountType->id, 'orderList' => $list]);
                 OW::getEventManager()->trigger($event);
             }
         }
 
                 
-        $event = new OW_Event(BOL_QuestionService::EVENT_ON_ACCOUNT_TYPE_REORDER, array('dto' => $accountType, 'id' => $accountType->id, 'orderList' => $list));
+        $event = new OW_Event(BOL_QuestionService::EVENT_ON_ACCOUNT_TYPE_REORDER, ['dto' => $accountType, 'id' => $accountType->id, 'orderList' => $list]);
         OW::getEventManager()->trigger($event);
         
         return $result;

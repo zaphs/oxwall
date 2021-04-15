@@ -127,10 +127,10 @@ class BOL_ComponentAdminService extends BOL_ComponentService
 
         $component = $this->findComponent($placeDto->componentId);
 
-        $event = new OW_Event('widgets.before_place_delete', array(
+        $event = new OW_Event('widgets.before_place_delete', [
             'class' => $component->className,
             'uniqName' => $placeDto->uniqName
-        ));
+        ]);
 
         OW::getEventManager()->trigger($event);
 
@@ -147,7 +147,7 @@ class BOL_ComponentAdminService extends BOL_ComponentService
         return $this->fetchSettingList($dtoList);
     }
 
-    public function findSettingList( $componentPlaceUniqName, $settingList = array() )
+    public function findSettingList( $componentPlaceUniqName, $settingList = [])
     {
         $dtoList = $this->componentSettingDao->findSettingList($componentPlaceUniqName, $settingList);
 
@@ -156,7 +156,7 @@ class BOL_ComponentAdminService extends BOL_ComponentService
 
     public function findSettingListByComponentPlaceList( array $componentPlaceList )
     {
-        $componentPlaceNameList = array();
+        $componentPlaceNameList = [];
         foreach ( $componentPlaceList as $item )
         {
             $componentPlaceNameList[] = $item['uniqName'];

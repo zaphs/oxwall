@@ -70,8 +70,8 @@ final class UPDATE_ErrorManager
         $this->debugMode = (bool) $debugMode;
 
         // set custom error and exception interceptors
-        set_error_handler(array($this, 'errorHandler'));
-        set_exception_handler(array($this, 'exceptionHandler'));
+        set_error_handler([$this, 'errorHandler']);
+        set_exception_handler([$this, 'exceptionHandler']);
 
         // set error reporting level
         error_reporting(-1);
@@ -126,11 +126,11 @@ final class UPDATE_ErrorManager
             return true;
         }
 
-        $data = array(
+        $data = [
             'message' => $errString,
             'file' => $errFile,
             'line' => $errLine
-        );
+        ];
 
         switch ( $errno )
         {
@@ -189,14 +189,14 @@ final class UPDATE_ErrorManager
      */
     public function exceptionHandler( Exception $e )
     {
-        $data = array(
+        $data = [
             'message' => $e->getMessage(),
             'file' => $e->getFile(),
             'line' => $e->getLine(),
             'trace' => '<pre>' . $e->getTraceAsString() . '</pre>',
             'type' => 'Exception',
             'class' => get_class($e)
-        );
+        ];
 
         if ( $this->debugMode )
         {

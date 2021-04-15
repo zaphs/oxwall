@@ -31,7 +31,7 @@ class ADMIN_CLASS_SeoMetaForm extends Form
     /**
      * @var array
      */
-    private $entities = array();
+    private $entities = [];
 
     /**
      * @var array
@@ -62,7 +62,7 @@ class ADMIN_CLASS_SeoMetaForm extends Form
         $langService = BOL_LanguageService::getInstance();
         $langId = $langService->getCurrent()->getId();
 
-        $disabledItems = isset($this->seoData["disabledEntities"][current($this->data)["sectionKey"]]) ? $this->seoData["disabledEntities"][current($this->data)["sectionKey"]] : array();
+        $disabledItems = isset($this->seoData["disabledEntities"][current($this->data)["sectionKey"]]) ? $this->seoData["disabledEntities"][current($this->data)["sectionKey"]] : [];
 
         foreach( $this->data as $item ){
 
@@ -97,20 +97,20 @@ class ADMIN_CLASS_SeoMetaForm extends Form
             $indexCheckbox->setLabel($language->text("base", "seo_meta_form_element_index_label"));
             $this->addElement($indexCheckbox);
 
-            $this->entities[$item["entityKey"]] = array(
+            $this->entities[$item["entityKey"]] = [
                 "label" => $item["entityLabel"],
                 "iconClass" => empty($item["iconClass"]) ? "" : $item["iconClass"],
-                "title" => array(
+                "title" => [
                     "length" => mb_strlen($title->getValue()),
                     "max" => BOL_SeoService::META_TITLE_MAX_LENGTH,
                     "isRed" => mb_strlen($title->getValue()) > BOL_SeoService::META_TITLE_MAX_LENGTH
-                ),
-                "desc" => array(
+                ],
+                "desc" => [
                     "length" => mb_strlen($desc->getValue()),
                     "max" => BOL_SeoService::META_DESC_MAX_LENGTH,
                     "isRed" => mb_strlen($desc->getValue()) > BOL_SeoService::META_DESC_MAX_LENGTH
-                )
-            );
+                ]
+            ];
         }
 
         $submit = new Submit("save");
@@ -132,10 +132,10 @@ class ADMIN_CLASS_SeoMetaForm extends Form
 
         if( $this->isValid($post) ){
             $values = $this->getValues();
-            $dataToUpdate = array();
+            $dataToUpdate = [];
             reset($this->data);
 
-            $this->seoData["disabledEntities"][current($this->data)["sectionKey"]] = array();
+            $this->seoData["disabledEntities"][current($this->data)["sectionKey"]] = [];
 
             foreach( $values as $key => $val )
             {
@@ -148,7 +148,7 @@ class ADMIN_CLASS_SeoMetaForm extends Form
 
                     if( !isset($dataToUpdate[$entity]) )
                     {
-                        $dataToUpdate[$entity] = array();
+                        $dataToUpdate[$entity] = [];
                     }
 
                     $dataToUpdate[$entity][$attribute] = $val;

@@ -80,7 +80,7 @@ class BASE_CMP_ChangePassword extends OW_Component
                 $result = true;
             }
             
-            echo json_encode( array( 'result' => $result ) );
+            echo json_encode( ['result' => $result]);
             exit;
         }
         else
@@ -116,18 +116,20 @@ class BASE_CMP_ChangePassword extends OW_Component
 
             //include js
             $onLoadJs = " window.changePassword = new OW_BaseFieldValidators( " .
-                                                    json_encode( array (
+                                                    json_encode( [
                                                             'formName' => $form->getName(),
                                                             'responderUrl' => OW::getRouter()->urlFor("BASE_CTRL_Join", "ajaxResponder"),
                                                             'passwordMaxLength' => UTIL_Validator::PASSWORD_MAX_LENGTH,
-                                                            'passwordMinLength' => UTIL_Validator::PASSWORD_MIN_LENGTH ) ) . ",
+                                                            'passwordMinLength' => UTIL_Validator::PASSWORD_MIN_LENGTH
+                                                    ]) . ",
                                                             " . UTIL_Validator::EMAIL_PATTERN . ", " . UTIL_Validator::USER_NAME_PATTERN . " ); ";
 
 
             $onLoadJs .= " window.oldPassword = new OW_ChangePassword( " .
-                                                    json_encode( array (
+                                                    json_encode( [
                                                             'formName' => $form->getName(),
-                                                            'responderUrl' => OW::getRouter()->urlFor("BASE_CTRL_Edit", "ajaxResponder") ) ) ." ); ";
+                                                            'responderUrl' => OW::getRouter()->urlFor("BASE_CTRL_Edit", "ajaxResponder")
+                                                    ]) . " ); ";
 
             OW::getDocument()->addOnloadScript($onLoadJs);
 

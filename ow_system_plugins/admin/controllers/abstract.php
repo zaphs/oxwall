@@ -42,7 +42,7 @@ abstract class ADMIN_CTRL_Abstract extends OW_ActionController
 
         if ( OW::getApplication()->getContext() != OW_Application::CONTEXT_DESKTOP )
         {
-            throw new InterceptException(array(OW_RequestHandler::ATTRS_KEY_CTRL => 'BASE_MCTRL_BaseDocument', OW_RequestHandler::ATTRS_KEY_ACTION => 'notAvailable'));
+            throw new InterceptException([OW_RequestHandler::ATTRS_KEY_CTRL => 'BASE_MCTRL_BaseDocument', OW_RequestHandler::ATTRS_KEY_ACTION => 'notAvailable']);
         }
 
         if ( !OW::getUser()->isAdmin() )

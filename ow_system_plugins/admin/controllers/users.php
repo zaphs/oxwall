@@ -45,11 +45,11 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
     {
         $language = OW::getLanguage();
 
-        $menuItems = array();
+        $menuItems = [];
 
-        $keys = array('recent', 'suspended', 'unverified', 'unapproved');
-        $labels = array('recently_active', 'suspended', 'unverified', 'unapproved');
-        $icons = array('clock', 'delete', 'mail', 'ok');
+        $keys = ['recent', 'suspended', 'unverified', 'unapproved'];
+        $labels = ['recently_active', 'suspended', 'unverified', 'unapproved'];
+        $icons = ['clock', 'delete', 'mail', 'ok'];
 
         $approveEnabled = OW::getConfig()->getValue('base', 'mandatory_user_approve');
         foreach ( $keys as $ord => $key )
@@ -59,7 +59,7 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
                 continue;
             }
             
-            $urlParams = $key == 'recent' ? array() : array('list' => $key);
+            $urlParams = $key == 'recent' ? [] : ['list' => $key];
 
             $item = new BASE_MenuItem();
             $item->setLabel($language->text('admin', 'menu_item_users_' . $labels[$ord]));
@@ -102,7 +102,7 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
         $form->addElement($emails);
         $emails->setRequired();
         $emails->setHasInvitation(true);
-        $emails->setInvitation($language->text('admin', 'invite_members_textarea_invitation_text', array('limit' => (int)OW::getConfig()->getValue('base', 'user_invites_limit'))));
+        $emails->setInvitation($language->text('admin', 'invite_members_textarea_invitation_text', ['limit' => (int)OW::getConfig()->getValue('base', 'user_invites_limit')]));
 
         $submit = new Submit('submit');
         $submit->setValue($language->text('admin', 'invite_members_submit_label'));
@@ -117,7 +117,7 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
                 $data = $form->getValues();
                 $emails = array_unique(preg_split('/\n/', $data['emails']));
 
-                $emailList = array();
+                $emailList = [];
 
                 foreach ( $emails as $email )
                 {
@@ -129,7 +129,7 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
 
                 if ( sizeof($emailList) > (int)OW::getConfig()->getValue('base', 'user_invites_limit') )
                 {
-                    OW::getFeedback()->error($language->text('admin', 'invite_members_max_limit_message', array('limit' => (int)OW::getConfig()->getValue('base', 'user_invites_limit'))));
+                    OW::getFeedback()->error($language->text('admin', 'invite_members_max_limit_message', ['limit' => (int)OW::getConfig()->getValue('base', 'user_invites_limit')]));
                     $form->getElement('emails')->setValue($data['emails']);
                     $this->redirect();
                 }
@@ -159,7 +159,7 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
 
         if ( !empty($_GET['search']) && !empty($_GET['search_by']) )
         {
-            $extra = array('question' => $_GET['search_by'], 'value' => $_GET['search']);
+            $extra = ['question' => $_GET['search_by'], 'value' => $_GET['search']];
             $type = 'search';
         }
         else
@@ -168,17 +168,17 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
             $type = isset($params['list']) ? $params['list'] : 'recent';
         }
         
-        $buttons['suspend'] = array('name' => 'suspend', 'id' => 'suspend_user_btn', 'label' => $language->text('base', 'suspend_user_btn'), 'class' => 'ow_mild_red');
+        $buttons['suspend'] = ['name' => 'suspend', 'id' => 'suspend_user_btn', 'label' => $language->text('base', 'suspend_user_btn'), 'class' => 'ow_mild_red'];
         $buttons['suspend']['js'] = ' $("#suspend_user_btn").click(function(e){ 
             e.preventDefault();
             OW.ajaxFloatBox("ADMIN_CMP_SetSuspendMessage", [],{width: 520, title: OW.getLanguageText(\'admin\', \'admin_suspend_floatbox_title\')}); 
             return false;
         }); ';
         
-        $buttons['unverify'] = array('name' => 'email_unverify', 'id' => 'email_unverify_user_btn', 'label' => $language->text('base', 'mark_email_unverified_btn'), 'class' => 'ow_mild_red');
-        $buttons['unsuspend'] = array('name' => 'reactivate', 'id' => 'unsuspend_user_btn', 'label' => $language->text('base', 'unsuspend_user_btn'), 'class' => 'ow_mild_green');
-        $buttons['verify'] = array('name' => 'email_verify', 'id' => 'email_verify_user_btn', 'label' => $language->text('base', 'mark_email_verified_btn'), 'class' => 'ow_mild_green');
-        $buttons['approve'] = array('name' => 'approve', 'id' => 'approve_user_btn', 'label' => $language->text('base', 'approve_user_btn'), 'class' => 'ow_mild_green');
+        $buttons['unverify'] = ['name' => 'email_unverify', 'id' => 'email_unverify_user_btn', 'label' => $language->text('base', 'mark_email_unverified_btn'), 'class' => 'ow_mild_red'];
+        $buttons['unsuspend'] = ['name' => 'reactivate', 'id' => 'unsuspend_user_btn', 'label' => $language->text('base', 'unsuspend_user_btn'), 'class' => 'ow_mild_green'];
+        $buttons['verify'] = ['name' => 'email_verify', 'id' => 'email_verify_user_btn', 'label' => $language->text('base', 'mark_email_verified_btn'), 'class' => 'ow_mild_green'];
+        $buttons['approve'] = ['name' => 'approve', 'id' => 'approve_user_btn', 'label' => $language->text('base', 'approve_user_btn'), 'class' => 'ow_mild_green'];
         //$buttons['disapprove'] = array('name' => 'disapprove', 'id' => 'disapprove_user_btn', 'label' => $language->text('base', 'disapprove_user_btn'), 'class' => 'ow_mild_red');
         
         $par = new ADMIN_UserListParams();
@@ -229,16 +229,16 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
         
         $question = OW::getConfig()->getValue('base', 'display_name_question');
         
-        $searchQ = array(
+        $searchQ = [
             $question => $language->text('base', 'questions_question_'.$question.'_label'),
             'email' => $language->text('base', 'questions_question_email_label')
-        );
+        ];
         $this->assign('searchQ', $searchQ);
         
-        $this->assign('currentSearch', array(
+        $this->assign('currentSearch', [
             'question' => !empty($_GET['search_by']) ? $_GET['search_by'] : '',
             'value' => !empty($_GET['search']) ? htmlspecialchars($_GET['search']) : ''
-        ));
+        ]);
         
         $this->assign('userSearchUrl', OW::getRouter()->urlForRoute('admin_users_browse'));
     }
@@ -254,7 +254,7 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
         $roles = $roleService->findNonGuestRoleList();
        
 
-        $list = array();
+        $list = [];
 
         $total = $service->count(true);
 
@@ -262,10 +262,10 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
         {            
             $userCount = $roleService->countUserByRoleId($role->getId());           
 
-            $list[$role->getId()] = array(
+            $list[$role->getId()] = [
                 'dto' => $role,
                 'userCount' => $userCount,
-            );
+            ];
         }
         
         $this->assign( 'set', $list );
@@ -297,13 +297,13 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
         $groups = $service->getGroupList();
         $permissions = $service->getPermissionList();
 
-        $groupActionList = array();
+        $groupActionList = [];
 
         foreach ( $groups as $group )
         {
             /* @var $group BOL_AuthorizationGroup */
             $groupActionList[$group->id]['name'] = $group->name;
-            $groupActionList[$group->id]['actions'] = array();
+            $groupActionList[$group->id]['actions'] = [];
         }
 
         foreach ( $actions as $action )
@@ -320,14 +320,14 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
             }
         }
 
-        $perms = array();
+        $perms = [];
         foreach ( $permissions as $permission )
         {
             /* @var $permission BOL_AuthorizationPermission */
             $perms[$permission->actionId][$permission->roleId] = true;
         }
 
-        $tplRoles = array();
+        $tplRoles = [];
         foreach ( $roles as $role )
         {
             $tplRoles[$role->sortOrder] = $role;
@@ -346,7 +346,7 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
         OW::getEventManager()->trigger($event);
         $data = $event->getData();
 
-        $dataLabels = empty($data) ? array() : call_user_func_array('array_merge', $data);
+        $dataLabels = empty($data) ? [] : call_user_func_array('array_merge', $data);
         $this->assign('labels', $dataLabels);
     }
 
@@ -356,14 +356,14 @@ class ADMIN_CTRL_Users extends ADMIN_CTRL_Abstract
         {
             $par = new ADMIN_UserListParams();
             $par->setType('role');
-            $par->setExtra(array('roleId' => (int) $params['roleId']));
+            $par->setExtra(['roleId' => (int)$params['roleId']]);
             
             $this->addComponent('userList', new ADMIN_CMP_UserList($par));
 
             $role = BOL_AuthorizationService::getInstance()->getRoleById((int) $params['roleId']);
             $roleLabel = OW::getLanguage()->text('base', 'authorization_role_' . $role->name);
 
-            OW::getDocument()->setHeading(OW::getLanguage()->text('admin', 'heading_user_role', array('role' => $roleLabel)));
+            OW::getDocument()->setHeading(OW::getLanguage()->text('admin', 'heading_user_role', ['role' => $roleLabel]));
         }
 
         OW::getDocument()->setHeadingIconClass('ow_ic_user');

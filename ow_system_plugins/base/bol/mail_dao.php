@@ -97,7 +97,7 @@ class BOL_MailDao extends OW_BaseDao
             return;
         }
 
-        return $this->dbo->query(" UPDATE " . $this->getTableName() . " SET sent = ? WHERE id = ? ", array( $status, $mailId) );
+        return $this->dbo->query(" UPDATE " . $this->getTableName() . " SET sent = ? WHERE id = ? ", [$status, $mailId]);
     }
 
     public function deleteSentMails()

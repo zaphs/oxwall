@@ -49,13 +49,13 @@ class BASE_MCTRL_UserList extends OW_MobileActionController
         $this->addComponent('menu', self::getMenu($listType));
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl().'mobile_user_list.js');
 
-        $data = $this->getData( $listType, array(), true, $this->usersPerPage );
+        $data = $this->getData( $listType, [], true, $this->usersPerPage );
         $cmp = new BASE_MCMP_BaseUserList($listType, $data, true);
         $this->addComponent('list', $cmp);
         $this->assign('listType', $listType);
 
         OW::getDocument()->addOnloadScript(" 
-            window.mobileUserList = new OW_UserList(".  json_encode(array(
+            window.mobileUserList = new OW_UserList(".  json_encode([
                     'component' => 'BASE_MCMP_BaseUserList',
                     'listType' => $listType,
                     'excludeList' => $data,
@@ -63,7 +63,7 @@ class BASE_MCTRL_UserList extends OW_MobileActionController
                     'showOnline' => true,
                     'count' => $this->usersPerPage,
                     'responderUrl' => OW::getRouter()->urlForRoute('base_user_lists_responder')
-                )).");
+            ]) . ");
         ", 50);
     }
 
@@ -75,7 +75,7 @@ class BASE_MCTRL_UserList extends OW_MobileActionController
         }
         
         $listKey = empty($_POST['list']) ? 'latest' : strtolower(trim($_POST['list']));
-        $excludeList = empty($_POST['excludeList']) ? array() : $_POST['excludeList'];
+        $excludeList = empty($_POST['excludeList']) ? [] : $_POST['excludeList'];
         $showOnline = empty($_POST['showOnline']) ? false : $_POST['showOnline'];
         $count = empty($_POST['count']) ? $this->usersPerPage : (int)$_POST['count'];
 
@@ -85,9 +85,9 @@ class BASE_MCTRL_UserList extends OW_MobileActionController
         exit;
     }
 
-    protected function getData( $listKey, $excludeList = array(), $showOnline, $count )
+    protected function getData( $listKey, $excludeList = [], $showOnline, $count )
     {
-        $list = array();
+        $list = [];
 
         $start = count($excludeList);
 
@@ -131,21 +131,21 @@ class BASE_MCTRL_UserList extends OW_MobileActionController
     {
         $language = OW::getLanguage();
 
-        $menuArray = array(
-            array(
+        $menuArray = [
+            [
                 'label' => $language->text('base', 'user_list_menu_item_latest'),
-                'url' => OW::getRouter()->urlForRoute('base_user_lists', array('list' => 'latest')),
+                'url' => OW::getRouter()->urlForRoute('base_user_lists', ['list' => 'latest']),
                 'iconClass' => 'ow_ic_clock',
                 'key' => 'latest',
                 'order' => 1
-            ),
-            array(
+            ],
+            [
                 'label' => $language->text('base', 'user_list_menu_item_online'),
-                'url' => OW::getRouter()->urlForRoute('base_user_lists', array('list' => 'online')),
+                'url' => OW::getRouter()->urlForRoute('base_user_lists', ['list' => 'online']),
                 'iconClass' => 'ow_ic_push_pin',
                 'key' => 'online',
                 'order' => 3
-            ),
+            ],
             /* array(
                 'label' => $language->text('base', 'user_search_menu_item_label'),
                 'url' => OW::getRouter()->urlForRoute('users-search'),
@@ -153,17 +153,17 @@ class BASE_MCTRL_UserList extends OW_MobileActionController
                 'key' => 'search',
                 'order' => 4
             ) */
-        );
+        ];
 
         if ( BOL_UserService::getInstance()->countFeatured() > 0 )
         {
-            $menuArray[] =  array(
+            $menuArray[] =  [
                 'label' => $language->text('base', 'user_list_menu_item_featured'),
-                'url' => OW::getRouter()->urlForRoute('base_user_lists', array('list' => 'featured')),
+                'url' => OW::getRouter()->urlForRoute('base_user_lists', ['list' => 'featured']),
                 'iconClass' => 'ow_ic_push_pin',
                 'key' => 'featured',
                 'order' => 2
-            );
+            ];
         }
 
         $event = new BASE_CLASS_EventCollector('base.add_user_list');

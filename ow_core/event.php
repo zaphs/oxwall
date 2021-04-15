@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -25,10 +25,10 @@
 /**
  * The base class for events. All events used in event manager should be
  * instance of OW_Event or derived from it.
- * 
- * @author Sardar Madumarov <madumarov@gmail.com>
+ *
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 class OW_Event
 {
@@ -57,12 +57,15 @@ class OW_Event
 
     /**
      * Constructor.
+     * @param       $name
+     * @param array $params
+     * @param null  $dataValue
      */
-    public function __construct( $name, array $params = array(), $dataValue = null )
+    public function __construct($name, array $params = [], $dataValue = null)
     {
-        $this->name = trim($name);
+        $this->name   = trim($name);
         $this->params = $params;
-        $this->data = $dataValue;
+        $this->data   = $dataValue;
     }
 
     /**
@@ -92,7 +95,7 @@ class OW_Event
     /**
      * @param mixed $data
      */
-    public function setData( $data )
+    public function setData($data)
     {
         $this->data = $data;
     }

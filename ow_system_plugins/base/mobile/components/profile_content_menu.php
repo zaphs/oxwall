@@ -58,7 +58,7 @@ class BASE_MCMP_ProfileContentMenu extends OW_MobileComponent
     {
         parent::onBeforeRender();
 
-        $event = new BASE_CLASS_EventCollector(self::EVENT_NAME, array('userId' => $this->user->id));
+        $event = new BASE_CLASS_EventCollector(self::EVENT_NAME, ['userId' => $this->user->id]);
 
         OW::getEventManager()->trigger($event);
 
@@ -76,7 +76,7 @@ class BASE_MCMP_ProfileContentMenu extends OW_MobileComponent
 
     public function initMenu( $items )
     {
-        $tplActions = array();
+        $tplActions = [];
 
         foreach ( $items as $item  )
         {
@@ -87,7 +87,7 @@ class BASE_MCMP_ProfileContentMenu extends OW_MobileComponent
 
             $attrs = isset($item[self::DATA_KEY_LINK_ATTRIBUTES]) && is_array($item[self::DATA_KEY_LINK_ATTRIBUTES])
                 ? $item[self::DATA_KEY_LINK_ATTRIBUTES]
-                : array();
+                : [];
 
             $attrs['href'] = isset($item[self::DATA_KEY_LINK_HREF]) ? $item[self::DATA_KEY_LINK_HREF] : 'javascript://';
 
@@ -111,7 +111,7 @@ class BASE_MCMP_ProfileContentMenu extends OW_MobileComponent
                 $action['img'] = $item[self::DATA_KEY_THUMB];
             }
 
-            $_attrs = array();
+            $_attrs = [];
             foreach ( $attrs as $name => $value )
             {
                 $_attrs[] = $name . '="' . $value . '"';

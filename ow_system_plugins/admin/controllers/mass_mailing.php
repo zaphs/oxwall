@@ -48,7 +48,7 @@ class ADMIN_CTRL_MassMailing extends ADMIN_CTRL_Abstract
         parent::__construct();
     }
 
-    public function index( $params = array() )
+    public function index( $params = [])
     {
         $userService = BOL_UserService::getInstance();
 
@@ -78,10 +78,10 @@ class ADMIN_CTRL_MassMailing extends ADMIN_CTRL_Abstract
         $emailFormat = new Selectbox('emailFormat');
         $emailFormat->setLabel($language->text('admin', 'massmailing_email_format_label'));
         $emailFormat->setOptions(
-            array(
+            [
                 self::EMAIL_FORMAT_TEXT => $language->text('admin', 'massmailing_email_format_text'),
                 self::EMAIL_FORMAT_HTML => $language->text('admin', 'massmailing_email_format_html')
-        ));
+            ]);
 
         $emailFormat->setValue(self::EMAIL_FORMAT_TEXT);
         $emailFormat->setHasInvitation(false);
@@ -111,7 +111,7 @@ class ADMIN_CTRL_MassMailing extends ADMIN_CTRL_Abstract
         if ( $emailFormat->getValue() == self::EMAIL_FORMAT_HTML )
         {
             $body = new WysiwygTextarea('body');
-            $body->forceAddButtons(array( BOL_TextFormatService::WS_BTN_IMAGE, BOL_TextFormatService::WS_BTN_HTML ));
+            $body->forceAddButtons([BOL_TextFormatService::WS_BTN_IMAGE, BOL_TextFormatService::WS_BTN_HTML]);
         }
         
         $body->addAttribute('class', 'ow_text');
@@ -146,7 +146,7 @@ class ADMIN_CTRL_MassMailing extends ADMIN_CTRL_Abstract
             if ( $timeout  > 0 )
             {
                 $isActive = false;
-                $this->assign('expireText',  $language->text('admin', 'massmailing_expire_text', array( 'hours' => (int) ceil( $timeout / ( 60 * 60 ) ) ) ) );
+                $this->assign('expireText',  $language->text('admin', 'massmailing_expire_text', ['hours' => (int) ceil($timeout / (60 * 60 ) )]) );
             }
         }
         
@@ -170,8 +170,8 @@ class ADMIN_CTRL_MassMailing extends ADMIN_CTRL_Abstract
                 {
                     $result = $this->userService->findMassMailingUsers($start, $count, $ignoreUnsubscribe, $data['userRoles']);
                     
-                    $mails = array();
-                    $userIdList = array();
+                    $mails = [];
+                    $userIdList = [];
 
                     foreach ( $result as $user )
                     {
@@ -196,9 +196,9 @@ class ADMIN_CTRL_MassMailing extends ADMIN_CTRL_Abstract
 
                         $code = md5($user->username . $user->password);
 
-                        $vars['unsubscribe_url'] = OW::getRouter()->urlForRoute('base_massmailing_unsubscribe', array('id' => $user->id, 'code' => $code)) . '?desktopRedirect=1';
+                        $vars['unsubscribe_url'] = OW::getRouter()->urlForRoute('base_massmailing_unsubscribe', ['id' => $user->id, 'code' => $code]) . '?desktopRedirect=1';
 
-                        $event = new BASE_CLASS_PropertyEvent("base.massmail_on_before_fetch_user_mail", $vars, array("userId" => $user->id));
+                        $event = new BASE_CLASS_PropertyEvent("base.massmail_on_before_fetch_user_mail", $vars, ["userId" => $user->id]);
                         OW::getEventManager()->trigger($event);
                         $vars = $event->getProperties();
                         
@@ -211,7 +211,7 @@ class ADMIN_CTRL_MassMailing extends ADMIN_CTRL_Abstract
                             
                             if( !$hasUnsubscribeUrl )
                             {
-                                $htmlContent .= $language->text('admin', 'massmailing_unsubscribe_link_html', array('link' => $vars['unsubscribe_url']));
+                                $htmlContent .= $language->text('admin', 'massmailing_unsubscribe_link_html', ['link' => $vars['unsubscribe_url']]);
                             }
                             
                             $mail->setHtmlContent($htmlContent);
@@ -226,7 +226,7 @@ class ADMIN_CTRL_MassMailing extends ADMIN_CTRL_Abstract
                             
                             if( !$hasUnsubscribeUrl )
                             {
-                                $textContent .= "\n\n" . $language->text('admin', 'massmailing_unsubscribe_link_text', array('link' => $vars['unsubscribe_url']));
+                                $textContent .= "\n\n" . $language->text('admin', 'massmailing_unsubscribe_link_text', ['link' => $vars['unsubscribe_url']]);
                             }
                             
                             $mail->setTextContent($textContent);
@@ -241,7 +241,7 @@ class ADMIN_CTRL_MassMailing extends ADMIN_CTRL_Abstract
                     OW::getMailer()->addListToQueue($mails);
                 }
 
-                OW::getFeedback()->info($language->text('admin', 'massmailing_send_mails_message', array('count' => $mailCount)));
+                OW::getFeedback()->info($language->text('admin', 'massmailing_send_mails_message', ['count' => $mailCount]));
 
                 if ( defined( 'OW_PLUGIN_XP' ) )
                 {
@@ -283,7 +283,7 @@ class ADMIN_CTRL_MassMailing extends ADMIN_CTRL_Abstract
                 $params = json_decode($_POST['values'], true);
                 
                 $ignoreUnsubscribe = false;
-                $roles = array();
+                $roles = [];
 
                 if ( isset($params['ignoreUnsubscribe']) )
                 {
@@ -297,7 +297,7 @@ class ADMIN_CTRL_MassMailing extends ADMIN_CTRL_Abstract
 
                 $result = $this->userService->findMassMailingUserCount($ignoreUnsubscribe, $roles);
 
-                echo json_encode(array('result' => (int) $result));
+                echo json_encode(['result' => (int) $result]);
 
                 break;
 

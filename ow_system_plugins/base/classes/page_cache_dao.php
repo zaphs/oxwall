@@ -32,14 +32,14 @@
 abstract class BASE_CLASS_PageCacheDao extends OW_BaseDao
 {
 
-    protected $cachedItems = array( );
+    protected $cachedItems = [];
 
     protected function __construct()
     {
         parent::__construct();
     }
 
-    public function findById( $id, $cacheLifeTime = 0, $tags = array( ) )
+    public function findById( $id, $cacheLifeTime = 0, $tags = [])
     {
         $id = intval($id);
 
@@ -51,12 +51,12 @@ abstract class BASE_CLASS_PageCacheDao extends OW_BaseDao
         return $this->cachedItems[$id];
     }
 
-    public function findByIdList( array $idList, $cacheLifeTime = 0, $tags = array( ) )
+    public function findByIdList( array $idList, $cacheLifeTime = 0, $tags = [])
     {
         $idList = array_map('intval', $idList);
 
-        $idsToRequire = array( );
-        $result = array( );
+        $idsToRequire = [];
+        $result = [];
 
         foreach ( $idList as $id )
         {
@@ -70,7 +70,7 @@ abstract class BASE_CLASS_PageCacheDao extends OW_BaseDao
             }
         }
 
-        $items = array( );
+        $items = [];
 
         if ( !empty($idsToRequire) )
         {

@@ -123,14 +123,14 @@ class BOL_MobileNavigationService
         $document->setUri("cp-" . $document->getId());
         $this->navigationService->saveDocument($document);
         
-        $this->editItem($menuItem, array(
+        $this->editItem($menuItem, [
             self::SETTING_LABEL => OW::getLanguage()->text("mobile", "admin_nav_default_menu_name"),
             self::SETTING_TITLE => OW::getLanguage()->text("mobile", "admin_nav_default_page_title"),
             self::SETTING_CONTENT => OW::getLanguage()->text("mobile", "admin_nav_default_page_content"),
             self::SETTING_VISIBLE_FOR => 3,
             self::SETTING_TYPE => "local",
             self::SETTING_URL => null
-        ));
+        ]);
         
         return $menuItem;
     }
@@ -194,14 +194,14 @@ class BOL_MobileNavigationService
     {
         $language = OW::getLanguage();
         
-        return array(
+        return [
             self::SETTING_LABEL => $language->text($item->prefix, $item->key),
             self::SETTING_TITLE => $language->text($item->prefix, $item->key . "_title"),
             self::SETTING_CONTENT => $language->text($item->prefix, $item->key . "_content"),
             self::SETTING_VISIBLE_FOR => (int) $item->visibleFor,
             self::SETTING_TYPE => empty($item->externalUrl) ? "local" : "external",
             self::SETTING_URL => $item->externalUrl
-        );
+        ];
     }
     
     public function getItemSettingsByPrefixAndKey( $prefix, $key )
@@ -210,7 +210,7 @@ class BOL_MobileNavigationService
         
         if ( $item === null ) 
         {
-            return array();
+            return [];
         }
         
         return $this->getItemSettings($item);

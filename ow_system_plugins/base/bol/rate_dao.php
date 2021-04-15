@@ -115,7 +115,7 @@ class BOL_RateDao extends OW_BaseDao
     {
         return $this->dbo->queryForRow("SELECT COUNT(*) as `rates_count`, AVG(`score`) as `avg_score`
 			FROM " . $this->getTableName() . " WHERE `entityId` = :entityId AND `entityType` = :entityType
-			GROUP BY `entityId`", array('entityId' => $entityId, 'entityType' => $entityType));
+			GROUP BY `entityId`", ['entityId' => $entityId, 'entityType' => $entityType]);
     }
 
     /**
@@ -128,26 +128,26 @@ class BOL_RateDao extends OW_BaseDao
     {
         if ( empty($entityIdList) )
         {
-            return array();
+            return [];
         }
 
         $query = "SELECT COUNT(*) as `rates_count`, AVG(`score`) as `avg_score`, `" . self::ENTITY_ID . "`
 			FROM " . $this->getTableName() . " WHERE `" . self::ENTITY_TYPE . "` = :entityType AND `" . self::ENTITY_ID . "` IN (" . $this->dbo->mergeInClause($entityIdList) . ")
 			GROUP BY `entityId`";
 
-        return $this->dbo->queryForList($query, array('entityType' => $entityType));
+        return $this->dbo->queryForList($query, ['entityType' => $entityType]);
     }
 
     public function findMostRatedEntityList( $entityType, $first, $count, $exclude )
     {
-        $queryParts = BOL_ContentService::getInstance()->getQueryFilter(array(
+        $queryParts = BOL_ContentService::getInstance()->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_CONTENT => 'r'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_CONTENT_ID => 'id'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::OPTION_METHOD => __METHOD__,
             BASE_CLASS_QueryBuilderEvent::OPTION_TYPE => $entityType
-        ));
+        ]);
 
         $excludeCond = $exclude ? ' AND `r`.`' . self::ENTITY_ID . '` NOT IN (' . $this->dbo->mergeInClause($exclude) . ')' : '';
 
@@ -158,21 +158,21 @@ class BOL_RateDao extends OW_BaseDao
             GROUP BY `r`.`' . self::ENTITY_ID . '`
             ORDER BY `avgScore` DESC, `ratesCount` DESC, MAX(`r`.`timeStamp`) DESC
             LIMIT :first, :count';
-        $boundParams = array_merge(array('entityType' => $entityType, 'first' => (int) $first, 'count' => (int) $count), $queryParts['params']);
+        $boundParams = array_merge(['entityType' => $entityType, 'first' => (int) $first, 'count' => (int) $count], $queryParts['params']);
 
         return $this->dbo->queryForList($query, $boundParams);
     }
 
     public function findMostRatedEntityCount( $entityType, $exclude )
     {
-        $queryParts = BOL_ContentService::getInstance()->getQueryFilter(array(
+        $queryParts = BOL_ContentService::getInstance()->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_CONTENT => 'r'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_CONTENT_ID => 'id'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::OPTION_METHOD => __METHOD__,
             BASE_CLASS_QueryBuilderEvent::OPTION_TYPE => $entityType
-        ));
+        ]);
 
         $excludeCond = $exclude ? ' AND `r`.`' . self::ENTITY_ID . '` NOT IN (' . $this->dbo->mergeInClause($exclude) . ')' : '';
 
@@ -180,7 +180,7 @@ class BOL_RateDao extends OW_BaseDao
             "  . $queryParts['join'] . "
             WHERE `r`.`" . self::ENTITY_TYPE . "` = :entityType AND `r`.`" . self::ACTIVE . "` = 1" . $excludeCond . " AND " . $queryParts['where'] . "";
 
-        return (int) $this->dbo->queryForColumn($query, array('entityType' => $entityType));
+        return (int) $this->dbo->queryForColumn($query, ['entityType' => $entityType]);
     }
 
     public function updateEntityStatus( $entityType, $entityId, $status )
@@ -188,7 +188,7 @@ class BOL_RateDao extends OW_BaseDao
         $query = "UPDATE `" . $this->getTableName() . "` SET `" . self::ACTIVE . "` = :status
                 WHERE `" . self::ENTITY_TYPE . "` = :entityType AND `" . self::ENTITY_ID . "` = :entityId";
 
-        $this->dbo->query($query, array('status' => $status, 'entityType' => $entityType, 'entityId' => $entityId));
+        $this->dbo->query($query, ['status' => $status, 'entityType' => $entityType, 'entityId' => $entityId]);
     }
 
     /**
@@ -231,7 +231,7 @@ class BOL_RateDao extends OW_BaseDao
     {
         if ( count($entityIdList) === 0 )
         {
-            return array();
+            return [];
         }
 
         $sql = 'SELECT `' . self::ENTITY_ID . '`, `' . self::SCORE . '`
@@ -240,6 +240,6 @@ class BOL_RateDao extends OW_BaseDao
                 `' . self::ENTITY_TYPE . '` = :entityType AND
                 `' . self::ENTITY_ID . '` IN(' . implode(',', array_map('intval', array_unique($entityIdList))) . ')';
 
-        return $this->dbo->queryForList($sql, array('userId' => $userId, 'entityType' => $entityType));
+        return $this->dbo->queryForList($sql, ['userId' => $userId, 'entityType' => $entityType]);
     }
 }

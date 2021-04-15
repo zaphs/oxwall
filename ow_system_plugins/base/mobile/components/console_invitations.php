@@ -44,7 +44,7 @@ class BASE_MCMP_ConsoleInvitations extends OW_MobileComponent
         $items = $this->prepareData($invitations);
         $this->assign('items', $items);
 
-        $invitationIdList = array();
+        $invitationIdList = [];
         foreach ( $items as $id => $item )
         {
             $invitationIdList[] = $id;
@@ -64,20 +64,20 @@ class BASE_MCMP_ConsoleInvitations extends OW_MobileComponent
 
     public static function prepareData( $invitations )
     {
-        $avatars = array();
+        $avatars = [];
         $router = OW::getRouter();
         foreach ( $invitations as $invitation )
         {
             $data = json_decode($invitation->data, true);
-            $avatars[$invitation->id] = array(
+            $avatars[$invitation->id] = [
                 'src' => $data['avatar']['src'],
                 'title' => $data['avatar']['title'],
                 'url' => isset($data['avatar']['urlInfo']) ?
                     $router->urlForRoute($data['avatar']['urlInfo']['routeName'], $data['avatar']['urlInfo']['vars']) : null
-            );
+            ];
         }
 
-        $items = array();
+        $items = [];
 
         foreach ( $invitations as $invitation )
         {
@@ -87,13 +87,13 @@ class BASE_MCMP_ConsoleInvitations extends OW_MobileComponent
             /** @var $invitation BOL_Invitation  */
             $item = $invitation->getData();
 
-            $itemEvent = new OW_Event('mobile.invitations.on_item_render', array(
+            $itemEvent = new OW_Event('mobile.invitations.on_item_render', [
                 'entityType' => $invitation->entityType,
                 'entityId' => $invitation->entityId,
                 'pluginKey' => $invitation->pluginKey,
                 'userId' => $invitation->userId,
                 'data' => $item
-            ));
+            ]);
 
             OW::getEventManager()->trigger($itemEvent);
             $eData = $itemEvent->getData();
@@ -113,7 +113,7 @@ class BASE_MCMP_ConsoleInvitations extends OW_MobileComponent
             if ( !empty($item['string']) && is_array($item['string']) )
             {
                 $key = explode('+', $item['string']['key']);
-                $vars = empty($item['string']['vars']) ? array() : $item['string']['vars'];
+                $vars = empty($item['string']['vars']) ? [] : $item['string']['vars'];
                 $item['string'] = OW::getLanguage()->text($key[0], $key[1], $vars);
                 if ( $disabled )
                 {
@@ -124,7 +124,7 @@ class BASE_MCMP_ConsoleInvitations extends OW_MobileComponent
             if ( !empty($item['contentImage']) )
             {
                 $item['contentImage'] = is_string($item['contentImage'])
-                    ? array( 'src' => $item['contentImage'] )
+                    ? ['src' => $item['contentImage']]
                     : $item['contentImage'];
             }
             else

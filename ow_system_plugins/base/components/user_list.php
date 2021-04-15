@@ -50,7 +50,7 @@ class BASE_CMP_UserList extends OW_Component
      *      integer count
      *      string boxType
      */
-    function __construct( array $params = array() )
+    function __construct( array $params = [])
     {
         parent::__construct();
 
@@ -66,32 +66,32 @@ class BASE_CMP_UserList extends OW_Component
         $randId = UTIL_HtmlTag::generateAutoId('base_users_cmp');
         $data = $this->getData($this->countUsers);
 
-        $menuItems = array();
-        $dataToAssign = array();
+        $menuItems = [];
+        $dataToAssign = [];
 
         foreach ( $data as $key => $item )
         {
             $contId = "{$randId}_users_cmp_{$key}";
             $toolbarId = (!empty($item['toolbar']) ? "{$randId}_toolbar_{$key}" : false );
 
-            $menuItems[$key] = array(
+            $menuItems[$key] = [
                 'label' => $item['menu-label'],
                 'id' => "{$randId}_users_cmp_menu_{$key}",
                 'contId' => $contId,
                 'active' => !empty($item['menu_active']),
                 'toolbarId' => $toolbarId,
                         'display' => 1
-            );
+            ];
 
             $usersCmp = $this->getUsersCmp($item['userIds']);
 
-            $dataToAssign[$key] = array(
+            $dataToAssign[$key] = [
                 'users' => $usersCmp->render(),
                 'active' => !empty($item['menu_active']),
-                'toolbar' => (!empty($item['toolbar']) ? $item['toolbar'] : array() ),
+                'toolbar' => (!empty($item['toolbar']) ? $item['toolbar'] : []),
                 'toolbarId' => $toolbarId,
                 'contId' => $contId
-            );
+            ];
         }
 
         $menu = $this->getMenuCmp($menuItems);
@@ -116,55 +116,56 @@ class BASE_CMP_UserList extends OW_Component
     {
         $language = OW::getLanguage();
 
-        $toolbar = array(
-            'latest' => array(
+        $toolbar = [
+            'latest' => [
                 'label' => OW::getLanguage()->text('base', 'view_all'),
-                'href' => OW::getRouter()->urlForRoute('base_user_lists', array('list' => 'latest'))
-            ),
-            'online' => array(
+                'href' => OW::getRouter()->urlForRoute('base_user_lists', ['list' => 'latest'])
+            ],
+            'online' => [
                 'label' => OW::getLanguage()->text('base', 'view_all'),
-                'href' => OW::getRouter()->urlForRoute('base_user_lists', array('list' => 'online'))
-            ),
-            'featured' => array(
+                'href' => OW::getRouter()->urlForRoute('base_user_lists', ['list' => 'online'])
+            ],
+            'featured' => [
                 'label' => OW::getLanguage()->text('base', 'view_all'),
-                'href' => OW::getRouter()->urlForRoute('base_user_lists', array('list' => 'featured'))
-            )
-        );
+                'href' => OW::getRouter()->urlForRoute('base_user_lists', ['list' => 'featured'])
+            ]
+        ];
 
         $userService = BOL_UserService::getInstance();
         $latestUsersCount = $userService->count();
 
         $latestUsersCount > $this->countUsers
-            ? $this->assign('toolbar', array($toolbar['latest']))
-            : $this->assign('toolbar', array());
+            ? $this->assign('toolbar', [$toolbar['latest']])
+            : $this->assign('toolbar', []);
 
         // fill array with result
-        $resultList = array(
-            'latest' => array(
+        $resultList = [
+            'latest' => [
                 'menu-label' => $language->text('base', 'user_list_menu_item_latest'),
                 'menu_active' => true,
                 'userIds' => $this->getIdList($userService->findList(0, $this->countUsers)),
-                'toolbar' => ( $latestUsersCount > $this->countUsers ? array($toolbar['latest']) : false ),
-            ),
-            'online' => array(
+                'toolbar' => ( $latestUsersCount > $this->countUsers ? [$toolbar['latest']] : false ),
+            ],
+            'online' => [
                 'menu-label' => $language->text('base', 'user_list_menu_item_online'),
                 'userIds' => $this->getIdList($userService->findOnlineList(0, $this->countUsers)),
-                'toolbar' => ( $userService->countOnline() > $this->countUsers ? array($toolbar['online']) : false ),
-            ));
+                'toolbar' => ( $userService->countOnline() > $this->countUsers ? [$toolbar['online']] : false ),
+            ]
+        ];
 
         // get list of featured users
         $featuredIdLIst = $this->getIdList($userService->findFeaturedList(0, $this->countUsers));
 
         if ( !empty($featuredIdLIst) )
         {
-            $resultList['featured'] = array(
+            $resultList['featured'] = [
                 'menu-label' => $language->text('base', 'user_list_menu_item_featured'),
                 'userIds' => $featuredIdLIst,
-                'toolbar' => ( $userService->countFeatured() > $this->countUsers ? array($toolbar['featured']) : false ),
-            );
+                'toolbar' => ( $userService->countFeatured() > $this->countUsers ? [$toolbar['featured']] : false ),
+            ];
         }
 
-        $event = new OW_Event('base.userList.onToolbarReady', array(), $resultList);
+        $event = new OW_Event('base.userList.onToolbarReady', [], $resultList);
         OW::getEventManager()->trigger($event);
 
         return  $event->getData();
@@ -178,7 +179,7 @@ class BASE_CMP_UserList extends OW_Component
      */
     protected function getIdList( array $users )
     {
-        $resultArray = array();
+        $resultArray = [];
 
         if ( $users )
         {
@@ -195,7 +196,7 @@ class BASE_CMP_UserList extends OW_Component
      * Get users component
      * 
      * @param array $list
-     * @return \BASE_CMP_AvatarUserList
+     * @return BASE_CMP_AvatarUserList
      */
     protected  function getUsersCmp( array $list )
     {
@@ -206,7 +207,7 @@ class BASE_CMP_UserList extends OW_Component
      * Get menu component
      * 
      * @param array $menuItems
-     * @return \BASE_CMP_WidgetMenu
+     * @return BASE_CMP_WidgetMenu
      */
     protected function getMenuCmp( array $menuItems )
     {

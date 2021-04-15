@@ -12,7 +12,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -23,9 +22,9 @@
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_utilities
- * @since 1.0
+ * @since   1.0
  */
 final class UTIL_Debug
 {
@@ -33,12 +32,12 @@ final class UTIL_Debug
     private static $pvObjects;
     private static $pvDepth = 10;
 
-    public static function varDump( $var, $exit = false )
+    public static function varDump($var, $exit = false)
     {
         self::addDebugStyles();
 
-        self::$pvOutput = '';
-        self::$pvObjects = array();
+        self::$pvOutput  = '';
+        self::$pvObjects = [];
         self::dumper($var, 0);
 
         $debugString = '
@@ -47,7 +46,7 @@ final class UTIL_Debug
     			<div class="ow_debug_cap vardump">OW Debug - Vardump</div>
     			<div>
     				<pre class="vardumper">' . self::$pvOutput .
-            "\n\n" . '<b>Type:</b> <span style="color:red;">' . ucfirst(gettype($var)) . "</span>" . '
+                       "\n\n" . '<b>Type:</b> <span style="color:red;">' . ucfirst(gettype($var)) . "</span>" . '
     				</pre>
     			</div>
     		</div>
@@ -56,18 +55,16 @@ final class UTIL_Debug
 
         echo $debugString;
 
-        if ( $exit )
-        {
+        if ($exit) {
             exit;
         }
     }
 
-    private static function dumper( $var, $level )
+    private static function dumper($var, $level)
     {
-        switch ( gettype($var) )
-        {
+        switch (gettype($var)) {
             case 'boolean':
-                self::$pvOutput .= '<span class="bool">' . ( $var ? 'true' : 'false' ) . '</span>';
+                self::$pvOutput .= '<span class="bool">' . ($var ? 'true' : 'false') . '</span>';
                 break;
 
             case 'integer':
@@ -95,61 +92,53 @@ final class UTIL_Debug
                 break;
 
             case 'array':
-                if ( self::$pvDepth <= $level )
-                {
+                if (self::$pvDepth <= $level) {
                     self::$pvOutput .= '<span class="array">array(...)</span>';
-                }
-                else if ( empty($var) )
-                {
-                    self::$pvOutput .= '<span class="array">array()</span>';
-                }
-                else
-                {
-                    $keys = array_keys($var);
-                    $spaces = str_repeat(' ', ($level * 4));
-                    self::$pvOutput .= '<span class="array">array</span>' . "\n" . $spaces . '(';
+                } else {
+                    if (empty($var)) {
+                        self::$pvOutput .= '<span class="array">array()</span>';
+                    } else {
+                        $keys           = array_keys($var);
+                        $spaces         = str_repeat(' ', ($level * 4));
+                        self::$pvOutput .= '<span class="array">array</span>' . "\n" . $spaces . '(';
 
-                    foreach ( $keys as $key )
-                    {
-                        self::$pvOutput .= "\n" . $spaces . "    [" . $key . "] => ";
-                        self::$pvOutput .= self::dumper($var[$key], ($level + 1));
+                        foreach ($keys as $key) {
+                            self::$pvOutput .= "\n" . $spaces . "    [" . $key . "] => ";
+                            self::$pvOutput .= self::dumper($var[$key], ($level + 1));
+                        }
+                        self::$pvOutput .= "\n" . $spaces . ')';
                     }
-                    self::$pvOutput .= "\n" . $spaces . ')';
                 }
                 break;
 
             case 'object':
-                if ( ( $id = array_search($var, self::$pvObjects, true)) !== false )
-                {
+                if (($id = array_search($var, self::$pvObjects, true)) !== false) {
                     self::$pvOutput .= get_class($var) . '#' . ($id + 1) . '(...)';
-                }
-                else if ( self::$pvDepth <= $level )
-                {
-                    self::$pvOutput .= get_class($var) . '(...)';
-                }
-                else
-                {
-                    $id = array_push(self::$pvObjects, $var);
-                    $className = get_class($var);
-                    $members = (array) $var;
-                    $keys = array_keys($members);
-                    $spaces = str_repeat(' ', ($level * 4));
-                    self::$pvOutput .= '<span class="class">' . "$className</span>#$id\n" . $spaces . '(';
+                } else {
+                    if (self::$pvDepth <= $level) {
+                        self::$pvOutput .= get_class($var) . '(...)';
+                    } else {
+                        $id             = array_push(self::$pvObjects, $var);
+                        $className      = get_class($var);
+                        $members        = (array)$var;
+                        $keys           = array_keys($members);
+                        $spaces         = str_repeat(' ', ($level * 4));
+                        self::$pvOutput .= '<span class="class">' . "$className</span>#$id\n" . $spaces . '(';
 
-                    foreach ( $keys as $key )
-                    {
-                        $keyDisplay = strtr(trim($key) . '</span>', array("\0" => ':<span class="class_prop">'));
-                        self::$pvOutput .= "\n" . $spaces . "    [$keyDisplay] => ";
-                        self::$pvOutput .= self::dumper($members[$key], ($level + 1));
+                        foreach ($keys as $key) {
+                            $keyDisplay     = strtr(trim($key) . '</span>', ["\0" => ':<span class="class_prop">']);
+                            self::$pvOutput .= "\n" . $spaces . "    [$keyDisplay] => ";
+                            self::$pvOutput .= self::dumper($members[$key], ($level + 1));
+                        }
+
+                        self::$pvOutput .= "\n" . $spaces . ')';
                     }
-
-                    self::$pvOutput .= "\n" . $spaces . ')';
                 }
                 break;
         }
     }
 
-    public static function printDebugMessage( $data )
+    public static function printDebugMessage($data)
     {
         self::addDebugStyles();
 
@@ -175,13 +164,13 @@ final class UTIL_Debug
     						<td class="lbl">Trace:</td>
     						<td class="cnt"><pre>' . $data['trace'] . '</pre></td>
     					</tr>
-                        ' : '' ) .
-            (!empty($data['class']) ?
-                '<tr>
+                        ' : '') .
+                       (!empty($data['class']) ?
+                           '<tr>
     						<td class="lbl">Type:</td>
     						<td class="cnt" style="color:red;">' . $data['class'] . '</td>
     					</tr>
-                        ' : '' ) . '
+                        ' : '') . '
     				</table>
     			</div>
     		</div>

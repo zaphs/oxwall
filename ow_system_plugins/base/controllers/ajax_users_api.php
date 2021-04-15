@@ -57,7 +57,7 @@ class BASE_CTRL_AjaxUsersApi extends OW_ActionController
         $command = trim($_GET['command']);
         $query = json_decode($_GET['params'], true);
 
-        $response = call_user_func(array($this, $command), $query);
+        $response = call_user_func([$this, $command], $query);
         
         /*try
         {
@@ -71,7 +71,7 @@ class BASE_CTRL_AjaxUsersApi extends OW_ActionController
             );
         }*/
 
-        $response = empty($response) ? array() : $response;
+        $response = empty($response) ? [] : $response;
         echo json_encode($response);
         exit;
     }
@@ -82,9 +82,9 @@ class BASE_CTRL_AjaxUsersApi extends OW_ActionController
 
         BOL_UserService::getInstance()->suspend($params["userId"], $params["message"]);
 
-        return array(
+        return [
             "info" => OW::getLanguage()->text('base', 'user_feedback_profile_suspended')
-        );
+        ];
     }
     
     private function deleteUser( $params )
@@ -93,9 +93,9 @@ class BASE_CTRL_AjaxUsersApi extends OW_ActionController
         
         BOL_UserService::getInstance()->deleteUser($params["userId"]);
 
-        return array(
+        return [
             "info" => OW::getLanguage()->text('base', 'user_deleted_page_message')
-        );
+        ];
     }
 
     private function unsuspend( $params )
@@ -104,9 +104,9 @@ class BASE_CTRL_AjaxUsersApi extends OW_ActionController
 
         BOL_UserService::getInstance()->unsuspend($params["userId"]);
 
-        return array(
+        return [
             "info" => OW::getLanguage()->text('base', 'user_feedback_profile_unsuspended')
-        );
+        ];
     }
 
     private function block( $params )
@@ -114,9 +114,9 @@ class BASE_CTRL_AjaxUsersApi extends OW_ActionController
         $this->checkAuthenticated();
         BOL_UserService::getInstance()->block($params["userId"]);
 
-        return array(
+        return [
             "info" => OW::getLanguage()->text('base', 'user_feedback_profile_blocked')
-        );
+        ];
     }
 
     private function unblock( $params )
@@ -124,9 +124,9 @@ class BASE_CTRL_AjaxUsersApi extends OW_ActionController
         $this->checkAuthenticated();
         BOL_UserService::getInstance()->unblock($params["userId"]);
 
-        return array(
+        return [
             "info" => OW::getLanguage()->text('base', 'user_feedback_profile_unblocked')
-        );
+        ];
     }
 
     private function feature( $params )
@@ -134,9 +134,9 @@ class BASE_CTRL_AjaxUsersApi extends OW_ActionController
         $this->checkAdmin();
         BOL_UserService::getInstance()->markAsFeatured($params["userId"]);
 
-        return array(
+        return [
             "info" => OW::getLanguage()->text('base', 'user_feedback_marked_as_featured')
-        );
+        ];
     }
 
     private function unfeature( $params )
@@ -144,9 +144,9 @@ class BASE_CTRL_AjaxUsersApi extends OW_ActionController
         $this->checkAdmin();
         BOL_UserService::getInstance()->cancelFeatured($params["userId"]);
 
-        return array(
+        return [
             "info" => OW::getLanguage()->text('base', 'user_feedback_unmarked_as_featured')
-        );
+        ];
     }
 
 }

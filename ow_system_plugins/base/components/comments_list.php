@@ -46,9 +46,9 @@ class BASE_CMP_CommentsList extends OW_Component
     protected $avatarService;
     protected $page;
     protected $isModerator;
-    protected $actionArr = array('comments' => array(), 'users' => array());
-    protected $commentIdList = array();
-    protected $userIdList = array();
+    protected $actionArr = ['comments' => [], 'users' => []];
+    protected $commentIdList = [];
+    protected $userIdList = [];
 
     /**
      * Constructor.
@@ -62,8 +62,8 @@ class BASE_CMP_CommentsList extends OW_Component
     {
         parent::__construct();
         $batchData = $params->getBatchData();
-        $this->staticData = empty($batchData['_static']) ? array() : $batchData['_static'];
-        $batchData = isset($batchData[$params->getEntityType()][$params->getEntityId()]) ? $batchData[$params->getEntityType()][$params->getEntityId()] : array();
+        $this->staticData = empty($batchData['_static']) ? [] : $batchData['_static'];
+        $batchData = isset($batchData[$params->getEntityType()][$params->getEntityId()]) ? $batchData[$params->getEntityType()][$params->getEntityId()] : [];
         $this->params = $params;
         $this->batchData = $batchData;
         $this->id = $id;
@@ -83,7 +83,7 @@ class BASE_CMP_CommentsList extends OW_Component
 
     protected function processList( $commentList )
     {
-        $arrayToAssign = array();
+        $arrayToAssign = [];
 
         /* @var $value BOL_Comment */
         foreach ( $commentList as $value )
@@ -97,7 +97,7 @@ class BASE_CMP_CommentsList extends OW_Component
         /* @var $value BOL_Comment */
         foreach ( $commentList as $value )
         {
-            $cmItemArray = array(
+            $cmItemArray = [
                 'displayName' => $userAvatarArrayList[$value->getUserId()]['title'],
                 'avatarUrl' => $userAvatarArrayList[$value->getUserId()]['src'],
                 'profileUrl' => $userAvatarArrayList[$value->getUserId()]['url'],
@@ -106,7 +106,7 @@ class BASE_CMP_CommentsList extends OW_Component
                 'userId' => $value->getUserId(),
                 'commentId' => $value->getId(),
                 'avatar' => $userAvatarArrayList[$value->getUserId()],
-            );
+            ];
 
             $contentAdd = '';
 
@@ -206,9 +206,9 @@ class BASE_CMP_CommentsList extends OW_Component
 
         if ( $this->commentCount === 0 )
         {
-            $commentList = array();
+            $commentList = [];
         }
-        else if ( in_array($this->params->getDisplayType(), array(BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST, BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST_MINI)) )
+        else if ( in_array($this->params->getDisplayType(), [BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST, BASE_CommentsParams::DISPLAY_TYPE_WITH_LOAD_LIST_MINI]) )
         {
             $commentList = empty($this->batchData['commentsList']) ? $this->commentService->findCommentList($this->params->getEntityType(), $this->params->getEntityId(), 1, $this->params->getInitialCommentsCount()) : $this->batchData['commentsList'];
             $commentList = array_reverse($commentList);
@@ -220,8 +220,8 @@ class BASE_CMP_CommentsList extends OW_Component
             $commentList = $this->commentService->findCommentList($this->params->getEntityType(), $this->params->getEntityId(), $this->page, $this->params->getCommentCountOnPage());
         }
 
-        OW::getEventManager()->trigger(new OW_Event('base.comment_list_prepare_data', array('list' => $commentList, 'entityType' => $this->params->getEntityType(), 'entityId' => $this->params->getEntityId())));
-        OW::getEventManager()->bind('base.comment_item_process', array($this, 'itemHandler'));
+        OW::getEventManager()->trigger(new OW_Event('base.comment_list_prepare_data', ['list' => $commentList, 'entityType' => $this->params->getEntityType(), 'entityId' => $this->params->getEntityId()]));
+        OW::getEventManager()->bind('base.comment_item_process', [$this, 'itemHandler']);
         $this->assign('comments', $this->processList($commentList));
         $pages = false;
 
@@ -246,19 +246,19 @@ class BASE_CMP_CommentsList extends OW_Component
 
         if ( !$dataInit )
         {
-            $staticDataArray = array(
+            $staticDataArray = [
                 'respondUrl' => OW::getRouter()->urlFor('BASE_CTRL_Comments', 'getCommentList'),
                 'delUrl' => OW::getRouter()->urlFor('BASE_CTRL_Comments', 'deleteComment'),
                 'delAtchUrl' => OW::getRouter()->urlFor('BASE_CTRL_Comments', 'deleteCommentAtatchment'),
                 'delConfirmMsg' => OW::getLanguage()->text('base', 'comment_delete_confirm_message'),
                 'preloaderImgUrl' => OW::getThemeManager()->getCurrentTheme()->getStaticImagesUrl() . 'ajax_preloader_button.gif'
-            );
+            ];
             OW::getDocument()->addOnloadScript("window.owCommentListCmps.staticData=" . json_encode($staticDataArray) . ";");
             $dataInit = true;
         }
 
         $jsParams = json_encode(
-            array(
+            [
                 'totalCount' => $this->commentCount,
                 'contextId' => $this->cmpContextId,
                 'displayType' => $this->params->getDisplayType(),
@@ -275,7 +275,7 @@ class BASE_CMP_CommentsList extends OW_Component
                 'cid' => $this->id,
                 'actionArray' => $this->actionArr,
                 'countToLoad' => $countToLoad
-            )
+            ]
         );
 
         OW::getDocument()->addOnloadScript(
@@ -320,41 +320,41 @@ class BASE_CMP_CommentsList extends OW_Component
             }
         }
 
-        $pageArray = array();
+        $pageArray = [];
 
         if ( $first )
         {
-            $pageArray[] = array('label' => OW::getLanguage()->text('base', 'paging_label_first'), 'pageIndex' => 1);
+            $pageArray[] = ['label' => OW::getLanguage()->text('base', 'paging_label_first'), 'pageIndex' => 1];
         }
 
         if ( $prev )
         {
-            $pageArray[] = array('label' => OW::getLanguage()->text('base', 'paging_label_prev'), 'pageIndex' => ($currentPage - 1));
+            $pageArray[] = ['label' => OW::getLanguage()->text('base', 'paging_label_prev'), 'pageIndex' => ($currentPage - 1)];
         }
 
         if ( $first )
         {
-            $pageArray[] = array('label' => '...');
+            $pageArray[] = ['label' => '...'];
         }
 
         for ( $i = (int) $start; $i <= ($start + $displayPagesCount - 1); $i++ )
         {
-            $pageArray[] = array('label' => $i, 'pageIndex' => $i, 'active' => ( $i === (int) $currentPage ));
+            $pageArray[] = ['label' => $i, 'pageIndex' => $i, 'active' => ($i === (int) $currentPage )];
         }
 
         if ( $last )
         {
-            $pageArray[] = array('label' => '...');
+            $pageArray[] = ['label' => '...'];
         }
 
         if ( $next )
         {
-            $pageArray[] = array('label' => OW::getLanguage()->text('base', 'paging_label_next'), 'pageIndex' => ( $currentPage + 1 ));
+            $pageArray[] = ['label' => OW::getLanguage()->text('base', 'paging_label_next'), 'pageIndex' => ($currentPage + 1 )];
         }
 
         if ( $last )
         {
-            $pageArray[] = array('label' => OW::getLanguage()->text('base', 'paging_label_last'), 'pageIndex' => $pagesCount);
+            $pageArray[] = ['label' => OW::getLanguage()->text('base', 'paging_label_last'), 'pageIndex' => $pagesCount];
         }
 
         return $pageArray;

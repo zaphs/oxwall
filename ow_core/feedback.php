@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -24,21 +24,21 @@
 
 /**
  * The class works with default feedback system.
- * 
- * @author Sardar Madumarov <madumarov@gmail.com>
+ *
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_Feedback getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_Feedback
 {
     /* feedback messages types */
-    const TYPE_ERROR = 'error';
-    const TYPE_INFO = 'info';
+    const TYPE_ERROR   = 'error';
+    const TYPE_INFO    = 'info';
     const TYPE_WARNING = 'warning';
 
     use OW_Singleton;
-    
+
     /**
      * @var array
      */
@@ -51,18 +51,15 @@ class OW_Feedback
     {
         $session = OW::getSession();
 
-        if ( $session->isKeySet('ow_messages') )
-        {
+        if ($session->isKeySet('ow_messages')) {
             $this->feedback = $session->get('ow_messages');
             $session->delete('ow_messages');
-        }
-        else
-        {
-            $this->feedback = array(
-                'error' => array(),
-                'info' => array(),
-                'warning' => array()
-            );
+        } else {
+            $this->feedback = [
+                'error'   => [],
+                'info'    => [],
+                'warning' => [],
+            ];
         }
     }
 
@@ -73,10 +70,9 @@ class OW_Feedback
      * @param string $type
      * @return OW_Feedback
      */
-    private function addMessage( $message, $type = 'info' )
+    private function addMessage($message, $type = 'info')
     {
-        if ( $type !== self::TYPE_ERROR && $type !== self::TYPE_INFO && $type !== self::TYPE_WARNING )
-        {
+        if ($type !== self::TYPE_ERROR && $type !== self::TYPE_INFO && $type !== self::TYPE_WARNING) {
             throw new InvalidArgumentException('Invalid message type `' . $type . '`!');
         }
 
@@ -90,7 +86,7 @@ class OW_Feedback
      *
      * @param string $message
      */
-    public function error( $message )
+    public function error($message)
     {
         $this->addMessage($message, self::TYPE_ERROR);
     }
@@ -100,7 +96,7 @@ class OW_Feedback
      *
      * @param string $message
      */
-    public function info( $message )
+    public function info($message)
     {
         $this->addMessage($message, self::TYPE_INFO);
     }
@@ -110,7 +106,7 @@ class OW_Feedback
      *
      * @param string $message
      */
-    public function warning( $message )
+    public function warning($message)
     {
         $this->addMessage($message, self::TYPE_WARNING);
     }
@@ -131,11 +127,11 @@ class OW_Feedback
 
     /**
      * System method. Don't call it.
+     * @throws Exception
      */
     public function __destruct()
     {
-        if ( $this->feedback !== null )
-        {
+        if ($this->feedback !== null) {
             OW::getSession()->set('ow_messages', $this->feedback);
         }
     }

@@ -40,23 +40,23 @@ class BASE_MCMP_JoinNowWidget extends BASE_CLASS_Widget
 
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_TITLE => OW::getLanguage()->text('base', 'join_index_join_button'),
             self::SETTING_SHOW_TITLE => false,
             self::SETTING_ICON => self::ICON_INFO
-        );
+        ];
     }
 
     public static function getSettingList()
     {
         $lang = OW::getLanguage();
-        $settingList = array();
+        $settingList = [];
         
-        $settingList['buttonLabel'] = array(
+        $settingList['buttonLabel'] = [
             'presentation' => self::PRESENTATION_TEXT,
             'label' => OW::getLanguage()->text('base', 'join_index_join_button'),
             'value' => ''
-        );
+        ];
         
         return $settingList;
     }

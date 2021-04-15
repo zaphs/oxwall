@@ -30,13 +30,13 @@ class UPDATE_Autoload
      *
      * @var array
      */
-    private $packagePointers = array();
+    private $packagePointers = [];
     /**
      * Registered classes.
      * 
      * @var array
      */
-    private $classPathArray = array();
+    private $classPathArray = [];
 
     /**
      * Constructor.

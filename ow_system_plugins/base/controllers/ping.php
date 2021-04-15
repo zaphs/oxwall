@@ -9,7 +9,7 @@ class BASE_CTRL_Ping extends OW_ActionController
         $request = json_decode($_POST['request'], true);
         $stack = $request['stack'];
 
-        $responseStack = array();
+        $responseStack = [];
 
         foreach ( $stack as $c )
         {
@@ -22,15 +22,15 @@ class BASE_CTRL_Ping extends OW_ActionController
             $event = new OW_Event(self::PING_EVENT, $c, $event->getData());
             OW::getEventManager()->trigger($event);
 
-            $responseStack[] = array(
+            $responseStack[] = [
                 'command' => $command,
                 'result' => $event->getData()
-            );
+            ];
         }
 
-        echo json_encode(array(
+        echo json_encode([
             'stack' => $responseStack
-        ));
+        ]);
 
         exit;
     }

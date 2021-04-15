@@ -36,11 +36,11 @@ class BASE_CLASS_ConsoleEventHandler
             {
                 $item = new BASE_CMP_ConsoleDropdownMenu($language->text('admin', 'main_menu_admin'));
                 $item->setUrl($router->urlForRoute('admin_default'));
-                $item->addItem('head', array('label' => $language->text('admin', 'console_item_admin_dashboard'), 'url' => $router->urlForRoute('admin_default')));
-                $item->addItem('main', array('label' => $language->text('admin', 'console_item_manage_theme'), 'url' => $router->urlForRoute('admin_themes_edit')));
-                $item->addItem('main', array('label' => $language->text('admin', 'console_item_manage_users'), 'url' => $router->urlForRoute('admin_users_browse')));
-                $item->addItem('main', array('label' => $language->text('admin', 'console_item_manage_pages'), 'url' => $router->urlForRoute('admin_pages_main')));
-                $item->addItem('main', array('label' => $language->text('admin', 'console_item_manage_plugins'), 'url' => $router->urlForRoute('admin_plugins_installed')));
+                $item->addItem('head', ['label' => $language->text('admin', 'console_item_admin_dashboard'), 'url' => $router->urlForRoute('admin_default')]);
+                $item->addItem('main', ['label' => $language->text('admin', 'console_item_manage_theme'), 'url' => $router->urlForRoute('admin_themes_edit')]);
+                $item->addItem('main', ['label' => $language->text('admin', 'console_item_manage_users'), 'url' => $router->urlForRoute('admin_users_browse')]);
+                $item->addItem('main', ['label' => $language->text('admin', 'console_item_manage_pages'), 'url' => $router->urlForRoute('admin_pages_main')]);
+                $item->addItem('main', ['label' => $language->text('admin', 'console_item_manage_plugins'), 'url' => $router->urlForRoute('admin_plugins_installed')]);
 
                 $event->addItem($item, 1);
             }
@@ -87,9 +87,9 @@ class BASE_CLASS_ConsoleEventHandler
 
     public function defaultPing( BASE_CLASS_ConsoleDataEvent $event )
     {
-        $event->setItemData('console', array(
+        $event->setItemData('console', [
             'time' => time()
-        ));
+        ]);
     }
 
     public function ping( OW_Event $originalEvent )
@@ -107,7 +107,7 @@ class BASE_CLASS_ConsoleEventHandler
 
     public function init()
     {
-        OW::getEventManager()->bind(BASE_CTRL_Ping::PING_EVENT . '.consoleUpdate', array($this, 'ping'));
-        OW::getEventManager()->bind('console.collect_items', array($this, 'collectItems'));
+        OW::getEventManager()->bind(BASE_CTRL_Ping::PING_EVENT . '.consoleUpdate', [$this, 'ping']);
+        OW::getEventManager()->bind('console.collect_items', [$this, 'collectItems']);
     }
 }

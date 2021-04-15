@@ -95,15 +95,15 @@ class BOL_CommentDao extends OW_BaseDao
      */
     public function findCommentList( $entityType, $entityId, $first, $count )
     {
-        $queryParts = BOL_ContentService::getInstance()->getQueryFilter(array(
+        $queryParts = BOL_ContentService::getInstance()->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_CONTENT => 'c',
             'comment_entity' => 'ce'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_CONTENT_ID => 'id'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::OPTION_METHOD => __METHOD__,
             BASE_CLASS_QueryBuilderEvent::OPTION_TYPE => $entityType
-        ));
+        ]);
 
         $query = "SELECT `c`.* FROM `" . $this->getTableName() . "` AS `c`
 			LEFT JOIN `" . BOL_CommentEntityDao::getInstance()->getTableName() . "` AS `ce` ON ( `c`.`" . self::COMMENT_ENTITY_ID . "` = `ce`.`id` )
@@ -113,7 +113,7 @@ class BOL_CommentDao extends OW_BaseDao
 			ORDER BY `" . self::CREATE_STAMP . "` DESC
 			LIMIT :first, :count";
 
-        $boundParams = array_merge(array('entityType' => $entityType, 'entityId' => $entityId, 'first' => $first, 'count' => $count), $queryParts['params']);
+        $boundParams = array_merge(['entityType' => $entityType, 'entityId' => $entityId, 'first' => $first, 'count' => $count], $queryParts['params']);
 
         return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), $boundParams);
     }
@@ -127,15 +127,15 @@ class BOL_CommentDao extends OW_BaseDao
      */
     public function findFullCommentList( $entityType, $entityId )
     {
-        $queryParts = BOL_ContentService::getInstance()->getQueryFilter(array(
+        $queryParts = BOL_ContentService::getInstance()->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_CONTENT => 'c',
             'comment_entity' => 'ce'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_CONTENT_ID => 'id'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::OPTION_METHOD => __METHOD__,
             BASE_CLASS_QueryBuilderEvent::OPTION_TYPE => $entityType
-        ));
+        ]);
 
         $query = "SELECT `c`.* FROM `" . $this->getTableName() . "` AS `c`
 			LEFT JOIN `" . BOL_CommentEntityDao::getInstance()->getTableName() . "` AS `ce` ON ( `c`.`" . self::COMMENT_ENTITY_ID . "` = `ce`.`id` )
@@ -144,7 +144,7 @@ class BOL_CommentDao extends OW_BaseDao
 			AND " . $queryParts['where'] . "
 			ORDER BY `" . self::CREATE_STAMP . "`";
 
-        $boundParams = array_merge(array('entityType' => $entityType, 'entityId' => $entityId), $queryParts['params']);
+        $boundParams = array_merge(['entityType' => $entityType, 'entityId' => $entityId], $queryParts['params']);
 
         return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), $boundParams);
     }
@@ -158,15 +158,15 @@ class BOL_CommentDao extends OW_BaseDao
      */
     public function findCommentCount( $entityType, $entityId )
     {
-        $queryParts = BOL_ContentService::getInstance()->getQueryFilter(array(
+        $queryParts = BOL_ContentService::getInstance()->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_CONTENT => 'c',
             'comment_entity' => 'ce'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_CONTENT_ID => 'id'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::OPTION_METHOD => __METHOD__,
             BASE_CLASS_QueryBuilderEvent::OPTION_TYPE => $entityType
-        ));
+        ]);
 
         $query = "SELECT COUNT(*) FROM `" . $this->getTableName() . "` AS `c`
 			LEFT JOIN `" . BOL_CommentEntityDao::getInstance()->getTableName() . "` AS `ce` ON ( `c`.`" . self::COMMENT_ENTITY_ID . "` = `ce`.`id` )
@@ -175,22 +175,22 @@ class BOL_CommentDao extends OW_BaseDao
 			AND " . $queryParts['where'] . "
 			";
 
-        $boundParams = array_merge(array('entityType' => $entityType, 'entityId' => $entityId), $queryParts['params']);
+        $boundParams = array_merge(['entityType' => $entityType, 'entityId' => $entityId], $queryParts['params']);
 
         return (int) $this->dbo->queryForColumn($query, $boundParams);
     }
 
     public function findMostCommentedEntityList( $entityType, $first, $count )
     {
-        $queryParts = BOL_ContentService::getInstance()->getQueryFilter(array(
+        $queryParts = BOL_ContentService::getInstance()->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_CONTENT => 'c',
             'comment_entity' => 'ce'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_CONTENT_ID => 'id'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::OPTION_METHOD => __METHOD__,
             BASE_CLASS_QueryBuilderEvent::OPTION_TYPE => $entityType
-        ));
+        ]);
 
         $query = 'SELECT `ce`.`entityId` AS `id`, COUNT(*) AS `commentCount`
             FROM `' . $this->getTableName() . '` AS `c`
@@ -201,7 +201,7 @@ class BOL_CommentDao extends OW_BaseDao
 			ORDER BY `commentCount` DESC, `id` DESC
 			LIMIT :first, :count';
 
-        $boundParams = array_merge(array('entityType' => $entityType, 'first' => $first, 'count' => $count), $queryParts['params']);
+        $boundParams = array_merge(['entityType' => $entityType, 'first' => $first, 'count' => $count], $queryParts['params']);
 
         return $this->dbo->queryForList($query, $boundParams);
     }
@@ -210,18 +210,18 @@ class BOL_CommentDao extends OW_BaseDao
     {
         if ( empty($idList) )
         {
-            return array();
+            return [];
         }
 
-        $queryParts = BOL_ContentService::getInstance()->getQueryFilter(array(
+        $queryParts = BOL_ContentService::getInstance()->getQueryFilter([
             BASE_CLASS_QueryBuilderEvent::TABLE_CONTENT => 'c',
             'comment_entity' => 'ce'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::FIELD_CONTENT_ID => 'id'
-        ), array(
+        ], [
             BASE_CLASS_QueryBuilderEvent::OPTION_METHOD => __METHOD__,
             BASE_CLASS_QueryBuilderEvent::OPTION_TYPE => $entityType
-        ));
+        ]);
 
         $query = "SELECT `ce`.`entityId` AS `id`, COUNT(*) AS `commentCount` FROM `" . $this->getTableName() . "` AS `c`
 			INNER JOIN `" . BOL_CommentEntityDao::getInstance()->getTableName() . "` AS `ce`
@@ -231,7 +231,7 @@ class BOL_CommentDao extends OW_BaseDao
 			AND " . $queryParts['where'] . "
 			GROUP BY `" . BOL_CommentEntityDao::ENTITY_ID . "`";
 
-        $boundParams = array_merge(array('entityType' => $entityType), $queryParts['params']);
+        $boundParams = array_merge(['entityType' => $entityType], $queryParts['params']);
 
         return $this->dbo->queryForList($query, $boundParams);
     }
@@ -258,7 +258,7 @@ class BOL_CommentDao extends OW_BaseDao
             LEFT JOIN `" . BOL_CommentEntityDao::getInstance()->getTableName() . "` AS `e` ON( `c`.`" . self::COMMENT_ENTITY_ID . "` = `e`.`id` )
             WHERE `e`.`" . BOL_CommentEntityDao::ENTITY_TYPE . "` = :entityType";
 
-        $this->dbo->query($query, array('entityType' => trim($entityType)));
+        $this->dbo->query($query, ['entityType' => trim($entityType)]);
     }
 
     public function deleteByPluginKey( $pluginKey )
@@ -267,13 +267,13 @@ class BOL_CommentDao extends OW_BaseDao
             LEFT JOIN `" . BOL_CommentEntityDao::getInstance()->getTableName() . "` AS `e` ON( `c`.`" . self::COMMENT_ENTITY_ID . "` = `e`.`id` )
             WHERE `e`.`" . BOL_CommentEntityDao::PLUGIN_KEY . "` = :pluginKey";
 
-        $this->dbo->query($query, array('pluginKey' => trim($pluginKey)));
+        $this->dbo->query($query, ['pluginKey' => trim($pluginKey)]);
     }
 
     public function findBatchCommentsCount( array $entities )
     {
         $queryStr = '';
-        $params = array();
+        $params = [];
         foreach ( $entities as $entity )
         {
             $queryStr .= " (`ce`.`" . BOL_CommentEntityDao::ENTITY_TYPE . "` = ? AND `ce`.`" . BOL_CommentEntityDao::ENTITY_ID . "` = ? ) OR";
@@ -293,11 +293,11 @@ class BOL_CommentDao extends OW_BaseDao
     {
         if ( empty($entities) )
         {
-            return array();
+            return [];
         }
 
-        $queryParts = array();
-        $queryParams = array();
+        $queryParts = [];
+        $queryParams = [];
         $genId = 1;
         foreach ( $entities as $entity )
         {

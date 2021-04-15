@@ -31,7 +31,7 @@
  */
 class BASE_CMP_AjaxOembedAttachment extends OW_Component
 {
-    protected $oembed = array(), $uniqId;
+    protected $oembed = [], $uniqId;
 
     public function __construct( $oembed )
     {
@@ -46,7 +46,7 @@ class BASE_CMP_AjaxOembedAttachment extends OW_Component
     public function initJs()
     {
         $js = UTIL_JsGenerator::newInstance();
-        $js->newObject(array('OW_AttachmentItemColletction', $this->uniqId), 'OW_Attachment', array($this->uniqId, $this->oembed));
+        $js->newObject(['OW_AttachmentItemColletction', $this->uniqId], 'OW_Attachment', [$this->uniqId, $this->oembed]);
 
         OW::getDocument()->addOnloadScript($js);
 

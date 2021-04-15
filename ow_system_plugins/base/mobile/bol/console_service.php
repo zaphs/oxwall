@@ -69,7 +69,7 @@ class MBOL_ConsoleService
         OW::getEventManager()->trigger($event);
         $data = $event->getData();
 
-        $pages = array();
+        $pages = [];
         foreach ( $data as $item )
         {
             $cmp = $item['cmpClass'];
@@ -77,10 +77,10 @@ class MBOL_ConsoleService
             $key = isset($item['key']) ? $item['key'] : uniqid();
             $counter = !empty($item['counter']) ? (int) $item['counter'] : null;
 
-            $pages[$key] = array('order' => $order, 'key' => $key, 'counter' => $counter, 'cmpClass' => $cmp);
+            $pages[$key] = ['order' => $order, 'key' => $key, 'counter' => $counter, 'cmpClass' => $cmp];
         }
 
-        usort($pages, array($this, 'sortItems'));
+        usort($pages, [$this, 'sortItems']);
 
         return $pages;
     }
@@ -89,10 +89,10 @@ class MBOL_ConsoleService
     {
         if ( !mb_strlen($page) )
         {
-            return array();
+            return [];
         }
 
-        $params = array('page' => $page);
+        $params = ['page' => $page];
         $event = new BASE_CLASS_EventCollector(
             MBOL_ConsoleService::EVENT_COLLECT_CONSOLE_PAGE_SECTIONS,
             $params
@@ -100,7 +100,7 @@ class MBOL_ConsoleService
         OW::getEventManager()->trigger($event);
         $items = $event->getData();
 
-        $sections = array();
+        $sections = [];
         foreach ( $items as $item )
         {
             $cmp = $item['component'];
@@ -109,14 +109,14 @@ class MBOL_ConsoleService
             /** @var $cmp OW_MobileComponent */
             if ( is_subclass_of($cmp, 'OW_Renderable') && $cmp->isVisible() )
             {
-                $sections[] = array(
+                $sections[] = [
                     'item' => $cmp->render(),
                     'order' => $order
-                );
+                ];
             }
         }
 
-        usort($sections, array($this, 'sortItems'));
+        usort($sections, [$this, 'sortItems']);
 
         return $sections;
     }
@@ -128,7 +128,7 @@ class MBOL_ConsoleService
             return null;
         }
 
-        $params = array('page' => $page);
+        $params = ['page' => $page];
         $event = new BASE_CLASS_EventCollector(
             MBOL_ConsoleService::EVENT_COUNT_CONSOLE_PAGE_NEW_ITEMS,
             $params
@@ -165,7 +165,7 @@ class MBOL_ConsoleService
 
     public function getNewItems( $page, $timestamp )
     {
-        $params = array('page' => $page, 'timestamp' => $timestamp);
+        $params = ['page' => $page, 'timestamp' => $timestamp];
         $event = new BASE_CLASS_EventCollector(
             MBOL_ConsoleService::EVENT_COLLECT_CONSOLE_PAGE_NEW_ITEMS,
             $params
@@ -173,7 +173,7 @@ class MBOL_ConsoleService
         OW::getEventManager()->trigger($event);
         $items = $event->getData();
 
-        $result = array();
+        $result = [];
         if ( $items )
         {
             foreach ( $items as $item )

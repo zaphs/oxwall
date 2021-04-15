@@ -6,15 +6,15 @@ class BASE_CMP_ModerationPanelList extends OW_Component
     {
         parent::__construct();
         
-        $tplItems = array();
+        $tplItems = [];
         
         foreach ( $items as $item )
         {
-            $tplItems[] = array_merge(array(
+            $tplItems[] = array_merge([
                 "label" => null,
                 "url" => null,
                 "count" => 0
-            ), $item);
+            ], $item);
         }
         
         $this->assign("items", $tplItems);

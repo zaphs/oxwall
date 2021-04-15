@@ -21,9 +21,9 @@ class ADMIN_CMP_MobileNavigationItemSettings extends OW_Component
         $js = UTIL_JsGenerator::composeJsString('owForms[{$formName}].bind("success", function(r) {
             _scope.callBack(r);
             _scope.floatBox.close();
-        })', array(
+        })', [
             "formName" => $form->getName()
-        ));
+        ]);
         
         OW::getDocument()->addOnloadScript($js);
     }

@@ -38,9 +38,9 @@ class ADMIN_CLASS_NotificationCollector extends BASE_CLASS_EventCollector
 
     public function add( $item, $type = self::NOTIFICATION_INFO )
     {
-        $this->data[] = array(
+        $this->data[] = [
             'message' => $item,
             'type' => $type
-        );
+        ];
     }
 }

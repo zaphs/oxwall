@@ -72,9 +72,9 @@ class BASE_CLASS_AjaxUploadForm extends Form
                 {
                     OW.error("Server error");
                 }
-            }', array(
+            }', [
                 'url' => $url
-            ))
+            ])
         );
 
         $submit = new Submit('submit');

@@ -64,37 +64,37 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
             return strcmp($a->getTitle(), $b->getTitle());
         });
 
-        $arrayToAssign["active"] = array();
-        $arrayToAssign["inactive"] = array();
+        $arrayToAssign["active"] = [];
+        $arrayToAssign["inactive"] = [];
 
         /* @var $plugin BOL_Plugin */
         foreach ( $plugins as $plugin )
         {
-            $array = array(
+            $array = [
                 "title" => $plugin->getTitle(),
                 "description" => $plugin->getDescription(),
                 "set_url" => ( $plugin->isActive && $plugin->getAdminSettingsRoute() !== null) ? $router->urlForRoute($plugin->adminSettingsRoute) : false,
                 "update_url" => ((int) $plugin->getUpdate() == 1) ? $router->urlFor(__CLASS__, "updateRequest",
-                        array("key" => $plugin->getKey())) : false,
-                "un_url" => $router->urlFor(__CLASS__, "uninstallRequest", array("key" => $plugin->getKey()))
-            );
+                        ["key" => $plugin->getKey()]) : false,
+                "un_url" => $router->urlFor(__CLASS__, "uninstallRequest", ["key" => $plugin->getKey()])
+            ];
 
             if ( $plugin->getLicenseCheckTimestamp() > 0 )
             {
-                $params = array(
+                $params = [
                     BOL_StorageService::URI_VAR_BACK_URI => urlencode($router->uriForRoute("admin_plugins_installed")),
                     BOL_StorageService::URI_VAR_KEY => $plugin->getKey(),
                     BOL_StorageService::URI_VAR_ITEM_TYPE => BOL_StorageService::URI_VAR_ITEM_TYPE_VAL_PLUGIN,
                     BOL_StorageService::URI_VAR_DEV_KEY => $plugin->getDeveloperKey(),
                     BOL_StorageService::URI_VAR_RETURN_RESULT => 0
-                );
+                ];
                 $array["license_url"] = OW::getRequest()->buildUrlQueryString($router->urlFor("ADMIN_CTRL_Storage",
                         "checkItemLicense"), $params);
             }
 
             if ( $plugin->isActive() )
             {
-                $array["deact_url"] = $router->urlFor(__CLASS__, "deactivate", array("key" => $plugin->getKey()));
+                $array["deact_url"] = $router->urlFor(__CLASS__, "deactivate", ["key" => $plugin->getKey()]);
 
                 if ( $plugin->getUninstallRoute() !== null )
                 {
@@ -105,12 +105,12 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
             }
             else
             {
-                $array["active_url"] = $router->urlFor(__CLASS__, "activate", array("key" => $plugin->getKey()));
+                $array["active_url"] = $router->urlFor(__CLASS__, "activate", ["key" => $plugin->getKey()]);
                 $arrayToAssign["inactive"][$plugin->getKey()] = $array;
             }
         }
 
-        $event = new OW_Event("admin.plugins_list_view", array("ctrl" => $this, "type" => "index"), $arrayToAssign);
+        $event = new OW_Event("admin.plugins_list_view", ["ctrl" => $this, "type" => "index"], $arrayToAssign);
         OW::getEventManager()->trigger($event);
         $arrayToAssign = $event->getData();
 
@@ -140,17 +140,18 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
         /* @var $plugin BOL_Plugin */
         foreach ( $arrayToAssign as $key => $plugin )
         {
-            $params = array(
+            $params = [
                 BOL_StorageService::URI_VAR_KEY => $plugin["key"],
                 BOL_StorageService::URI_VAR_DEV_KEY => $plugin["developerKey"],
-                BOL_StorageService::URI_VAR_ITEM_TYPE => "plugin");
+                BOL_StorageService::URI_VAR_ITEM_TYPE => "plugin"
+            ];
             $arrayToAssign[$key]["inst_url"] = OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlFor(__CLASS__,
                     "install"), $params);
             $arrayToAssign[$key]["del_url"] = OW::getRouter()->urlFor(__CLASS__, "delete",
-                array("key" => $plugin["key"]));
+                ["key" => $plugin["key"]]);
         }
 
-        $event = new OW_Event("admin.plugins_list_view", array("ctrl" => $this, "type" => "available"), $arrayToAssign);
+        $event = new OW_Event("admin.plugins_list_view", ["ctrl" => $this, "type" => "available"], $arrayToAssign);
         OW::getEventManager()->trigger($event);
         $arrayToAssign = $event->getData();
         $this->assign("plugins", $arrayToAssign);
@@ -217,7 +218,7 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
                 unlink($tempFile);
 
                 $this->redirect(OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlFor(__CLASS__, "processAdd"),
-                        array("dir" => $tempDirName)));
+                        ["dir" => $tempDirName]));
             }
         }
     }
@@ -241,7 +242,7 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
         $tempDirPath = $this->getTemDirPath() . $tempDirName;
 
         // locate plugin.xml file to find plugin source root dir
-        $result = UTIL_File::findFiles($tempDirPath, array("xml"));
+        $result = UTIL_File::findFiles($tempDirPath, ["xml"]);
         $localPluginRootPath = null;
 
         foreach ( $result as $item )
@@ -330,7 +331,7 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
         $this->pluginService->deactivate($pluginDto->getKey());
 
         OW::getFeedback()->info($language->text('admin', 'manage_plugins_deactivate_success_message',
-                array('plugin' => $pluginDto->getTitle())));
+                ['plugin' => $pluginDto->getTitle()]));
         $this->redirectToAction('index');
     }
 
@@ -361,7 +362,7 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
         $this->pluginService->activate($pluginDto->getKey());
 
         OW::getFeedback()->info($language->text("admin", "manage_plugins_activate_success_message",
-                array("plugin" => $pluginDto->getTitle())));
+                ["plugin" => $pluginDto->getTitle()]));
         $this->redirect($urlRedirect);
     }
 
@@ -401,13 +402,13 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
         {
             if ( !isset($_GET[BOL_StorageService::URI_VAR_LICENSE_CHECK_COMPLETE]) )
             {
-                $get = array(
+                $get = [
                     BOL_StorageService::URI_VAR_BACK_URI => urlencode($router->uriFor(__CLASS__, "updateRequest",
                             $params)),
                     BOL_StorageService::URI_VAR_KEY => $pluginDto->getKey(),
                     BOL_StorageService::URI_VAR_ITEM_TYPE => BOL_StorageService::URI_VAR_ITEM_TYPE_VAL_PLUGIN,
                     BOL_StorageService::URI_VAR_DEV_KEY => $pluginDto->getDeveloperKey()
-                );
+                ];
                 $this->redirect(OW::getRequest()->buildUrlQueryString($router->urlFor("ADMIN_CTRL_Storage",
                             "checkItemLicense"), $get));
             }
@@ -420,8 +421,10 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
 
         $this->assign("text",
             $language->text("admin", "free_plugin_request_text",
-                array("releaseNotes" => "", "oldVersion" => $pluginDto->getBuild(), "newVersion" => $remotePluginInfo["build"],
-                "name" => $pluginDto->getTitle())));
+                [
+                    "releaseNotes" => "", "oldVersion" => $pluginDto->getBuild(), "newVersion" => $remotePluginInfo["build"],
+                    "name"         => $pluginDto->getTitle()
+                ]));
         $this->assign("updateUrl", $router->urlFor(__CLASS__, "update", $params));
 
         if ( OW::getConfig()->getValue("base", "update_soft") )
@@ -455,7 +458,7 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
 
                 case "plugin_update_success":
                     OW::getEventManager()->trigger(new OW_Event(OW_EventManager::ON_AFTER_PLUGIN_UPDATE,
-                        array('pluginKey' => $pluginDto->getKey())));
+                        ['pluginKey' => $pluginDto->getKey()]));
                     $feedback->info($language->text("admin", "manage_plugins_update_success_message"));
                     break;
 
@@ -520,7 +523,7 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
         }
 
         // locate plugin.xml file to find plugin source root dir
-        $result = UTIL_File::findFiles($tempDirPath, array("xml"));
+        $result = UTIL_File::findFiles($tempDirPath, ["xml"]);
         $localPluginRootPath = null;
 
         foreach ( $result as $item )
@@ -552,7 +555,7 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
         UTIL_File::removeDir($localPluginRootPath);
 
         $this->pluginService->addPluginDirs($pluginDto);
-        $params = array("plugin" => $pluginDto->getKey(), "back-uri" => urlencode(OW::getRequest()->getRequestUri()));
+        $params = ["plugin" => $pluginDto->getKey(), "back-uri" => urlencode(OW::getRequest()->getRequestUri())];
         $this->redirect(OW::getRequest()->buildUrlQueryString($this->storageService->getUpdaterUrl(), $params));
     }
 
@@ -593,7 +596,7 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
                     if ( $pluginDto !== null )
                     {
                         OW::getEventManager()->trigger(new OW_Event(OW_EventManager::ON_AFTER_PLUGIN_UPDATE,
-                            array("pluginKey" => $pluginDto->getKey())));
+                            ["pluginKey" => $pluginDto->getKey()]));
                     }
 
                     $feedback->info($language->text("admin", "manage_plugins_update_success_message"));
@@ -615,8 +618,8 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
         }
 
         $this->assign("text",
-            $language->text("admin", "manage_plugins_manual_update_request", array("name" => $pluginDto->getTitle())));
-        $params = array("plugin" => $pluginDto->getKey(), "back-uri" => urlencode(OW::getRequest()->getRequestUri()), "addParam" => UTIL_String::getRandomString());
+            $language->text("admin", "manage_plugins_manual_update_request", ["name" => $pluginDto->getTitle()]));
+        $params = ["plugin" => $pluginDto->getKey(), "back-uri" => urlencode(OW::getRequest()->getRequestUri()), "addParam" => UTIL_String::getRandomString()];
         $this->assign("redirectUrl",
             OW::getRequest()->buildUrlQueryString($this->storageService->getUpdaterUrl(), $params));
     }
@@ -692,7 +695,7 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
                 }
 
                 $feedback->info($language->text("admin", "manage_plugins_install_success_message",
-                        array("plugin" => $pluginDto->getTitle())));
+                        ["plugin" => $pluginDto->getTitle()]));
             }
             catch ( LogicException $e )
             {
@@ -704,7 +707,7 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
                 }
 
                 $feedback->error($language->text("admin", "manage_plugins_install_error_message",
-                        array("key" => ( empty($pluginDto) ? "_INVALID_" : $pluginDto->getKey()))));
+                        ["key" => ( empty($pluginDto) ? "_INVALID_" : $pluginDto->getKey())]));
             }
         }
         else
@@ -763,7 +766,7 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
         }
 
         OW::getFeedback()->info($language->text("admin", "manage_plugins_uninstall_success_message",
-                array("plugin" => $pluginDto->getTitle())));
+                ["plugin" => $pluginDto->getTitle()]));
         $this->redirect(OW::getRouter()->urlForRoute("admin_plugins_installed"));
     }
 
@@ -786,7 +789,7 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
         }
 
         $this->assign("text",
-            $language->text("admin", "plugin_uninstall_request_text", array('name' => $pluginDto->getTitle())));
+            $language->text("admin", "plugin_uninstall_request_text", ['name' => $pluginDto->getTitle()]));
         $this->assign("redirectUrl", OW::getRouter()->urlFor("ADMIN_CTRL_Plugins", "uninstall", $params));
     }
 
@@ -811,7 +814,7 @@ class ADMIN_CTRL_Plugins extends ADMIN_CTRL_StorageAbstract
         $ftp->rmDir($availablePlugins[$key]["path"]);
 
         OW::getFeedback()->info(OW::getLanguage()->text("admin", "manage_plugins_delete_success_message",
-                array("plugin" => $availablePlugins[$key]["title"])));
+                ["plugin" => $availablePlugins[$key]["title"]]));
         $this->redirectToAction("available");
     }
     /* ---------------------------------------------------------------------- */

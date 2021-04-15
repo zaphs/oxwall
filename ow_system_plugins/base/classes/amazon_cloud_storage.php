@@ -59,7 +59,7 @@ class BASE_CLASS_AmazonCloudStorage implements OW_Storage
         $this->s3 = new S3(OW_AMAZON_S3_ACCESS_KEY, OW_AMAZON_S3_SECRET_KEY);
         $this->bucketName = OW_AMAZON_S3_BUCKET_NAME;
         $this->bucketUrl = OW_AMAZON_S3_BUCKET_URL;
-        $this->requestHeaders = array( 'Cache-Control' => 'max-age=' . (60 * 60 * 24 * 365 * 3) );
+        $this->requestHeaders = ['Cache-Control' => 'max-age=' . (60 * 60 * 24 * 365 * 3)];
     }
 
     /**
@@ -124,11 +124,11 @@ class BASE_CLASS_AmazonCloudStorage implements OW_Storage
      *
      * @return boolean
      */
-    public function copyFile( $sourcePath, $destPath, $requestHeaders = array() )
+    public function copyFile( $sourcePath, $destPath, $requestHeaders = [])
     {
         $destPath = $this->getCloudFilePath($destPath);
 
-        $obj = $this->s3->putObjectFile($sourcePath, $this->bucketName, $destPath, S3::ACL_PUBLIC_READ, array(), array());
+        $obj = $this->s3->putObjectFile($sourcePath, $this->bucketName, $destPath, S3::ACL_PUBLIC_READ, [], []);
 
         if ( $obj === null )
         {
@@ -174,14 +174,14 @@ class BASE_CLASS_AmazonCloudStorage implements OW_Storage
 
         $result = $this->s3->getBucket($this->bucketName, $cloudPrefix, $marker, $limit, self::CLOUD_FILES_DS, $returnCommonPrefixes);
 
-        return $result ? $result : array();
+        return $result ? $result : [];
     }
 
     public function getFileNameList( $path, $prefix = null, array $fileTypes = null, $marker = null, $limit = self::MAX_OBJECT_LIST_SIZE )
     {
         $files = $this->getFileList($path, $prefix, $marker, $limit);
 
-        $result = array();
+        $result = [];
 
         foreach ( $files as $file )
         {
@@ -276,7 +276,7 @@ class BASE_CLASS_AmazonCloudStorage implements OW_Storage
     public function fileSetContent( $destPath, $content )
     {
         $cloudPath = $this->getCloudFilePath($destPath);
-        $result = $this->s3->putObject($content, $this->bucketName, $cloudPath, S3::ACL_PUBLIC_READ, array(), $this->requestHeaders);
+        $result = $this->s3->putObject($content, $this->bucketName, $cloudPath, S3::ACL_PUBLIC_READ, [], $this->requestHeaders);
 
         if ( $result )
         {
@@ -433,7 +433,7 @@ class BASE_CLASS_AmazonCloudStorage implements OW_Storage
         $oldCloudPath = $this->getCloudFilePath($oldDestPath);
         $newCloudPath = $this->getCloudFilePath($newDestPath);
 
-        $result = $this->s3->copyObject($this->bucketName, $oldCloudPath, $this->bucketName, $newCloudPath, S3::ACL_PUBLIC_READ, array(), $this->requestHeaders);
+        $result = $this->s3->copyObject($this->bucketName, $oldCloudPath, $this->bucketName, $newCloudPath, S3::ACL_PUBLIC_READ, [], $this->requestHeaders);
 
         if ( $oldCloudPath != $newCloudPath )
         {
@@ -453,10 +453,10 @@ class BASE_CLASS_AmazonCloudStorage implements OW_Storage
             return;
         }
 
-        $params = array(
+        $params = [
             'path' => $path,
             'size' => (int) $size
-        );
+        ];
 
         $event = new OW_Event(self::EVENT_ON_FILE_UPLOAD, $params);
         OW::getEventManager()->trigger($event);
@@ -469,10 +469,10 @@ class BASE_CLASS_AmazonCloudStorage implements OW_Storage
             return;
         }
 
-        $params = array(
+        $params = [
             'path' => $path,
             'size' => (int)$size
-        );
+        ];
 
         $event = new OW_Event(self::EVENT_ON_FILE_DELETE, $params);
         OW::getEventManager()->trigger($event);

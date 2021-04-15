@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -24,20 +24,21 @@
 
 /**
  * The class works with config system.
- * 
- * @author Sardar Madumarov <madumarov@gmail.com>
+ *
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_Config getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_Config
 {
     use OW_Singleton;
-    
+
     /**
      * @var BOL_ConfigService
      */
     private $configService;
+
     /**
      * @var array
      */
@@ -53,18 +54,16 @@ class OW_Config
         $this->generateCache();
     }
 
-    public function generateCache()
+    public function generateCache(): void
     {
         $configs = $this->configService->findAllConfigs();
 
-        $this->cachedConfigs = array();
-        
-        /* @var $config BOL_Config */
-        foreach ( $configs as $config )
-        {
-            if ( !isset($this->cachedConfigs[$config->getKey()]) )
-            {
-                $this->cachedConfigs[$config->getKey()] = array();
+        $this->cachedConfigs = [];
+
+        /* @var BOL_Config $config */
+        foreach ($configs as $config) {
+            if (!isset($this->cachedConfigs[$config->getKey()])) {
+                $this->cachedConfigs[$config->getKey()] = [];
             }
 
             $this->cachedConfigs[$config->getKey()][$config->getName()] = $config->getValue();
@@ -73,58 +72,59 @@ class OW_Config
 
     /**
      * Returns config value for provided plugin key and config name.
-     * 
+     *
      * @param string $key
      * @param string $name
      * @return string|null
      */
-    public function getValue( $key, $name )
+    public function getValue(string $key, string $name): ?string
     {
-        return ( isset($this->cachedConfigs[$key][$name]) ) ? $this->cachedConfigs[$key][$name] : null;
+        return $this->cachedConfigs[$key][$name] ?? null;
     }
 
     /**
      * Returns all config values for plugin key.
-     * 
+     *
      * @param string $key
      * @return array
      */
-    public function getValues( $key )
+    public function getValues(string $key): array
     {
-        return ( isset($this->cachedConfigs[$key]) ) ? $this->cachedConfigs[$key] : array();
+        return $this->cachedConfigs[$key] ?? [];
     }
 
     /**
      * Adds plugin config.
-     * 
+     *
      * @param string $key
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
+     * @param string $description
      */
-    public function addConfig( $key, $name, $value, $descripton = null )
+    public function addConfig(string $key, string $name, $value, string $description = null): void
     {
-        $this->configService->addConfig($key, $name, $value, $descripton);
+        $this->configService->addConfig($key, $name, $value, $description);
         $this->generateCache();
     }
 
     /**
      * Deletes config by provided plugin key and config name.
-     * 
+     *
      * @param string $key
      * @param string $name
      */
-    public function deleteConfig( $key, $name )
+    public function deleteConfig(string $key, string $name): void
     {
         $this->configService->removeConfig($key, $name);
-        $this->generateCache();        
+        $this->generateCache();
     }
 
     /**
      * Removes all plugin configs.
-     * 
+     *
      * @param string $key
      */
-    public function deletePluginConfigs( $key )
+    public function deletePluginConfigs(string $key): void
     {
         $this->configService->removePluginConfigs($key);
     }
@@ -134,21 +134,21 @@ class OW_Config
      *
      * @param string $key
      * @param string $name
-     * @return boolean
+     * @return bool
      */
-    public function configExists( $key, $name )
+    public function configExists(string $key, string $name): bool
     {
         return array_key_exists($key, $this->cachedConfigs) && array_key_exists($name, $this->cachedConfigs[$key]);
     }
 
     /**
      * Updates config value.
-     * 
+     *
      * @param string $key
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      */
-    public function saveConfig( $key, $name, $value )
+    public function saveConfig(string $key, string $name, $value): void
     {
         $this->configService->saveConfig($key, $name, $value);
         $this->generateCache();

@@ -86,7 +86,7 @@ class BOL_QuestionToAccountTypeDao extends OW_BaseDao
                     INNER JOIN ' . BOL_QuestionAccountTypeDao::getInstance()->getTableName() . ' as `account` ON ( `account`.`name` = `atq`.`accountType` )
                 WHERE  `atq`.`accountType` = :accountType ';
 
-        return $this->dbo->queryForObjectList($sql, BOL_QuestionDao::getInstance()->getDtoClassName(), array('accountType' => $accountType));
+        return $this->dbo->queryForObjectList($sql, BOL_QuestionDao::getInstance()->getDtoClassName(), ['accountType' => $accountType]);
     }
     /**
      * @see OW_BaseDao::getTableName()
@@ -119,7 +119,7 @@ class BOL_QuestionToAccountTypeDao extends OW_BaseDao
     {
         if ( empty($questionName) )
         {
-            return array();
+            return [];
         }
 
         $ex = new OW_Example();
@@ -158,7 +158,7 @@ class BOL_QuestionToAccountTypeDao extends OW_BaseDao
     {
         if ( empty($accountType) || empty($questionNameList) || !is_array($questionNameList) )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();

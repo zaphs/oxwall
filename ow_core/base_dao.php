@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -25,17 +25,24 @@
 /**
  * Base Data Access Object class.
  *
- * @author Nurlan Dzhumakaliev <nurlanj@live.com>
+ * @author  Nurlan Dzhumakaliev <nurlanj@live.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 abstract class OW_BaseDao
 {
-    const DEFAULT_CACHE_LIFETIME = false;
+    public const DEFAULT_CACHE_LIFETIME = false;
 
-    public abstract function getTableName();
+    /**
+     * @return string
+     */
+    abstract public function getTableName();
 
-    public abstract function getDtoClassName();
+    /**
+     * @return string
+     */
+    abstract public function getDtoClassName();
+
     /**
      *
      * @var OW_Database
@@ -50,80 +57,82 @@ abstract class OW_BaseDao
     /**
      * Finds and returns mapped entity item
      *
-     * @param int $id
-     * @return OW_Entity
+     * @param int   $id
+     * @param int   $cacheLifeTime
+     * @param array $tags
+     * @return OW_Entity|object|null
      */
-    public function findById( $id, $cacheLifeTime = 0, $tags = array() )
+    public function findById($id, $cacheLifeTime = 0, $tags = [])
     {
         $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE `id` = ?';
 
-        return $this->dbo->queryForObject($sql, $this->getDtoClassName(), array((int) $id), $cacheLifeTime, $tags);
+        return $this->dbo->queryForObject($sql, $this->getDtoClassName(), [(int)$id], $cacheLifeTime, $tags);
     }
 
     /**
      * Finds and returns mapped entity list
      *
      * @param array $idList
+     * @param int   $cacheLifeTime
+     * @param array $tags
      * @return array
      */
-    public function findByIdList( array $idList, $cacheLifeTime = 0, $tags = array() )
+    public function findByIdList(array $idList, $cacheLifeTime = 0, $tags = [])
     {
-        if ( $idList === null || count($idList) === 0 )
-        {
-            return array();
+        if ($idList === null || count($idList) === 0) {
+            return [];
         }
         $sql = 'SELECT * FROM ' . $this->getTableName() . ' WHERE `id` IN(' . $this->dbo->mergeInClause($idList) . ')';
 
-        return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), [], $cacheLifeTime, $tags);
     }
 
-    public function findListByExample( OW_Example $example, $cacheLifeTime = 0, $tags = array() )
+    public function findListByExample(OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
-        if ( $example === null )
-        {
+        if ($example === null) {
             throw new InvalidArgumentException('argument must not be null');
         }
 
         $sql = 'SELECT * FROM ' . $this->getTableName() . $example;
 
-        return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), [], $cacheLifeTime, $tags);
     }
 
-    public function countByExample( OW_Example $example, $cacheLifeTime = 0, $tags = array() )
+    public function countByExample(OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
-        if ( $example === null )
-        {
+        if ($example === null) {
             throw new InvalidArgumentException('argument must not be null');
         }
 
         $sql = 'SELECT COUNT(*) FROM ' . $this->getTableName() . $example;
 
-        return $this->dbo->queryForColumn($sql, array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForColumn($sql, [], $cacheLifeTime, $tags);
     }
 
-    public function findObjectByExample( OW_Example $example, $cacheLifeTime = 0, $tags = array() )
+    public function findObjectByExample(OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
-        if ( $example === null )
-        {
+        if ($example === null) {
             throw new InvalidArgumentException('argument must not be null');
         }
 
         $example->setLimitClause(0, 1);
         $sql = 'SELECT * FROM ' . $this->getTableName() . $example;
 
-        return $this->dbo->queryForObject($sql, $this->getDtoClassName(), array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForObject($sql, $this->getDtoClassName(), [], $cacheLifeTime, $tags);
     }
 
     /**
      * Returns all mapped entries of table
      *
+     * @param int   $cacheLifeTime
+     * @param array $tags
      * @return array
      */
-    public function findAll( $cacheLifeTime = 0, $tags = array() )
+    public function findAll($cacheLifeTime = 0, $tags = [])
     {
         $sql = 'SELECT * FROM ' . $this->getTableName();
 
-        return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForObjectList($sql, $this->getDtoClassName(), [], $cacheLifeTime, $tags);
     }
 
     /**
@@ -143,13 +152,12 @@ abstract class OW_BaseDao
      * @param int $id
      * @return int
      */
-    public function deleteById( $id )
+    public function deleteById($id)
     {
-        $id = (int) $id;
-        if ( $id > 0 )
-        {
-            $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE `id` = ?';
-            $result = $this->dbo->delete($sql, array($id));
+        $id = (int)$id;
+        if ($id > 0) {
+            $sql    = 'DELETE FROM ' . $this->getTableName() . ' WHERE `id` = ?';
+            $result = $this->dbo->delete($sql, [$id]);
             $this->clearCache();
             return $result;
         }
@@ -161,13 +169,12 @@ abstract class OW_BaseDao
      * Deletes list of entities by id list. Returns affected rows
      *
      * @param array $idList
-     * @return int
+     * @return int|null
      */
-    public function deleteByIdList( array $idList )
+    public function deleteByIdList(array $idList)
     {
-        if ( $idList === null || count($idList) === 0 )
-        {
-            return;
+        if ($idList === null || count($idList) === 0) {
+            return null;
         }
         $sql = 'DELETE FROM ' . $this->getTableName() . ' WHERE `id` IN(' . $this->dbo->mergeInClause($idList) . ')';
 
@@ -176,10 +183,9 @@ abstract class OW_BaseDao
         return $this->dbo->delete($sql);
     }
 
-    public function deleteByExample( OW_Example $example )
+    public function deleteByExample(OW_Example $example)
     {
-        if ( $example === null || mb_strlen($example->__toString()) === 0 )
-        {
+        if ($example === null || (string)$example === '') {
             throw new InvalidArgumentException('example must not be null or empty');
         }
         $sql = 'DELETE FROM ' . $this->getTableName() . $example;
@@ -194,89 +200,77 @@ abstract class OW_BaseDao
      * throws InvalidArgumentException
      *
      * @param OW_Entity $entity
-     * 
+     *
      * @throws InvalidArgumentException
      */
-    public function save( $entity )
+    public function save($entity)
     {
-        if ( $entity === null || !($entity instanceof OW_Entity) )
-        {
+        if ($entity === null || !($entity instanceof OW_Entity)) {
             throw new InvalidArgumentException('Argument must be instance of OW_Entity and cannot be null');
         }
 
-        $entity->id = (int) $entity->id;
+        $entity->id = (int)$entity->id;
 
-        if ( $entity->id > 0 )
-        {
+        if ($entity->id > 0) {
             $this->dbo->updateObject($this->getTableName(), $entity);
-        }
-        else
-        {
-            $entity->id = NULL;
+        } else {
             $entity->id = $this->dbo->insertObject($this->getTableName(), $entity);
         }
 
         $this->clearCache();
     }
 
-    public function saveDelayed( $entity )
+    public function saveDelayed($entity)
     {
-        if ( $entity === null || !($entity instanceof OW_Entity) )
-        {
+        if ($entity === null || !($entity instanceof OW_Entity)) {
             throw new InvalidArgumentException('Argument must be instance of OW_Entity and cannot be null');
         }
 
-        $entity->id = (int) $entity->id;
+        $entity->id = (int)$entity->id;
 
-        if ( $entity->id > 0 )
-        {
+        if ($entity->id > 0) {
             $this->dbo->updateObject($this->getTableName(), $entity, 'id', true);
-        }
-        else
-        {
+        } else {
             $entity->id = $this->dbo->insertObject($this->getTableName(), $entity, true);
         }
 
         $this->clearCache();
     }
 
-    public function delete( $entity )
+    public function delete($entity)
     {
         $this->deleteById($entity->id);
         $this->clearCache();
     }
 
-    public function findIdByExample( OW_Example $example, $cacheLifeTime = 0, $tags = array() )
+    public function findIdByExample(OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
-        if ( $example === null )
-        {
+        if ($example === null) {
             throw new InvalidArgumentException('argument must not be null');
         }
 
         $example->setLimitClause(0, 1);
         $sql = 'SELECT `id` FROM ' . $this->getTableName() . $example;
 
-        return $this->dbo->queryForColumn($sql, array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForColumn($sql, [], $cacheLifeTime, $tags);
     }
 
-    public function findIdListByExample( OW_Example $example, $cacheLifeTime = 0, $tags = array() )
+    public function findIdListByExample(OW_Example $example, $cacheLifeTime = 0, $tags = [])
     {
-        if ( $example === null )
-        {
+        if ($example === null) {
             throw new InvalidArgumentException('argument must not be null');
         }
 
         $sql = 'SELECT `id` FROM ' . $this->getTableName() . $example;
 
-        return $this->dbo->queryForColumnList($sql, array(), $cacheLifeTime, $tags);
+        return $this->dbo->queryForColumnList($sql, [], $cacheLifeTime, $tags);
     }
 
     protected function clearCache()
     {
         $tagsToClear = $this->getClearCacheTags();
 
-        if ( $tagsToClear )
-        {
+        if ($tagsToClear) {
             OW::getCacheManager()->clean($tagsToClear);
         }
     }
@@ -286,11 +280,11 @@ abstract class OW_BaseDao
      */
     protected function getClearCacheTags()
     {
-        return array();
+        return [];
     }
-    
+
     protected function tableDataChanged()
     {
-        
+
     }
 }

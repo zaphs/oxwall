@@ -56,16 +56,16 @@ class BASE_CTRL_AjaxUpdateStatus extends OW_ActionController
         {
             $action = new ACTIVITY_BOL_Action();
 
-            $data = array(
+            $data = [
                 'string' => OW::getLanguage()->text('user_status', 'activity_string',
-                    array(
+                    [
                         'actor' => BOL_UserService::getInstance()->getDisplayName($status->getUserId()),
                         'actorUrl' => BOL_UserService::getInstance()->getUserUrl($status->getUserId()),
                         'status' => $status->getStatus()
-                    )
+                    ]
                 ),
                 'content_comment' => '',
-            );
+            ];
 
             $action->setUserId($status->getUserId())
                 ->setTimestamp(time())
@@ -76,9 +76,9 @@ class BASE_CTRL_AjaxUpdateStatus extends OW_ActionController
             ACTIVITY_BOL_Service::getInstance()->addAction($action);
         }
 
-        exit(json_encode(array(
+        exit(json_encode([
                 'result' => 'success',
                 'js' => 'OW.info("' . OW::getLanguage()->text('user_status', 'updated') . '")'
-            )));
+        ]));
     }
 }

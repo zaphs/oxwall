@@ -56,9 +56,9 @@ class ADMIN_CMP_FinanceStatisticWidget extends ADMIN_CMP_AbstractStatisticWidget
     public function onBeforeRender()
     {
         // register components
-        $this->addComponent('statistics', new ADMIN_CMP_FinanceStatistic(array(
+        $this->addComponent('statistics', new ADMIN_CMP_FinanceStatistic([
             'defaultPeriod' => $this->defaultPeriod
-        )));
+        ]));
 
         $this->addMenu('finance');
 
@@ -73,11 +73,11 @@ class ADMIN_CMP_FinanceStatisticWidget extends ADMIN_CMP_AbstractStatisticWidget
      */
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_TITLE => OW::getLanguage()->text('admin', 'widget_finance_statistics'),
             self::SETTING_ICON => self::ICON_INFO,
             self::SETTING_SHOW_TITLE => true,
             self::SETTING_WRAP_IN_BOX => true
-        );
+        ];
     }
 }

@@ -12,7 +12,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -23,35 +22,31 @@
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_system_plugins.base.components
- * @since 1.0
+ * @since   1.0
  */
 class BASE_CMP_IndexWallWidget extends BASE_CLASS_Widget
 {
 
     /**
-     * @return Constructor.
+     * BASE_CMP_IndexWallWidget constructor.
+     * @param $paramObj
      */
-    public function __construct( $paramObj )
+    public function __construct($paramObj)
     {
         parent::__construct();
 
         // check if comments are empty and user can't add comments
-        if( (int)BOL_CommentService::getInstance()->findCommentCount('base_index_wall', 1) === 0 )
-        {
-            if( !OW::getUser()->isAuthenticated() )
-            {
-                $this->setVisible(false);
-            }
+        if (((int)BOL_CommentService::getInstance()->findCommentCount('base_index_wall', 1) === 0) && !OW::getUser()->isAuthenticated()) {
+            $this->setVisible(false);
         }
-        
+
         $params = $paramObj->customParamList;
 
         $commentParams = new BASE_CommentsParams('base', 'base_index_wall');
 
-        if ( isset($params['comments_count']) )
-        {
+        if (isset($params['comments_count'])) {
             $commentParams->setCommentCountOnPage($params['comments_count']);
         }
 
@@ -63,24 +58,24 @@ class BASE_CMP_IndexWallWidget extends BASE_CLASS_Widget
 
     public static function getSettingList()
     {
-        $settingList = array();
-        $settingList['comments_count'] = array(
+        $settingList                   = [];
+        $settingList['comments_count'] = [
             'presentation' => self::PRESENTATION_SELECT,
-            'label' => OW::getLanguage()->text('base', 'cmp_widget_wall_comments_count'),
-            'optionList' => array('3' => 3, '5' => 5, '10' => 10, '20' => 20, '50' => 50),
-            'value' => 10
-        );
+            'label'        => OW::getLanguage()->text('base', 'cmp_widget_wall_comments_count'),
+            'optionList'   => ['3' => 3, '5' => 5, '10' => 10, '20' => 20, '50' => 50],
+            'value'        => 10,
+        ];
 
         return $settingList;
     }
 
     public static function getStandardSettingValueList()
     {
-        return array(
-            self::SETTING_SHOW_TITLE => false,
-            self::SETTING_TITLE => OW::getLanguage()->text('base', 'comments_widget_label'),
-            self::SETTING_WRAP_IN_BOX => false
-        );
+        return [
+            self::SETTING_SHOW_TITLE  => false,
+            self::SETTING_TITLE       => OW::getLanguage()->text('base', 'comments_widget_label'),
+            self::SETTING_WRAP_IN_BOX => false,
+        ];
     }
 
     public static function getAccess()

@@ -79,7 +79,7 @@ class BASE_CTRL_StaticDocument extends OW_ActionController
 
         $this->setDocumentKey($document->getKey());
 
-        OW::getEventManager()->bind(OW_EventManager::ON_BEFORE_DOCUMENT_RENDER, array($this, 'setCustomMetaInfo'));
+        OW::getEventManager()->bind(OW_EventManager::ON_BEFORE_DOCUMENT_RENDER, [$this, 'setCustomMetaInfo']);
     }
 
     public function setCustomMetaInfo()

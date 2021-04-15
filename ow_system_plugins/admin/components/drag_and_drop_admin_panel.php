@@ -46,10 +46,10 @@ class ADMIN_CMP_DragAndDropAdminPanel extends BASE_CMP_DragAndDropPanel
     {
         parent::onBeforeRender();
         
-        $sharedData = array(
+        $sharedData = [
             'additionalSettings' => $this->additionalSettingList,
             'place' => $this->placeName
-        );
+        ];
         
         $this->initializeJs('BASE_CTRL_AjaxComponentAdminPanel', 'OW_Components_DragAndDrop', $sharedData);
         

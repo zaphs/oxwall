@@ -36,7 +36,7 @@ class BASE_CLASS_PropertyEvent extends OW_Event
     /**
      * Constructor.
      */
-    public function __construct( $name, array $properties, array $params = array() )
+    public function __construct( $name, array $properties, array $params = [])
     {
         parent::__construct($name, $params);
         $this->props = $properties;

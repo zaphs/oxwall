@@ -157,6 +157,6 @@ class BOL_AttachmentDao extends OW_BaseDao
     public function updateStatusByBundle( $pluginKey, $bundle, $status )
     {
         $query = "UPDATE `" . $this->getTableName() . "` SET `" . self::STATUS . "` = :status WHERE `".self::PLUGIN_KEY."` = :pk AND `" . self::BUNDLE . "` = :bundle";
-        $this->dbo->query($query, array('status' => $status, 'bundle' => $bundle, 'pk' => $pluginKey));
+        $this->dbo->query($query, ['status' => $status, 'bundle' => $bundle, 'pk' => $pluginKey]);
     }
 }

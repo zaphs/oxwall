@@ -29,7 +29,7 @@
  */
 class BASE_MCMP_ContextAction extends BASE_MCMP_AbstractButtonList
 {
-    protected $items = array();
+    protected $items = [];
     protected $uniqId;
     
     /**
@@ -70,7 +70,7 @@ class BASE_MCMP_ContextAction extends BASE_MCMP_AbstractButtonList
 
     protected function initList()
     {
-        $tplActions = array();
+        $tplActions = [];
 
         foreach ( $this->items as $item  )
         {

@@ -132,7 +132,7 @@ class BOL_ComponentPlaceDao extends OW_BaseDao
     			INNER JOIN `' . $componentDao->getTableName() . '` AS `c` ON `cp`.`componentId` = `c`.`id`
     				WHERE `cp`.`placeId`=?';
 
-        return $this->dbo->queryForList($query, array($placeId));
+        return $this->dbo->queryForList($query, [$placeId]);
     }
 
     public function findComponentListByIdList( array $componentIds )
@@ -145,7 +145,7 @@ class BOL_ComponentPlaceDao extends OW_BaseDao
     				WHERE `cp`.`componentId` IN (' . implode(', ', $componentIds) . ')
     	';
 
-        return $this->dbo->queryForColumnList($query, array($placeId));
+        return $this->dbo->queryForColumnList($query, [$placeId]);
     }
 
     public function findListBySection( $placeId, $section )
@@ -161,6 +161,6 @@ class BOL_ComponentPlaceDao extends OW_BaseDao
                     WHERE `cp`.`placeId`=? AND `p`.`section`=?
         ';
 
-        return $this->dbo->queryForList($query, array($placeId, $section));
+        return $this->dbo->queryForList($query, [$placeId, $section]);
     }
 }

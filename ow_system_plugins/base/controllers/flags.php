@@ -84,7 +84,7 @@ class BASE_CTRL_Flags extends OW_ActionController
 
         $list = BOL_FlagService::getInstance()->findTypeList();
 
-        $mil = array();
+        $mil = [];
         $i = 0;
         foreach ( $list as $type )
         {
@@ -97,7 +97,7 @@ class BASE_CTRL_Flags extends OW_ActionController
             $mi->setLabel($language->text($a[0], $a[1]) . ($c > 0 ? " ($c)" : ''))
                 ->setKey($type['type'])
                 ->setOrder($i++)
-                ->setUrl(OW::getRouter()->urlFor('BASE_CTRL_Flags', 'index', array('type' => $type['type'])));
+                ->setUrl(OW::getRouter()->urlFor('BASE_CTRL_Flags', 'index', ['type' => $type['type']]));
 
             if ( $active == $type )
             {

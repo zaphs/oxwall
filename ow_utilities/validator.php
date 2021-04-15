@@ -12,7 +12,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -23,9 +22,9 @@
  */
 
 /**
- * @author Podyachev Evgeny <joker.OW2@gmail.com>
+ * @author  Podyachev Evgeny <joker.OW2@gmail.com>
  * @package ow_utilities
- * @since 1.0
+ * @since   1.0
  */
 class UTIL_Validator
 {
@@ -45,88 +44,80 @@ class UTIL_Validator
 
     const ALPHA_NUMERIC_PATTERN = '/^[A-Za-z0-9]+$/';
 
-    public static function isEmailValid( $value )
+    public static function isEmailValid($value)
     {
         $pattern = self::EMAIL_PATTERN;
 
-        if ( !preg_match($pattern, $value) )
-        {
+        if (!preg_match($pattern, $value)) {
             return false;
         }
 
         return true;
     }
 
-    public static function isUrlValid( $value )
+    public static function isUrlValid($value)
     {
         $pattern = self::URL_PATTERN;
 
-        if ( !preg_match($pattern, $value) )
-        {
+        if (!preg_match($pattern, $value)) {
             return false;
         }
 
         return true;
     }
 
-    public static function isIntValid( $value )
+    public static function isIntValid($value)
     {
-        if ( !preg_match(self::INT_PATTERN, $value) )
-        {
+        if (!preg_match(self::INT_PATTERN, $value)) {
             return false;
         }
 
         return true;
     }
 
-    public static function isFloatValid( $value )
+    public static function isFloatValid($value)
     {
-        if ( !preg_match(self::FLOAT_PATTERN, $value) )
-        {
+        if (!preg_match(self::FLOAT_PATTERN, $value)) {
             return false;
         }
 
         return true;
     }
 
-    public static function isAlphaNumericValid( $value )
+    public static function isAlphaNumericValid($value)
     {
         $pattern = self::ALPHA_NUMERIC_PATTERN;
 
-        if ( !preg_match($pattern, $value) )
-        {
+        if (!preg_match($pattern, $value)) {
             return false;
         }
 
         return true;
     }
 
-    public static function isUserNameValid( $value )
+    public static function isUserNameValid($value)
     {
         $pattern = self::USER_NAME_PATTERN;
 
-        if ( !preg_match($pattern, $value) )
-        {
+        if (!preg_match($pattern, $value)) {
             return false;
         }
 
         return true;
     }
 
-    public static function isDateValid( $month, $day, $year )
+    public static function isDateValid($month, $day, $year)
     {
-        if ( !checkdate($month, $day, $year) )
-        {
+        if (!checkdate($month, $day, $year)) {
             return false;
         }
 
         return true;
     }
 
-    public static function isCaptchaValid( $value )
+    public static function isCaptchaValid($value)
     {
-        if ( $value === null )
-        {
+        if ($value === null) {
             return false;
         }
 
@@ -134,8 +125,7 @@ class UTIL_Validator
 
         $img = new Securimage();
 
-        if ( !$img->check($value) )
-        {
+        if (!$img->check($value)) {
             return false;
         }
 

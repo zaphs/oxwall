@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -25,9 +25,9 @@
 /**
  * The base class for all action controllers.
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 abstract class OW_ActionController extends OW_Renderable
 {
@@ -43,13 +43,13 @@ abstract class OW_ActionController extends OW_Renderable
      */
     public function __construct()
     {
-        
+
     }
 
     /**
      * @return string
      */
-    public function getDefaultAction()
+    public function getDefaultAction(): string
     {
         return $this->defaultAction;
     }
@@ -57,7 +57,7 @@ abstract class OW_ActionController extends OW_Renderable
     /**
      * @param string $action
      */
-    public function setDefaultAction( $action )
+    public function setDefaultAction($action)
     {
         $this->defaultAction = trim($action);
     }
@@ -66,8 +66,9 @@ abstract class OW_ActionController extends OW_Renderable
      * Makes permanent redirect to the same controller and provided action.
      *
      * @param string $action
+     * @throws Exception
      */
-    public function redirectToAction( $action )
+    public function redirectToAction(string $action)
     {
         $handlerAttrs = OW::getRequestHandler()->getHandlerAttributes();
 
@@ -78,8 +79,9 @@ abstract class OW_ActionController extends OW_Renderable
      * Makes permanent redirect to provided URL or URI.
      *
      * @param string $redirectTo
+     * @throws Exception
      */
-    public function redirect( $redirectTo = null )
+    public function redirect(string $redirectTo = null)
     {
         OW::getApplication()->redirect($redirectTo);
     }
@@ -89,7 +91,7 @@ abstract class OW_ActionController extends OW_Renderable
      */
     public function init()
     {
-        
+
     }
 
     /**
@@ -97,17 +99,17 @@ abstract class OW_ActionController extends OW_Renderable
      *
      * @param string $key
      */
-    public function setDocumentKey( $key )
+    public function setDocumentKey(string $key)
     {
         OW::getApplication()->setDocumentKey($key);
     }
 
     /**
      * Returns document key for current page.
-     * 
+     *
      * @return string
      */
-    public function getDocumentKey()
+    public function getDocumentKey(): string
     {
         return OW::getApplication()->getDocumentKey();
     }
@@ -116,7 +118,7 @@ abstract class OW_ActionController extends OW_Renderable
      * Sets page heading.
      * @param string $heading
      */
-    public function setPageHeading( $heading )
+    public function setPageHeading(string $heading)
     {
         OW::getDocument()->setHeading(trim($heading));
     }
@@ -126,7 +128,7 @@ abstract class OW_ActionController extends OW_Renderable
      *
      * @param string $class
      */
-    public function setPageHeadingIconClass( $class )
+    public function setPageHeadingIconClass(string $class)
     {
         OW::getDocument()->setHeadingIconClass($class);
     }
@@ -134,7 +136,7 @@ abstract class OW_ActionController extends OW_Renderable
     /**
      * @param string $title
      */
-    public function setPageTitle( $title )
+    public function setPageTitle(string $title)
     {
         OW::getDocument()->setTitle(trim($title));
     }
@@ -142,7 +144,7 @@ abstract class OW_ActionController extends OW_Renderable
     /**
      * @param string $desc
      */
-    public function setPageDescription( $desc )
+    public function setPageDescription(string $desc)
     {
         OW::getDocument()->setDescription($desc);
     }
@@ -150,7 +152,7 @@ abstract class OW_ActionController extends OW_Renderable
     /**
      * @param array $keywords
      */
-    public function setKeywords( $keywords )
+    public function setKeywords(array $keywords)
     {
         OW::getDocument()->setKeywords($keywords);
     }

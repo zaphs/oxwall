@@ -148,7 +148,7 @@ class BASE_Cron extends OW_Cron
 
     public function deleteExpiredCache()
     {
-        OW::getCacheManager()->clean(array(), OW_CacheManager::CLEAN_OLD);
+        OW::getCacheManager()->clean([], OW_CacheManager::CLEAN_OLD);
     }
 
     public function dropLogFile()

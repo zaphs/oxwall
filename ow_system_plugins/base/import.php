@@ -147,7 +147,7 @@ class BASE_Import extends DATAIMPORTER_CLASS_Import
         
         BOL_ThemeService::getInstance()->saveTheme($theme);
 
-        $controlValues = array();
+        $controlValues = [];
         $url_pattern = '/http:\/\/[^\s]+\/([\w\.]+)/i';
         
         foreach ( $this->configs['controlValue'] as $key => $controlValue )
@@ -175,11 +175,11 @@ class BASE_Import extends DATAIMPORTER_CLASS_Import
     {
         $mediaPanelUrl = $this->configs['media_panel_url'];
 
-        $list = array();
+        $list = [];
 
         $list = BOL_MediaPanelService::getInstance()->findAll();
         
-        $list = is_array($list)?  $list: array();
+        $list = is_array($list)?  $list: [];
         
         foreach ($list as $dto)/*@var $dto BOL_MediaPanelFile*/
         {

@@ -165,7 +165,7 @@ class BOL_BillingSaleDao extends OW_BaseDao
             ORDER BY `timeStamp` DESC
             LIMIT :first, :limit";
         
-        return $this->dbo->queryForList($sql, array('first' => $first, 'limit' => $onPage));
+        return $this->dbo->queryForList($sql, ['first' => $first, 'limit' => $onPage]);
     }
     
     public function getSalesCurrencies()
@@ -183,7 +183,7 @@ class BOL_BillingSaleDao extends OW_BaseDao
             WHERE `currency` = :curr
             AND `status` = 'delivered'";
         
-        return $this->dbo->queryForColumn($sql, array('curr' => $currency));
+        return $this->dbo->queryForColumn($sql, ['curr' => $currency]);
     }
     
     public function countSales( )

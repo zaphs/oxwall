@@ -69,7 +69,7 @@ class BASE_CTRL_Comments extends OW_ActionController
 
         if ( $errorMessage )
         {
-            exit(json_encode(array('error' => $errorMessage)));
+            exit(json_encode(['error' => $errorMessage]));
         }
 
         $commentText = empty($_POST['commentText']) ? '' : trim($_POST['commentText']);
@@ -80,7 +80,7 @@ class BASE_CTRL_Comments extends OW_ActionController
             if ( !empty($_POST['attachmentInfo']) )
             {
                 $tempArr = json_decode($_POST['attachmentInfo'], true);
-                OW::getEventManager()->call('base.attachment_save_image', array('uid' => $tempArr['uid'], 'pluginKey' => $tempArr['pluginKey']));
+                OW::getEventManager()->call('base.attachment_save_image', ['uid' => $tempArr['uid'], 'pluginKey' => $tempArr['pluginKey']]);
                 $tempArr['href'] = $tempArr['url'];
                 $tempArr['type'] = 'photo';
                 $attachment = json_encode($tempArr);
@@ -96,14 +96,14 @@ class BASE_CTRL_Comments extends OW_ActionController
         $comment = $this->commentService->addComment($params->getEntityType(), $params->getEntityId(), $params->getPluginKey(), OW::getUser()->getId(), $commentText, $attachment);
 
         // trigger event comment add
-        $event = new OW_Event('base_add_comment', array(
+        $event = new OW_Event('base_add_comment', [
             'entityType' => $params->getEntityType(),
             'entityId' => $params->getEntityId(),
             'userId' => OW::getUser()->getId(),
             'commentId' => $comment->getId(),
             'pluginKey' => $params->getPluginKey(),
             'attachment' => json_decode($attachment, true)
-        ));
+        ]);
 
         OW::getEventManager()->trigger($event);
 
@@ -118,14 +118,14 @@ class BASE_CTRL_Comments extends OW_ActionController
             $commentListCmp = new BASE_CMP_CommentsList($params, $_POST['cid']);
         }
 
-        exit(json_encode(array(
+        exit(json_encode([
             'newAttachUid' => $this->commentService->generateAttachmentUid($params->getEntityType(), $params->getEntityId()),
             'entityType' => $params->getEntityType(),
             'entityId' => $params->getEntityId(),
             'commentList' => $commentListCmp->render(),
             'onloadScript' => OW::getDocument()->getOnloadScript(),
             'commentCount' => $this->commentService->findCommentCount($params->getEntityType(), $params->getEntityId())
-                )
+            ]
             )
         );
     }
@@ -136,18 +136,18 @@ class BASE_CTRL_Comments extends OW_ActionController
 
         $page = ( isset($_POST['page']) && (int) $_POST['page'] > 0) ? (int) $_POST['page'] : 1;
         $commentsList = new BASE_CMP_CommentsList($params, $_POST['cid'], $page);
-        exit(json_encode(array(
+        exit(json_encode([
             'onloadScript' => OW::getDocument()->getOnloadScript(),
             'commentList' => $commentsList->render(),
             'commentCount' => $this->commentService->findCommentCount($params->getEntityType(), $params->getEntityId())
-        )));
+        ]));
     }
 
     public function getMobileCommentList()
     {
         $params = $this->getParamsObject();
         $commentsList = new BASE_MCMP_CommentsList($params, $_POST['cid']);
-        exit(json_encode(array('onloadScript' => OW::getDocument()->getOnloadScript(), 'commentList' => $commentsList->render())));
+        exit(json_encode(['onloadScript' => OW::getDocument()->getOnloadScript(), 'commentList' => $commentsList->render()]));
     }
 
     public function deleteComment()
@@ -164,12 +164,12 @@ class BASE_CTRL_Comments extends OW_ActionController
             $this->commentService->deleteCommentEntity($commentEntity->getId());
         }
 
-        $event = new OW_Event('base_delete_comment', array(
+        $event = new OW_Event('base_delete_comment', [
             'entityType' => $commentEntity->getEntityType(),
             'entityId' => $commentEntity->getEntityId(),
             'userId' => $comment->getUserId(),
             'commentId' => $comment->getId()
-        ));
+        ]);
 
         OW::getEventManager()->trigger($event);
 
@@ -216,7 +216,7 @@ class BASE_CTRL_Comments extends OW_ActionController
     {
         if ( !isset($_POST['commentId']) || (int) $_POST['commentId'] < 1 )
         {
-            echo json_encode(array('error' => OW::getLanguage()->text('base', 'comment_ajax_error')));
+            echo json_encode(['error' => OW::getLanguage()->text('base', 'comment_ajax_error')]);
             exit();
         }
 
@@ -227,7 +227,7 @@ class BASE_CTRL_Comments extends OW_ActionController
 
         if ( $comment === null || $commentEntity === null )
         {
-            echo json_encode(array('error' => OW::getLanguage()->text('base', 'comment_ajax_error')));
+            echo json_encode(['error' => OW::getLanguage()->text('base', 'comment_ajax_error')]);
             exit();
         }
 
@@ -239,11 +239,11 @@ class BASE_CTRL_Comments extends OW_ActionController
 
         if ( !$isModerator && !$isOwnerAuthorized && !$commentOwner )
         {
-            echo json_encode(array('error' => OW::getLanguage()->text('base', 'auth_ajax_error')));
+            echo json_encode(['error' => OW::getLanguage()->text('base', 'auth_ajax_error')]);
             exit();
         }
 
-        return array('comment' => $comment, 'commentEntity' => $commentEntity);
+        return ['comment' => $comment, 'commentEntity' => $commentEntity];
     }
 
     private function getParamsObject()
@@ -289,9 +289,9 @@ class BASE_CTRL_Comments extends OW_ActionController
 
         if ( $errorMessage )
         {
-            echo json_encode(array(
+            echo json_encode([
                 'error' => $errorMessage
-            ));
+            ]);
 
             exit();
         }

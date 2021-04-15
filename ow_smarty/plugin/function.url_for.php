@@ -8,7 +8,7 @@
 
 function smarty_function_url_for($params, $smarty)
 {
-	$arr = array();
+	$arr = [];
 	
 	$tmp = explode(':',$params['for']);
 			
@@ -35,4 +35,3 @@ function smarty_function_url_for($params, $smarty)
 	
 	return OW::getRouter()->urlFor( $controller, (!empty($action)?$action: null), $arr );
 }
-?>

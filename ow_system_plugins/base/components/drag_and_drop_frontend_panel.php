@@ -94,7 +94,7 @@ class BASE_CMP_DragAndDropFrontendPanel extends BASE_CMP_DragAndDropPanel
         $template = $this->customizeMode ? 'drag_and_drop_item_customize' : null;
 
         $viewInstance = new $this->itemClassName($uniqName, $this->isComponentClone($uniqName), $template, $this->sharedData);
-        $viewInstance->setSettingList(empty($this->settingList[$uniqName]) ? array() : $this->settingList[$uniqName]);
+        $viewInstance->setSettingList(empty($this->settingList[$uniqName]) ? [] : $this->settingList[$uniqName]);
         $viewInstance->componentParamObject->additionalParamList = $this->additionalSettingList;
         $viewInstance->componentParamObject->customizeMode = $this->customizeMode;
 

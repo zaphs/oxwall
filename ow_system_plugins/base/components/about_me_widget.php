@@ -44,9 +44,9 @@ class BASE_CMP_AboutMeWidget extends BASE_CLASS_Widget
         }
         else
         {
-            $settings = BOL_ComponentEntityService::getInstance()->findSettingList($param->widgetDetails->uniqName, $userId, array(
+            $settings = BOL_ComponentEntityService::getInstance()->findSettingList($param->widgetDetails->uniqName, $userId, [
                 'content'
-            ));
+            ]);
 
             $content = empty($settings['content']) ? null : $settings['content'];
         }
@@ -81,25 +81,25 @@ class BASE_CMP_AboutMeWidget extends BASE_CLASS_Widget
 
     public static function getSettingList()
     {
-        $settingList = array();
-        $settingList['content'] = array(
+        $settingList = [];
+        $settingList['content'] = [
             'presentation' => self::PRESENTATION_HIDDEN,
             'label' => '',
             'value' => null
-        );
+        ];
 
         return $settingList;
     }
 
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_TITLE => OW::getLanguage()->text('base', 'about_me_widget_default_title'),
             self::SETTING_SHOW_TITLE => false,
             self::SETTING_WRAP_IN_BOX => false,
             self::SETTING_ICON => self::ICON_INFO,
             self::SETTING_FREEZE => true
-        );
+        ];
     }
 
     public static function processForm( $data )
@@ -166,9 +166,9 @@ class AboutMeForm extends Form
 
         $content = htmlspecialchars($data['about_me']);
 
-        BOL_ComponentEntityService::getInstance()->saveComponentSettingList($data['widget_uniq_name'], $userId, array('content' => $content));
+        BOL_ComponentEntityService::getInstance()->saveComponentSettingList($data['widget_uniq_name'], $userId, ['content' => $content]);
         BOL_ComponentEntityService::getInstance()->clearEntityCache(BOL_ComponentEntityService::PLACE_PROFILE, $userId);
 
-        return array('message' => OW::getLanguage()->text('base', 'about_me_widget_content_saved'));
+        return ['message' => OW::getLanguage()->text('base', 'about_me_widget_content_saved')];
     }
 }

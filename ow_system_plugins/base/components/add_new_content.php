@@ -60,17 +60,17 @@ class BASE_CMP_AddNewContent extends BASE_CLASS_Widget
 
     public static function getSettingList()
     {
-        return array();
+        return [];
     }
 
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_SHOW_TITLE => true,
             self::SETTING_WRAP_IN_BOX => true,
             self::SETTING_TITLE => OW::getLanguage()->text('base', 'component_add_new_box_cap_label'),
             self::SETTING_ICON => self::ICON_ADD
-        );
+        ];
     }
 
     public static function getAccess()

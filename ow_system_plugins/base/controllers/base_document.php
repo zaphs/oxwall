@@ -52,8 +52,8 @@ class BASE_CTRL_BaseDocument extends OW_ActionController
         OW::getDocument()->getMasterPage()->setTemplate(OW::getThemeManager()->getMasterPageTemplate(OW_MasterPage::TEMPLATE_BLANK));
         $this->assign('text', OW::getSession()->get('baseConfirmPageMessage'));
         OW::getSession()->delete('baseConfirmPageMessage');
-        $this->assign('okBackUrl', OW::getRequest()->buildUrlQueryString(OW_URL_HOME . urldecode($_GET['back_uri']), array('confirm-result' => 1)));
-        $this->assign('clBackUrl', OW::getRequest()->buildUrlQueryString(OW_URL_HOME . urldecode($_GET['back_uri']), array('confirm-result' => 0)));
+        $this->assign('okBackUrl', OW::getRequest()->buildUrlQueryString(OW_URL_HOME . urldecode($_GET['back_uri']), ['confirm-result' => 1]));
+        $this->assign('clBackUrl', OW::getRequest()->buildUrlQueryString(OW_URL_HOME . urldecode($_GET['back_uri']), ['confirm-result' => 0]));
     }
 
     public function page404()
@@ -83,7 +83,7 @@ class BASE_CTRL_BaseDocument extends OW_ActionController
             OW::getDocument()->getMasterPage()->setTemplate(OW::getThemeManager()->getMasterPageTemplate('blank'));
             if ( !empty($_COOKIE['adminToken']) && trim($_COOKIE['adminToken']) == OW::getConfig()->getValue('base', 'admin_cookie') )
             {
-                $this->assign('disableMessage', OW::getLanguage()->text('base', 'maintenance_disable_message', array('url' => OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlForRoute('static_sign_in'), array('back-uri' => urlencode('admin/pages/maintenance'))))));
+                $this->assign('disableMessage', OW::getLanguage()->text('base', 'maintenance_disable_message', ['url' => OW::getRequest()->buildUrlQueryString(OW::getRouter()->urlForRoute('static_sign_in'), ['back-uri' => urlencode('admin/pages/maintenance')])]));
             }
         }
         else
@@ -103,7 +103,7 @@ class BASE_CTRL_BaseDocument extends OW_ActionController
         }
 
         OW::getDocument()->getMasterPage()->setTemplate(OW::getThemeManager()->getMasterPageTemplate('blank'));
-        $this->assign('submit_url', OW::getRequest()->buildUrlQueryString(null, array('agree' => 1)));
+        $this->assign('submit_url', OW::getRequest()->buildUrlQueryString(null, ['agree' => 1]));
 
         $leaveUrl = OW::getConfig()->getValue('base', 'splash_leave_url');
 
@@ -162,7 +162,7 @@ class BASE_CTRL_BaseDocument extends OW_ActionController
                 OW::getConfig()->saveConfig("base", "install_complete", 1);
             }
 
-            $this->redirect(OW::getRequest()->buildUrlQueryString(null, array('redirect' => null)));
+            $this->redirect(OW::getRequest()->buildUrlQueryString(null, ['redirect' => null]));
         }
 
         $masterPageFileDir = OW::getThemeManager()->getMasterPageTemplate('blank');

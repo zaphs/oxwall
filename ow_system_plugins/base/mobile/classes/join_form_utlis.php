@@ -4,7 +4,7 @@ final class BASE_MCLASS_JoinFormUtlis
 {
     public static function presentationToCssClass()
     {
-        $result = array();
+        $result = [];
         $presentations = BOL_QuestionService::getInstance()->getPresentations();
 
         foreach ( $presentations as $presentation => $dataType )
@@ -45,7 +45,7 @@ final class BASE_MCLASS_JoinFormUtlis
     {
         foreach( $questions as $question )
         {            
-            if( in_array($question['presentation'], array(BOL_QuestionService::QUESTION_PRESENTATION_TEXT, BOL_QuestionService::QUESTION_PRESENTATION_PASSWORD)) )
+            if( in_array($question['presentation'], [BOL_QuestionService::QUESTION_PRESENTATION_TEXT, BOL_QuestionService::QUESTION_PRESENTATION_PASSWORD]) )
             {
                 /* @var $element FormElement */
                 $element = $form->getElement($question['name']);

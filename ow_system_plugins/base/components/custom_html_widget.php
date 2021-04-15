@@ -53,18 +53,18 @@ class BASE_CMP_CustomHtmlWidget extends BASE_CLASS_Widget
 
     public static function getSettingList()
     {
-        $settingList = array();
-        $settingList['content'] = array(
+        $settingList = [];
+        $settingList['content'] = [
             'presentation' => self::PRESENTATION_TEXTAREA,
             'label' => OW::getLanguage()->text('base', 'custom_html_widget_content_label'),
             'value' => ''
-        );
+        ];
 
-        $settingList['nl_to_br'] = array(
+        $settingList['nl_to_br'] = [
             'presentation' => self::PRESENTATION_CHECKBOX,
             'label' => OW::getLanguage()->text('base', 'custom_html_widget_nl2br_label'),
             'value' => '0'
-        );
+        ];
 
         return $settingList;
     }
@@ -86,9 +86,9 @@ class BASE_CMP_CustomHtmlWidget extends BASE_CLASS_Widget
 
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_TITLE => OW::getLanguage()->text('base', 'custom_html_widget_default_title')
-        );
+        ];
     }
 
     public static function getAccess()

@@ -29,7 +29,7 @@
  */
 class BASE_MCMP_ButtonList extends BASE_MCMP_AbstractButtonList
 {
-    protected $items = array();
+    protected $items = [];
     
     /**
      * Constructor.
@@ -53,8 +53,8 @@ class BASE_MCMP_ButtonList extends BASE_MCMP_AbstractButtonList
 
     protected function initList()
     {
-        $itemGroups = array();
-        $buttons = array();
+        $itemGroups = [];
+        $buttons = [];
 
         foreach ( $this->items as $item  )
         {
@@ -62,11 +62,11 @@ class BASE_MCMP_ButtonList extends BASE_MCMP_AbstractButtonList
             {
                 if ( empty($itemGroups[$item["group"]]) )
                 {
-                    $itemGroups[$item["group"]] = array(
+                    $itemGroups[$item["group"]] = [
                         "key" => $item["group"],
                         "label" => isset($item["groupLabel"]) ? $item["groupLabel"] : null,
-                        "context" => array()
-                    );
+                        "context" => []
+                    ];
                 }
                 
                 $itemGroups[$item["group"]]["items"][] = $item;
@@ -77,7 +77,7 @@ class BASE_MCMP_ButtonList extends BASE_MCMP_AbstractButtonList
             }
         }
 
-        $tplGroups = array();
+        $tplGroups = [];
         
         foreach ( $itemGroups as $group )
         {

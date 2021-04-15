@@ -44,15 +44,15 @@ class BASE_CMP_ProfileWall extends BASE_CLASS_Widget
 
     public static function getSettingList()
     {
-        return array();
+        return [];
     }
 
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_SHOW_TITLE => false,
             self::SETTING_WRAP_IN_BOX => false
-        );
+        ];
     }
 
     public static function getAccess()

@@ -30,14 +30,14 @@
 class ADMIN_CMP_UploadedFilesFilter extends OW_Component
 {
 
-    public function __construct($params = array())
+    public function __construct($params = [])
     {
         parent::__construct();
     }
 
     private function getDates($images)
     {
-        $dates = array();
+        $dates = [];
         foreach ($images as $image)
         {
             if ( $image->addDatetime )

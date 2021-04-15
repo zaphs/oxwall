@@ -43,16 +43,16 @@ class BASE_CLASS_Attachment extends OW_Component
         $this->uid = $uid;
         $previewContId = 'attch_preview_' . $this->uid;
 
-        $params = array(
+        $params = [
             'uid' => $uid,
             'previewId' => $previewContId,
             'buttonId' => $buttonId,
             'pluginKey' => $pluginKey,
             'addPhotoUrl' => OW::getRouter()->urlFor('BASE_CTRL_Attachment', 'addPhoto'),
-            'langs' => array(
+            'langs' => [
                 'attchLabel' => $language->text('base', 'attch_attachment_label')
-            )
-        );
+            ]
+        ];
 
         $this->assign('previewId', $previewContId);
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'attachments.js');

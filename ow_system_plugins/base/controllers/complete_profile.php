@@ -31,7 +31,7 @@ class BASE_CTRL_CompleteProfile extends OW_ActionController
 
             if ( !empty($menu) )
             {
-                $menu->setMenuItems(array($item));
+                $menu->setMenuItems([$item]);
             }
         }
     }
@@ -51,7 +51,7 @@ class BASE_CTRL_CompleteProfile extends OW_ActionController
             throw new Redirect404Exception();
         }
 
-        $event = new OW_Event( OW_EventManager::ON_BEFORE_USER_COMPLETE_ACCOUNT_TYPE, array( 'user' => $user ) );
+        $event = new OW_Event( OW_EventManager::ON_BEFORE_USER_COMPLETE_ACCOUNT_TYPE, ['user' => $user]);
         OW::getEventManager()->trigger($event);
         
         $accounts = $this->getAccountTypes();
@@ -122,7 +122,7 @@ class BASE_CTRL_CompleteProfile extends OW_ActionController
 
         $language = OW::getLanguage();
         
-        $event = new OW_Event( OW_EventManager::ON_BEFORE_USER_COMPLETE_PROFILE, array( 'user' => $user ) );
+        $event = new OW_Event( OW_EventManager::ON_BEFORE_USER_COMPLETE_PROFILE, ['user' => $user]);
         OW::getEventManager()->trigger($event);
         
         // -- Edit form --
@@ -145,8 +145,8 @@ class BASE_CTRL_CompleteProfile extends OW_ActionController
         }
 
         $section = null;
-        $questionArray = array();
-        $questionNameList = array();
+        $questionArray = [];
+        $questionNameList = [];
 
         foreach ( $questions as $sort => $question )
         {
@@ -165,7 +165,7 @@ class BASE_CTRL_CompleteProfile extends OW_ActionController
 
         $questionValues = $this->questionService->findQuestionsValuesByQuestionNameList($questionNameList);
 
-        $form->addQuestions($questions, $questionValues, array());
+        $form->addQuestions($questions, $questionValues, []);
 
         if ( OW::getRequest()->isPost() )
         {
@@ -191,9 +191,10 @@ class BASE_CTRL_CompleteProfile extends OW_ActionController
 
         //include js
         $onLoadJs = " window.edit = new OW_BaseFieldValidators( " .
-            json_encode(array(
+            json_encode([
                 'formName' => $form->getName(),
-                'responderUrl' => OW::getRouter()->urlFor("BASE_CTRL_Edit", "ajaxResponder"))) . ",
+                'responderUrl' => OW::getRouter()->urlFor("BASE_CTRL_Edit", "ajaxResponder")
+            ]) . ",
                 " . UTIL_Validator::EMAIL_PATTERN . ", " . UTIL_Validator::USER_NAME_PATTERN . ", " . $user->id . " ); ";
 
         OW::getDocument()->addOnloadScript($onLoadJs);
@@ -211,7 +212,7 @@ class BASE_CTRL_CompleteProfile extends OW_ActionController
             {
                 OW::getFeedback()->info(OW::getLanguage()->text('base', 'edit_successfull_edit'));
                 
-                $event = new OW_Event(OW_EventManager::ON_AFTER_USER_COMPLETE_PROFILE, array( 'userId' => $userId ));
+                $event = new OW_Event(OW_EventManager::ON_AFTER_USER_COMPLETE_PROFILE, ['userId' => $userId]);
                     
                 OW::getEventManager()->trigger($event);
                 //BOL_PreferenceService::getInstance()->savePreferenceValue('profile_details_update_stamp', time(), $userId);
@@ -233,7 +234,7 @@ class BASE_CTRL_CompleteProfile extends OW_ActionController
         // get available account types from DB
         $accountTypes = BOL_QuestionService::getInstance()->findAllAccountTypes();
 
-        $accounts = array();
+        $accounts = [];
 
         /* @var $value BOL_QuestionAccount */
         foreach ( $accountTypes as $key => $value )

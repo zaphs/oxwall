@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 trait OW_Singleton
 {
@@ -6,14 +7,10 @@ trait OW_Singleton
 
     public static function getInstance()
     {
-        if ( static::$instance == null )
-        {
-            try
-            {
+        if (static::$instance == null) {
+            try {
                 static::$instance = OW::getClassInstance(static::class);
-            }
-            catch ( ReflectionException $ex )
-            {
+            } catch (ReflectionException $ex) {
                 static::$instance = new static();
             }
         }

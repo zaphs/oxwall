@@ -97,7 +97,7 @@ class ADMIN_CMP_UserList extends OW_Component
                     }
                 }
 
-                OW::getFeedback()->info($language->text('admin', 'user_delete_msg', array('count' => $deleted)));
+                OW::getFeedback()->info($language->text('admin', 'user_delete_msg', ['count' => $deleted]));
             }
             else if ( isset($_POST['email_verify']) )
             {
@@ -165,7 +165,7 @@ class ADMIN_CMP_UserList extends OW_Component
 
         $onPage = 20;
 
-        $event = new OW_Event('admin.amount_users_per_page', array(), array("amountOnPage" => $onPage));
+        $event = new OW_Event('admin.amount_users_per_page', [], ["amountOnPage" => $onPage]);
 
         OW::getEventManager()->trigger($event);
 
@@ -202,8 +202,8 @@ class ADMIN_CMP_UserList extends OW_Component
                     $search = htmlspecialchars(urldecode($extra['value']));
                     $this->assign('search', $search);
 
-                    $userList = $userService->findUserListByQuestionValues(array($extra['question'] => $search), $first, $onPage, true);
-                    $userCount = $userService->countUsersByQuestionValues(array($extra['question'] => $search), true);
+                    $userList = $userService->findUserListByQuestionValues([$extra['question'] => $search], $first, $onPage, true);
+                    $userCount = $userService->countUsersByQuestionValues([$extra['question'] => $search], true);
                 }
                 break;
 
@@ -216,7 +216,7 @@ class ADMIN_CMP_UserList extends OW_Component
 
         if ( !$userList && $page > 1 )
         {
-            OW::getApplication()->redirect(OW::getRequest()->buildUrlQueryString(null, array('page' => $page - 1)));
+            OW::getApplication()->redirect(OW::getRequest()->buildUrlQueryString(null, ['page' => $page - 1]));
         }
         
         if ( $userList )
@@ -230,7 +230,7 @@ class ADMIN_CMP_UserList extends OW_Component
 
             $this->addComponent('paging', $paging);
 
-            $userIdList = array();
+            $userIdList = [];
 
             foreach ( $userList as $user )
             {
@@ -246,10 +246,10 @@ class ADMIN_CMP_UserList extends OW_Component
             $userNameList = $userService->getUserNamesForList($userIdList);
             $this->assign('userNameList', $userNameList);
 
-            $questionList = BOL_QuestionService::getInstance()->getQuestionData($userIdList, array('sex', 'birthdate', 'email'));
+            $questionList = BOL_QuestionService::getInstance()->getQuestionData($userIdList, ['sex', 'birthdate', 'email']);
             $this->assign('questionList', $questionList);
 
-            $sexList = array();
+            $sexList = [];
             
             foreach ( $userIdList as $id )
             {
@@ -298,7 +298,7 @@ class ADMIN_CMP_UserList extends OW_Component
             $this->assign('onlineStatus', $onlineStatus);
             
             $moderatorList = $authService->getModeratorList();
-            $adminList = array();
+            $adminList = [];
             
             /* @var $moderator BOL_AuthorizationModerator */
             foreach ( $moderatorList as $moderator )
@@ -340,15 +340,15 @@ final class ADMIN_UserListParams
     
     private $type;
     
-    private $buttons = array();
+    private $buttons = [];
     
-    private $extra = array();
+    private $extra = [];
     
     public function __construct() 
     {
         $lang = OW::getLanguage();
         
-        $this->buttons['delete'] = array('name' => 'delete', 'id' => 'delete_user_btn', 'label' => $lang->text('base', 'delete'), 'class' => 'ow_mild_red');
+        $this->buttons['delete'] = ['name' => 'delete', 'id' => 'delete_user_btn', 'label' => $lang->text('base', 'delete'), 'class' => 'ow_mild_red'];
         $this->buttons['delete']['js'] = '$("#delete_user_btn").click(function(){
             
             var $form_content = $("#delete-user-confirm").children();

@@ -121,7 +121,7 @@ class BOL_FlagDao extends OW_BaseDao
     {
         if ( empty($entityTypes) )
         {
-            return array();
+            return [];
         }
         
         $query = "SELECT count(DISTINCT `entityId`) `count`, `entityType` "
@@ -129,7 +129,7 @@ class BOL_FlagDao extends OW_BaseDao
                     . "WHERE `entityType` IN ('" . implode("', '", $entityTypes) . "') "
                     . "GROUP BY `entityType`";
         
-        $out = array();
+        $out = [];
         foreach ( $this->dbo->queryForList($query) as $row )
         {
             $out[$row['entityType']] = $row['count'];

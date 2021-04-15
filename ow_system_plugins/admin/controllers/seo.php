@@ -68,8 +68,8 @@ class ADMIN_CTRL_Seo extends ADMIN_CTRL_Abstract
             return $item1["sectionLabel"] > $item2["sectionLabel"] ? 1 : -1;
         });
 
-        $sections = array();
-        $formData = array();
+        $sections = [];
+        $formData = [];
 
         if( empty($_GET["section"]) ){
             $currentSection = current($metaList)["sectionKey"];
@@ -198,7 +198,7 @@ class ADMIN_CTRL_Seo extends ADMIN_CTRL_Abstract
      */
     protected function getMenu()
     {
-        $items = array();
+        $items = [];
 
         $item = new BASE_MenuItem();
         $item->setLabel(OW::getLanguage()->text('admin', 'seo_page'));

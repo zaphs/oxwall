@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -25,9 +25,9 @@
 /**
  * The class represents the results of an authentication attempt.
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 class OW_AuthResult
 {
@@ -66,25 +66,24 @@ class OW_AuthResult
 
     /**
      * Constructor.
+     * @param       $code
+     * @param null  $userId
+     * @param array $messages
      */
-    public function __construct( $code, $userId = null, array $messages = array() )
+    public function __construct($code, $userId = null, array $messages = [])
     {
-        $code = (int) $code;
+        $code = (int)$code;
 
-        if ( $code < self::FAILURE_PASSWORD_INVALID )
-        {
+        if ($code < self::FAILURE_PASSWORD_INVALID) {
             $code = self::FAILURE;
-        }
-        elseif ( $code > self::SUCCESS )
-        {
+        } elseif ($code > self::SUCCESS) {
             $code = self::SUCCESS;
         }
 
         $this->code = $code;
 
-        if ( $userId != null )
-        {
-            $this->userId = (int) $userId;
+        if ($userId != null) {
+            $this->userId = (int)$userId;
         }
 
         $this->messages = $messages;
@@ -97,7 +96,7 @@ class OW_AuthResult
      */
     public function isValid()
     {
-        return ( $this->code > 0 ) ? true : false;
+        return $this->code > 0;
     }
 
     /**

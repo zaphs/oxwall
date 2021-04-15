@@ -41,7 +41,7 @@ class BASE_MCMP_CommentsForm extends OW_MobileComponent
         $textArea->setInvitation($language->text('base', 'comment_form_element_invitation_text'));
         $form->addElement($textArea);
 
-        $hiddenEls = array(
+        $hiddenEls = [
             'entityType' => $params->getEntityType(),
             'entityId' => $params->getEntityId(),
             'displayType' => $params->getDisplayType(),
@@ -50,7 +50,7 @@ class BASE_MCMP_CommentsForm extends OW_MobileComponent
             'cid' => $id,
             'commentCountOnPage' => $params->getCommentCountOnPage(),
             'isMobile' => 1
-        );
+        ];
 
         foreach ( $hiddenEls as $name => $value )
         {

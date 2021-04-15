@@ -54,7 +54,7 @@ class BASE_CMP_Console extends OW_Component
         OW::getEventManager()->trigger($event);
         $items = $event->getData();
 
-        $resultItems = array();
+        $resultItems = [];
 
         foreach ( $items as $item )
         {
@@ -81,10 +81,10 @@ class BASE_CMP_Console extends OW_Component
                 $order = count($resultItems);
             }
 
-            $resultItem = array(
+            $resultItem = [
                 "item" => $itemCmp,
                 "order" => $order
-            );
+            ];
 
             $renderEvent = new OW_Event(self::RENDER_EVENT_NAME, $resultItem, $resultItem);
             OW::getEventManager()->trigger($renderEvent);
@@ -95,16 +95,16 @@ class BASE_CMP_Console extends OW_Component
 
             if ( is_subclass_of($itemCmp, 'OW_Renderable') && $itemCmp->isVisible() )
             {
-                $resultItems[] = array(
+                $resultItems[] = [
                     'item' => $itemCmp->render(),
                     'order' => $order
-                );
+                ];
             }
         }
 
-        usort($resultItems, array($this, '_sortItems'));
+        usort($resultItems, [$this, '_sortItems']);
 
-        $tplItems = array();
+        $tplItems = [];
 
         foreach ( $resultItems as $item )
         {
@@ -120,12 +120,12 @@ class BASE_CMP_Console extends OW_Component
         $event = new OW_Event(BASE_CTRL_Ping::PING_EVENT . '.consoleUpdate');
         OW::getEventManager()->trigger($event);
 
-        $params = array(
+        $params = [
             'pingInterval' => 30000
-        );
+        ];
 
         $js = UTIL_JsGenerator::newInstance();
-        $js->newObject(array('OW', 'Console'), 'OW_Console', array($params, $event->getData()));
+        $js->newObject(['OW', 'Console'], 'OW_Console', [$params, $event->getData()]);
 
         OW::getDocument()->addOnloadScript($js, 900);
     }

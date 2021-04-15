@@ -40,14 +40,14 @@ class BASE_CMP_MainMenu extends BASE_CMP_Menu
     /**
      * Constructor.
      */
-    public function __construct( array $params = array() )
+    public function __construct( array $params = [])
     {
         parent::__construct();
         
         $this->responsive = isset($params["responsive"]) && $params["responsive"];
     }
     
-    public function render()
+    public function render(): string
     {
         $menuItems = OW::getDocument()->getMasterPage()
                 ->getMenu(BOL_NavigationService::MENU_TYPE_MAIN)->getMenuItems();

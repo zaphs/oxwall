@@ -2,7 +2,7 @@
 
 class BASE_MCMP_WidgetPanelItem extends BASE_CMP_DragAndDropItem 
 {
-    public function __construct($componentUniqName, $isClone = false, $template = null, $sharedData = array())
+    public function __construct($componentUniqName, $isClone = false, $template = null, $sharedData = [])
     {
         parent::__construct($componentUniqName, $isClone, null, $sharedData);
         

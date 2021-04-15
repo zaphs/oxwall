@@ -33,20 +33,20 @@ class BASE_CMP_DeleteUser extends OW_Component
     /**
      * Constructor.
      */
-    public function __construct( $params = array() )
+    public function __construct( $params = [])
     {
         parent::__construct();
 
         $userId = (int) $params['userId'];
         $showMessage = (bool) $params['showMessage'];
 
-        $rspUrl = OW::getRouter()->urlFor('BASE_CTRL_User', 'deleteUser', array(
+        $rspUrl = OW::getRouter()->urlFor('BASE_CTRL_User', 'deleteUser', [
             'user-id' => $userId
-        ));
+        ]);
 
-        $rspUrl = OW::getRequest()->buildUrlQueryString($rspUrl, array(
+        $rspUrl = OW::getRequest()->buildUrlQueryString($rspUrl, [
             'showMessage' => (int) $showMessage
-        ));
+        ]);
 
         $js = UTIL_JsGenerator::composeJsString('$("#baseDCButton").click(function()
         {
@@ -68,9 +68,9 @@ class BASE_CMP_DeleteUser extends OW_Component
                     _scope.deleteCallback(r);
                 }
             });
-        });', array(
+        });', [
             'rsp' => $rspUrl
-        ));
+        ]);
 
         OW::getDocument()->addOnloadScript($js);
     }

@@ -97,7 +97,7 @@ class BOL_ThemeContentDao extends OW_BaseDao
     {
         $example = new OW_Example();
         $example->andFieldEqual(self::THEME_ID, $themeId);
-        return $this->findListByExample($example, 24 * 3600, array(BOL_ThemeDao::CACHE_TAG_PAGE_LOAD_THEME, OW_CacheManager::TAG_OPTION_INSTANT_LOAD));
+        return $this->findListByExample($example, 24 * 3600, [BOL_ThemeDao::CACHE_TAG_PAGE_LOAD_THEME, OW_CacheManager::TAG_OPTION_INSTANT_LOAD]);
     }
 
     /**
@@ -116,6 +116,6 @@ class BOL_ThemeContentDao extends OW_BaseDao
 
     protected function clearCache()
     {
-        OW::getCacheManager()->clean(array(BOL_ThemeDao::CACHE_TAG_PAGE_LOAD_THEME));
+        OW::getCacheManager()->clean([BOL_ThemeDao::CACHE_TAG_PAGE_LOAD_THEME]);
     }
 }

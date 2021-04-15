@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -25,15 +25,15 @@
 /**
  * The class is a gateway for auth. adapters and provides common API to authenticate users.
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
  * @method static OW_Auth getInstance()
- * @since 1.0
+ * @since   1.0
  */
 class OW_Auth
 {
     use OW_Singleton;
-    
+
     /**
      * @var OW_IAuthenticator
      */
@@ -42,7 +42,7 @@ class OW_Auth
     /**
      * @return OW_IAuthenticator
      */
-    public function getAuthenticator()
+    public function getAuthenticator(): OW_IAuthenticator
     {
         return $this->authenticator;
     }
@@ -50,7 +50,7 @@ class OW_Auth
     /**
      * @param OW_IAuthenticator $authenticator
      */
-    public function setAuthenticator( OW_IAuthenticator $authenticator )
+    public function setAuthenticator(OW_IAuthenticator $authenticator): void
     {
         $this->authenticator = $authenticator;
     }
@@ -61,17 +61,15 @@ class OW_Auth
      * @param OW_AuthAdapter $adapter
      * @return OW_AuthResult
      */
-    public function authenticate( OW_AuthAdapter $adapter )
+    public function authenticate(OW_AuthAdapter $adapter): OW_AuthResult
     {
         $result = $adapter->authenticate();
 
-        if ( !( $result instanceof OW_AuthResult ) )
-        {
+        if (!($result instanceof OW_AuthResult)) {
             throw new LogicException('Instance of OW_AuthResult expected!');
         }
 
-        if ( $result->isValid() )
-        {
+        if ($result->isValid()) {
             $this->login($result->getUserId());
         }
 
@@ -81,9 +79,9 @@ class OW_Auth
     /**
      * Checks if current user is authenticated.
      *
-     * @return boolean
+     * @return bool
      */
-    public function isAuthenticated()
+    public function isAuthenticated(): bool
     {
         return $this->authenticator->isAuthenticated();
     }
@@ -92,9 +90,9 @@ class OW_Auth
      * Returns current user id.
      * If user is not authenticated 0 returned.
      *
-     * @return integer
+     * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->authenticator->getUserId();
     }
@@ -102,38 +100,33 @@ class OW_Auth
     /**
      * Logins user by provided user id.
      *
-     * @param integer $userId
-     * @return string
+     * @param int $userId
      */
-    public function login( $userId )
+    public function login(int $userId): void
     {
-        $userId = (int) $userId;
-
-        if ( $userId < 1 )
-        {
+        if ($userId < 1) {
             throw new InvalidArgumentException('invalid userId');
         }
 
-        $event = new OW_Event(OW_EventManager::ON_BEFORE_USER_LOGIN, array('userId' => $userId));
+        $event = new OW_Event(OW_EventManager::ON_BEFORE_USER_LOGIN, ['userId' => $userId]);
         OW::getEventManager()->trigger($event);
 
         $this->authenticator->login($userId);
 
-        $event = new OW_Event(OW_EventManager::ON_USER_LOGIN, array('userId' => $userId));
+        $event = new OW_Event(OW_EventManager::ON_USER_LOGIN, ['userId' => $userId]);
         OW::getEventManager()->trigger($event);
     }
 
     /**
      * Logs out current user.
      */
-    public function logout()
+    public function logout(): void
     {
-        if ( !$this->isAuthenticated() )
-        {
+        if (!$this->isAuthenticated()) {
             return;
         }
 
-        $event = new OW_Event(OW_EventManager::ON_USER_LOGOUT, array('userId' => $this->getUserId()));
+        $event = new OW_Event(OW_EventManager::ON_USER_LOGOUT, ['userId' => $this->getUserId()]);
         OW::getEventManager()->trigger($event);
 
         $this->authenticator->logout();
@@ -144,7 +137,7 @@ class OW_Auth
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->authenticator->getId();
     }

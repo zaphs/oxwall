@@ -91,8 +91,7 @@ class BASE_CMP_Paging extends OW_Component
         $this->assign('page_shortcut_count', $range);
         $this->assign('count', $count);
 
-        $this->assign('url', OW::getRequest()->buildUrlQueryString(null, array("{$prefix}page" => null)));
+        $this->assign('url', OW::getRequest()->buildUrlQueryString(null, ["{$prefix}page" => null]));
     }
 }
 
-?>

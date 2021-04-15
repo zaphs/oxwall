@@ -76,7 +76,7 @@ class BASE_CMP_TagSearch extends OW_Component
         $this->assign('form_id', $formId);
         $this->assign('el_id', $elId);
 
-        $urlToRedirect = ($this->routeName === null) ? OW::getRequest()->buildUrlQueryString($this->url, array('tag' => '_tag_')) : OW::getRouter()->urlForRoute($this->routeName, array('tag' => '#tag#'));
+        $urlToRedirect = ($this->routeName === null) ? OW::getRequest()->buildUrlQueryString($this->url, ['tag' => '_tag_']) : OW::getRouter()->urlForRoute($this->routeName, ['tag' => '#tag#']);
 
         $script = "
 			var tsVar" . $randId . " = '" . $urlToRedirect . "';

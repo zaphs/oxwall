@@ -34,10 +34,10 @@ abstract class BASE_CMP_DragAndDropPanel extends OW_Component
     protected $settingsCmpClass = "BASE_CMP_ComponentSettings";
     protected $itemClassName = "BASE_CMP_DragAndDropItem";
     
-    protected $componentList = array();
-    protected $settingList = array();
-    protected $positionList = array();
-    protected $standartSettings = array();
+    protected $componentList = [];
+    protected $settingList = [];
+    protected $positionList = [];
+    protected $standartSettings = [];
 
     protected $placeName;
     /**
@@ -45,9 +45,9 @@ abstract class BASE_CMP_DragAndDropPanel extends OW_Component
      * @var BOL_Scheme
      */
     protected $scheme = 1;
-    protected $schemeList = array();
-    protected $additionalSettingList = array();
-    protected $sharedData = array();
+    protected $schemeList = [];
+    protected $additionalSettingList = [];
+    protected $sharedData = [];
 
     public function __construct( $placeName, array $componentList, $template = null )
     {
@@ -64,20 +64,20 @@ abstract class BASE_CMP_DragAndDropPanel extends OW_Component
 
         foreach ( $this->componentList as $widget )
         {
-            $this->standartSettings[$widget['className']] = call_user_func(array($widget['className'], 'getStandardSettingValueList'), $widget["uniqName"]);
+            $this->standartSettings[$widget['className']] = call_user_func([$widget['className'], 'getStandardSettingValueList'], $widget["uniqName"]);
         }
 
-        OW_ViewRenderer::getInstance()->registerFunction('dd_component', array($this, 'tplComponent'));
+        OW_ViewRenderer::getInstance()->registerFunction('dd_component', [$this, 'tplComponent']);
 
         $this->assign('disableJs', !empty($_GET['disable-js']));
 
         $this->assign('placeName', $placeName);
 
 
-        $this->sharedData = array(
+        $this->sharedData = [
             'additionalSettings' => &$this->additionalSettingList,
             'place' => $this->placeName
-        );
+        ];
     }
 
     public function setItemClassName( $class ) 
@@ -90,7 +90,7 @@ abstract class BASE_CMP_DragAndDropPanel extends OW_Component
         $this->settingsCmpClass = $class;
     }
 
-    protected function initializeJs( $responderController, $dragAndDropJsConstructor, $sharedData = array() )
+    protected function initializeJs( $responderController, $dragAndDropJsConstructor, $sharedData = [])
     {
         $baseStaticJsUrl = OW::getPluginManager()->getPlugin('BASE')->getStaticJsUrl();
 
@@ -104,12 +104,12 @@ abstract class BASE_CMP_DragAndDropPanel extends OW_Component
         OW::getLanguage()->addKeyForJs('base', 'widgets_reset_position_confirm');
         $urlAjaxResponder = OW::getRouter()->urlFor($responderController, 'processQueue');
 
-        $sharedData = array_merge(array(
+        $sharedData = array_merge([
             "settingsCmpClass" => $this->settingsCmpClass
-        ), $sharedData);
+        ], $sharedData);
         
         $js = new UTIL_JsGenerator();
-        $js->newObject('handler', 'OW_Components_DragAndDropAjaxHandler', array($urlAjaxResponder, $sharedData));
+        $js->newObject('handler', 'OW_Components_DragAndDropAjaxHandler', [$urlAjaxResponder, $sharedData]);
         $js->newObject('dragAndDrop', $dragAndDropJsConstructor);
         $js->addScript("dragAndDrop.setHandler(handler)");
 
@@ -143,14 +143,14 @@ abstract class BASE_CMP_DragAndDropPanel extends OW_Component
 
     private function makeTplComponentList()
     {
-        $resultList = array();
+        $resultList = [];
         $tplPanelComponents = & $resultList['place'];
         $tplSectionComponents = & $resultList['section'];
         $tplClonableComponents = & $resultList['clonable'];
 
-        $tplPanelComponents = array();
-        $tplSectionComponents = array();
-        $tplClonableComponents = array();
+        $tplPanelComponents = [];
+        $tplSectionComponents = [];
+        $tplClonableComponents = [];
 
         foreach ( $this->componentList as $uniqName => $component )
         {
@@ -176,7 +176,7 @@ abstract class BASE_CMP_DragAndDropPanel extends OW_Component
 
         foreach ( $tplSectionComponents as &$section )
         {
-            usort($section, array($this, 'sectionSortDelegate'));
+            usort($section, [$this, 'sectionSortDelegate']);
         }
 
         return $resultList;
@@ -243,7 +243,7 @@ abstract class BASE_CMP_DragAndDropPanel extends OW_Component
         foreach ( $this->componentList as $widget )
         {
             $standartSettings = empty($this->standartSettings[$widget['className']])
-                ? array()
+                ? []
                 : $this->standartSettings[$widget['className']];
 
             $settingList[$widget['uniqName']] = empty($settingList[$widget['uniqName']])
@@ -274,7 +274,7 @@ abstract class BASE_CMP_DragAndDropPanel extends OW_Component
         $this->assign('schemeList', $this->schemeList);
     }
 
-    public function setAdditionalSettingList( array $settingList = array() )
+    public function setAdditionalSettingList( array $settingList = [])
     {
         $this->additionalSettingList = $settingList;
     }
@@ -289,7 +289,7 @@ abstract class BASE_CMP_DragAndDropPanel extends OW_Component
         $uniqName = $params['uniqName'];
 
         $viewInstance = new $this->itemClassName($uniqName, $this->isComponentClone($uniqName), 'drag_and_drop_item_customize', $this->sharedData);
-        $viewInstance->setSettingList(empty($this->settingList[$uniqName]) ? array() : $this->settingList[$uniqName]);
+        $viewInstance->setSettingList(empty($this->settingList[$uniqName]) ? [] : $this->settingList[$uniqName]);
         $viewInstance->componentParamObject->additionalParamList = $this->additionalSettingList;
         $viewInstance->componentParamObject->customizeMode = null;
 

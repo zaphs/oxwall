@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -25,15 +25,19 @@
 /**
  * The class is a gateway for auth. adapters and provides common API to authenticate users.
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 interface OW_ICacheBackend
 {
-    public function save( $data, $key, array $tags = array(), $expTime );
-    public function load( $key );
-    public function test( $key );
-    public function remove( $key );
-    public function clean( array $tags, $mode );
+    public function save($data, $key, array $tags = [], $expTime = null);
+
+    public function load($key);
+
+    public function test($key);
+
+    public function remove($key);
+
+    public function clean(array $tags, $mode);
 }

@@ -56,7 +56,7 @@ class BOL_Language extends OW_Entity
     /**
      * @return string
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
@@ -74,7 +74,7 @@ class BOL_Language extends OW_Entity
     }
 
     /**
-     * @return unknown
+     * @return int
      */
     public function getOrder()
     {
@@ -82,7 +82,7 @@ class BOL_Language extends OW_Entity
     }
 
     /**
-     * @param unknown_type $order
+     * @param int $order
      * @return $this
      */
     public function setOrder( $order )

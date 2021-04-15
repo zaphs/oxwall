@@ -90,7 +90,7 @@ class BOL_SearchResultDao extends OW_BaseDao
         $count = 0;
         $values = '';
 
-        $valuesList = array();
+        $valuesList = [];
 
         foreach ( $idList as $order => $userId )
         {
@@ -112,7 +112,7 @@ class BOL_SearchResultDao extends OW_BaseDao
                 $this->dbo->query($query . $values, $valuesList);
                 $count = 0;
                 $values = '';
-                $valuesList = array();
+                $valuesList = [];
             }
         }
 
@@ -130,7 +130,7 @@ class BOL_SearchResultDao extends OW_BaseDao
      * @param int $count
      * return array
      */
-    public function getUserIdList( $listId, $first, $count, $excludeList = array() )
+    public function getUserIdList( $listId, $first, $count, $excludeList = [])
     {
         $example = new OW_Example();
         $example->andFieldEqual('searchId', (int) $listId);
@@ -144,7 +144,7 @@ class BOL_SearchResultDao extends OW_BaseDao
 
         $results = $this->findListByExample($example);
 
-        $userIdList = array();
+        $userIdList = [];
 
         foreach ( $results as $result )
         {

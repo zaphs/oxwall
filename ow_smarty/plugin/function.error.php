@@ -55,5 +55,5 @@ function smarty_function_error( $params )
 
     $errors = $input->renderErrors();
 
-    return UTIL_HtmlTag::generateTag('span', array('id' => $input->getId() . '_error', 'style' => ( $errors ? 'display:block;' : 'display:none;' ), 'class' => 'error'), true, $errors);
+    return UTIL_HtmlTag::generateTag('span', ['id' => $input->getId() . '_error', 'style' => ( $errors ? 'display:block;' : 'display:none;' ), 'class' => 'error'], true, $errors);
 }

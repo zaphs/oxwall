@@ -117,6 +117,6 @@ class BOL_FileTemporaryDao extends OW_BaseDao
             FROM `' . $this->getTableName() . '`
             WHERE `addDatetime` <= :limit';
         
-        return $this->dbo->queryForColumnList($sql, array('limit' => $limit));
+        return $this->dbo->queryForColumnList($sql, ['limit' => $limit]);
     }
 }

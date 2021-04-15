@@ -84,13 +84,13 @@ class BASE_CTRL_User extends OW_ActionController
         }
 
         // set meta info
-        $params = array(
+        $params = [
             "sectionKey" => "base.base_pages",
             "entityKey" => "forgotPass",
             "title" => "base+meta_title_forgot_pass",
             "description" => "base+meta_desc_forgot_pass",
             "keywords" => "base+meta_keywords_forgot_pass"
-        );
+        ];
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }
@@ -123,7 +123,7 @@ class BASE_CTRL_User extends OW_ActionController
                     $this->redirect();
                 }
 
-                $this->redirect(OW::getRouter()->urlForRoute('base.reset_user_password', array('code' => $resetPassword->getCode())));
+                $this->redirect(OW::getRouter()->urlForRoute('base.reset_user_password', ['code' => $resetPassword->getCode()]));
             }
             else
             {
@@ -166,7 +166,7 @@ class BASE_CTRL_User extends OW_ActionController
         $form = $this->userService->getResetPasswordForm();
         $this->addForm($form);
 
-        $this->assign('formText', $language->text('base', 'reset_password_form_text', array('username' => $user->getUsername())));
+        $this->assign('formText', $language->text('base', 'reset_password_form_text', ['username' => $user->getUsername()]));
 
         OW::getDocument()->getMasterPage()->setTemplate(OW::getThemeManager()->getMasterPageTemplate(OW_MasterPage::TEMPLATE_BLANK));
 
@@ -201,7 +201,7 @@ class BASE_CTRL_User extends OW_ActionController
     {
         $this->setPageHeading(OW::getLanguage()->text('base', 'reset_password_code_expired_cap_label'));
         $this->setPageHeadingIconClass('ow_ic_info');
-        $this->assign('text', OW::getLanguage()->text('base', 'reset_password_code_expired_text', array('url' => OW::getRouter()->urlForRoute('base_forgot_password'))));
+        $this->assign('text', OW::getLanguage()->text('base', 'reset_password_code_expired_text', ['url' => OW::getRouter()->urlForRoute('base_forgot_password')]));
         OW::getDocument()->getMasterPage()->setTemplate(OW::getThemeManager()->getMasterPageTemplate(OW_MasterPage::TEMPLATE_BLANK));
     }
 
@@ -209,7 +209,7 @@ class BASE_CTRL_User extends OW_ActionController
     {
         if ( OW::getRequest()->isAjax() )
         {
-            exit(json_encode(array()));
+            exit(json_encode([]));
         }
 
         if ( OW::getUser()->isAuthenticated() )
@@ -258,13 +258,13 @@ class BASE_CTRL_User extends OW_ActionController
         $this->setDocumentKey('base_sign_in');
 
         // set meta info
-        $params = array(
+        $params = [
             "sectionKey" => "base.base_pages",
             "entityKey" => "sign_in",
             "title" => "base+meta_title_sign_in",
             "description" => "base+meta_desc_sign_in",
             "keywords" => "base+meta_keywords_sign_in"
-        );
+        ];
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }
@@ -284,7 +284,7 @@ class BASE_CTRL_User extends OW_ActionController
             }
             catch ( LogicException $e )
             {
-                exit(json_encode(array('result' => false, 'message' => 'Error!')));
+                exit(json_encode(['result' => false, 'message' => 'Error!']));
             }
 
             $message = '';
@@ -296,17 +296,17 @@ class BASE_CTRL_User extends OW_ActionController
 
             if ( $result->isValid() )
             {
-                exit(json_encode(array('result' => true, 'message' => $message)));
+                exit(json_encode(['result' => true, 'message' => $message]));
             }
             else
             {
-                exit(json_encode(array('result' => false, 'message' => $message)));
+                exit(json_encode(['result' => false, 'message' => $message]));
             }
 
-            exit(json_encode(array()));
+            exit(json_encode([]));
         }
 
-        exit(json_encode(array()));
+        exit(json_encode([]));
     }
 
     public function signOut()
@@ -415,17 +415,17 @@ class BASE_CTRL_User extends OW_ActionController
 
         if ( $user === null || !OW::getUser()->isAuthorized('base') )
         {
-            exit(json_encode(array(
+            exit(json_encode([
                 'result' => 'error'
-            )));
+            ]));
         }
 
         if ( BOL_AuthorizationService::getInstance()->isActionAuthorizedForUser($userId, BOL_AuthorizationService::ADMIN_GROUP_NAME) )
         {
-            exit(json_encode(array(
+            exit(json_encode([
                 'message' => OW::getLanguage()->text('base', 'cannot_delete_admin_user_message'),
                 'result' => 'error'
-            )));
+            ]));
         }
 
 //        $event = new OW_Event(OW_EventManager::ON_USER_UNREGISTER, array('userId' => $userId, 'deleteContent' => true));
@@ -440,10 +440,10 @@ class BASE_CTRL_User extends OW_ActionController
             OW::getFeedback()->info($successMessage);
         }
 
-        exit(json_encode(array(
+        exit(json_encode([
             'message' => $successMessage,
             'result' => 'success'
-        )));
+        ]));
     }
 
     public function userDeleted()
@@ -476,7 +476,7 @@ class BASE_CTRL_User extends OW_ActionController
         if ( empty($_SERVER['HTTP_REFERER']) )
         {
             $username = $userService->getUserName($userId);
-            $this->redirect(OW::getRouter()->urlForRoute('base_user_profile', array('username' => $username)));
+            $this->redirect(OW::getRouter()->urlForRoute('base_user_profile', ['username' => $username]));
         }
         else
         {
@@ -488,20 +488,20 @@ class BASE_CTRL_User extends OW_ActionController
     {
         if ( !OW::getUser()->isAuthorized('base') )
         {
-            exit(json_encode(array(
+            exit(json_encode([
                 'result' => 'error',
                 'message' => 'Not Authorized'
-            )));
+            ]));
         }
 
         $user = BOL_UserService::getInstance()->findUserById((int) $_POST['userId']);
 
         if ( $user === null )
         {
-            exit(json_encode(array('result' => 'error', 'mesaage' => 'Empty user')));
+            exit(json_encode(['result' => 'error', 'mesaage' => 'Empty user']));
         }
 
-        $roles = array();
+        $roles = [];
         foreach ( $_POST['roles'] as $roleId => $onoff )
         {
             if ( !empty($onoff) )
@@ -518,10 +518,10 @@ class BASE_CTRL_User extends OW_ActionController
             $aService->saveUserRole($user->getId(), $roleId);
         }
 
-        exit(json_encode(array(
+        exit(json_encode([
             'result' => 'success',
             'message' => OW::getLanguage()->text('base', 'authorization_feedback_roles_updated')
-        )));
+        ]));
     }
 
     public function block( $params )

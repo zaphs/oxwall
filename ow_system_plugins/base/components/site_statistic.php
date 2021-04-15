@@ -88,23 +88,23 @@ class BASE_CMP_SiteStatistic  extends OW_Component
         $entities = $service->getStatistics($this->entityTypes, $this->period);
 
         // translate and process the data entities
-        $data  = array();
-        $total = array();
+        $data  = [];
+        $total = [];
         $index = 0;
 
         foreach ($entities as $entity => $values)
         {
             $list = array_values($values);
 
-            $data[] = array_merge(array(
+            $data[] = array_merge([
                 'label' => $this->entityLabels[$entity],
                 'data' => $list
-            ), $this->getChartColor($index));
+            ], $this->getChartColor($index));
 
-            $total[] = array(
+            $total[] = [
                 'label' => $this->entityLabels[$entity],
                 'count' => array_sum($list)
-            );
+            ];
 
             $index++;
         }
@@ -156,7 +156,7 @@ class BASE_CMP_SiteStatistic  extends OW_Component
      */
     protected function getMonths($count)
     {
-        $months = array();
+        $months = [];
         $language = OW::getLanguage();
 
         for ($i = $count - 1; $i > 0; $i--)
@@ -178,7 +178,7 @@ class BASE_CMP_SiteStatistic  extends OW_Component
      */
     protected function getHours()
     {
-        $hours = array();
+        $hours = [];
         $hours[] = '12:00 AM';
         $hour  = 1;
 
@@ -206,7 +206,7 @@ class BASE_CMP_SiteStatistic  extends OW_Component
      */
     protected function getDays($count)
     {
-        $days = array();
+        $days = [];
 
         for ($i = $count - 1; $i > 0; $i--)
         {
@@ -232,13 +232,13 @@ class BASE_CMP_SiteStatistic  extends OW_Component
         $g = hexdec(substr($hash, 2, 2));
         $b = hexdec(substr($hash, 4, 2));
 
-        return array(
+        return [
             'fillColor' => 'rgba(' . $r . ',' . $g . ',' . $b . ',0.2)',
             'strokeColor' => 'rgba(' . $r . ',' . $g . ',' .$b . ',1)',
             'pointColor' => 'rgba(' . $r . ',' .$g .',' . $b . ',1)',
             'pointStrokeColor' => '#fff',
             'pointHighlightFill' => '#fff',
             'pointHighlightStroke' => 'rgba(' .$r . ',' . $g .','. $b . ',1)'
-        );
+        ];
     }
 }

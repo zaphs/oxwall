@@ -55,23 +55,23 @@ class BASE_CMP_QuickLinksWidget extends BASE_CLASS_Widget
 
     public static function getSettingList()
     {
-        $settingList = array();
-        $settingList['content'] = array(
+        $settingList = [];
+        $settingList['content'] = [
             'presentation' => self::PRESENTATION_HIDDEN,
             'label' => '',
             'value' => null
-        );
+        ];
 
         return $settingList;
     }
 
     public static function getStandardSettingValueList()
     {
-        return array(
+        return [
             self::SETTING_TITLE => OW::getLanguage()->text('base', 'quick_links_cap_label'),
             self::SETTING_SHOW_TITLE => true,
             self::SETTING_WRAP_IN_BOX => true,
             self::SETTING_ICON => self::ICON_INFO
-        );
+        ];
     }
 }

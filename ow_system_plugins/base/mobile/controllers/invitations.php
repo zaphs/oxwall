@@ -41,10 +41,10 @@ class BASE_MCTRL_Invitations extends OW_MobileActionController
         $invid = $_POST['invid'];
         $command = $_POST['command'];
 
-        $event = new OW_Event('invitations.on_command', array(
+        $event = new OW_Event('invitations.on_command', [
             'command' => $command,
             'data' => $invid
-        ));
+        ]);
 
         OW::getEventManager()->trigger($event);
         $result = $event->getData();

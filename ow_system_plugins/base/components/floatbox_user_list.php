@@ -19,16 +19,16 @@ class BASE_CMP_FloatboxUserList extends OW_Component
         $this->assign('usernameList', $usernameList);
         $this->assign('avatarList', $avatarList);
         $this->assign('displayNameList', $displayNameList);
-        $this->assign('onlineInfo', array());
+        $this->assign('onlineInfo', []);
 
         $this->assign('list', $idList);
     }
 
     public function getFields( $userIdList )
     {
-        $fields = array();
+        $fields = [];
 
-        $qs = array();
+        $qs = [];
 
         $qBdate = BOL_QuestionService::getInstance()->findQuestionByName('birthdate');
 
@@ -45,7 +45,7 @@ class BASE_CMP_FloatboxUserList extends OW_Component
         foreach ( $questionList as $uid => $q )
         {
 
-            $fields[$uid] = array();
+            $fields[$uid] = [];
 
             $age = '';
 
@@ -58,10 +58,10 @@ class BASE_CMP_FloatboxUserList extends OW_Component
 
             if ( !empty($q['sex']) )
             {
-                $fields[$uid][] = array(
+                $fields[$uid][] = [
                     'label' => '',
                     'value' => BOL_QuestionService::getInstance()->getQuestionValueLang('sex', $q['sex']) . ' ' . $age
-                );
+                ];
             }
 
             if( !empty($q['birthdate']) )

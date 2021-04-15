@@ -4,7 +4,7 @@ class BASE_CMP_ConsoleItem extends OW_Renderable
 {
 
     protected $content = null, $control = null, $hidden = false;
-    private $uniqId, $class = array();
+    private $uniqId, $class = [];
 
     public function __construct()
     {
@@ -58,7 +58,7 @@ class BASE_CMP_ConsoleItem extends OW_Renderable
 
     public function render()
     {
-        $content = array();
+        $content = [];
 
         if ( !empty($this->content) )
         {
@@ -66,14 +66,14 @@ class BASE_CMP_ConsoleItem extends OW_Renderable
             $content['uniqId'] = $this->getContentUniqId();
         }
 
-        $this->assign('item', array
-        (
+        $this->assign('item',
+            [
             'uniqId' => $this->getUniqId(),
             'class' => $this->getClass(),
             'content' => $content,
             'html' => $this->control,
             'hidden' => $this->getIsHidden()
-        ));
+            ]);
 
         return parent::render();
     }

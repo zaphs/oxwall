@@ -37,7 +37,7 @@ require_once UPDATE_DIR_ROOT . 'classes' . DS . 'updater.php';
 require_once OW_DIR_CORE . 'ow.php';
 require_once OW_DIR_CORE . 'plugin.php';
 
-spl_autoload_register(array('UPDATE_Autoload', 'autoload'));
+spl_autoload_register(['UPDATE_Autoload', 'autoload']);
 
 UPDATE_ErrorManager::getInstance(true);
 
@@ -64,7 +64,7 @@ if ( (int) $currentXmlInfo['build'] > $currentBuild )
 
     $owpUpdateDir = UPDATE_DIR_ROOT . 'updates' . DS;
 
-    $updateDirList = array();
+    $updateDirList = [];
 
     $handle = opendir($owpUpdateDir);
 
@@ -94,8 +94,8 @@ if ( (int) $currentXmlInfo['build'] > $currentBuild )
 
 //        $updateXmlInfo = (array) simplexml_load_file($owpUpdateDir . $item . DS . 'update.xml');
 
-        $db->query("UPDATE `" . OW_DB_PREFIX . "base_config` SET `value` = :build WHERE `key` = 'base' AND `name` = 'soft_build'", array('build' => $currentXmlInfo['build']));
-        $db->query("UPDATE `" . OW_DB_PREFIX . "base_config` SET `value` = :version WHERE `key` = 'base' AND `name` = 'soft_version'", array('version' => $currentXmlInfo['version']));
+        $db->query("UPDATE `" . OW_DB_PREFIX . "base_config` SET `value` = :build WHERE `key` = 'base' AND `name` = 'soft_build'", ['build' => $currentXmlInfo['build']]);
+        $db->query("UPDATE `" . OW_DB_PREFIX . "base_config` SET `value` = :version WHERE `key` = 'base' AND `name` = 'soft_version'", ['version' => $currentXmlInfo['version']]);
     }
 
     $db->query("UPDATE `" . OW_DB_PREFIX . "base_config` SET `value` = 0 WHERE `key` = 'base' AND `name` = 'update_soft'");
@@ -109,7 +109,7 @@ if ( (int) $currentXmlInfo['build'] > $currentBuild )
         $query = "INSERT INTO `" . OW_DB_PREFIX . "base_log` (`message`, `type`, `key`, `timeStamp`) VALUES (:message, 'ow_update', 'core', :time)";
         try
         {
-            $db->query($query, array('message' => json_encode($entries), 'time' => time()));
+            $db->query($query, ['message' => json_encode($entries), 'time' => time()]);
         }
         catch ( Exception $e )
         {
@@ -125,7 +125,7 @@ if ( (int) $currentXmlInfo['build'] > $currentBuild )
 if ( !empty($_GET['plugin']) )
 {
     $query = "SELECT * FROM `" . OW_DB_PREFIX . "base_plugin` WHERE `key` = :key";
-    $result = $db->queryForRow($query, array('key' => trim($_GET['plugin'])));
+    $result = $db->queryForRow($query, ['key' => trim($_GET['plugin'])]);
 
     // plugin not found
     if ( empty($result) )
@@ -143,7 +143,7 @@ if ( !empty($_GET['plugin']) )
 
             $owpUpdateDir = OW_DIR_ROOT . 'ow_plugins' . DS . $result['module'] . DS . 'update' . DS;
 
-            $updateDirList = array();
+            $updateDirList = [];
 
             if ( file_exists($owpUpdateDir) )
             {
@@ -170,7 +170,7 @@ if ( !empty($_GET['plugin']) )
                     {
                         include($owpUpdateDir . $item . DS . 'update.php');
                         $query = "UPDATE `" . OW_DB_PREFIX . "base_plugin` SET `build` = :build, `update` = 0 WHERE `key` = :key";
-                        $db->query($query, array('build' => (int) $item, 'key' => $result['key']));
+                        $db->query($query, ['build' => (int) $item, 'key' => $result['key']]);
                     }
                 }
             }
@@ -182,7 +182,7 @@ if ( !empty($_GET['plugin']) )
                 $query = "INSERT INTO `" . OW_DB_PREFIX . "base_log` (`message`, `type`, `key`, `timeStamp`) VALUES (:message, 'ow_update', :key, :time)";
                 try
                 {
-                    $db->query($query, array('message' => json_encode($entries), 'key' => $result['key'], 'time' => time()));
+                    $db->query($query, ['message' => json_encode($entries), 'key' => $result['key'], 'time' => time()]);
                 }
                 catch ( Exception $e )
                 {
@@ -191,7 +191,7 @@ if ( !empty($_GET['plugin']) )
             }
 
             $query = "UPDATE `" . OW_DB_PREFIX . "base_plugin` SET `build` = :build, `update` = 0, `title` = :title, `description` = :desc WHERE `key` = :key";
-            $db->query($query, array('build' => (int) $xmlInfoArray['build'], 'key' => $result['key'], 'title' => $xmlInfoArray['name'], 'desc' => $xmlInfoArray['description']));
+            $db->query($query, ['build' => (int)$xmlInfoArray['build'], 'key' => $result['key'], 'title' => $xmlInfoArray['name'], 'desc' => $xmlInfoArray['description']]);
 
             $mode = 'plugin_update_success';
             $hcMessage = "Update Complete! Plugin '<b>" . $result['key'] . "</b>' successfully updated.";
@@ -201,7 +201,7 @@ if ( !empty($_GET['plugin']) )
         }
         else
         {
-            $db->query("UPDATE `" . OW_DB_PREFIX . "base_plugin` SET `update` = 0 WHERE `key` = :key", array('key' => $result['key']));
+            $db->query("UPDATE `" . OW_DB_PREFIX . "base_plugin` SET `update` = 0 WHERE `key` = :key", ['key' => $result['key']]);
             $mode = 'plugin_up_to_date';
             $hcMessage = "Error! Plugin '<b>" . $result['key'] . "</b>' is up to date.";
         }
@@ -210,7 +210,7 @@ if ( !empty($_GET['plugin']) )
     // update result actions
     if ( !empty($_GET['back-uri']) )
     {
-        $url = build_url_query_string(OW_URL_HOME . urldecode($_GET['back-uri']), array('plugin' => $_GET['plugin'], 'mode' => $mode));
+        $url = build_url_query_string(OW_URL_HOME . urldecode($_GET['back-uri']), ['plugin' => $_GET['plugin'], 'mode' => $mode]);
         Header("HTTP/1.1 301 Moved Permanently");
         Header("Location: " . $url);
         exit;
@@ -245,7 +245,7 @@ if ( !empty($_GET['plugin']) )
 if ( !empty($_GET['theme']) )
 {
     $query = "SELECT * FROM `" . OW_DB_PREFIX . "base_theme` WHERE `key` = :key";
-    $result = $db->queryForRow($query, array('key' => trim($_GET['theme'])));
+    $result = $db->queryForRow($query, ['key' => trim($_GET['theme'])]);
 
     // theme not found
     if ( empty($result) )
@@ -268,7 +268,7 @@ if ( !empty($_GET['theme']) )
                 $query = "INSERT INTO `" . OW_DB_PREFIX . "base_log` (`message`, `type`, `key`, `timeStamp`) VALUES (:message, 'ow_update', :key, :time)";
                 try
                 {
-                    $db->query($query, array('message' => json_encode($entries), 'key' => $result['key'], 'time' => time()));
+                    $db->query($query, ['message' => json_encode($entries), 'key' => $result['key'], 'time' => time()]);
                 }
                 catch ( Exception $e )
                 {
@@ -277,7 +277,7 @@ if ( !empty($_GET['theme']) )
             }
 
             $query = "UPDATE `" . OW_DB_PREFIX . "base_theme` SET `update` = 0 WHERE `key` = :key";
-            $db->query($query, array('key' => $result['key']));
+            $db->query($query, ['key' => $result['key']]);
 
             BOL_ThemeService::getInstance()->updateThemeInfo($result['key'], true);
 
@@ -289,7 +289,7 @@ if ( !empty($_GET['theme']) )
         }
         else
         {
-            $db->query("UPDATE `" . OW_DB_PREFIX . "base_theme` SET `update` = 0 WHERE `key` = :key", array('key' => $result['key']));
+            $db->query("UPDATE `" . OW_DB_PREFIX . "base_theme` SET `update` = 0 WHERE `key` = :key", ['key' => $result['key']]);
             $mode = 'theme_up_to_date';
             $hcMessage = "Error! Theme '<b>" . $result['title'] . "</b>' is up to date.";
         }
@@ -298,7 +298,7 @@ if ( !empty($_GET['theme']) )
     // update result actions
     if ( !empty($_GET['back-uri']) )
     {
-        $url = build_url_query_string(OW_URL_HOME . urldecode($_GET['back-uri']), array('theme' => $_GET['theme'], 'mode' => $mode));
+        $url = build_url_query_string(OW_URL_HOME . urldecode($_GET['back-uri']), ['theme' => $_GET['theme'], 'mode' => $mode]);
         Header("HTTP/1.1 301 Moved Permanently");
         Header("Location: " . $url);
         exit;
@@ -370,11 +370,11 @@ else
 
 /* functions */
 
-function build_url_query_string( $url, array $paramsToUpdate = array(), $anchor = null )
+function build_url_query_string( $url, array $paramsToUpdate = [], $anchor = null )
 {
     $requestUrlArray = parse_url($url);
 
-    $currentParams = array();
+    $currentParams = [];
 
     if ( isset($requestUrlArray['query']) )
     {

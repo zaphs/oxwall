@@ -69,14 +69,14 @@ class BASE_CLASS_StandardAuth extends OW_AuthAdapter
 
         if ( $user === null )
         {
-            return new OW_AuthResult(OW_AuthResult::FAILURE_IDENTITY_NOT_FOUND, null, array($language->text('base', 'auth_identity_not_found_error_message')));
+            return new OW_AuthResult(OW_AuthResult::FAILURE_IDENTITY_NOT_FOUND, null, [$language->text('base', 'auth_identity_not_found_error_message')]);
         }
         
         if ( $user->getPassword() !== BOL_UserService::getInstance()->hashPassword($this->password) )
         {
-            return new OW_AuthResult(OW_AuthResult::FAILURE_PASSWORD_INVALID, null, array($language->text('base', 'auth_invlid_password_error_message')));
+            return new OW_AuthResult(OW_AuthResult::FAILURE_PASSWORD_INVALID, null, [$language->text('base', 'auth_invlid_password_error_message')]);
         }
 
-        return new OW_AuthResult(OW_AuthResult::SUCCESS, $user->getId(), array($language->text('base', 'auth_success_message')));
+        return new OW_AuthResult(OW_AuthResult::SUCCESS, $user->getId(), [$language->text('base', 'auth_success_message')]);
     }
 }

@@ -12,7 +12,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -21,6 +20,7 @@
  * Display of Attribution Information is required in Larger Works which are defined in the CPAL as a work
  * which combines Covered Code or portions thereof with code not governed by the terms of the CPAL.
  */
+
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Handler\CurlHandler;
@@ -28,13 +28,13 @@ use GuzzleHttp\Handler\StreamHandler;
 use GuzzleHttp\RequestOptions;
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_utilities
- * @since 1.8.1
+ * @since   1.8.1
  */
 class UTIL_HttpClient
 {
-    const HTTP_STATUS_OK = 200;
+    const HTTP_STATUS_OK     = 200;
     const CONNECTION_TIMEOUT = 5;
 
     /**
@@ -43,16 +43,15 @@ class UTIL_HttpClient
     private static $client;
 
     /**
-     * @param string $url
+     * @param string                $url
      * @param UTIL_HttpClientParams $params
      * @return UTIL_HttpClientResponse
      */
-    public static function get( $url, UTIL_HttpClientParams $params = null )
+    public static function get($url, UTIL_HttpClientParams $params = null)
     {
-        $options = $params ? $params->getOptions() : array();
+        $options = $params ? $params->getOptions() : [];
 
-        if ( !empty($options["params"]) )
-        {
+        if (!empty($options["params"])) {
             $options[RequestOptions::QUERY] = $options["params"];
         }
 
@@ -60,51 +59,47 @@ class UTIL_HttpClient
     }
 
     /**
-     * @param string $url
+     * @param string                $url
      * @param UTIL_HttpClientParams $params
      * @return UTIL_HttpClientResponse
      */
-    public static function post( $url, UTIL_HttpClientParams $params = null )
+    public static function post($url, UTIL_HttpClientParams $params = null)
     {
-        $options = $params ? $params->getOptions() : array();
+        $options = $params ? $params->getOptions() : [];
 
-        if ( !empty($options["params"]) )
-        {
+        if (!empty($options["params"])) {
             $options[RequestOptions::FORM_PARAMS] = $options["params"];
         }
 
         return self::request("POST", $url, $options);
     }
+
     /* --------------------------------------------------------------------- */
 
     private static function getClient()
     {
-        if ( self::$client == null )
-        {
+        if (self::$client == null) {
             $handler = function_exists("curl_version") ? new CurlHandler() : new StreamHandler();
 
-            self::$client = new Client(array(
-                "request.options" => array(
+            self::$client = new Client([
+                "request.options" => [
                     "exceptions" => false,
-                ),
-                "handler" => HandlerStack::create($handler)
-            ));
+                ],
+                "handler"         => HandlerStack::create($handler),
+            ]);
         }
 
         return self::$client;
     }
 
-    private static function request( $method, $url, array $options )
+    private static function request($method, $url, array $options)
     {
-        $options[RequestOptions::VERIFY] = false;
+        $options[RequestOptions::VERIFY]          = false;
         $options[RequestOptions::CONNECT_TIMEOUT] = self::CONNECTION_TIMEOUT;
 
-        try
-        {
+        try {
             $response = self::getClient()->request($method, $url, $options);
-        }
-        catch ( Exception $e )
-        {
+        } catch (Exception $e) {
             return null;
         }
 

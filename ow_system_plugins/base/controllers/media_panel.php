@@ -26,7 +26,7 @@ class BASE_CTRL_MediaPanel extends OW_ActionController
     public function ajaxUpload( $params )
     {
         $pluginKey = $params['pluginKey'];
-        $result = array();
+        $result = [];
 
         if (OW::getRequest()->isPost())
         {
@@ -40,15 +40,15 @@ class BASE_CTRL_MediaPanel extends OW_ActionController
                     $url = OW::getStorage()->getFileUrl(OW::getPluginManager()->
                             getPlugin('base')->getUserFilesDir() . $img->id . '-' . $img->getData()->name);
 
-                    $result = array(
+                    $result = [
                         'file_url' => OW::getStorage()->
                                 getFileUrl(OW::getPluginManager()->getPlugin('base')->getUserFilesDir() . $img->id . '-' . $img->getData()->name),
-                    );
+                    ];
                 }
                 else {
-                    $result = array(
+                    $result = [
                         'error_message' => $imageId,
-                    );
+                    ];
                 }
             }
         }
@@ -109,16 +109,16 @@ class BASE_CTRL_MediaPanel extends OW_ActionController
 
         $list = $service->findGalleryImages($pluginKey, OW::getUser()->getId(), 0, 500);
         $list = array_reverse($list);
-        $images = array();
+        $images = [];
 
         foreach ( $list as $img )
         {
-            $images[] = array(
+            $images[] = [
                 'dto' => $img,
                 'data' => $img->getData(),
                 'url' => OW::getStorage()->getFileUrl(OW::getPluginManager()->getPlugin('base')->getUserFilesDir() . $img->id . '-' . $img->getData()->name),
                 'sel' => !empty($params['pid']) && $img->getId() == $params['pid'],
-            );
+            ];
         }
 
         $this->assign('images', $images);
@@ -225,7 +225,7 @@ class UploadImageForm extends Form
         $height = $image->getHeight();
         $width = $image->getWidth();
 
-        $id = BOL_MediaPanelService::getInstance()->add($plugin, 'image', OW::getUser()->getId(), array('name' => $name, 'height' => $height, 'width' => $width));
+        $id = BOL_MediaPanelService::getInstance()->add($plugin, 'image', OW::getUser()->getId(), ['name' => $name, 'height' => $height, 'width' => $width]);
         OW::getStorage()->copyFile($tmpname, $uploaddir . $id . '-' . $name);
         @unlink($tmpname);
 

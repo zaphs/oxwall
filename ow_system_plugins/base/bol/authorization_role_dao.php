@@ -120,19 +120,19 @@ class BOL_AuthorizationRoleDao extends OW_BaseDao
 		WHERE `ur`.`userId` = ? ORDER BY `sortOrder` ASC
 		";
 
-        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), array($userId));
+        return $this->dbo->queryForObjectList($query, $this->getDtoClassName(), [$userId]);
     }
 
     protected function clearCache()
     {
-        OW::getCacheManager()->clean(array(BOL_AuthorizationActionDao::CACHE_TAG_AUTHORIZATION));
+        OW::getCacheManager()->clean([BOL_AuthorizationActionDao::CACHE_TAG_AUTHORIZATION]);
     }
 
-    public function findAll( $cacheLifeTime = 0, $tags = array() )
+    public function findAll( $cacheLifeTime = 0, $tags = [])
     {
     	$example = new OW_Example();
     	$example->setOrder('`sortOrder` ASC');
     	
-        return $this->findListByExample($example, 3600 * 24, array(BOL_AuthorizationActionDao::CACHE_TAG_AUTHORIZATION, OW_CacheManager::TAG_OPTION_INSTANT_LOAD));
+        return $this->findListByExample($example, 3600 * 24, [BOL_AuthorizationActionDao::CACHE_TAG_AUTHORIZATION, OW_CacheManager::TAG_OPTION_INSTANT_LOAD]);
     }
 }

@@ -2,7 +2,7 @@
 
 class BASE_CMP_ContentPresenter extends OW_Component
 {
-    private static $presenters = array();
+    private static $presenters = [];
 
     protected $content;
     
@@ -10,18 +10,18 @@ class BASE_CMP_ContentPresenter extends OW_Component
     {
         parent::__construct();
         
-        $this->content = empty($content) ? array() : $content;
+        $this->content = empty($content) ? [] : $content;
     }
     
     private function detectFormat( $content )
     {
-        $formats = array(
-            "video" => array("html"),
-            "image_content" => array("image", "title", "description"),
-            "image" => array("image"),
-            "content" => array("title", "description"),
-            "text" => array("text")
-        );
+        $formats = [
+            "video" => ["html"],
+            "image_content" => ["image", "title", "description"],
+            "image" => ["image"],
+            "content" => ["title", "description"],
+            "text" => ["text"]
+        ];
         
         foreach ( $formats as $format => $fields )
         {
@@ -41,13 +41,13 @@ class BASE_CMP_ContentPresenter extends OW_Component
             return self::$presenters;
         }
         
-        $presenters = array(
+        $presenters = [
             "video"         => "BASE_ContentPresenterVideo",
             "image"         => "BASE_ContentPresenterImage",
             "image_content" => "BASE_ContentPresenterImageContent",
             "content"       => "BASE_ContentPresenterContent",
             "text"          => "BASE_ContentPresenterText"
-        );
+        ];
         
         $event = new BASE_CLASS_EventCollector("content.collect_presenters");
         OW::getEventManager()->trigger($event);
@@ -106,7 +106,7 @@ class BASE_CMP_ContentPresenter extends OW_Component
 
 class BASE_ContentPresenter extends OW_Component
 {
-    protected $content = array();
+    protected $content = [];
     protected $displayFormat;
     protected $uniqId;
 
@@ -129,9 +129,9 @@ class BASE_ContentPresenter extends OW_Component
         $imageSet = & $this->content["image"];
         if ( is_string($imageSet) )
         {
-            $imageSet = array(
+            $imageSet = [
                 "fullsize" => $imageSet
-            );
+            ];
         }
         
         // Processing image data to ensure all image types are defined
@@ -159,11 +159,11 @@ class BASE_ContentPresenter extends OW_Component
     {
         parent::onBeforeRender();
 
-        $event = new OW_Event("content.before_presenter_render", array(
+        $event = new OW_Event("content.before_presenter_render", [
             "name" => $this->displayFormat,
             "content" => $this->content,
             "uniqId" => $this->uniqId
-        ), $this->content);
+        ], $this->content);
         
         OW::getEventManager()->trigger($event);
         
@@ -228,10 +228,10 @@ class BASE_ContentPresenterVideo extends BASE_ContentPresenterImageContent
                     . 'e.preventDefault(); e.stopPropagation();'
                     . '$(".ow_newsfeed_oembed_atch", "#" + {$uniqId}).addClass("ow_video_playing"); '
                     . '$(".ow_newsfeed_item_picture", "#" + {$uniqId}).html({$embed});'
-                    . 'return false; });', array(
+                    . 'return false; });', [
                 "uniqId" => $this->uniqId,
                 "embed" => $code
-            ));
+            ]);
 
             OW::getDocument()->addOnloadScript($js);
         }

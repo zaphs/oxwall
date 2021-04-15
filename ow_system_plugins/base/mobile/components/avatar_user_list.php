@@ -29,7 +29,7 @@
  */
 class BASE_MCMP_AvatarUserList extends BASE_CMP_AvatarUserList
 {
-    public function __construct( array $idList = array() )
+    public function __construct( array $idList = [])
     {
         parent::__construct($idList);
         $this->setTemplate(OW::getPluginManager()->getPlugin('base')->getMobileCmpViewDir() . 'avatar_user_list.html');

@@ -8,8 +8,8 @@ class BASE_CMP_ConsoleListIpcItem extends OW_Component
      */
     protected $consoleItem;
 
-    protected $avatar = array(), $toolbar = array(),
-            $content = '', $contentImage = array(), $url;
+    protected $avatar = [], $toolbar = [],
+            $content = '', $contentImage = [], $url;
 
 
     public function __construct()

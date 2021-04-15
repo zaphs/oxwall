@@ -84,14 +84,14 @@ class BASE_CLASS_FileAttachment extends OW_Component
         parent::onBeforeRender();
 
         $items = BOL_AttachmentService::getInstance()->getFilesByBundleName($this->pluginKey, $this->uid);
-        $itemsArr = array();
+        $itemsArr = [];
 
         foreach ( $items as $item )
         {
-            $itemsArr[] = array('name' => $item['dto']->getOrigFileName(), 'size' => $item['dto']->getSize(), 'dbId' => $item['dto']->getId());
+            $itemsArr[] = ['name' => $item['dto']->getOrigFileName(), 'size' => $item['dto']->getSize(), 'dbId' => $item['dto']->getId()];
         }
 
-        $params = array(
+        $params = [
             'uid' => $this->uid,
             'submitUrl' => OW::getRouter()->urlFor('BASE_CTRL_Attachment', 'addFile'),
             'deleteUrl' => OW::getRouter()->urlFor('BASE_CTRL_Attachment', 'deleteFile'),
@@ -100,13 +100,13 @@ class BASE_CLASS_FileAttachment extends OW_Component
             'pluginKey' => $this->pluginKey,
             'multiple' => $this->multiple,
             'lItems' => $itemsArr
-        );
+        ];
 
         OW::getDocument()->addScript(OW::getPluginManager()->getPlugin('base')->getStaticJsUrl() . 'attachments.js');
         OW::getDocument()->addOnloadScript("owFileAttachments['" . $this->uid . "'] = new OWFileAttachment(" . json_encode($params) . ");");
 
 
 
-        $this->assign('data', array('uid' => $this->uid, 'showPreview' => $this->showPreview, 'selector' => $this->inputSelector));
+        $this->assign('data', ['uid' => $this->uid, 'showPreview' => $this->showPreview, 'selector' => $this->inputSelector]);
     }
 }

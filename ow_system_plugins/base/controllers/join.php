@@ -72,7 +72,7 @@ class BASE_CTRL_Join extends OW_ActionController
             //close join form
             try
             {
-                $event = new OW_Event(OW_EventManager::ON_JOIN_FORM_RENDER, array('code' => $code));
+                $event = new OW_Event(OW_EventManager::ON_JOIN_FORM_RENDER, ['code' => $code]);
                 OW::getEventManager()->trigger($event);
                 $this->assign('notValidInviteCode', true);
                 return;
@@ -105,11 +105,12 @@ class BASE_CTRL_Join extends OW_ActionController
 
         //include js
         $onLoadJs = " window.join = new OW_BaseFieldValidators( " .
-            json_encode(array(
+            json_encode([
                 'formName' => $this->joinForm->getName(),
                 'responderUrl' => $this->responderUrl,
                 'passwordMaxLength' => UTIL_Validator::PASSWORD_MAX_LENGTH,
-                'passwordMinLength' => UTIL_Validator::PASSWORD_MIN_LENGTH)) . ",
+                'passwordMinLength' => UTIL_Validator::PASSWORD_MIN_LENGTH
+            ]) . ",
                 " . UTIL_Validator::EMAIL_PATTERN . ", " . UTIL_Validator::USER_NAME_PATTERN . " ); ";
 
         OW::getDocument()->addOnloadScript($onLoadJs);
@@ -120,13 +121,13 @@ class BASE_CTRL_Join extends OW_ActionController
         $this->setDocumentKey('base_user_join');
 
         // set meta info
-        $params = array(
+        $params = [
             "sectionKey" => "base.base_pages",
             "entityKey" => "join",
             "title" => "base+meta_title_join",
             "description" => "base+meta_desc_join",
             "keywords" => "base+meta_keywords_join"
-        );
+        ];
 
         OW::getEventManager()->trigger(new OW_Event("base.provide_page_meta_info", $params));
     }
@@ -147,7 +148,7 @@ class BASE_CTRL_Join extends OW_ActionController
             //close join form
             try
             {
-                $event = new OW_Event(OW_EventManager::ON_JOIN_FORM_RENDER, array('code' => $code));
+                $event = new OW_Event(OW_EventManager::ON_JOIN_FORM_RENDER, ['code' => $code]);
                 OW::getEventManager()->trigger($event);
                 $this->assign('notValidInviteCode', true);
                 return;
@@ -175,7 +176,7 @@ class BASE_CTRL_Join extends OW_ActionController
 
                     if ( !isset($joinData) || !is_array($joinData) )
                     {
-                        $joinData = array();
+                        $joinData = [];
                     }
 
                     $data = $this->joinForm->getRealValues();
@@ -253,7 +254,7 @@ class BASE_CTRL_Join extends OW_ActionController
                 $username = $_POST["value"];
                 $result = $this->userService->isExistUserName($username);
 
-                echo json_encode(array('result' => !$result));
+                echo json_encode(['result' => !$result]);
 
                 break;
 
@@ -263,7 +264,7 @@ class BASE_CTRL_Join extends OW_ActionController
 
                 $result = $this->userService->isExistEmail($email);
 
-                echo json_encode(array('result' => !$result));
+                echo json_encode(['result' => !$result]);
 
                 break;
 
@@ -300,7 +301,7 @@ class BASE_CTRL_Join extends OW_ActionController
                 // create Avatar
                 $this->createAvatar($user->id);
 
-                $event = new OW_Event(OW_EventManager::ON_USER_REGISTER, array('userId' => $user->id, 'method' => 'native', 'params' => $params));
+                $event = new OW_Event(OW_EventManager::ON_USER_REGISTER, ['userId' => $user->id, 'method' => 'native', 'params' => $params]);
                 OW::getEventManager()->trigger($event);
 
                 OW::getFeedback()->info(OW::getLanguage()->text('base', 'join_successful_join'));
@@ -339,17 +340,17 @@ class JoinForm extends BASE_CLASS_UserQuestionForm
 
     const SESSION_START_STAMP = 'join.session_start_stamp';
 
-    protected $post = array();
+    protected $post = [];
     protected $stepCount = 1;
     protected $isLastStep = false;
     protected $displayAccountType = false;
-    public  $questions = array();
-    protected $sortedQuestionsList = array();
-    protected $questionListBySection = array();
-    protected $questionValuesList = array();
+    public  $questions = [];
+    protected $sortedQuestionsList = [];
+    protected $questionListBySection = [];
+    protected $questionValuesList = [];
     protected $accountType = null;
     protected $isBot = false;
-    protected $data = array();
+    protected $data = [];
     protected $toggleClass = '';
 
     public function __construct( $controller )
@@ -378,7 +379,7 @@ class JoinForm extends BASE_CLASS_UserQuestionForm
 
         if ( !isset($joinData) || !is_array($joinData) )
         {
-            $joinData = array();
+            $joinData = [];
         }
 
         $accountsKeys = array_keys($accounts);
@@ -424,8 +425,8 @@ class JoinForm extends BASE_CLASS_UserQuestionForm
 
         $section = null;
 
-        $questionNameList = array();
-        $this->sortedQuestionsList = array();
+        $questionNameList = [];
+        $this->sortedQuestionsList = [];
 
         foreach ( $this->questions as $sort => $question )
         {
@@ -578,11 +579,11 @@ class JoinForm extends BASE_CLASS_UserQuestionForm
     protected function addFakeQuestions()
     {
         $step = $this->getStep();
-        $realQuestionList = array();
+        $realQuestionList = [];
         $valueList = $this->questionValuesList;
-        $this->questionValuesList = array();
-        $this->sortedQuestionsList = array();
-        $this->questionListBySection = array();
+        $this->questionValuesList = [];
+        $this->sortedQuestionsList = [];
+        $this->questionListBySection = [];
         $section = '';
 
         $oldQuestionList = OW::getSession()->get(self::SESSION_REAL_QUESTION_LIST);
@@ -629,7 +630,7 @@ class JoinForm extends BASE_CLASS_UserQuestionForm
 
                     $addFakes = $event->getData();
 
-                    if ( !$addFakes || in_array( $this->questions[$sort]['presentation'], array('password', 'range') ) )
+                    if ( !$addFakes || in_array( $this->questions[$sort]['presentation'], ['password', 'range']) )
                     {
                         $this->questions[$sort]['fake'] = false;
                         $this->questions[$sort]['realName'] = $question['name'];
@@ -705,12 +706,12 @@ class JoinForm extends BASE_CLASS_UserQuestionForm
 
             if ( empty($oldQuestionList) )
             {
-                $oldQuestionList = array();
+                $oldQuestionList = [];
             }
 
             if ( empty($allQuestionList) )
             {
-                $allQuestionList = array();
+                $allQuestionList = [];
             }
 
             if ( $oldQuestionList && $allQuestionList )
@@ -737,7 +738,7 @@ class JoinForm extends BASE_CLASS_UserQuestionForm
 
         if ( $this->isBot )
         {
-            $event = new OW_Event('base.bot_detected', array('isBot' => true));
+            $event = new OW_Event('base.bot_detected', ['isBot' => true]);
             OW::getEventManager()->trigger($event);
         }
 
@@ -778,7 +779,7 @@ class JoinForm extends BASE_CLASS_UserQuestionForm
         $list = $this->sortedQuestionsList;
 
         $values = $this->getValues();
-        $result = array();
+        $result = [];
 
         if ( !empty($list) )
         {
@@ -826,7 +827,7 @@ class JoinForm extends BASE_CLASS_UserQuestionForm
 
     public function getQuestions()
     {
-        $this->questions = array();
+        $this->questions = [];
 
         if ( $this->isLastStep )
         {

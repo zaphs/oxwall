@@ -29,7 +29,7 @@
  */
 class BASE_CTRL_AjaxLoader extends OW_ActionController
 {
-    public function init()
+    public function init(): void
     {
         if( !OW::getRequest()->isAjax() )
         {
@@ -45,7 +45,7 @@ class BASE_CTRL_AjaxLoader extends OW_ActionController
         }
 
         $cmpClass = trim($_GET['cmpClass']);
-        $params = empty($_POST['params']) ? array() : json_decode($_POST['params'], true);
+        $params = empty($_POST['params']) ? [] : json_decode($_POST['params'], true);
         
         $cmp = OW::getClassInstanceArray($cmpClass, $params);
         $responce = $this->getComponentMarkup($cmp);
@@ -59,7 +59,7 @@ class BASE_CTRL_AjaxLoader extends OW_ActionController
         /* @var $document OW_AjaxDocument */
         $document = OW::getDocument();
 
-        $responce = array();
+        $responce = [];
 
         $responce['content'] = trim($cmp->render());
 

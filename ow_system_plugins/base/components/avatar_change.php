@@ -33,7 +33,7 @@ class BASE_CMP_AvatarChange extends OW_Component
     {
         parent::__construct();
 
-        $step = !empty($params['step']) && in_array($params['step'], array(1,2)) ? $params['step'] : 1;
+        $step = !empty($params['step']) && in_array($params['step'], [1, 2]) ? $params['step'] : 1;
         $inputId = !empty($params['inputId']) ? $params['inputId'] : null;
         $entityType = !empty($params['entityType']) ? $params['entityType'] : null;
         $entityId = !empty($params['entityId']) ? $params['entityId'] : null;
@@ -78,14 +78,14 @@ class BASE_CMP_AvatarChange extends OW_Component
         OW::getDocument()->addScript($staticJsUrl . 'jquery.Jcrop.min.js');
         OW::getDocument()->addScript($staticJsUrl . 'avatar_change.js');
 
-        $objParams = array(
+        $objParams = [
             'ajaxResponder' => OW::getRouter()->urlFor('BASE_CTRL_Avatar', 'ajaxResponder'),
             'step' => $step,
             'limit' => BOL_AvatarService::AVATAR_CHANGE_GALLERY_LIMIT,
             'inputId' => $inputId,
             'minCropSize' => $minSize,
             'changeUserAvatar' => $changeUserAvatar
-        );
+        ];
 
         if ( $library && $entityType && $id )
         {

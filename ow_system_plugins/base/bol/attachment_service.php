@@ -161,9 +161,9 @@ final class BOL_AttachmentService
      * @return array
      */
 
-    public function processPhotoAttachment( $pluginKey, array $fileInfo, $bundle = null, $validFileExtensions = array(), $maxUploadSize = 0 )
+    public function processPhotoAttachment( $pluginKey, array $fileInfo, $bundle = null, $validFileExtensions = [], $maxUploadSize = 0 )
     {
-        return $this->processUploadedFile($pluginKey, $fileInfo, $bundle, array('jpeg', 'jpg', 'png', 'gif'), (float) OW::getConfig()->getValue('base', 'tf_max_pic_size') * 1024);
+        return $this->processUploadedFile($pluginKey, $fileInfo, $bundle, ['jpeg', 'jpg', 'png', 'gif'], (float) OW::getConfig()->getValue('base', 'tf_max_pic_size') * 1024);
     }
     /* attachments 1.6.1 update */
 
@@ -192,7 +192,7 @@ final class BOL_AttachmentService
         $this->attachmentDao->save($dto);
     }
 
-    public function processUploadedFile( $pluginKey, array $fileInfo, $bundle = null, $validFileExtensions = array(), $maxUploadSize = null, $dimensions = null )
+    public function processUploadedFile( $pluginKey, array $fileInfo, $bundle = null, $validFileExtensions = [], $maxUploadSize = null, $dimensions = null )
     {
         $language = OW::getLanguage();
         $error = false;
@@ -294,7 +294,7 @@ final class BOL_AttachmentService
         $uploadPath = $this->getAttachmentsDir() . $attachDto->getFileName();
         $tempPath = $this->getAttachmentsDir() . 'temp_' . $attachDto->getFileName();
 
-        if ( in_array(UTIL_File::getExtension($fileInfo['name']), array('jpg', 'jpeg', 'gif', 'png')) )
+        if ( in_array(UTIL_File::getExtension($fileInfo['name']), ['jpg', 'jpeg', 'gif', 'png']) )
         {
             try
             {
@@ -302,7 +302,7 @@ final class BOL_AttachmentService
 
                 if ( empty($dimensions) )
                 {
-                    $dimensions = array('width' => 1000, 'height' => 1000);
+                    $dimensions = ['width' => 1000, 'height' => 1000];
                 }
 
                 $image->resizeImage($dimensions['width'], $dimensions['height'])->orientateImage()->saveImage($tempPath);
@@ -323,19 +323,19 @@ final class BOL_AttachmentService
         OW::getStorage()->chmod($uploadPath, 0666);
         unlink($tempPath);
 
-        return array('uid' => $attachDto->getBundle(), 'dto' => $attachDto, 'path' => $uploadPath, 'url' => $this->getAttachmentsUrl() . $attachDto->getFileName());
+        return ['uid' => $attachDto->getBundle(), 'dto' => $attachDto, 'path' => $uploadPath, 'url' => $this->getAttachmentsUrl() . $attachDto->getFileName()];
     }
 
     public function getFilesByBundleName( $pluginKey, $bundle )
     {
         $list = $this->attachmentDao->findAttahcmentByBundle($pluginKey, $bundle);
 
-        $resultArray = array();
+        $resultArray = [];
 
         /* @var $item BOL_Attachment */
         foreach ( $list as $item )
         {
-            $resultArray[] = array('dto' => $item, 'path' => $this->getAttachmentsDir() . $item->getFileName(), 'url' => $this->getAttachmentsUrl() . $item->getFileName());
+            $resultArray[] = ['dto' => $item, 'path' => $this->getAttachmentsDir() . $item->getFileName(), 'url' => $this->getAttachmentsUrl() . $item->getFileName()];
         }
 
         return $resultArray;

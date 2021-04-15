@@ -118,7 +118,7 @@ class BOL_InvitationDao extends OW_BaseDao
     {
         if ( empty($userIdList) )
         {
-            return array();
+            return [];
         }
 
         $example = new OW_Example();
@@ -198,9 +198,9 @@ class BOL_InvitationDao extends OW_BaseDao
 
         $query = "UPDATE " . $this->getTableName() . " SET `viewed`=:viewed WHERE id IN ( " . $in . " )";
 
-        $this->dbo->query($query, array(
+        $this->dbo->query($query, [
             'viewed' => $viewed ? 1 : 0
-        ));
+        ]);
     }
 
     public function markViewedByUserId( $userId, $viewed = true )
@@ -212,7 +212,7 @@ class BOL_InvitationDao extends OW_BaseDao
 
         $query = "UPDATE " . $this->getTableName() . " SET `viewed` = :viewed WHERE userId = :userId";
 
-        $this->dbo->query($query, array('viewed' => $viewed ? 1 : 0, 'userId' => $userId));
+        $this->dbo->query($query, ['viewed' => $viewed ? 1 : 0, 'userId' => $userId]);
     }
 
     public function markSentByIds( array $ids, $sent = true )
@@ -226,9 +226,9 @@ class BOL_InvitationDao extends OW_BaseDao
 
         $query = "UPDATE " . $this->getTableName() . " SET `sent`=:sent WHERE id IN ( " . $in . " )";
 
-        $this->dbo->query($query, array(
+        $this->dbo->query($query, [
             'sent' => $sent ? 1 : 0
-        ));
+        ]);
     }
 
     public function saveInvitation( BOL_Invitation $invitation )
@@ -280,9 +280,9 @@ class BOL_InvitationDao extends OW_BaseDao
     {
         $query = "UPDATE " . $this->getTableName() . " SET `active`=:s WHERE pluginKey=:pk";
 
-        $this->dbo->query($query, array(
+        $this->dbo->query($query, [
             's' => (int) $status,
             'pk' => $pluginKey
-        ));
+        ]);
     }
 }

@@ -22,7 +22,7 @@ class ADMIN_CLASS_EditQuestionForm extends ADMIN_CLASS_AddQuestionForm
 
         $accountTypeDtoList = BOL_QuestionService::getInstance()->findAccountTypeListByQuestionName($question->name);
         
-        $accountTypeValues = array();
+        $accountTypeValues = [];
         if ( !empty($accountTypeDtoList) )
         {
             foreach ( $accountTypeDtoList as $dto )
@@ -33,7 +33,7 @@ class ADMIN_CLASS_EditQuestionForm extends ADMIN_CLASS_AddQuestionForm
         }
         
         $valuesDto = BOL_QuestionService::getInstance()->findQuestionValues($question->name);
-        $values = array();
+        $values = [];
         /* @var $valueDto BOL_QuestionValue */
         foreach ( $valuesDto as $valueDto )
         {
@@ -46,7 +46,7 @@ class ADMIN_CLASS_EditQuestionForm extends ADMIN_CLASS_AddQuestionForm
             $this->presentations2types[BOL_QuestionService::QUESTION_PRESENTATION_RANGE] = BOL_QuestionService::QUESTION_VALUE_TYPE_TEXT;
         }
 
-        $presentationsLabel = array();
+        $presentationsLabel = [];
 
         foreach ( $this->presentations2types as $key => $item )
         {
@@ -85,7 +85,7 @@ class ADMIN_CLASS_EditQuestionForm extends ADMIN_CLASS_AddQuestionForm
         
         $this->addElement($element);
 
-        $presentationConfigList = !empty($this->configToPresentation[$question->presentation]) ? $this->configToPresentation[$question->presentation] : array();
+        $presentationConfigList = !empty($this->configToPresentation[$question->presentation]) ? $this->configToPresentation[$question->presentation] : [];
         $presentationConfigValues = json_decode($question->custom, true);
 
         foreach ( $presentationConfigList as $config )
@@ -274,9 +274,9 @@ class ADMIN_CLASS_EditQuestionForm extends ADMIN_CLASS_AddQuestionForm
 //                if ( !$disableActionList['disable_display_config'] )
 //                {
                     // save question configs
-                    $configs = array();
+                    $configs = [];
 
-                    $presentationConfigList = !empty($this->configToPresentation[$this->question->presentation]) ? $this->configToPresentation[$this->question->presentation] : array();
+                    $presentationConfigList = !empty($this->configToPresentation[$this->question->presentation]) ? $this->configToPresentation[$this->question->presentation] : [];
 
                     foreach ( $presentationConfigList as $config )
                     {
@@ -344,15 +344,15 @@ class ADMIN_CLASS_EditQuestionForm extends ADMIN_CLASS_AddQuestionForm
 
                 OW::getFeedback()->info($message);
 
-                echo json_encode( array( 'result' => true, 'errors' => array(), 'message' => $message ) );
+                echo json_encode( ['result' => true, 'errors' => [], 'message' => $message]);
             }
             else
             {
-                echo json_encode( array( 'result' => false, 'errors' => $this->getErrors(), 'message' => OW::getLanguage()->text( 'admin', 'questions_update_error' ) ) );
+                echo json_encode( ['result' => false, 'errors' => $this->getErrors(), 'message' => OW::getLanguage()->text( 'admin', 'questions_update_error' )]);
             }
             exit;
 
         }
     }
 }
-?>
+

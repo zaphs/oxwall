@@ -45,7 +45,7 @@ class BASE_CTRL_AjaxComponentAdminPanel extends BASE_CTRL_AjaxComponentPanel
     {
         parent::init();
 
-        $this->registerAction('allowCustomize', array($this, 'allowCustomize'));
+        $this->registerAction('allowCustomize', [$this, 'allowCustomize']);
 
         if ( !OW::getUser()->isAdmin() )
         {
@@ -105,10 +105,12 @@ class BASE_CTRL_AjaxComponentAdminPanel extends BASE_CTRL_AjaxComponentPanel
         }
         catch ( WidgetSettingValidateException $e )
         {
-            return array('error' => array(
+            return [
+                'error' => [
                     'message' => $e->getMessage(),
                     'field' => $e->getFieldName()
-                ));
+                ]
+            ];
         }
 
         $settings = $this->processSettingList($componentClass, $settings, $data['place'], true, $data);
@@ -117,14 +119,14 @@ class BASE_CTRL_AjaxComponentAdminPanel extends BASE_CTRL_AjaxComponentPanel
         $componentSettings = $this->componentService->findSettingList($componentPlaceUniqName);
         $this->clearCache($data['place']);
 
-        return array('settingList' => $componentSettings);
+        return ['settingList' => $componentSettings];
     }
 
     protected function getSettingsMarkup( $data )
     {
         if ( empty($data['componentId']) )
         {
-            return array();
+            return [];
         }
 
         $componentPlaceUniqName = $data['componentId'];
@@ -160,13 +162,13 @@ class BASE_CTRL_AjaxComponentAdminPanel extends BASE_CTRL_AjaxComponentPanel
     protected function moveComponentToPanel( $data )
     {
         $placeComponentId = $data['componentId'];
-        $this->componentService->saveComponentSettingList($placeComponentId, array('freeze' => 0));
+        $this->componentService->saveComponentSettingList($placeComponentId, ['freeze' => 0]);
 
         $this->clearCache($data['place']);
 
-        return array(
+        return [
             'freeze' => false
-        );
+        ];
     }
 
     protected function reloadComponent( $data )

@@ -12,7 +12,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -21,50 +20,50 @@
  * Display of Attribution Information is required in Larger Works which are defined in the CPAL as a work
  * which combines Covered Code or portions thereof with code not governed by the terms of the CPAL.
  */
+
 use GuzzleHttp\RequestOptions;
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_utilities
- * @since 1.8.1
+ * @since   1.8.1
  */
 class UTIL_HttpClientParams
 {
     /**
      * @var array
      */
-    private $options = array("params" => array());
+    private $options = ["params" => []];
 
     public function __construct()
     {
-        
+
     }
 
     /**
      * @param bool $allowRedirects
      */
-    public function setAllowRedirects( $allowRedirects )
+    public function setAllowRedirects($allowRedirects)
     {
-        $this->options[RequestOptions::ALLOW_REDIRECTS] = (bool) $allowRedirects;
+        $this->options[RequestOptions::ALLOW_REDIRECTS] = (bool)$allowRedirects;
     }
 
     /**
      * @param int $timeout
      */
-    public function setTimeout( $timeout )
+    public function setTimeout($timeout)
     {
-        $this->options[RequestOptions::CONNECT_TIMEOUT] = (int) $timeout;
+        $this->options[RequestOptions::CONNECT_TIMEOUT] = (int)$timeout;
     }
 
     /**
      * @param string $headerName
      * @param string $headerVal
      */
-    public function setHeader( $headerName, $headerVal )
+    public function setHeader($headerName, $headerVal)
     {
-        if ( array_key_exists(RequestOptions::HEADERS, $this->options) )
-        {
-            $this->options[RequestOptions::HEADERS] = array();
+        if (array_key_exists(RequestOptions::HEADERS, $this->options)) {
+            $this->options[RequestOptions::HEADERS] = [];
         }
 
         $this->options[RequestOptions::HEADERS][trim($headerName)] = trim($headerVal);
@@ -73,10 +72,9 @@ class UTIL_HttpClientParams
     /**
      * @param array $headers
      */
-    public function setHeaders( array $headers )
+    public function setHeaders(array $headers)
     {
-        foreach ( $headers as $name => $val )
-        {
+        foreach ($headers as $name => $val) {
             $this->setHeader($name, $val);
         }
     }
@@ -84,7 +82,7 @@ class UTIL_HttpClientParams
     /**
      * @param string $body
      */
-    public function setBody( $body )
+    public function setBody($body)
     {
         $this->options[RequestOptions::BODY] = trim($body);
     }
@@ -101,7 +99,7 @@ class UTIL_HttpClientParams
      * @param string $name
      * @param string $val
      */
-    public function addParam( $name, $val )
+    public function addParam($name, $val)
     {
         $this->options["params"][trim($name)] = trim($val);
     }
@@ -109,10 +107,9 @@ class UTIL_HttpClientParams
     /**
      * @param array $params
      */
-    public function addParams( array $params )
+    public function addParams(array $params)
     {
-        foreach ( $params as $name => $val )
-        {
+        foreach ($params as $name => $val) {
             $this->addParam($name, $val);
         }
     }

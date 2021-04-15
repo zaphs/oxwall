@@ -171,14 +171,14 @@ class UPDATE_AmazonCloudStorage implements OW_Storage
 
         $result = $this->s3->getBucket($this->bucketName, $cloudPrefix, $marker, $limit, self::CLOUD_FILES_DS, $returnCommonPrefixes);
 
-        return $result ? $result : array() ;
+        return $result ? $result : [];
     }
 
     public function getFileNameList( $path, $prefix = null, array $fileTypes = null, $marker = null, $limit = self::MAX_OBJECT_LIST_SIZE )
     {
         $files = $this->getFileList( $path, $prefix, $marker, $limit );
 
-        $result = array();
+        $result = [];
 
         foreach ( $files as $file )
         {
@@ -450,10 +450,10 @@ class UPDATE_AmazonCloudStorage implements OW_Storage
             return;
         }
 
-        $params = array(
+        $params = [
             'path' => $path,
             'size' => (int)$size
-        );
+        ];
 
         $event = new OW_Event(self::EVENT_ON_FILE_UPLOAD, $params);
         OW::getEventManager()->trigger($event);
@@ -466,9 +466,9 @@ class UPDATE_AmazonCloudStorage implements OW_Storage
             return;
         }
 
-        $params = array(
+        $params = [
             'path' => $path
-        );
+        ];
 
         $event = new OW_Event(self::EVENT_ON_FILE_DELETE, $params);
         OW::getEventManager()->trigger($event);

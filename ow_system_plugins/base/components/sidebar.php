@@ -31,9 +31,9 @@
  */
 class BASE_CMP_Sidebar extends OW_Component
 {
-    private $componentList = array();
-    private $settingList = array();
-    private $positionList = array();
+    private $componentList = [];
+    private $settingList = [];
+    private $positionList = [];
 
     /**
      *
@@ -48,7 +48,7 @@ class BASE_CMP_Sidebar extends OW_Component
             $this->service = BOL_ComponentAdminService::getInstance();
             $this->fetchFromCache();
 
-            OW_ViewRenderer::getInstance()->registerFunction('sb_component', array($this, 'tplComponent'));
+            OW_ViewRenderer::getInstance()->registerFunction('sb_component', [$this, 'tplComponent']);
 	}
 
 	private function fetchFromCache()
@@ -82,7 +82,7 @@ class BASE_CMP_Sidebar extends OW_Component
 
 	public function render()
 	{
-        $tplComponentList = array();
+        $tplComponentList = [];
         foreach ( $this->componentList as $item )
         {
             $position = $this->positionList[$item['uniqName']];
@@ -103,7 +103,7 @@ class BASE_CMP_Sidebar extends OW_Component
         $componentPlace = $this->componentList[$uniqName];
 
         $viewInstance = new BASE_CMP_DragAndDropItem($uniqName);
-        $viewInstance->setSettingList( empty( $this->settingList[$uniqName] ) ? array() : $this->settingList[$uniqName] );
+        $viewInstance->setSettingList( empty( $this->settingList[$uniqName] ) ? [] : $this->settingList[$uniqName] );
         $viewInstance->setContentComponentClass( $componentPlace['className'] );
 
         return $viewInstance->renderView();

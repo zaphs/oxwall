@@ -106,21 +106,23 @@ class BOL_StorageService
      */
     public function checkUpdates()
     {
-        $requestArray = array("platform" => array(self::URI_VAR_BUILD => OW::getConfig()->getValue("base", "soft_build")),
-            "items" => array());
+        $requestArray = [
+            "platform" => [self::URI_VAR_BUILD => OW::getConfig()->getValue("base", "soft_build")],
+            "items"    => []
+        ];
 
         $plugins = $this->pluginService->findRegularPlugins();
 
         /* @var $plugin BOL_Plugin */
         foreach ( $plugins as $plugin )
         {
-            $requestArray["items"][] = array(
+            $requestArray["items"][] = [
                 self::URI_VAR_KEY => $plugin->getKey(),
                 self::URI_VAR_DEV_KEY => $plugin->getDeveloperKey(),
                 self::URI_VAR_BUILD => $plugin->getBuild(),
                 self::URI_VAR_LICENSE_KEY => $plugin->getLicenseKey(),
                 self::URI_VAR_ITEM_TYPE => self::URI_VAR_ITEM_TYPE_VAL_PLUGIN
-            );
+            ];
         }
 
         //check all manual updates before reading builds in DB
@@ -130,13 +132,13 @@ class BOL_StorageService
         /* @var $dto BOL_Theme */
         foreach ( $themes as $dto )
         {
-            $requestArray["items"][] = array(
+            $requestArray["items"][] = [
                 self::URI_VAR_KEY => $dto->getKey(),
                 self::URI_VAR_DEV_KEY => $dto->getDeveloperKey(),
                 self::URI_VAR_BUILD => $dto->getBuild(),
                 self::URI_VAR_LICENSE_KEY => $dto->getLicenseKey(),
                 self::URI_VAR_ITEM_TYPE => self::URI_VAR_ITEM_TYPE_VAL_THEME
-            );
+            ];
         }
 
         $data = $this->triggerEventBeforeRequest();
@@ -154,7 +156,7 @@ class BOL_StorageService
             return false;
         }
 
-        $resultArray = array();
+        $resultArray = [];
 
         if ( $response->getBody() )
         {
@@ -182,7 +184,7 @@ class BOL_StorageService
             }
         }
 
-        $items = !empty($resultArray["invalidLicense"]) ? $resultArray["invalidLicense"] : array();
+        $items = !empty($resultArray["invalidLicense"]) ? $resultArray["invalidLicense"] : [];
 
         $this->updateItemsLicenseStatus($items);
 
@@ -199,11 +201,11 @@ class BOL_StorageService
      */
     public function getItemInfoForUpdate( $key, $devKey, $currentBuild = 0 )
     {
-        $params = array(
+        $params = [
             self::URI_VAR_KEY => trim($key),
             self::URI_VAR_DEV_KEY => trim($devKey),
             self::URI_VAR_BUILD => (int) $currentBuild
-        );
+        ];
 
         $data = array_merge($params, $this->triggerEventBeforeRequest($params));
         $requestUrl = OW::getRequest()->buildUrlQueryString($this->getStorageUrl(self::URI_GET_ITEM_INFO), $data);
@@ -231,11 +233,11 @@ class BOL_StorageService
      */
     public function downloadPlatform()
     {
-        $params = array(
+        $params = [
             "platform-version" => OW::getConfig()->getValue("base", "soft_version"),
             "platform-build" => OW::getConfig()->getValue("base", "soft_build"),
             "site-url" => OW::getRouter()->getBaseUrl()
-        );
+        ];
 
         $data = array_merge($params, $this->triggerEventBeforeRequest($params));
         $requestUrl = OW::getRequest()->buildUrlQueryString($this->getStorageUrl(self::URI_DOWNLOAD_PLATFORM_ARCHIVE),
@@ -268,12 +270,12 @@ class BOL_StorageService
      */
     public function downloadItem( $key, $devKey, $licenseKey = null )
     {
-        $params = array(
+        $params = [
             self::URI_VAR_KEY => trim($key),
             self::URI_VAR_DEV_KEY => trim($devKey),
             self::URI_VAR_LICENSE_KEY => $licenseKey != null ? trim($licenseKey) : null,
             "site-url" => OW::getRouter()->getBaseUrl()
-        );
+        ];
 
         $data = array_merge($params, $this->triggerEventBeforeRequest($params));
 
@@ -308,11 +310,11 @@ class BOL_StorageService
             return null;
         }
 
-        $params = array(
+        $params = [
             self::URI_VAR_KEY => trim($key),
             self::URI_VAR_DEV_KEY => trim($devKey),
             self::URI_VAR_LICENSE_KEY => trim($licenseKey)
-        );
+        ];
 
         $data = array_merge($params, $this->triggerEventBeforeRequest($params));
         $result = $this->requestGetResultAsJson($this->getStorageUrl(self::URI_CHECK_LECENSE_KEY), $data);
@@ -468,12 +470,12 @@ class BOL_StorageService
         return self::UPDATE_SERVER . UTIL_String::removeFirstAndLastSlashes($uri) . "/";
     }
 
-    private function triggerEventBeforeRequest( $params = array() )
+    private function triggerEventBeforeRequest( $params = [])
     {
         $event = OW::getEventManager()->trigger(new OW_Event('base.on_plugin_info_update', $params));
         $data = $event->getData();
 
-        return (!empty($data) && is_array($data) ) ? $data : array();
+        return (!empty($data) && is_array($data) ) ? $data : [];
     }
 
     private function updateItemsUpdateStatus( array $items )
@@ -510,7 +512,7 @@ class BOL_StorageService
 
     private function updateItemsLicenseStatus( array $items )
     {
-        $invalidItems = array(self::URI_VAR_ITEM_TYPE_VAL_PLUGIN => array(), self::URI_VAR_ITEM_TYPE_VAL_THEME => array());
+        $invalidItems = [self::URI_VAR_ITEM_TYPE_VAL_PLUGIN => [], self::URI_VAR_ITEM_TYPE_VAL_THEME => []];
 
         foreach ( $items as $item )
         {
@@ -518,7 +520,7 @@ class BOL_StorageService
         }
 
         $itemsToCheck = array_merge($this->pluginService->findAllPlugins(), $this->themeService->findAllThemes());
-        $dataForNotification = array();
+        $dataForNotification = [];
 
         /* @var $item BOL_StoreItem */
         foreach ( $itemsToCheck as $item )
@@ -530,7 +532,7 @@ class BOL_StorageService
             {
                 if ( (int) $item->getLicenseCheckTimestamp() == 0 )
                 {
-                    $dataForNotification[] = array("type" => $type, "title" => $item->getTitle());
+                    $dataForNotification[] = ["type" => $type, "title" => $item->getTitle()];
                     $item->setLicenseCheckTimestamp(time());
                     $this->saveStoreItem($item);
                 }
@@ -565,7 +567,7 @@ class BOL_StorageService
 
     private function notifyAdminAboutInvalidItems( array $items )
     {
-        $event = new OW_Event(self::EVENT_ON_NOTIFY_ADMIN_ABOUT_INVALID_ITEMS, array(), $items);
+        $event = new OW_Event(self::EVENT_ON_NOTIFY_ADMIN_ABOUT_INVALID_ITEMS, [], $items);
         OW::getEventManager()->trigger($event);
         $items = $event->getData();
 
@@ -574,18 +576,18 @@ class BOL_StorageService
             return;
         }
 
-        $titleList = array();
+        $titleList = [];
 
         foreach ( $items as $item )
         {
             $titleList[] = "\"{$item["title"]}\"";
         }
 
-        $params = array(
+        $params = [
             "itemList" => implode("<br />", $titleList),
             "siteURL" => OW::getRouter()->getBaseUrl(),
             "adminUrl" => OW::getRouter()->urlForRoute("admin_plugins_installed")
-        );
+        ];
 
         $language = OW::getLanguage();
         $mail = OW::getMailer()->createMail();

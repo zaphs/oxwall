@@ -73,7 +73,7 @@ class BASE_CMP_AvatarUserList extends OW_Component
      *
      * @param array $idList
      */
-    public function __construct( array $idList = array() )
+    public function __construct( array $idList = [])
     {
         parent::__construct();
         $this->idList = $idList;
@@ -95,7 +95,7 @@ class BASE_CMP_AvatarUserList extends OW_Component
 
         $avatars = $this->getAvatarInfo($this->idList);
         
-        $event = new OW_Event('bookmarks.is_mark', array(), $avatars);
+        $event = new OW_Event('bookmarks.is_mark', [], $avatars);
         OW::getEventManager()->trigger($event);
         
         if ( $event->getData() )
@@ -105,7 +105,7 @@ class BASE_CMP_AvatarUserList extends OW_Component
 
         if ( $this->viewMoreUrl !== null )
         {
-            $this->assign('view_more_array', array('url' => $this->viewMoreUrl, 'title' => OW::getLanguage()->text('base', 'view_more_label')));
+            $this->assign('view_more_array', ['url' => $this->viewMoreUrl, 'title' => OW::getLanguage()->text('base', 'view_more_label')]);
         }
 
         $this->assign('users', $avatars);

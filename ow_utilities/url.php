@@ -12,7 +12,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -23,13 +22,13 @@
  */
 
 /**
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_utilities
- * @since 1.0
+ * @since   1.0
  */
 class UTIL_Url
 {
-    private static $redirectCodes = array(
+    private static $redirectCodes = [
         100 => "HTTP/1.1 100 Continue",
         101 => "HTTP/1.1 101 Switching Protocols",
         200 => "HTTP/1.1 200 OK",
@@ -68,18 +67,18 @@ class UTIL_Url
         501 => "HTTP/1.1 501 Not Implemented",
         502 => "HTTP/1.1 502 Bad Gateway",
         503 => "HTTP/1.1 503 Service Unavailable",
-        504 => "HTTP/1.1 504 Gateway Time-out"
-    );
+        504 => "HTTP/1.1 504 Gateway Time-out",
+    ];
 
     /**
      * Makes search engines friendly redirect to provided URL.
-     * 
-     * @param string $url
+     *
+     * @param string  $url
      * @param integer $redirectCode
      */
-    public static function redirect( $url, $redirectCode = null )
+    public static function redirect($url, $redirectCode = null)
     {
-        $redirectCode = array_key_exists((int) $redirectCode, self::$redirectCodes) ? (int) $redirectCode : 301;
+        $redirectCode = array_key_exists((int)$redirectCode, self::$redirectCodes) ? (int)$redirectCode : 301;
 
         header(self::$redirectCodes[$redirectCode]);
         header("Location: " . $url);
@@ -88,20 +87,19 @@ class UTIL_Url
 
     /**
      * Removes site installation subfolder from request URI
-     * 
+     *
      * @param string $urlHome
      * @param string $requestUri
      * @return string
      */
-    public static function getRealRequestUri( $urlHome, $requestUri )
+    public static function getRealRequestUri($urlHome, $requestUri)
     {
         $urlArray = parse_url($urlHome);
 
-        $originalUri = UTIL_String::removeFirstAndLastSlashes($requestUri);
+        $originalUri  = UTIL_String::removeFirstAndLastSlashes($requestUri);
         $originalPath = UTIL_String::removeFirstAndLastSlashes($urlArray['path']);
 
-        if ( $originalPath === '' )
-        {
+        if ($originalPath === '') {
             return $originalUri;
         }
 
@@ -111,39 +109,35 @@ class UTIL_Url
         return $uri ? self::secureUri($uri) : '';
     }
 
-   /**
-    * Secure uri
-    *
-    * @param string $uri
-    * @return string
-    */
-    public static function secureUri( $uri )
+    /**
+     * Secure uri
+     *
+     * @param string $uri
+     * @return string
+     */
+    public static function secureUri($uri)
     {
         // remove posible native uri encoding
         $uriInfo = parse_url(urldecode($uri));
 
-        if ( $uriInfo )
-        {
+        if ($uriInfo) {
             $processedUri = '';
 
             // process uri path
-            if ( !empty($uriInfo['path']) ) 
-            {
+            if (!empty($uriInfo['path'])) {
                 $processedUri = implode('/', array_map('urlencode', explode('/', $uriInfo['path'])));
             }
 
             // process uri params
-            if ( !empty($uriInfo['query']) )
-            {
+            if (!empty($uriInfo['query'])) {
                 // parse uri params
-                $uriParams = array();
+                $uriParams = [];
                 parse_str($uriInfo['query'], $uriParams);
 
                 $processedUri .= '?' . http_build_query($uriParams);
             }
 
-            if ( !empty($uriInfo['fragment']) )
-            {
+            if (!empty($uriInfo['fragment'])) {
                 $processedUri .= '#' . urlencode($uriInfo['fragment']);
             }
 
@@ -153,27 +147,26 @@ class UTIL_Url
 
     public static function selfUrl()
     {
-        $s = (!empty($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on") ) ? 's' : '';
+        $s              = (!empty($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on")) ? 's' : '';
         $serverProtocol = strtolower($_SERVER["SERVER_PROTOCOL"]);
-        $protocol = substr($serverProtocol, 0, strpos($serverProtocol, '/')) . $s;
+        $protocol       = substr($serverProtocol, 0, strpos($serverProtocol, '/')) . $s;
 
         return $protocol . "://" . $_SERVER['SERVER_NAME'] . self::secureUri($_SERVER['REQUEST_URI']);
     }
 
-    public static function getLocalPath( $uri )
+    public static function getLocalPath($uri)
     {
         $userFilesUrl = OW::getStorage()->getFileUrl(OW_DIR_USERFILES);
-        $path = null;
+        $path         = null;
 
-        if ( stripos($uri, OW_URL_HOME) !== false )
-        {
+        if (stripos($uri, OW_URL_HOME) !== false) {
             $path = str_replace(OW_URL_HOME, OW_DIR_ROOT, $uri);
             $path = str_replace('/', DS, $path);
-        }
-        else if ( stripos($uri, $userFilesUrl) !== false )
-        {
-            $path = str_replace($userFilesUrl, OW_DIR_USERFILES, $uri);
-            $path = str_replace('/', DS, $path);
+        } else {
+            if (stripos($uri, $userFilesUrl) !== false) {
+                $path = str_replace($userFilesUrl, OW_DIR_USERFILES, $uri);
+                $path = str_replace('/', DS, $path);
+            }
         }
 
         return $path;

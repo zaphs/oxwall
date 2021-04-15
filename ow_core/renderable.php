@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * EXHIBIT A. Common Public Attribution License Version 1.0
@@ -12,7 +13,6 @@
  * governing rights and limitations under the License. The Original Code is Oxwall software.
  * The Initial Developer of the Original Code is Oxwall Foundation (http://www.oxwall.org/foundation).
  * All portions of the code written by Oxwall Foundation are Copyright (c) 2011. All Rights Reserved.
-
  * EXHIBIT B. Attribution Information
  * Attribution Copyright Notice: Copyright 2011 Oxwall Foundation. All rights reserved.
  * Attribution Phrase (not exceeding 10 words): Powered by Oxwall community software
@@ -25,9 +25,9 @@
 /**
  * Base class for renderable elements. Allows to assign vars and compile HTML using template engine.
  *
- * @author Sardar Madumarov <madumarov@gmail.com>
+ * @author  Sardar Madumarov <madumarov@gmail.com>
  * @package ow_core
- * @since 1.0
+ * @since   1.0
  */
 abstract class OW_Renderable extends OW_View
 {
@@ -36,30 +36,30 @@ abstract class OW_Renderable extends OW_View
      *
      * @var array
      */
-    protected $components = array();
+    protected $components = [];
 
     /**
      * List of registered forms.
      *
      * @var array
      */
-    protected $forms = array();
+    protected $forms = [];
 
     /**
      * Constructor.
      */
     protected function __construct()
     {
-        
+
     }
 
     /**
      * Adds component to renderable object.
      *
-     * @param string $key
+     * @param string        $key
      * @param OW_Renderable $component
      */
-    public function addComponent( $key, OW_Renderable $component )
+    public function addComponent($key, OW_Renderable $component)
     {
         $this->components[$key] = $component;
     }
@@ -70,9 +70,9 @@ abstract class OW_Renderable extends OW_View
      * @param string $key
      * @return OW_Component
      */
-    public function getComponent( $key )
+    public function getComponent($key)
     {
-        return ( isset($this->components[$key]) ? $this->components[$key] : null );
+        return ($this->components[$key] ?? null);
     }
 
     /**
@@ -80,10 +80,9 @@ abstract class OW_Renderable extends OW_View
      *
      * @param string $key
      */
-    public function removeComponent( $key )
+    public function removeComponent($key)
     {
-        if ( isset($this->components[$key]) )
-        {
+        if (isset($this->components[$key])) {
             unset($this->components[$key]);
         }
     }
@@ -93,7 +92,7 @@ abstract class OW_Renderable extends OW_View
      *
      * @param Form $form
      */
-    public function addForm( Form $form )
+    public function addForm(Form $form)
     {
         $this->forms[$form->getName()] = $form;
     }
@@ -101,12 +100,12 @@ abstract class OW_Renderable extends OW_View
     /**
      * Returns added form by key.
      *
-     * @param string $key
+     * @param $name
      * @return OW_Form
      */
-    public function getForm( $name )
+    public function getForm($name)
     {
-        return ( isset($this->forms[$name]) ? $this->forms[$name] : null );
+        return ($this->forms[$name] ?? null);
     }
 
     protected function onRender()
@@ -115,21 +114,18 @@ abstract class OW_Renderable extends OW_View
 
         $viewRenderer = OW_ViewRenderer::getInstance();
 
-        if ( !empty($this->components) )
-        {
-            $renderedCmps = array();
+        if (!empty($this->components)) {
+            $renderedCmps = [];
 
-            foreach ( $this->components as $key => $value )
-            {
+            foreach ($this->components as $key => $value) {
                 $renderedCmps[$key] = $value->isVisible() ? $value->render() : '';
             }
 
             $viewRenderer->assignVars($renderedCmps);
         }
 
-        if ( !empty($this->forms) )
-        {
-            $viewRenderer->assignVar("_owForms_", $this->forms);
+        if (!empty($this->forms)) {
+            $viewRenderer->assignVar('_owForms_', $this->forms);
         }
     }
 }

@@ -85,10 +85,10 @@ class BOL_QuestionValueDao extends OW_BaseDao
     {
         if ( isset($questionNameList) && count($questionNameList) > 0 )
         {
-            $list = array();
+            $list = [];
 
             $questionList = BOL_QuestionDao::getInstance()->findQuestionByNameList($questionNameList);
-            $parentList = array();
+            $parentList = [];
 
             foreach ( $questionList as $question )
             {
@@ -97,7 +97,7 @@ class BOL_QuestionValueDao extends OW_BaseDao
             }
 
             $parentQuestionList = BOL_QuestionDao::getInstance()->findQuestionByNameList($parentList);
-            $parentQuestions = array();
+            $parentQuestions = [];
             
             foreach ( $parentQuestionList as $question )
             {
@@ -117,7 +117,7 @@ class BOL_QuestionValueDao extends OW_BaseDao
             $example->setOrder('questionName, sortOrder');
             $values = $this->findListByExample($example);
 
-            $result = array();
+            $result = [];
             $questionName = '';
             $count = 0;
 
@@ -142,7 +142,7 @@ class BOL_QuestionValueDao extends OW_BaseDao
             {
                 if ( !empty($question->parent) && !empty( $parentQuestions[$question->parent] ) )
                 {
-                    $result[$question->name]['values'] = empty($result[$question->parent]['values']) ? array() : $result[$question->parent]['values'];
+                    $result[$question->name]['values'] = empty($result[$question->parent]['values']) ? [] : $result[$question->parent]['values'];
                 }
             }
 
@@ -154,31 +154,31 @@ class BOL_QuestionValueDao extends OW_BaseDao
             return $result;
         }
 
-        return array();
+        return [];
     }
 
     public function findQuestionValues( $questionName )
     {
         if ( $questionName === null )
         {
-            return array();
+            return [];
         }
 
-        $result = $this->findQuestionsValuesByQuestionNameList(array($questionName));
+        $result = $this->findQuestionsValuesByQuestionNameList([$questionName]);
         
         if ( !empty($result[$questionName]['values']) )
         {
             return $result[$questionName]['values'];
         }
         
-        return array();
+        return [];
     }
 
     public function findRealQuestionValues( $questionName )
     {
         if ( $questionName === null )
         {
-            return array();
+            return [];
         }
 
         $name = trim($questionName);
@@ -193,7 +193,7 @@ class BOL_QuestionValueDao extends OW_BaseDao
             return $result;
         }
         
-        return array();
+        return [];
     }
 
     public function findQuestionValueById($id)
@@ -208,7 +208,7 @@ class BOL_QuestionValueDao extends OW_BaseDao
     {
         if ( $questionName === null )
         {
-            return array();
+            return [];
         }
 
         $name = trim($questionName);

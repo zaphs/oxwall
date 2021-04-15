@@ -2,7 +2,7 @@
 
 class BASE_CMP_ConsoleListItem extends OW_Renderable
 {
-    protected $key, $content, $class = array();
+    protected $key, $content, $class = [];
 
     public function __construct()
     {
@@ -41,12 +41,12 @@ class BASE_CMP_ConsoleListItem extends OW_Renderable
 
     public function render()
     {
-        $this->assign('item', array
-        (
+        $this->assign('item',
+            [
             'key' => $this->getKey(),
             'class' => $this->getClass(),
             'content' => $this->content
-        ));
+            ]);
 
         return parent::render();
     }

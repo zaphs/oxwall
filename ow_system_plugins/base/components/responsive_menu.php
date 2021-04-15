@@ -4,7 +4,7 @@ class BASE_CMP_ResponsiveMenu extends BASE_CMP_Menu
 {
     protected $uniqId;
 
-    public function __construct( $menuItems = array() ) 
+    public function __construct( $menuItems = [])
     {
         parent::__construct($menuItems);
         
@@ -16,7 +16,7 @@ class BASE_CMP_ResponsiveMenu extends BASE_CMP_Menu
     public function initStatic()
     {
         $js = UTIL_JsGenerator::newInstance();
-        $js->newObject("menu", "OW.ResponsiveMenu", array($this->uniqId));
+        $js->newObject("menu", "OW.ResponsiveMenu", [$this->uniqId]);
         
         OW::getDocument()->addOnloadScript($js);
     }

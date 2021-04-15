@@ -50,7 +50,7 @@ class BOL_PreferenceService
     /**
      * @var array
      */
-    private $preferenceData = array();
+    private $preferenceData = [];
     /**
      * Singleton instance.
      *
@@ -113,7 +113,7 @@ class BOL_PreferenceService
      */
     public function findPreferenceList( $keyList )
     {
-        $resultList = array();
+        $resultList = [];
         $result = $this->preferenceDao->findPreferenceList( $keyList );
 
         foreach( $result as $dto )
@@ -143,7 +143,7 @@ class BOL_PreferenceService
     public function deletePreference( $key )
     {
         $result = $this->preferenceDao->deletePreference($key);
-        $this->preferenceDataDao->deleteByPreferenceNamesList(array( $key ));
+        $this->preferenceDataDao->deleteByPreferenceNamesList([$key]);
         return $result;
     }
 
@@ -183,13 +183,13 @@ class BOL_PreferenceService
     }
 
     /**
-     * @param array $preferenceList
+     * @param string $preferenceKey
      * @param int $userId
-     * @return array[userId][preferenceName]
+     * @return string
      */
     public function getPreferenceValue( $preferenceKey, $userId )
     {
-        $result = $this->getPreferenceValueListByUserIdList( array( $preferenceKey ), array( $userId ) );
+        $result = $this->getPreferenceValueListByUserIdList( [$preferenceKey], [$userId]);
         return isset($result[$userId][$preferenceKey]) ? $result[$userId][$preferenceKey] : null;
     }
 
@@ -200,7 +200,7 @@ class BOL_PreferenceService
      */
     public function getPreferenceValueList( array $preferenceList, $userId )
     {
-        $result = $this->getPreferenceValueListByUserIdList( $preferenceList, array( $userId ) );
+        $result = $this->getPreferenceValueListByUserIdList( $preferenceList, [$userId]);
         return $result[$userId];
     }
 
@@ -211,11 +211,11 @@ class BOL_PreferenceService
      */
     public function getPreferenceValueListByUserIdList( array $preferenceList, array $userIdList )
     {
-        $resultList = array();
+        $resultList = [];
 
         foreach( $userIdList as $userId )
         {
-            $resultList[$userId] = array();
+            $resultList[$userId] = [];
         }
 
         if ( $userIdList === null || !is_array($userIdList) || count($userIdList) === 0 )
@@ -235,15 +235,15 @@ class BOL_PreferenceService
             return $resultList;
         }
 
-        $issetUserList = array();
+        $issetUserList = [];
 
         foreach( $usersBol as $user )
         {
             $issetUserList[$user->id] = $user->id;
         }
 
-        $cachedPreferenceList = array();
-        $notCachedPreferenceList = array();
+        $cachedPreferenceList = [];
+        $notCachedPreferenceList = [];
 
         foreach( $usersBol as $user )
         {
@@ -269,12 +269,12 @@ class BOL_PreferenceService
             else
             {
                 $notCachedPreferenceList = $preferenceList;
-                $cachedPreferenceList = array();
+                $cachedPreferenceList = [];
             }
         }
 
-        $preferenceDtoList = array();
-        $preferenceData = array();
+        $preferenceDtoList = [];
+        $preferenceData = [];
 
         if ( count($notCachedPreferenceList) > 0 )
         {
@@ -321,7 +321,7 @@ class BOL_PreferenceService
      */
     public function savePreferenceValue( $preferenceKey, $value, $userId )
     {
-        return $this->savePreferenceValues( array( $preferenceKey => $value ), $userId );
+        return $this->savePreferenceValues( [$preferenceKey => $value], $userId );
     }
 
     /**
@@ -347,8 +347,8 @@ class BOL_PreferenceService
 
         $preferenceDtoList = $this->findPreferenceList( $preferenceKeyList );
 
-        $result = $this->preferenceDataDao->findByPreferenceListForUserList($preferenceKeyList, array( $userId ));
-        $preferenceDataDtoList = !empty($result[$userId]) ? $result[$userId] : array();
+        $result = $this->preferenceDataDao->findByPreferenceListForUserList($preferenceKeyList, [$userId]);
+        $preferenceDataDtoList = !empty($result[$userId]) ? $result[$userId] : [];
 
         $preferenceKeyList = array_keys($preferenceDtoList);
 

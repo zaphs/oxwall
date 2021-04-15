@@ -2,7 +2,7 @@
 
 class BASE_CMP_VerticalMenu extends BASE_CMP_Menu
 {
-    public function __construct($menuItems = array()) 
+    public function __construct($menuItems = [])
     {
         parent::__construct($menuItems);
         

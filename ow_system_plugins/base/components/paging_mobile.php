@@ -32,4 +32,3 @@
 class BASE_CMP_PagingMobile extends BASE_CMP_Paging
 {}
 
-?>

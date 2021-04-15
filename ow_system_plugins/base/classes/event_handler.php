@@ -33,71 +33,74 @@ class BASE_CLASS_EventHandler
     public function genericInit()
     {
         $eventManager = OW::getEventManager();
-        $eventManager->bind(BOL_BillingService::EVENT_ON_AFTER_DELIVER_SALE, [$this, 'onAfterBillingDeliverSale']);
-        $eventManager->bind(OW_EventManager::ON_USER_LOGIN, [$this, 'onUserLoginSaveStatistics']);
-        $eventManager->bind(BOL_ContentService::EVENT_AFTER_ADD, [$this, 'onAfterAdd']);
-        $eventManager->bind('base.add_global_lang_keys', [$this, 'onAddGlobalLangs']);
-        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, 'onDeleteUserContent']);
-        $eventManager->bind(OW_EventManager::ON_USER_LOGIN, [$this, 'onUserLogin']);
-        $eventManager->bind(OW_EventManager::ON_USER_LOGOUT, [$this, 'onUserLogout']);
-        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, [$this, 'onJoinMandatoryUserApprove']);
-        $eventManager->bind(OW_EventManager::ON_USER_EDIT, [$this, 'onUserEditFeed']);
-        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, [$this, 'onJoinFeed']);
-        $eventManager->bind('feed.after_comment_add', [$this, 'onUserJoinCommentFeed']);
-        $eventManager->bind('feed.after_like_added', [$this, 'onLikeUserJoin']);
-        $eventManager->bind('feed.after_like_added', [$this, 'onUserAvatarLikeFeed']);
-        $eventManager->bind('feed.after_comment_add', [$this, 'onUserAvatarCommentFeed']);
-        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, [$this, 'onUserRegisterWelcomeLetter']);
-        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, 'onUserUnregisterDeleteDisaproved']);
-        $eventManager->bind('notifications.collect_actions', [$this, 'onNotifyActions']);
-        $eventManager->bind('base_add_comment', [$this, 'onAddComment']);
-        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, 'onUserUnregisterRemovePreference']);
-        $eventManager->bind('base.update_entity_items_status', [$this, 'onUpdateEntityItemsStatus']);
-        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, 'onDeleteMediaPanelFiles']);
-        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, 'clearUserListQueryCache']);
-        $eventManager->bind(OW_EventManager::ON_USER_SUSPEND, [$this, 'clearUserListQueryCache']);
-        $eventManager->bind(OW_EventManager::ON_USER_SUSPEND, [$this, 'sendSuspendNotification']);
-        $eventManager->bind(OW_EventManager::ON_USER_UNSUSPEND, [$this, 'clearUserListQueryCache']);
-        $eventManager->bind(OW_EventManager::ON_USER_APPROVE, [$this, 'clearUserListQueryCache']);
-        $eventManager->bind(OW_EventManager::ON_USER_DISAPPROVE, [$this, 'clearUserListQueryCache']);
-        $eventManager->bind(OW_EventManager::ON_USER_MARK_FEATURED, [$this, 'clearUserListQueryCache']);
-        $eventManager->bind(OW_EventManager::ON_USER_UNMARK_FEATURED, [$this, 'clearUserListQueryCache']);
-        $eventManager->bind('base.questions_field_get_label', [$this, 'getQuestionLabel']);
-        $eventManager->bind('base.before_decorator', [$this, 'onBeforeDecoratorRender']);
-        $eventManager->bind('plugin.privacy.get_action_list', [$this, 'onPrivacyAddAction']);
-        $eventManager->bind('base.members_only_exceptions', [$this, 'onAddMembersOnlyException']);
-        $eventManager->bind('base.password_protected_exceptions', [$this, 'onAddPasswordProtectedExceptions']);
-        $eventManager->bind('base.maintenance_mode_exceptions', [$this, 'onAddMaintenanceModeExceptions']);
-        $eventManager->bind(OW_EventManager::ON_USER_LOGIN, [$this, 'onUserLoginSetAdminCookie']);
-        $eventManager->bind('core.emergency_exit', [$this, 'onEmergencyExit']);
 
-        $eventManager->bind('admin.add_auth_labels', [$this, 'onAddAuthLabels']);
+        $eventManager->bind(BOL_BillingService::EVENT_ON_AFTER_DELIVER_SALE, array($this, 'onAfterBillingDeliverSale'));
+        $eventManager->bind(OW_EventManager::ON_USER_LOGIN, array($this, 'onUserLoginSaveStatistics'));
+        $eventManager->bind(BOL_ContentService::EVENT_AFTER_ADD, array($this, 'onAfterAdd'));
+        $eventManager->bind('base.add_global_lang_keys', array($this, 'onAddGlobalLangs'));
+        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, 'onDeleteUserContent'));
+        $eventManager->bind(OW_EventManager::ON_USER_LOGIN, array($this, 'onUserLogin'));
+        $eventManager->bind(OW_EventManager::ON_USER_LOGOUT, array($this, 'onUserLogout'));
+        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, array($this, 'onJoinMandatoryUserApprove'));
+        $eventManager->bind(OW_EventManager::ON_USER_EDIT, array($this, 'onUserEditFeed'));
+        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, array($this, 'onJoinFeed'));
+        $eventManager->bind('feed.after_comment_add', array($this, 'onUserJoinCommentFeed'));
+        $eventManager->bind('feed.after_like_added', array($this, 'onLikeUserJoin'));
+        $eventManager->bind('feed.after_like_added', array($this, 'onUserAvatarLikeFeed'));
+        $eventManager->bind('feed.after_comment_add', array($this, 'onUserAvatarCommentFeed'));
+        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, array($this, 'onUserRegisterWelcomeLetter'));
+        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, 'onUserUnregisterDeleteDisaproved'));
+        $eventManager->bind('notifications.collect_actions', array($this, 'onNotifyActions'));
+        $eventManager->bind('base_add_comment', array($this, 'onAddComment'));
+        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, 'onUserUnregisterRemovePreference'));
+        $eventManager->bind('base.update_entity_items_status', array($this, 'onUpdateEntityItemsStatus'));
+        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, 'onDeleteMediaPanelFiles'));
+        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, 'clearUserListQueryCache'));
+        $eventManager->bind(OW_EventManager::ON_USER_SUSPEND, array($this, 'clearUserListQueryCache'));
+        $eventManager->bind(OW_EventManager::ON_USER_SUSPEND, array($this, 'sendSuspendNotification'));
+        $eventManager->bind(OW_EventManager::ON_USER_UNSUSPEND, array($this, 'clearUserListQueryCache'));
+        $eventManager->bind(OW_EventManager::ON_USER_APPROVE, array($this, 'clearUserListQueryCache'));
+        $eventManager->bind(OW_EventManager::ON_USER_DISAPPROVE, array($this, 'clearUserListQueryCache'));
+        $eventManager->bind(OW_EventManager::ON_USER_MARK_FEATURED, array($this, 'clearUserListQueryCache'));
+        $eventManager->bind(OW_EventManager::ON_USER_UNMARK_FEATURED, array($this, 'clearUserListQueryCache'));
+        $eventManager->bind('base.questions_field_get_label', array($this, 'getQuestionLabel'));
+        $eventManager->bind('base.before_decorator', array($this, 'onBeforeDecoratorRender'));
+        $eventManager->bind('plugin.privacy.get_action_list', array($this, 'onPrivacyAddAction'));
+        $eventManager->bind('base.members_only_exceptions', array($this, 'onAddMembersOnlyException'));
+        $eventManager->bind('base.splash_screen_exceptions', array($this, 'onAddSplashScreenExceptions'));
+        $eventManager->bind('base.password_protected_exceptions', array($this, 'onAddPasswordProtectedExceptions'));
+        $eventManager->bind('base.maintenance_mode_exceptions', array($this, 'onAddMaintenanceModeExceptions'));
+        $eventManager->bind(OW_EventManager::ON_USER_LOGIN, array($this, 'onUserLoginSetAdminCookie'));
+        $eventManager->bind('core.emergency_exit', array($this, 'onEmergencyExit'));
 
-        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, [$this, 'onUserUnregisterClearMailQueue']);
+        $eventManager->bind('admin.add_auth_labels', array($this, 'onAddAuthLabels'));
 
-        $eventManager->bind('socialsharing.get_entity_info', [$this, 'sosialSharingGetUserInfo']);
+        $eventManager->bind(OW_EventManager::ON_USER_UNREGISTER, array($this, 'onUserUnregisterClearMailQueue'));
 
-        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, [$this, 'setAccountTypeUserRoleOnUserRegister']);
-        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, [$this, 'deleteInviteCode']);
-        $eventManager->bind('base.before_save_user', [$this, 'setUserRoleOnChangeAccountType']);
+        $eventManager->bind('socialsharing.get_entity_info', array($this, 'sosialSharingGetUserInfo'));
 
-        $eventManager->bind('base.questions_field_add_fake_questions', [$this, 'addFakeQuestions']);
+        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, array($this, 'setAccountTypeUserRoleOnUserRegister'));
+        $eventManager->bind(OW_EventManager::ON_USER_REGISTER, array($this, 'deleteInviteCode'));
+        $eventManager->bind('base.before_save_user', array($this, 'setUserRoleOnChangeAccountType'));
 
-        $eventManager->bind(OW_EventManager::ON_JOIN_FORM_RENDER, [$this, 'onInviteMembersProcessJoinForm']);
+        $eventManager->bind('base.questions_field_add_fake_questions', array($this, 'addFakeQuestions'));
 
-        $eventManager->bind(BASE_CMP_ModerationToolsWidget::EVENT_COLLECT_CONTENTS, [$this, 'onCollectModerationWidgetContent']);
-        $eventManager->bind("base.moderation_tools.collect_menu", [$this, 'onCollectModerationToolsMenu']);
+        $eventManager->bind(OW_EventManager::ON_JOIN_FORM_RENDER, array($this, 'onInviteMembersProcessJoinForm'));
 
-        $eventManager->bind(BOL_ContentService::EVENT_BEFORE_DELETE, [$this, 'deleteEntityFlags']);
+        $eventManager->bind(BASE_CMP_ModerationToolsWidget::EVENT_COLLECT_CONTENTS, array($this, 'onCollectModerationWidgetContent'));
+        $eventManager->bind("base.moderation_tools.collect_menu", array($this, 'onCollectModerationToolsMenu'));
+
+        $eventManager->bind(BOL_ContentService::EVENT_BEFORE_DELETE, array($this, 'deleteEntityFlags'));
 
         BASE_CLASS_ContentProvider::getInstance()->init();
         $eventManager->bind('base.after_avatar_update', [$this, 'onAfterAvatarUpdate']);
 
-        $eventManager->bind("base.user_list.get_displayed_fields", [$this, 'onGetUserListFields']);
-        $eventManager->bind("base.user_list.get_questions", [$this, 'onGetUserListQuestions']);
-        $eventManager->bind("base.user_list.get_field_data", [$this, 'onGetUserListFieldValue']);
-        $eventManager->bind("base.sitemap.get_urls", [$this, 'onSitemapGetUrls']);
-        $eventManager->bind("base.provide_page_meta_info", [$this, 'onProvideMetaInfoForPage']);
+        $eventManager->bind("base.user_list.get_displayed_fields", array($this, 'onGetUserListFields'));
+        $eventManager->bind("base.user_list.get_questions", array($this, 'onGetUserListQuestions'));
+        $eventManager->bind("base.user_list.get_field_data", array($this, 'onGetUserListFieldValue'));
+        $eventManager->bind("base.sitemap.get_urls", array($this, 'onSitemapGetUrls'));
+        $eventManager->bind("base.provide_page_meta_info", array($this, 'onProvideMetaInfoForPage'));
+        $eventManager->bind("base.on_after_generate_email_verification_code", array($this, 'generateEmailVerificationCode'));
     }
 
     public function init()
@@ -935,45 +938,53 @@ class BASE_CLASS_EventHandler
 
     public function onAddMaintenanceModeExceptions( BASE_CLASS_EventCollector $event )
     {
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'standardSignIn']);
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'forgotPassword']);
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPassword']);
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordCodeExpired']);
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordRequest']);
-        $event->add(['controller' => 'BASE_CTRL_ApiServer', 'action' => 'request']);
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'standardSignIn'));
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'forgotPassword'));
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPassword'));
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordCodeExpired'));
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordRequest'));
+        $event->add(array('controller' => 'BASE_CTRL_ApiServer', 'action' => 'request'));
+        $event->add(array('controller' => 'BASE_CTRL_Base', 'action' => 'sitemap'));
     }
 
     public function onAddPasswordProtectedExceptions( BASE_CLASS_EventCollector $event )
     {
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'standardSignIn']);
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'ajaxSignIn']);
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'forgotPassword']);
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordRequest']);
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPassword']);
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordCodeExpired']);
-        $event->add(['controller' => 'BASE_CTRL_EmailVerify', 'action' => 'verify']);
-        $event->add(['controller' => 'BASE_CTRL_ApiServer', 'action' => 'request']);
-        $event->add(['controller' => 'BASE_CTRL_Unsubscribe', 'action' => 'index']);
-        $event->add(['controller' => 'BASE_CTRL_BaseDocument', 'action' => 'redirectToMobile']);
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'standardSignIn'));
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'ajaxSignIn'));
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'forgotPassword'));
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordRequest'));
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPassword'));
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordCodeExpired'));
+        $event->add(array('controller' => 'BASE_CTRL_EmailVerify', 'action' => 'verify'));
+        $event->add(array('controller' => 'BASE_CTRL_ApiServer', 'action' => 'request'));
+        $event->add(array('controller' => 'BASE_CTRL_Unsubscribe', 'action' => 'index'));
+        $event->add(array('controller' => 'BASE_CTRL_BaseDocument', 'action' => 'redirectToMobile'));
+        $event->add(array('controller' => 'BASE_CTRL_Base', 'action' => 'sitemap'));
     }
 
     public function onAddMembersOnlyException( BASE_CLASS_EventCollector $event )
     {
-        $event->add(['controller' => 'BASE_CTRL_Join', 'action' => 'index']);
-        $event->add(['controller' => 'BASE_CTRL_Join', 'action' => 'joinFormSubmit']);
-        $event->add(['controller' => 'BASE_CTRL_Join', 'action' => 'ajaxResponder']);
-        $event->add(['controller' => 'BASE_CTRL_Captcha', 'action' => 'index']);
-        $event->add(['controller' => 'BASE_CTRL_Captcha', 'action' => 'ajaxResponder']);
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'forgotPassword']);
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordRequest']);
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'resetPassword']);
-        $event->add(['controller' => 'BASE_CTRL_User', 'action' => 'ajaxSignIn']);
-        $event->add(['controller' => 'BASE_CTRL_ApiServer', 'action' => 'request']);
-        $event->add(['controller' => 'BASE_CTRL_Unsubscribe', 'action' => 'index']);
-        $event->add(['controller' => 'BASE_CTRL_BaseDocument', 'action' => 'redirectToMobile']);
-        $event->add(['controller' => 'BASE_CTRL_AjaxLoader', 'action' => 'init']);
-        $event->add(['controller' => 'BASE_CTRL_AjaxLoader', 'action' => 'component']);
-        $event->add(['controller' => 'BASE_CTRL_Avatar', 'action' => 'ajaxResponder']);
+        $event->add(array('controller' => 'BASE_CTRL_Join', 'action' => 'index'));
+        $event->add(array('controller' => 'BASE_CTRL_Join', 'action' => 'joinFormSubmit'));
+        $event->add(array('controller' => 'BASE_CTRL_Join', 'action' => 'ajaxResponder'));
+        $event->add(array('controller' => 'BASE_CTRL_Captcha', 'action' => 'index'));
+        $event->add(array('controller' => 'BASE_CTRL_Captcha', 'action' => 'ajaxResponder'));
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'forgotPassword'));
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPasswordRequest'));
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'resetPassword'));
+        $event->add(array('controller' => 'BASE_CTRL_User', 'action' => 'ajaxSignIn'));
+        $event->add(array('controller' => 'BASE_CTRL_ApiServer', 'action' => 'request'));
+        $event->add(array('controller' => 'BASE_CTRL_Unsubscribe', 'action' => 'index'));
+        $event->add(array('controller' => 'BASE_CTRL_BaseDocument', 'action' => 'redirectToMobile'));
+        $event->add(array('controller' => 'BASE_CTRL_AjaxLoader', 'action' => 'init'));
+        $event->add(array('controller' => 'BASE_CTRL_AjaxLoader', 'action' => 'component'));
+        $event->add(array('controller' => 'BASE_CTRL_Avatar', 'action' => 'ajaxResponder'));
+        $event->add(array('controller' => 'BASE_CTRL_Base', 'action' => 'sitemap'));
+    }
+
+    public function onAddSplashScreenExceptions( BASE_CLASS_EventCollector $event )
+    {
+        $event->add(array('controller' => 'BASE_CTRL_Base', 'action' => 'sitemap'));
     }
 
     public function onPreferenceMenuItem( BASE_CLASS_EventCollector $event )
@@ -2044,6 +2055,32 @@ class BASE_CLASS_EventHandler
         {
             $parts = explode("+", $params["title"]);
             $title = $this->processMetaText($language->text($parts[0], $parts[1], $vars), false, BOL_SeoService::META_TITLE_MAX_LENGTH);
+
+            if (!empty($parts[1]) && $parts[1] === 'meta_title_user_page')
+            {
+                if (empty($vars['user_gender']) || empty($vars['user_age']) || empty($vars['user_age'])
+                        || empty($vars['user_location']))
+                {
+                    $delimiter = ', ';
+                    $alterDelimiter = ' | ';
+
+                    $profileTitle = !empty($vars['user_name']) ? $vars['user_name'] : '';
+
+                    $profileTitle = !empty($vars['user_gender']) &&  !empty($vars['user_age'])
+                        ? $profileTitle . $delimiter . $vars['user_gender'] . $delimiter . $vars['user_age']
+                        : $profileTitle;
+
+                    $profileTitle = !empty($vars['user_location'])
+                        ? $profileTitle . $alterDelimiter . $vars['user_location']
+                        : $profileTitle;
+
+                    $profileTitle = $profileTitle . $alterDelimiter . OW::getConfig()->getValue('base', 'site_name');
+
+                    $profileTitle = trim($profileTitle, $delimiter);
+
+                    $title = $this->processMetaText(trim($profileTitle, $alterDelimiter), false, BOL_SeoService::META_TITLE_MAX_LENGTH);
+                }
+            }
         }
 
         if( !empty($params["description"]) )
@@ -2133,5 +2170,22 @@ class BASE_CLASS_EventHandler
         }
 
         return $text;
+    }
+
+    public function generateEmailVerificationCode(OW_Event $event)
+    {
+        $min = 10000;
+        $max = 99999;
+        $code = mt_rand($min, $max);
+        $service = BOL_EmailVerifyService::getInstance();
+
+        while ($service->findByHash($code) !== null)
+        {
+            $code = mt_rand($min, $max);
+        }
+
+        $event->setData($code);
+
+        return $code;
     }
 }

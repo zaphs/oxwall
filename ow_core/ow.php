@@ -66,9 +66,12 @@ final class OW
 
         $context = self::CONTEXT_DESKTOP;
 
-        try {
-            $isSmart = UTIL_Browser::isSmartphone();
-        } catch (Exception $e) {
+        try
+        {
+            $isSmart = UTIL_Browser::isSmartphone() ? true : UTIL_Browser::isTierTablet();
+        }
+        catch ( Exception $e )
+        {
             return;
         }
 
